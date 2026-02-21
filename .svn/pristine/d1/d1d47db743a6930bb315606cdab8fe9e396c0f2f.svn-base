@@ -1,0 +1,345 @@
+[pils: .use "<pils>/english/parse/testbench",]
+><:[module:. parse, .timestamp 2009-08-23T22:01:16.385+02 .language system]><;
+><:[module:. parse language .timestamp 2009-08-23T22:01:28.135+02 .language system]><;
+><:[module:. parse language pils .timestamp 2009-08-23T22:02:16.197+02 .language system]><;
+{ parse: .text .tag
+| :try
+  @ tokenize (.text .tag)
+  first [design-file: .?]
+  fold (@@ rules)
+}
+><:[module:. parse testbench .timestamp 2009-09-28T22:30:34.578+02 .language system]><;
+><:[module:. parse testbench run .timestamp 2009-09-28T22:41:58.375+02 .language system]><;
+{ run: .text .limit .language
+| :who :ok who run (.text .language) ++# limit
+}
+{ run: .text .language
+| :ok
+  @ [pils kernel-generator specs parse] tokenize
+  (.text .tag [-test-] .language)
+  every {ok = token: ..tag|:ok list := ok}
+  first [-test-]
+  fold
+  ( {? := ?|exit := ()}
+    +++
+    @@ [pils kernel-generator specs parse rules]
+    +++
+    { state := input | list := state: ..input }
+  )
+  call {state|:ok list := state: ..input [done]}
+  .:exit .:list
+  first 1 fold
+  { x := y | oops }
+  { at := state: ..input | :ok list := (at: ..state .input); at }
+  { ? := token: .? .tag * ;at | :ok at }
+  .:list
+}
+><:[module:. parse testbench selected .timestamp 2009-09-28T22:48:50.921+02 .language system]><;
+{ selected: ..channel
+| :ok
+  ;source channel source .language channel language;
+  selected state
+  **=** { ? := token: . ok .tag? | :ok }
+  .(channel state-display text: {} indent)
+  and:
+  channel source selection:
+  selected at
+!  call:
+!  @ ([language] & language & [tokenize]) positions (.text source text)
+!  try {ok = (extra) 0|:ok . & (extra,)}
+}
+><:[module:. pils, .timestamp 2009-08-19T16:01:07.800+02 .language system]><;
+><:[module:. pils kernel-generator .timestamp 2009-08-19T16:02:39.893+02 .language system]><;
+><:[module:. pils kernel-generator specs .timestamp 2009-09-28T21:06:23.812+02 .language system]><;
+><:[module:. pils kernel-generator specs parse .timestamp 2009-09-28T23:51:43.765+02 .language system]><;
+><:[module:. pils kernel-generator specs parse rules .timestamp 2009-09-29T00:42:03.187+02 .language system]><;
+{ x := y | oops }
+{ ok := token: . " " .tag? | :ok }
+{ [-test-] := | :who :ok [term: .level start; pils] call (who) := }
+{ (state = term: .level?; ?) := . = token: . "{" .tag?
+| :ok term: .level [match]; rule: ."{" =.; ruleset: . (); state
+}
+{ (term: .level; state) := name = token: . [name], ? .tag?
+| :ok term: .level .name; state
+}
+{ (term: .level .name; state) := . = token: . ":" .tag?
+| :ok legs: . () .level [leg]; node: .name .":" =.; term: .level; state
+}
+{ (state = legs: .? .level; ?) := . = token: . [dot-attribute] .tag?
+| :ok leg-name: leg: ."." =.; state
+}
+{ (leg-name: state) := leg-name = token: .? call [.name], ? .tag?
+| :who :ok state call (who) := leg-name:.
+}
+{ (leg: ."."; state) := leg-name:. name
+| :who :ok state call (who) := leg: ."." .name
+}
+{ (state = legs: .? .level; ?) := leg: ."." .name
+| :ok term: .level; leg: ."." .name; state
+}
+><:[module:. pils kernel-generator specs parse sample .timestamp 2009-09-28T20:59:18.890+02 .language text]><;
+{ split: .text . $.
+| :ok
+  text split
+  [ stringpart space string ?:"(" ?:")" comma
+    dot-attribute dot-colon-inversion dot-inversion dot
+    sign timestamp dating duration number
+    colon-node colon-colon colon
+    semicolon-node semicolon-empty-node semicolon
+    ?:"[" ?:"]:" ?:"]" this-language ?:"{" ?:"|" ?:"}"
+    prefix dotted-operator name comparator operator
+    question-name question namestart ending
+    .space [+: blank, linecomment, longcomment]
+    .?:"(" "("
+    .?:")" ")"
+    .comma ","
+    .dot-attribute "." followed-by-attribute-name,
+    .dot-colon-inversion ".:"
+    .dot-inversion ".("
+    .dot "."
+    .colon-node ":" followed-by-attribute-name,
+    .colon-colon ":" [-: -: ":"],
+    .colon ":"
+    .semicolon-node ";" followed-by-attribute-name,
+    .semicolon-empty-node ";:" 
+    .semicolon ";"
+    .?:"[" "["
+    .?:"]:" "]:"
+    .?:"]" "]"
+    .this-language "{}"
+    .?:"{" "{"
+    .?:"|" "|"
+    .?:"}" "}"
+    .question "?"
+    .question-name "?:"
+    .blank ""00"- "
+    .linecomment "!" [-: "!"] [=*: ""=, ""<],
+    .longcomment "!!" [=*: "!!"],
+    .sign "-" [-: -: digit],
+    .digit "0-9"
+    .digits [+: digit]
+    .fraction [".", ","] digits,
+    .timestamp dating timezone,
+    .duration
+      [digits "m",,] [digits "h",,] [digits "m",,] [digits [fraction,,] "s",,],
+    .number "0x" [+: hexdigit], [-: "0x"] digits [fraction,,] [exponent,,],
+    .exponent "%", ["E", "e"] ["+", "-",,] digits,
+    .dating
+      digit digit digit digit "-" digit digit "-" digit digit
+      ["T" digit digit [":" digit digit [":" digit digit ["." digits,,],,],,],,],
+    .timezone "z", "Z", ["+", "-"] digit digit [":" digit digit,,],
+    .followed-by-attribute-name
+      [-: -: namestarter, hyphen, digit, "[", "?:", """"]
+    .namestarter comparator-char, operator-char, letter
+    .hyphen "-"
+    .comparator-char "<", "=", ">", "~"
+    .operator-char "#", "$", "%", "&", "'", "*", "+", "-", "/", "\", "^",
+    .letter "@", "A-Z", "_", "`", "a-z", ""80"-"ff
+    .prefix [name, comparator, operator, "?"] ":" [-: -: namestarter, hyphen],
+    .string stringpart [*: "-" [space,,] stringpart,] [-: "-"],
+    .stringpart plainstring [*: control [plainstring, -: """"],],
+    .control [+: control-char, double-control-char]
+    .control-char hexdigit hexdigit, "=", "<", ">", "~", "*", """""",
+    .double-control-char "/"
+    .hexdigit digit, "a-f"
+    .plainstring """" [*: string-char] """",
+    .string-char """""", [-: """"] 1
+    .dotted-operator namestart dotted-operator-ending,
+    .name namestart name-ending,
+    .comparator namestart comparator-ending,
+    .operator namestart operator-ending,
+    .namestart [-: -: namestarter] [*: [-: ending] 1,],
+    .ending
+      dotted-operator-ending,
+      name-ending,
+      comparator-ending,
+      operator-ending,
+    .dotted-operator-ending operator-char "." ended,
+    .operator-ending operator-char ended,
+    .comparator-ending comparator-char ended,
+    .name-ending [digit, ".", letter] ended,
+    .ended [-: comparator-char operator-char letter digit "."]
+  ]
+}
+><:[module:. pils kernel-generator specs parse test .timestamp 2009-09-28T22:38:31.812+02 .language system]><;
+{ .test
+| :ok
+  @ [parse] testbench: .text @@ sample .language {}
+}
+><:[module:. pils kernel-generator specs parse tokenize .timestamp 2009-09-28T23:53:22.078+02 .language system]><;
+{ tokenize: .text .tag .language . language
+| :ok
+  @ split (.text)
+  first 0 fold
+  { at :=
+    token,
+    original $ count
+  | :ok
+    ;to at + count;
+    list := (token:. .tag tag:. .original .at ., to);
+    to
+  }
+  { at :=
+    token call [.name],
+    original $ count
+  | :ok
+    ;to at + count;
+    list := (token:.., original .tag tag:. .original .at ., to);
+    to
+  }
+  { at :=
+    token call
+    [ .space " "
+      .?:"{" "{"
+      .?:"[" "["
+      .?:"|" "|"
+      .?:"}" "}"
+      .?:"]" "]"
+      .colon ":"
+    ]
+    ,
+    original $ count
+  | :ok
+    ;to at + count;
+    list := (token:. .tag tag:. .original .at ., to);
+    to
+  }
+  .:list
+}
+><:[module:. pils kernel-generator specs parse tokenize split .timestamp 2009-09-28T21:03:26.265+02 .language system]><;
+{ split: .text . $.
+| :ok
+  text split
+  [ space string ?:"(" ?:")" comma
+    dot-attribute dot-colon-inversion dot-inversion dot
+    sign timestamp dating duration number
+    colon-node colon-colon colon
+    semicolon-node semicolon-empty-node semicolon
+    ?:"[" ?:"]:" ?:"]" this-language ?:"{" ?:"|" ?:"}"
+    prefix dotted-operator name comparator operator
+    question-name question namestart ending
+    .space [+: blank, linecomment, longcomment]
+    .?:"(" "("
+    .?:")" ")"
+    .comma ","
+    .dot-attribute "." followed-by-attribute-name,
+    .dot-colon-inversion ".:"
+    .dot-inversion ".("
+    .dot "."
+    .colon-node ":" followed-by-attribute-name,
+    .colon-colon ":" [-: -: ":"],
+    .colon ":"
+    .semicolon-node ";" followed-by-attribute-name,
+    .semicolon-empty-node ";:" 
+    .semicolon ";"
+    .?:"[" "["
+    .?:"]:" "]:"
+    .?:"]" "]"
+    .this-language "{}"
+    .?:"{" "{"
+    .?:"|" "|"
+    .?:"}" "}"
+    .question "?"
+    .question-name "?:"
+    .blank ""00"- "
+    .linecomment "!" [-: "!"] [=*: ""=, ""<],
+    .longcomment "!!" [=*: "!!"],
+    .sign "-" [-: -: digit],
+    .digit "0-9"
+    .digits [+: digit]
+    .fraction [".", ","] digits,
+    .timestamp dating timezone,
+    .duration
+      [digits "m",,] [digits "h",,] [digits "m",,] [digits [fraction,,] "s",,],
+    .number "0x" [+: hexdigit], [-: "0x"] digits [fraction,,] [exponent,,],
+    .exponent "%", ["E", "e"] ["+", "-",,] digits,
+    .dating
+      digit digit digit digit "-" digit digit "-" digit digit
+      ["T" digit digit [":" digit digit [":" digit digit ["." digits,,],,],,],,],
+    .timezone "z", "Z", ["+", "-"] digit digit [":" digit digit,,],
+    .followed-by-attribute-name
+      [-: -: namestarter, hyphen, digit, "[", "?:", """"]
+    .namestarter comparator-char, operator-char, letter
+    .hyphen "-"
+    .comparator-char "<", "=", ">", "~"
+    .operator-char "#", "$", "%", "&", "'", "*", "+", "-", "/", "\", "^",
+    .letter "@", "A-Z", "_", "`", "a-z", ""80"-"ff
+    .prefix [name, comparator, operator, "?"] ":" [-: -: namestarter, hyphen],
+    .string stringpart [*: "-" [space,,] stringpart,] [-: "-"],
+    .stringpart plainstring [*: control [plainstring, -: """"],],
+    .control [+: control-char, double-control-char]
+    .control-char hexdigit hexdigit, "=", "<", ">", "~", "*", """""",
+    .double-control-char "/"
+    .hexdigit digit, "a-f"
+    .plainstring """" [*: string-char] """",
+    .string-char """""", [-: """"] 1
+    .dotted-operator namestart dotted-operator-ending,
+    .name namestart name-ending,
+    .comparator namestart comparator-ending,
+    .operator namestart operator-ending,
+    .namestart [-: -: namestarter] [*: [-: ending] 1,],
+    .ending
+      dotted-operator-ending,
+      name-ending,
+      comparator-ending,
+      operator-ending,
+    .dotted-operator-ending operator-char "." ended,
+    .operator-ending operator-char ended,
+    .comparator-ending comparator-char ended,
+    .name-ending [digit, ".", letter] ended,
+    .ended [-: comparator-char operator-char letter digit "."]
+  ]
+}
+><:[module:. pils kernel-generator specs parse tokenize split test .timestamp 2009-09-28T21:27:10.937+02 .language system]><;
+><:[module:. pils kernel-generator specs parse tokenize split test modules .timestamp 2009-08-23T20:51:03.619+02 .language system]><;
+{ .modules
+| :ok
+  this program libraries every [call: filename]
+  every
+  { filename
+  |:ok (channel: pils-library: filename) node legs
+    {+& module := * ;module +$ text|:ok module: ..text}
+  }
+  splice
+  distinct [call: module] order {module:..text?|:ok {} write: module}
+  every {module:..text?|:ok module (module)}
+  each
+  { * module: .name .language . language .text
+  | :ok module: .name .text .language
+  }
+}
+><:[module:. pils kernel-generator target .timestamp 2009-08-19T16:07:40.237+02 .language system]><;
+;target @ [nasm-win32]><:[module:. pils kernel-generator target masm-win32 .timestamp 2009-08-19T16:03:37.003+02 .language system]><;
+><:[module:. pils kernel-generator target masm-win32 filename .timestamp 2009-10-04T10:29:20.525+02 .language system]><;
+{ .filename
+| :ok
+  this program path <-#^* "/src/" "asmkernel/masm-win32/pilskernel.asm"
+}
+><:[module:. pils kernel-generator test .timestamp 2009-08-19T16:15:47.487+02 .language system]><;
+{ .test
+| :ok
+  file (@ target filename) text := @@ handmade
+}
+><:[module:. pils kernel-generator test handmade .timestamp 2009-08-20T03:54:17.213+02 .language text]><;
+.386
+.model flat, c
+.code
+
+; Euclid's algorithm finds the greatest common divisor by repeatedly
+; subtracting the smaller number from the larger number until zero
+; is reached. The number remaining is the greatest common divisor.
+
+euclid PROC x:SDWORD, y:SDWORD
+  mov ecx, x
+  mov eax, y
+@@:
+  cmp ecx, eax
+  jge noswap
+  xchg eax, ecx
+noswap:
+  sub ecx, eax
+  jnz @B
+  RET
+euclid ENDP
+
+end

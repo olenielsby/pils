@@ -1,0 +1,73 @@
+<HTML><HEAD><TITLE>PILS Browser Plugin Test</TITLE></HEAD>
+<BODY>
+<center>
+
+<script>
+function printmessage(arg)
+{
+    document.getElementById ("result").innerHTML += "<p>" + arg + "</p>";
+}
+
+function getPlugin()
+{
+    return document.getElementById ("plugin");
+}
+
+function showAMessage()
+{
+    var response = getPlugin().printText ("This is a message sent from the website's javascript...");
+    printmessage (response);
+}
+
+function popUpMessageBox()
+{
+    // fetch a couple of properties from the plugin and tell the plugin to show them in a pop-up box..
+    getPlugin().popUpMessageBox ("property1 = " + getPlugin().property1 
+                                   + "\nproperty2 = " + getPlugin().property2);
+}
+
+// callbacks from plugin...
+function WebpageCallbacks()
+{
+    this.printmessage = printmessage;
+}
+
+function sendCallbackObjectToPlugin()
+{
+    // This gives the plugin an object containing methods that it can call, so that it
+    // can trigger events in the webpage..
+    getPlugin().registerCallbackObject (new WebpageCallbacks());
+}
+
+function executePilsCommand(arg)
+{
+    getPlugin().pilsCommand (arg);
+    // fetch a couple of properties from the plugin and tell the plugin to show them in a pop-up box..
+    getPlugin().popUpMessageBox ("property1 = " + getPlugin().property1 
+                                   + "\nproperty2 = " + getPlugin().property2);
+
+}
+
+</script>
+
+<!-- This tag works in IE - for Netscape plugins, remove or rename the classid tag 
+     and it should use the npapi plugin instead
+     -->
+<object id="plugin"
+        type="application/nppils-plugin"
+        classid="CLSID:5AD94FEB-60EF-44C7-A7C5-AA00B1F7ADCD"
+        width="80%" height="400">
+</object>
+
+<br>
+<form name="formname">
+<input type="button" value="Tell the plugin to show a message" onclick="showAMessage()">
+<input type="button" value="Tell the plugin to show a pop-up" onclick="popUpMessageBox()">
+<input type="button" value="Pass a callback object to the plugin" onclick="sendCallbackObjectToPlugin()">
+<input type="button" value="Do a PILS thing" onclick="executePilsCommand(&quot;&quot;)">
+</form>
+
+<div id="result"></div>
+
+</center>
+</BODY></HTML>

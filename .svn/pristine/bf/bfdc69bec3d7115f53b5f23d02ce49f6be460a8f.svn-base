@@ -1,0 +1,195 @@
+><:[module:. codecomb, .timestamp 2009-03-06T10:53:32.324+01 .language system]><;
+><:[module:. codecomb search .timestamp 2009-11-11T22:53:52.814+01 .language system]><;
+;changing [call: .changed] -> this module channel;
+
+{ .search
+| :ok
+  this module channel close anyway:
+  ;window platform window (say [search]) size [1000 800];
+  window mind close := this module channel listen (window);
+  ;splitter window splitter [wall];
+  ;column splitter column;
+  ;column splitter column;
+  ;[row: high] column row;
+  ;[seek: high] row [high] textfield when (changing);
+  ;[whole: high]
+    row [high] checkbox (say [whole words only]) when (changing)
+  ;
+  ;[case-sensitive: high]
+    row [high] checkbox (say [case-sensitive]) checked 1
+    when (changing)
+  ;
+  column mind focusing := seek [high];
+  ;belt column row;
+  ;tree
+    belt tree
+    icons
+    ( . [none high low both]
+       every {n|:ok @@ ([pils editor detective icon detectives] & n & [small])}
+       .size 16
+     )
+    when
+    { selected: .
+    | :who . mind selected := selected id;
+      this module channel text (. selected mind text or "" ) and:
+      this module channel hits
+    }
+    { activated: .
+    | :who . mind selected := activated id;
+      this module channel open
+    }
+    { * [key down]: .key [escape] | :try editor-channel escape }
+  ;
+  ;hits belt list when
+    { selected: .
+    | :who . mind hits . selected call (this module channel)
+!      and: who focus
+    }
+    { * [key down]: .key [escape] | :try editor-channel escape }
+  ;
+  hits mind width := 60;
+  ;[row: low] column row;
+  ;[seek: low] row [low] textfield when (changing);
+  ;[whole: low]
+    row [low] checkbox (say [whole words only]) when (changing)
+  ;
+  ;[case-sensitive: low]
+    row [low] checkbox (say [case-sensitive]) checked 1
+    when (changing)
+  ;
+  ;textpane splitter textpane;
+  [high low] every {side|:ok row (side) mind height := 40} and:
+  tree mind contents :=
+    @ populate (.tree .data @ data: .root @ root)
+  ;
+  splitter split (column, textpane) and:
+  window mind listen := this module channel listen
+  { .hits | :ok () }
+  { .hits
+  | ;selected tree mind selected .:need; :ok
+    tree mind contents
+    **=** {flap: ..item; ?|:if flap = selected; list := item}
+    .:list find
+    { | :ok () }
+    { file: .? .text .language?
+    | :ok
+      [high low] each (column mind search or:) every (call: text) splice
+      order {hit: . ok, ? .line?|:ok}
+      every {hit: ..line|:ok hit: ..line}
+    }
+    or ()
+    call
+    { hitlist
+    | :ok
+      hits mind hits := hitlist;
+      hits clear add: hitlist every
+      { * hit: .line | :ok {} write (line) }
+    }
+  }
+  { hit: ..line?
+  | :ok textpane selection (hit .scroll-to-center 1)
+  }
+  { .changed
+  | ;search
+    [search: .high .low] **=**
+    { side := side
+    | :ok
+      ;wanted seek (side) text;
+      @ [compute text] searching:
+      .wanted
+      .whole whole (side) checked
+      .case-sensitive case-sensitive (side) checked
+    }
+    ;
+    column mind search := search;
+    tree mind contents call (@ state: .search .tree) and:
+    this module channel hits
+  }
+  { text: . | :ok textpane text (text) }
+  ;
+  this module channel changed anyway:
+}
+><:[module:. codecomb search data .timestamp 2009-11-11T22:43:15.463+01 .language system]><;
+{ data: .root . $.
+| :who :ok
+  folder (root) call
+  { folder
+  | :who :possibly folder: .;
+    folder folders each (who)
+    &
+    (folder files each (@ filter))
+    call {+& ok|:ok} .:need
+  }
+}
+><:[module:. codecomb search data filter .timestamp 2009-11-11T22:43:24.387+01 .language system]><;
+;filter
+{ file file: ? <$* ".c"
+| :possibly file: ..text file text .language [c]
+}
+{ file file: ? <$* ".h"
+| :possibly file: ..text file text .language [c++]
+}
+{ file file: ? <$* ".cpp"
+| :possibly file: ..text file text .language [c++]
+}
+->
+{ file: ..text .language
+| :ok file: ..language .text . *=* (""/, ""=, "">, "    ")
+}><:[module:. codecomb search data test .timestamp 2009-03-06T12:04:51.387+01 .language system]><;
+{ .test | :ok @ data: .root @ root }
+><:[module:. codecomb search populate .timestamp 2009-03-09T12:49:27.195+01 .language system]><;
+{ populate: .tree .data
+| :ok more (. data, .branch tree) call {ok,|:ok}
+}
+===
+{ more: ..branch
+| :who :ok
+  more every
+  { item = file: ..text .language
+  | :ok flap: . branch add (file name <+#-* "/") mind (item) id .item;
+  }
+  { folder: .. folder (name); more
+  | :ok
+    ;branch . add (name <+#~* "//" -#$* "/");
+    flap: . branch id .item (folder: .);
+    who more: ..branch
+  }
+}
+><:[module:. codecomb search root .timestamp 2009-03-06T11:43:34.043+01 .language system]><;
+{ .root
+| :ok
+  this module path <-#=* "/pils/" "/src/"
+}
+><:[module:. codecomb search state .timestamp 2009-03-09T13:04:29.774+01 .language system]><;
+{ state: .search (search: .high .low) .tree
+| :ok
+  { flap: ..item; branches
+  | :who :ok
+    item call
+    {folder: .?|:ok state: .high 0 .low 0}
+    { file: .? .text .language?
+    | :ok
+      state:
+      .high .. text ++# 1 count
+      .low .. text ++# 1 count
+    }
+    & (branches each: who) fold
+    { (state: .high .low) := state: .high h .low l
+    | :ok state: .high . + h <> 0 .low . + l <> 0
+    }
+    try
+    { state
+    | tree . flap icon: .
+      state call
+      [ .[state: .high 0 .low 0] 1
+        .[state: .high 1 .low 0] 2
+        .[state: .high 0 .low 1] 3
+        .[state: .high 1 .low 1] 4
+      ]
+    }
+  }
+}
+><:[module:. codecomb search test .timestamp 2009-03-06T11:31:15.683+01 .language system]><;
+{ .test
+| :ok @ search
+}

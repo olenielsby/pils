@@ -1,0 +1,11 @@
+[pils: .use "<pils>/english/system/juce/plumming-generator",]
+><:[module: . job, .timestamp 2009-07-30T00:33:28.083+02 .language system]><;
+><:[module: . job plumming .language system]><;
+><:[module: . job plumming juce .language system]><;
+><:[module: . job plumming juce target .language system]><;
+><:[module: . job plumming juce target folder .timestamp 2009-07-30T00:44:03.239+02 .language system]><;
+;folder this module filename <-#=* "/pils/" "/src/nppils/"><:[module: . job plumming juce target opengl-header .timestamp 2009-07-30T01:16:59.159+02 .language system]><;
+;opengl-header "jpils/jpils-opengl.h"
+><:[module: . job plumming juce target prefix .timestamp 2009-07-30T00:49:49.692+02 .language system]><;
+;prefix "nppils-"
+><:[module: . test, .timestamp 2009-07-30T00:33:40.145+02 .language system]><;

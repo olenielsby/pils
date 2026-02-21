@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E9CACF77-5AEF-4DE3-A067-37AC050CBD61}</ProjectGuid>
+    <RootNamespace>pilskernel</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration)\pils-kernel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\pils-kernel\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\pils-kernel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\pils-kernel\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\pils-kernel\builder.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\builtin.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\call.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\catchy.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\channel.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\compile.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\concatenate.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\datamodel.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\escape.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\language.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\node.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\numeric.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\order.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\pilsatomic.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\pilserror.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\pilsread.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\pilsstring.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\pilsthread.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\pipe.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\quickstep.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\relational.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\rule.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\sink.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\splitter.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\statement.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\strap.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\stringcasing.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\timestamp.cpp" />
+    <ClCompile Include="..\..\..\src\pils-kernel\writing.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\pils-kernel\builder.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\builtin.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\call.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\catchy.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\channel.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\compile.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\concatenate.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\datamodel.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\escape.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\initializers.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\language.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\node.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\numeric.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\order.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\pilsatomic.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\pilserror.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\pilsmutex.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\pilsread.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\pilsstring.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\pilsthread.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\pilstime.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\pipe.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\quickstep.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\relational.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\rule.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\sink.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\splitter.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\statement.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\strap.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\timestamp.h" />
+    <ClInclude Include="..\..\..\src\pils-kernel\writing.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

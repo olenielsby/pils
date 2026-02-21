@@ -1,0 +1,712 @@
+[pils: .use "<pils>/registry/danish/diabetessimulator/diabetessimulator", "<pils>/danish/system/danish" .language danish]
+><:[modul:. program, .tidsstempel 2008-12-24T14:36:41.801+01 .sprog dansk]><;
+><:[modul:. program dansk .tidsstempel 2009-01-05T10:00:57.761+01 .sprog dansk]><;
+><:[modul:. program dansk maxi-projektet .tidsstempel 2009-01-05T10:07:39.839+01 .sprog dansk]><;
+><:[modul:. program dansk maxi-projektet diabeteshjælper .sprog dansk]><;
+><:[modul:. program dansk maxi-projektet diabeteshjælper data .tidsstempel 2008-12-30T18:14:52.004+01 .sprog dansk]><;
+><:[modul:. program dansk maxi-projektet diabeteshjælper data brugerprofil .tidsstempel 2010-01-23T17:07:47.826+01 .sprog dansk]><;
+;brugerprofil
+brugerprofil:
+.navn "Bert Braunschweiger"
+.glukosegrænserne 3, 8
+.startblodsukker  5
+.slutblodsukker  7
+.hvilepuls 70
+.maxpuls 190
+.vægt 60
+.køn 0
+.fødselsår 1986
+><:[modul:. program dansk maxi-projektet diabeteshjælper data insulinpræparaterne .tidsstempel 2009-10-21T00:06:23.324+02 .sprog dansk]><;
+;insulinpræparaterne
+[ [ medicinering:
+    .under menu
+    .kategori "Insulin"
+    .navn "Analog"
+    .billede "diverse/insulin_pen.svg"
+    .dosis 1
+    .sammensætning
+    [sammensætning: .1 1]
+  ]
+  [ medicinering:
+    .under "Analog"
+    .kategori "Insulin"
+    .navn "Human"
+    .billede "diverse/insulin_pen.svg"
+    .dosis 1
+    .sammensætning
+    [sammensætning: .2 1]
+  ]
+  [ medicinering:
+    .under "Analog"
+    .kategori "Insulin"
+    .navn "Intermediær"="human"
+    .billede "diverse/insulin_pen.svg"
+    .dosis 1
+    .sammensætning
+    [sammensætning: .3 1]
+  ]
+  [ medicinering:
+    .under "Analog"
+    .kategori "Insulin"
+    .navn "Langsom analog"
+    .billede "diverse/insulin_pen.svg"
+    .dosis 1
+    .sammensætning
+    [sammensætning: .4 1]
+  ]
+]
+><:[modul:. program dansk maxi-projektet diabeteshjælper data madfilerne .tidsstempel 2009-01-01T18:54:31.187+01 .sprog tekstliste]><;
+generelt.xml
+skagen_fiskerestaurant.xml
+slagter_munch.xml
+><:[modul:. program dansk maxi-projektet diabeteshjælper data motionsformerne .tidsstempel 2009-10-21T00:05:58.115+02 .sprog dansk]><;
+;motionsformerne
+[ [ motion:
+    .under menu
+    .kategori motion
+    .navn cykling
+    .billede "motion/bevaegelse_cykel.svg"
+    .puls 140
+    .minutterne 30
+  ]
+  [ motion:
+    .under cykling
+    .kategori motion
+    .navn boldspil
+    .billede "motion/bevaegelse_boldspil.svg"
+    .puls 140
+    .minutterne 30
+  ]
+  [ motion:
+    .under cykling
+    .kategori motion
+    .navn løb
+    .billede "motion/bevaegelse_loeb.svg"
+    .puls 140
+    .minutterne 30
+  ]
+]
+><:[modul:. program dansk maxi-projektet diabeteshjælper forløb .tidsstempel 2011-10-01T15:02:15.650+02 .sprog dansk]><;
+{ forløb:
+  .tidslinje
+  .placering
+  ;
+  & emnerne
+| :ok
+  [fra til] hver (placering)
+  hver {x|:ok tidslinje tid (.x) afrund 1m}
+  kald
+  {fra, til|:ok 0 op ((til - fra) / 1m) hver {x|:ok tid:. fra + x * 1m;}}
+  & (emnerne hver (@@ hændelsesreduktion) splejs)
+  grupperne {tid:.; værdi|:ok :navn tid; værdi}
+  benene {tid := hændelserne = () 1|:ok tid:.; hændelserne}
+  orden [kald: tid]
+}
+><:[modul:. program dansk maxi-projektet diabeteshjælper fremvisning .sprog dansk]><;
+><:[modul:. program dansk maxi-projektet diabeteshjælper fremvisning mal .sprog dansk]><;
+
+><:[modul:. program dansk maxi-projektet diabeteshjælper fremvisning mal baggrund .tidsstempel 2010-01-19T23:54:59.057+01 .sprog dansk]><;
+{ baggrund: .lærred .grafik
+| :ok
+  ;graf (graf:baggrund:. #eeeeee;);
+  lærred husk baggrund [graf] := graf;
+  grafik graf (graf)
+}
+><:[modul:. program dansk maxi-projektet diabeteshjælper fremvisning mal glukosekurve .tidsstempel 2010-01-21T01:00:21.482+01 .sprog dansk]><;
+{ glukosekurve:. .grafik .placering .glukoseskala .tidslinje
+| :ok
+  :kald (pyt: grafik) .hvem
+  ;figur
+    glukosekurve hver
+    {*;tid .glukose g|:ok tidslinje x (.tid), glukoseskala y (.g)}
+    .(graf:kurve:)
+  .gradient
+    @ gradient
+    ( ;margin placering bund - (placering top) \ 4;
+      placering top - margin, placering bund + margin
+    )
+  ;
+  grafik graf:
+  ([9 #000000], (8, gradient))
+  hver {graf:rund, graf:blæk|:ok graf:blæk:.; graf:rund:.; figur}
+}
+><:[modul:. program dansk maxi-projektet diabeteshjælper fremvisning mal madindtag .tidsstempel 2011-10-01T15:04:49.526+02 .sprog dansk]><;
+{ madindtag:. ' = (* madvare: .glukose .gram .billede .navn .hak)
+  .grafik .x .y
+| :ok
+  grafik graf:
+  graf:blæk:.;
+  graf:ved:. x, y;
+  ( graf:skyd:. 50%;
+    graf:stræk:. 32; graf:billede: billede kald (billederne)
+  )
+  &:
+  ( graf:ved:. 0, 25; graf:skyd:. 50%;
+    graf:skrift:.; :hvis hak; sig (gram, " g") .ellers "uspec."
+  )
+}
+><:[modul:. program dansk maxi-projektet diabeteshjælper fremvisning mal medicinering .tidsstempel 2010-01-22T17:08:22.139+01 .sprog dansk]><;
+{ medicinering: .grafik .dosis .x .y .billede .navn
+| :ok
+  grafik graf:
+  graf:blæk:.; graf:ved:. x, y;
+  ( graf:skyd:. 50%;
+    graf:stræk:. 32; graf:billede: billede kald: billederne
+  ),
+  ( graf:ved:. 0, 0;
+    graf:skyd:. 50%, 1; graf:skrift:.; sig (dosis, " enh.")
+  ),
+}
+><:[modul:. program dansk maxi-projektet diabeteshjælper fremvisning mal motion .tidsstempel 2010-01-22T19:16:54.723+01 .sprog dansk]><;
+{ motion:. (*;navn .minutterne .puls .billede) .grafik .tidslinje .tid .y
+| :ok
+  ;x tidslinje x (.tid)
+  .[x: slut] tidslinje x (.tid . + (minutterne * 1m))
+  ;
+  grafik graf:
+  graf:ved:. x, y;
+  ;x' x [slut] - x;
+  ( graf:blæk:. #649600;
+    graf:ved:. 0, 24;
+    graf:figur:
+    (0, -6),
+    (x' - 4, -6),
+    (x', -12),
+    (x' + 4, -6),
+    (x' + 4, 6),
+    (x', 12),
+    (x' - 4, 6),
+    (0, 6)
+  ),
+  ( graf:ved:. x' / 2, 0;
+    graf:skyd:. 50%; graf:stræk:. 32;
+    graf:billede: billede kald: billederne
+  ),
+  ( graf:blæk:. #ffffff;
+    graf:ved:. x' / 2, 24;
+    graf:skyd:. 50%;
+    graf:skrift:.; @ minutangivelse (.minutterne)
+  ),
+}
+><:[modul:. program dansk maxi-projektet diabeteshjælper fremvisning mal tidspil .tidsstempel 2010-01-20T00:31:04.723+01 .sprog dansk]><;
+{ tidspil: .grafik .placering * placering: .top .bund .fra .til .spids .udhæng
+| :ok
+  grafik graf:
+  graf:blæk:.;
+  graf:streg:. 3;
+  graf:figur:
+  (fra, top),
+  (til, top),
+  (til, top - udhæng),
+  (til + spids, top + bund / 2),
+  (til, bund + udhæng), 
+  (til, bund),
+  (fra, bund)
+}
+><:[modul:. program dansk maxi-projektet diabeteshjælper fremvisning placering .tidsstempel 2010-01-22T16:07:38.213+01 .sprog dansk]><;
+{ placering: .stræk bredde, højde
+| :ok
+  placering:
+  .top (højde * 10 \ 50) + (højde * højde \ 4000)
+  .bund højde - 10 - (højde \ 8)
+  .fra 30
+  .til bredde - 40
+  .spids 30
+  .udhæng 15
+  .[x: nu] 30
+  .bredde
+  .højde
+}
+><:[modul:. program dansk maxi-projektet diabeteshjælper fremvisning vindue .tidsstempel 2011-10-01T14:58:05.912+02 .sprog dansk]><;
+{ .vindue
+| :ok
+  kanal luk pyt:
+  ;vindue
+    platform vindue
+    (sig [diabetrix - træn din insulin "" dosering])
+    indre stræk [480 320] plads [0 0]
+  ;
+  vindue ikon (@ logo) og:
+  ;lærred
+    vindue lærred
+    når
+    { mal: grafik
+    | :hvem @ lærred:. hvem .grafik .visning hvem husk visning
+    }
+    { prøv = ? $* [mus,] *?
+    | :hvem :prøv ' kald:
+      @ mus:
+      .lærred hvem
+      .placering @ placering (.stræk hvem stræk)
+      .visning hvem husk visning
+    }
+    { .strakt | :hvem ' opfrisk .:ok }
+  ;
+  lærred husk ryk := 1m;
+  lærred husk model := [hakkebakke];
+  lærred husk baggrund [valgt] := @ baggrundene . 1;
+  :brug
+  { .visning | :ok lærred husk visning }
+  { .placering | :ok @ placering (.stræk lærred stræk) }
+  { .brugerprofil | :ok @ [data] brugerprofil }
+  ;
+  lærred husk visning := [personlig];
+  lærred husk minut := 2000-01-01T00:00Z;
+  lærred husk tilstand [spil] := @ [spil] tilstand (.lærred);
+  ;husk [kanal: diabeteshjælper] lyt
+    { .hændelserne | :prøv @ hændelserne }
+    { .tidslinje | :prøv @ tidslinje (.lærred .placering) }
+  ;
+  lærred husk bredde [time] := @@ tidshorisonterne find {[mellem], ok|:ok};
+  @ menu (.vindue .lærred .brugerprofil .visning) og:
+  vindue husk lukker := kanal lyt
+    { .luk | :prøv vindue luk }
+    { .opfrisk | :prøv lærred opfrisk }
+  ;
+  lærred husk tidslinje := @ tidslinje (.lærred .placering);
+  lærred husk butikshylde := 0;
+  lærred husk trækker := ();
+  lærred husk tikker := platform tikker [.engelsk:milliseconds 100] når
+  { .tik
+  | datafiltjek og:
+    lærred husk minut := lærred husk minut + (lærred husk ryk);
+    @ [spil] tik (.lærred) og:
+    lærred opfrisk
+  };
+  og:
+  vindue indre stræk [480 320]
+}
+><:[modul:. program dansk maxi-projektet diabeteshjælper fremvisning vindue lærred .tidsstempel 2011-10-01T15:05:58.838+02 .sprog dansk]><;
+;billederne @@ billederne
+.emnerne @ [emnerne]
+.mal @ [mal]
+;
+{ lærred:. .grafik .visning [personlig]
+| :ok
+  ;placering @ placering (.stræk lærred stræk);
+  ;tidslinje @ tidslinje (.lærred .placering)
+  .brugerprofil @ [data] brugerprofil
+  .hændelserne @ hændelserne (.lærred .placering)
+  .minut lærred husk minut
+  ;
+  ;glukoseskala
+    @ glukoseskala
+    (.glukosegrænserne brugerprofil glukosegrænserne .placering)
+  ;
+  mal baggrund (.grafik .lærred) og:
+  mal tidspil (.grafik .placering) og:
+!  @ varefelterne (.lærred) hver
+!  { vare:.. <> [] .rektangel .hylde
+!  | mal hyldevare:. vare .grafik .rektangel .hylde
+!  }
+!  og:
+  @ [model] (lærred husk model) mal
+  ( ..tidslinje
+    .placering
+    .hændelserne
+    .brugerprofil
+    .lærred
+    .grafik
+    .glukoseskala
+  )
+  og:
+  lærred husk glukoseskala := glukoseskala;
+  glukoseskala mal (..grafik)
+  og:
+  lærred husk hændelserne eller () hver
+  { emne:. .tid .flyder
+  | :prøv
+    emne kald (emnerne) mal:. .grafik .tidslinje .tid .flyder .lærred
+  }
+  og:
+  tidslinje mal (..grafik)
+  og:
+  lærred husk tilstand [spil] flyvende hver
+  { flyv:. .fra .til .varighed .sluttid
+  | ;sted
+      (fra, til) tværs hver
+      {fra, til|:ok ((fra - til) * (sluttid - minut) / varighed + til) afrund}  
+    ;
+    flyv
+    kald (emnerne) mal
+    ( ..grafik .tidslinje
+      .tid tidslinje tid (.x sted . 1)
+      .flyder glukoseskala flyder (.y sted . 2)
+      .lærred
+    )
+    .:kræv
+  }
+  og:
+
+  lærred husk trækker eller () prøv
+  { emne:. .sted x, y
+  | emne prøv [kald: emne]
+    kald (emnerne) mal
+    ( ..grafik .tidslinje
+      .tid tidslinje tid (.x)
+      .flyder glukoseskala flyder (.y)
+      .lærred
+    )
+    .:kræv
+  }
+}
+><:[modul:. program dansk maxi-projektet diabeteshjælper fremvisning vindue lærred model .sprog dansk]><;
+><:[modul:. program dansk maxi-projektet diabeteshjælper fremvisning vindue lærred model hakkebakke .tidsstempel 2010-01-21T02:04:42.129+01 .sprog dansk]><;
+;hakkebakke
+{ mal:
+  ..tidslinje
+  .placering
+  .hændelserne
+  .brugerprofil
+  .lærred
+  .grafik
+  .glukoseskala
+| :ok
+  ;starttid tidslinje tid (.x placering fra) afrund 1m;
+  ;starttilstand
+    lærred husk glukosekurve eller ()
+    find {ok = *;tid|:hvis tid = starttid; :ok}
+    eller
+    (@ [glukosemodel hakkebakke] starttilstand: .brugerprofil .tid starttid)
+  ;
+  ;forløb @ forløb (.tidslinje .placering; hændelserne);
+  :hvis forløb antal;
+  ;glukosekurve
+    @ [glukosemodel hakkebakke] forløb (..brugerprofil .starttilstand)
+  ;
+  lærred husk glukosekurve := glukosekurve;
+  mal glukosekurve (..grafik .placering .glukoseskala .tidslinje)
+}
+><:[modul:. program dansk maxi-projektet diabeteshjælper fremvisning vindue mus .tidsstempel 2011-10-01T15:10:43.624+02 .sprog dansk]><;
+{ mus: .lærred .placering .visning [oversigt] | :ok [ok] }
+{ mus: .lærred .placering .visning [personlig]
+| :ok
+  { [mus venstre ned]: sted = (x, y)
+  | ;glukoseskala
+      @ glukoseskala
+      ( .glukosegrænserne @ [data] brugerprofil glukosegrænserne
+        .placering
+      )
+    ;
+    ;tidslinje @ tidslinje (.lærred .placering);
+    lærred husk tidslinje := tidslinje;
+    lærred husk tilstand [spil] flyvende enhver
+    { flyv = flyv:.? .fra .til .varighed .sluttid
+    | :ok flyv:. .sted
+      (fra, til) tværs hver
+      { fra, til
+      |:ok ((fra - til) * (sluttid - lærred husk minut) / varighed + til) afrund
+      }  
+    }
+    find
+    { flyv:. .sted x', y'
+    | :hvis (x - x' >= -20 <= 20) og (y - y' >= -20 <= 20);
+      ;flyder placering flyder (.y y') eller 500;
+      :ok
+      lærred husk tilstand [spil] := lærred husk tilstand [spil] flet
+      ( ;flyvende
+        lærred husk tilstand [spil] flyvende
+        undtagen ((flyv,) eneste [ok])
+      )
+      ;
+      ;hændelserne lærred husk hændelserne;
+      lærred husk hændelserne := hændelserne &:
+      emne:. flyv flyv .flyder .tid tidslinje tid (.x x') afrund 1m
+    }
+!    { emne = emne:. aktivitet = (*;minutterne) .tid .flyder
+!    | ;x' tidslinje x (.tid . + (minutterne * 1m)) .y' glukoseskala y (.flyder);
+!      :hvis x' - 8 <= x, y' - 12 <= y, x' + 8 >= x, y' + 12 >= y; :ok
+!      emne:. ..(varighed:) .sted
+!    }
+    eller:
+  }
+}
+><:[modul:. program dansk maxi-projektet diabeteshjælper glukosemodel .sprog dansk]><;
+><:[modul:. program dansk maxi-projektet diabeteshjælper glukosemodel hakkebakke .sprog dansk]><;
+><:[modul:. program dansk maxi-projektet diabeteshjælper glukosemodel hakkebakke forløb .tidsstempel 2011-10-01T15:02:51.867+02 .sprog dansk]><;
+{ forløb:. ' = (tid:.; ?) 1 .brugerprofil .starttilstand
+| :ok
+  ;@@hændelse @@ hændelse .@@skridt @@ skridt;
+  forløb --# 1 først (starttilstand)
+  fold
+  { tilstand := tid:.; hændelserne
+  | :ok liste :=
+    @@skridt skridt (.tid .tilstand)
+    & (hændelserne -#+* (,)) fold (@@hændelse)
+  }
+  .(liste := starttilstand;)
+  .:liste
+  hver {ok = *;tid .glukose|:ok}
+}
+><:[modul:. program dansk maxi-projektet diabeteshjælper hændelserne .tidsstempel 2011-10-01T14:59:13.823+02 .sprog dansk]><;
+;emnerne @ [emnerne];
+{ hændelserne: .lærred .placering
+| :ok
+  ;tidslinje lærred husk tidslinje
+  .glukoseskala
+  ( @ glukoseskala:
+    .placering
+    .glukosegrænserne @ [data] brugerprofil glukosegrænserne
+  )
+  ;
+  ;hændelserne lærred husk hændelserne eller () prøv [fejl:.?];
+  lærred husk trækker eller () kald
+  { | :ok hændelserne }
+  { emne:. .sted ' = (?, y)
+  | :ok
+    hændelserne undtagen ((emne,) eneste [ok])
+    &:
+    () prøv
+    {
+    | ;tid tidslinje tid (.sted) .:kræv; :ok
+      emne:. ' prøv {*;emne ok|:ok}
+      .tid 
+      .flyder
+      @ glukoseskala
+      ( .glukosegrænserne @ [data] brugerprofil glukosegrænserne
+        .placering
+        @@ . [fremvisning placering] placering: .stræk lærred stræk
+      )
+      flyder (.y)
+    }
+  }
+  { emne:. (varighed: ?) .sted? | :ok hændelserne }
+  { emne:. (varighed: aktivitet = emne:. .flyder? .tid) .sted
+  | ;minutterne tidslinje tid (.sted) .:kræv - tid \ 1m;
+    :hvis minutterne; :ok
+    hændelserne undtagen ((aktivitet,) eneste [ok])
+    &: aktivitet flet: ;emne ' flet: ;minutterne
+  }
+  { emne:. (vægtjustering: ?) .sted? | :ok hændelserne }
+  { emne:. vægtjustering = (vægtjustering: mad = emne:. .flyder? .tid)
+    .sted x, y
+  | ;[x: emne] tidslinje x (.tid);
+    :hvis x >= x [emne] - 100, x < x [emne] + 100;
+    ;gram vægtjustering kald (emnerne) vægt (.y .glukoseskala);
+    :ok
+    hændelserne undtagen ((mad,) eneste [ok])
+    &: mad flet: ;emne ' flet: ;gram
+  }
+  { emne:. (dosisjustering: ?) .sted? | :ok hændelserne }
+  { emne:.
+      dosisjustering = (dosisjustering: medicinering = emne:. .flyder? .tid)
+    .sted x, y
+  | ;[x: emne] tidslinje x (.tid);
+    :hvis x >= x [emne] - 60, x < x [emne] + 140;
+    :ok
+    hændelserne undtagen ((medicinering,) eneste [ok])
+    &: medicinering flet: ;emne ' flet:
+    ;dosis dosisjustering kald (emnerne) dosis (.y .glukoseskala)
+  }
+  { emne:. måling =
+    (* blodsukkermåling: .værdi?)
+    .sted x, y
+  | ;tid tidslinje afrund (.tid tidslinje tid (.x));
+    :hvis y > 80, tid <= nu + 10m .ellers hændelserne .:ok;
+    :ok
+    hændelserne undtagen ((måling,) eneste [ok]) &:
+    ;glukoseskala;
+    ;værdi glukoseskala g (.y) * 10 afrund / 10;
+    emne:. (måling flet (;værdi))
+    .flyder (glukoseværdi:. værdi)
+    .tid
+  }
+  { emne:. ' =
+    (emne:. (måling = * blodsukkermåling: .værdi?) .flyder? .tid?)
+    .sted x, y
+  | ;hændelserne ' undtagen ((emne,) eneste [ok])
+    .tid tidslinje afrund (.tid tidslinje tid (.x))
+    ;
+    :hvis y > 80,  tid <= nu + 10m .ellers hændelserne .:ok;
+    :ok
+    hændelserne &:
+    ;glukoseskala;
+    ;værdi glukoseskala g (.y) * 10 afrund / 10;
+    emne:. (måling flet (;værdi))
+    .flyder (glukoseværdi:. værdi)
+    .tid
+  }
+  ===
+  { .glukoseskala
+  | :ok @ glukoseskala
+    ( .placering @@ . [fremvisning placering] placering (.stræk lærred stræk)
+      .glukosegrænserne @ [data] brugerprofil glukosegrænserne
+    )
+  }
+}
+><:[modul:. program dansk maxi-projektet diabeteshjælper hændelserne gem .tidsstempel 2010-01-20T00:54:02.164+01 .sprog dansk]><;
+;kanal (kanal: engelsk:pils-library: dette program filnavn)
+.modulnavn
+  [program dansk maxi-projektet diabeteshjælper data hændelserne]
+;
+{ gem: .hændelserne
+|
+}
+><:[modul:. program dansk maxi-projektet diabeteshjælper spil .tidsstempel 2010-01-21T12:56:48.829+01 .sprog dansk]><;
+><:[modul:. program dansk maxi-projektet diabeteshjælper spil fast .tidsstempel 2010-01-22T22:41:01.120+01 .sprog dansk]><;
+{ fast:. .lærred .flyder .tid
+| :ok
+  lærred husk hændelserne :=
+  lærred husk hændelserne eller () & emne: .flyder .tid .emne
+  fast kald: @ [vare]
+}
+><:[modul:. program dansk maxi-projektet diabeteshjælper spil tidsplan .tidsstempel 2010-01-23T18:21:09.094+01 .sprog dansk]><;
+;tidsplan
+[ 
+  fast:. [mad:. "Yoghurt m. frugt" .gram 150] .om 6h .flyder 800;
+  fast:. [mad:. "Franskbrød" .gram 50] .om 6h20m .flyder 200;
+  fast:. [mad:. "Ost" .gram 30] .om 6h20m .flyder 500;
+  vent:. 2h;
+  flyv:. [insulin:. 2] .fra 0 300 .til 480 30 .varighed 2h;
+  vent:. 1h;
+  flyv:. [insulin:. 2] .fra 0 300 .til 480 30 .varighed 2h;
+  vent:. 1h;
+  flyv:. [insulin:. 1] .fra 0 300 .til 480 30 .varighed 2h;
+  vent:. 2h;
+  fast:. [mad:. "Flødeis" .gram 50] .om 2h .flyder 100;
+  vent:. 30m;
+  fast:. [mad:. "Lakrids" .gram 100] .om 2h .flyder 100;
+  flyv:. [insulin:. 2] .fra 0 300 .til 480 30 .varighed 2h;
+  vent:. 30m;
+  flyv:. [insulin:. 8] .fra 0 300 .til 480 30 .varighed 2h;
+  flyv:. [mad:. "Banan" .gram 75] .fra 0 100 .til 480 230 .varighed 1h30m;
+  fast:. [mad:. "Salat" .gram 100] .om 4h .flyder 200;
+  fast:. [mad:. "Rugbrød" .gram 75] .om 4h .flyder 300;
+  fast:. [mad:. "Leverpostej" .gram 100] .om 4h .flyder 900;
+  fast:. [mad:. "Franskbrød" .gram 50] .om 4h15m .flyder 700;
+  fast:. [mad:. "Syltetøj" .gram 40] .om 4h15m .flyder 400;
+  vent:. 1h;
+  flyv:. [mad:. "Æble" .gram 125] .fra 0 100 .til 480 230 .varighed 1h;
+  flyv:. [insulin:. 3] .fra 0 300 .til 480 30 .varighed 1h30m;
+  vent:. 30m;
+  flyv:. [mad:. "Æble" .gram 125] .fra 0 100 .til 480 230 .varighed 1h30m;
+  vent:. 30m;
+  flyv:. [insulin:. 3] .fra 0 50 .til 480 300 .varighed 1h;
+  flyv:. [insulin:. 3] .fra 0 300 .til 480 30 .varighed 2h;
+  vent:. 30m;
+  flyv:. [mad:. "Æble" .gram 125] .fra 0 100 .til 480 230 .varighed 2h;
+  vent:. 30m;
+  flyv:. [mad:. "Gulerod" .gram 75] .fra 0 0 .til 480 300 .varighed 1h;
+  fast:. [mad:. "Kartoffel" .gram 125] .om 7h .flyder 250;
+  fast:. [mad:. "Kartoffel" .gram 125] .om 7h15m .flyder 400;
+  fast:. [mad:. "Kartoffel" .gram 125] .om 7h30m .flyder 100;
+  fast:. [mad:. "Salat" .gram 300] .om 7h15m .flyder 800;
+  fast:. [mad:. "Hamburgerryg" .gram 150] .om 7h15m .flyder 600;
+  vent:. 30m;
+  flyv:. [mad:. "Æble" .gram 125] .fra 0 0 .til 480 300 .varighed 1h;
+  vent:. 30m;
+  flyv:. [mad:. "Gulerod" .gram 75] .fra 0 0 .til 480 300 .varighed 1h;
+  vent:. 30m;
+  flyv:. [mad:. "Banan" .gram 125] .fra 0 0 .til 480 300 .varighed 1h;
+  vent:. 30m;
+  flyv:. [insulin:. 2] .fra 0 300 .til 480 30 .varighed 1h30m;
+  vent:. 1h;
+  flyv:. [insulin:. 3] .fra 0 50 .til 480 300 .varighed 1h;
+  flyv:. [insulin:. 2] .fra 0 300 .til 480 30 .varighed 2h;
+  vent:. 2h;
+  flyv:. [insulin:. 2] .fra 0 300 .til 480 30 .varighed 3h;
+  flyv:. [mad:. "Æble" .gram 125] .fra 0 0 .til 480 300 .varighed 3h;
+  vent:. 30m;
+  flyv:. [insulin:. 2] .fra 0 300 .til 480 30 .varighed 3h;
+  flyv:. [mad:. "Gulerod" .gram 75] .fra 0 0 .til 480 300 .varighed 3h;
+  vent:. 30m;
+  flyv:. [insulin:. 2] .fra 0 300 .til 480 30 .varighed 3h;
+  flyv:. [mad:. "Banan" .gram 125] .fra 0 0 .til 480 300 .varighed 1h;
+  fast:. [mad:. "Øl" .gram 500] .om 3h30m .flyder 800;
+  vent:. 30m;
+  flyv:. [insulin:. 2] .fra 0 300 .til 480 30 .varighed 3h;
+  flyv:. [mad:. "Banan" .gram 125] .fra 0 0 .til 480 300 .varighed 1h;
+  fast:. [mad:. "Vingummi" .gram 150] .om 4h .flyder 200;
+  vent:. 30m;
+  flyv:. [insulin:. 2] .fra 0 300 .til 480 30 .varighed 3h;
+  flyv:. [mad:. "Banan" .gram 125] .fra 0 0 .til 480 300 .varighed 1h;
+  vent:. 30m;
+  flyv:. [insulin:. 2] .fra 0 300 .til 480 30 .varighed 3h;
+  flyv:. [mad:. "Appelsin" .gram 125] .fra 0 0 .til 480 300 .varighed 1h;
+  vent:. 30m;
+  flyv:. [insulin:. 2] .fra 0 300 .til 480 30 .varighed 3h;
+  flyv:. [mad:. "Æble" .gram 125] .fra 0 0 .til 480 300 .varighed 1h;
+  vent:. 30m;
+  flyv:. [mad:. "Lakrids" .gram 100] .fra 0 0 .til 480 300 .varighed 1h;
+  vent:. 30m;
+  flyv:. [mad:. "Banan" .gram 125] .fra 0 0 .til 480 300 .varighed 1h;
+  vent:. 5h;
+]
+><:[modul:. program dansk maxi-projektet diabeteshjælper spil tik .tidsstempel 2011-10-01T15:00:34.597+02 .sprog dansk]><;
+{ tik: .lærred
+| :ok
+  ;minut lærred husk minut;
+  ;placering @ [fremvisning] placering (.stræk lærred stræk);
+  ;tidslinje @ tidslinje (.lærred .placering);
+  ;starttid minut;
+  lærred husk hændelserne :=
+  ( ;hændelserne
+      lærred husk hændelserne eller () & (tid: . starttid) orden [kald: tid]
+    ;
+    hændelserne +#^* ((tid: . starttid),) hver
+    { emne: .flyder .tid .emne ' = * motion: .minutterne
+    | ;minutterne ' - (starttid - tid) \ 1m;
+      :hvis minutterne; :ok
+      emne: .flyder .tid starttid .emne ' flet: ;minutterne 
+    }
+    &:
+    hændelserne -#=* ((tid: . starttid),)
+  )
+  ;
+  ;tilstand lærred husk tilstand [spil];
+  lærred husk tilstand [spil] := tilstand gentag
+  { tilstand: .tid .flyvende .aktuel
+  | :hvis tid <= minut; :ok
+    aktuel kald
+    { vent: .; aktuel
+    | :ok tilstand: .tid ' + vent .flyvende .aktuel
+    }
+    { fast: ..om .flyder; aktuel
+    | :ok
+      @ fast (..lærred .flyder .tid ' + om) pyt:
+      tilstand: .tid .flyvende .aktuel
+    }
+    { flyv: ..fra .til .varighed; aktuel
+    | :ok
+      tilstand: .tid .aktuel .flyvende ' & flyv:. ' kald (@ [vare])
+      .fra .til .varighed .sluttid tid + varighed
+    }
+    { | :ok tilstand: .tid .flyvende .aktuel @ tidsplan }
+  }
+  kald
+  { tilstand: .tid .flyvende .aktuel
+  | :ok
+    tilstand: .tid .aktuel .flyvende ' hver
+    { ok = flyv:.? .fra? .til? .varighed? .sluttid | :hvis sluttid >= minut; :ok }
+  }
+  ;
+}
+><:[modul:. program dansk maxi-projektet diabeteshjælper spil tilstand .tidsstempel 2010-01-22T19:53:53.939+01 .sprog dansk]><;
+{ tilstand: .lærred
+| :ok
+  ;tidsplan @ tidsplan;
+  tilstand: .aktuel tidsplan .flyvende [] .tid lærred husk minut
+}
+><:[modul:. program dansk maxi-projektet diabeteshjælper spil vare .tidsstempel 2010-01-22T22:35:25.791+01 .sprog dansk]><;
+><:[modul:. program dansk maxi-projektet diabeteshjælper spil vare insulin .tidsstempel 2010-01-22T22:39:06.136+01 .sprog dansk]><;
+{ insulin:. dosis
+| :ok
+  medicinering:
+  .under [menu]
+  .kategori "Insulin"
+  .navn "Analog"
+  .billede "diverse/insulin_pen.svg"
+  .dosis
+  .sammensætning
+  [sammensætning: .1 1]
+}
+><:[modul:. program dansk maxi-projektet diabeteshjælper spil vare mad .tidsstempel 2010-01-22T22:38:27.299+01 .sprog dansk]><;
+;madvarerne @ [data] madvarerne eneste [kald: navn];
+{ mad:..gram | :ok mad kald (madvarerne) flet (;gram) }
+><:[modul:. program dansk maxi-projektet diabeteshjælper spil vare motion .tidsstempel 2010-01-22T22:37:23.567+01 .sprog dansk]><;
+;motionsformerne @ [data] motionsformerne eneste [kald: navn];
+{ motion:..varighed 
+| :ok motion kald (motionsformerne) flet (;minutterne varighed \ 1m)
+}
+><:[modul:. program dansk maxi-projektet diabeteshjælper åbn .tidsstempel 2010-01-19T23:49:36.000+01 .sprog dansk]><;
+{ .åbn | :ok @ [fremvisning] vindue }

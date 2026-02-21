@@ -1,0 +1,22 @@
+><:[module:. pils, .timestamp 2008-12-06T22:52:30.457+01 .language system]><;
+><:[module:. pils talk .timestamp 2008-05-25T01:24:55.364+02 .language system]><;
+><:[module:. pils talk english .timestamp 2011-07-21T00:21:52.745+02 .language system]><;
+{ say: say
+| :who ' saying (say) .:need title .:try }
+{ saying: try
+| :who
+  ;language user .:need language .:need;
+  :try ' call
+  { try | language write (try) .:need ++# 100 .:try }
+  { = try | :try language write (try) .:need -#$* "[" <-#$* "]" ++# 100 }
+  { / name | :try language name (name) }
+  { $ text | :ok text }
+  { +& q | :self :try q every {say|:try who saying: say} .:need splice " " }
+  { ++& list
+  | :self
+    (list . 1 call (self) .:need)
+    (list +# 2 find {$ ?|:ok ""} or " ") .:need
+    (list -# 1 call (self) .:need)
+    .:try
+  }
+}

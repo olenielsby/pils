@@ -1,0 +1,156 @@
+[pils: .use "*D:/Projekter/vcPILS/trunk/utils/pils/html/online-docs",]
+><:[module:. parse, .timestamp 2008-05-03T12:34:27.625+02 .language system]><;
+@><:[module:. parse xml .timestamp 2011-09-29T23:45:14.774+02 .language system]><;
+{ xml: text
+| :ok
+  @ split (.text)
+  first [document] fold
+  { state := x | gryf }
+  { [document] := [prelude], ? | :ok [document] }
+  { state := [<], ? | :ok node: state }
+  { state := [attribute-name], name | :ok attribute: .name; state  }
+  { state := [attribute-name-prefix], prefix
+  | :ok attribute: .prefix ' <-# 1; state
+  }
+  { (attribute: .prefix; state) := [attribute-name], name
+  | :ok attribute: .name prefix, name; state
+  }
+  { (node: state) := [node-name], name
+  | :ok node: .name "", name; state
+  }
+  { (node: state) := [node-name-prefix], prefix
+  | :ok node: .prefix ' <-# 1; state
+  }
+  { (node: .prefix; state) := [node-name], name
+  | :ok node: .name prefix, name; state
+  }
+  { ok := ? call [.attribute-space .node-space .=], ? | :ok }
+  { (attribute: .name; state) := [attribute-value], value
+  | :ok
+    attribute: state .name .value
+    ' -# 1 <-# 1 *=*
+    ["&amp;", "&", "&lt;", "<", "&gt;", ">", "&quot;", """", "&apos;", "'"]
+  }
+  { ok := [>], ?
+  | :ok ' repeat
+    { attribute: .name local .value; state
+    | :ok list := (:name [attribute]; "", local, value); state
+    }
+    { attribute: .name prefix, local .value; state
+    | :ok list := (:name [attribute]; prefix, local, value); state
+    }
+    { attribute: .name "xmlns", prefix .value; state
+    | :ok list := (:name [prefix]; prefix, value); state
+    }
+    { attribute: .name "xmlns" .value; state
+    | :ok list := (:name [prefix]; "", value); state
+    }
+    call
+    { x | havox }
+    { node: .name; state | :ok list := (:name [name]; name); state }
+    .(list := :name [];) .:list groups [ok]
+    call
+    { (groups: .prefix .attribute .name ',; state,)
+      anyway [.prefix? .attribute?]
+    | :ok
+      ;state ' & prefix fold {state := prefix, uri|:ok prefix: ..uri; state};
+      node: state .node
+      ;resolve-name
+      ( ;resolve-prefix
+          { "" | :ok ?:? }
+          { "xml" | :ok "xml" }
+          { $ prefix
+          | :tag [prefix];
+            state repeat: --- :
+            { :quote * ;: ok | :quote :ok }
+            { prefix: ..uri (:quote ok); :quote ? | :quote :ok [prefix]; ok }
+          }
+        ;
+        { prefix, local | :ok prefix call (resolve-prefix) // local }
+      )
+      ;
+      attribute singles
+      { prefix, local, value
+      | :ok :name (prefix, local) call (resolve-name); value
+      }
+      merge: [node:] head: name try {$ ok|:ok "", ok} call (resolve-name)
+    }
+  }
+  { (node: .; state) := ? call [.node-data .node-space], data
+  | :ok
+    node:. ' merge
+    (, node? &: data singlewise
+      *=*
+      ["&amp;", "&", "&lt;", "<", "&gt;", ">", "&quot;", """", "&apos;", "'"]
+    );
+    state
+  }
+  { (node: .; state) := [block], data
+  | :ok
+    node:. ' merge (, node? &: data -# 4 <-# 3);
+    state
+  }
+  { (node: .; state) := [</], ?
+  | :ok ending: .node; state repeat {prefix: .? .uri?; ok|:ok}
+  }
+  { (ok = ending: .node?; ?) := ? | :ok }
+  { (ending: .node; state) := [>], ? | :ok gronx }
+  { (ending: .node; [document]) := [>], ? | :ok done: .node }
+  { (ending: .node; node: . parent; state) := [>], ?
+  | :ok node: . parent merge (, parent? & node); state }
+  { state := [/>], ?
+  | :who :ok
+    (who . state := [> ">"]) .((who)) (:= [</ "</"]) .((who)) (:= [> ">"])
+  }
+  { (done: .node ok) := [end-space], ? | :ok }
+  try {done: .node ok|:ok}
+}
+><:[module:. parse xml split .timestamp 2011-09-29T23:45:07.052+02 .language system]><;
+{ split: .text $ (')
+| :ok
+  text
+  split
+  [ prelude
+    block
+    </ < /> > =
+    attribute-space
+    node-name-prefix
+    node-name
+    attribute-name-prefix
+    attribute-name
+    attribute-value
+!    node-space
+    node-data
+    end-space
+    .prelude [/: $] [*: preprocessing-directive, doctype, [-: "<"] 1],
+    .preprocessing-directive "<?" [=*: "?>"],
+    .doctype "<!" [=*: ">"],
+    .< "<"
+    .</ "<" [*: space] "/",
+    ./> attribute-context "/" [*: space] ">",
+    .> attribute-context ">",
+    .= attribute-context "=",
+    .attribute-space attribute-context [+: space],
+    .node-name-prefix node-name ":",
+    .node-name [/: <, </, node-name-prefix] name,
+    .attribute-name-prefix attribute-context name ":",
+    .attribute-name attribute-context name,
+    .attribute-value
+      attribute-context ["""" [=*: """"], "'" [=*: "'"]],
+    .node-space [/: >, />] [+: space] [-: -: "<"],
+    .node-data [/: >, />] [^*: "<"] [-: -: "<"],
+    .end-space [*: space] [-: 1],
+    .space " ", "">, ""<, ""=
+    .name initial [*: initial, "0-9", ".", "-"],
+    .initial "A-Z", "a-z", ""80"-"ff, "_",
+    .block "<!--" [=*: "--" ">",],
+    .attribute-context
+      [ /:
+        <, </, =,
+        node-name, node-name-prefix,
+        attribute-name, attribute-name-prefix,
+        attribute-space,
+        attribute-value
+      ]
+  ]
+}

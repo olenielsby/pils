@@ -1,0 +1,5 @@
+All source code and documentation of the PILS system is public domain.
+
+Compilation of the PILS interpreter requires the Juce library which is GPL2
+unless a license is paid, see http://www.rawmaterialsoftware.com/juce/
+The jpils-auto*.h files are derived from Juce and subject to Juce licence.

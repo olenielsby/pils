@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{CE5FB926-E977-4671-AE61-3D9B6934764B}</ProjectGuid>
+    <RootNamespace>jpils</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration)\jpils\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\jpils\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\bin\win32\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\jpils\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</GenerateManifest>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pils</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pils</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\src;$(JUCE);..\..\..\src\external\libharu-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4373;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <OutputFile>$(OutDir)pils.exe</OutputFile>
+      <AdditionalLibraryDirectories>$(JUCE)\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\..\..\src;$(JUCE);..\..\..\src\external\libharu-2.1.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <OutputFile>$(OutDir)pils.exe</OutputFile>
+      <AdditionalLibraryDirectories>$(JUCE)\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\juce\Builds\VisualStudio2010\Juce.vcxproj">
+      <Project>{2f2af28c-cd42-f164-1ac5-90a9acd39dd3}</Project>
+    </ProjectReference>
+    <ProjectReference Include="pils-kernel.vcxproj">
+      <Project>{e9cacf77-5aef-4de3-a067-37ac050cbd61}</Project>
+      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="pilsplug.vcxproj">
+      <Project>{8a2cd93c-fc99-4dea-b4b3-a0c96f3131b2}</Project>
+      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="libharu.vcxproj">
+      <Project>{1a9d0e6d-ff39-4a0d-9a2f-b740007e79d4}</Project>
+      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\jpils\jpils-autodefine.cpp" />
+    <ClCompile Include="..\..\..\src\jpils\jpils-autoplumming.cpp" />
+    <ClCompile Include="..\..\..\src\jpils\jpils-binding-base.cpp" />
+    <ClCompile Include="..\..\..\src\jpils\jpils-commander.cpp" />
+    <ClCompile Include="..\..\..\src\jpils\jpils-file.cpp" />
+    <ClCompile Include="..\..\..\src\jpils\jpils-graph.cpp" />
+    <ClCompile Include="..\..\..\src\jpils\jpils-heap.cpp" />
+    <ClCompile Include="..\..\..\src\jpils\jpils-opengl.cpp" />
+    <ClCompile Include="..\..\..\src\jpils\jpils-plughost.cpp" />
+    <ClCompile Include="..\..\..\src\jpils\jpils-plumming.cpp" />
+    <ClCompile Include="..\..\..\src\jpils\jpils-standard-specials.cpp" />
+    <ClCompile Include="..\..\..\src\jpils\jpils-supplement.cpp" />
+    <ClCompile Include="..\..\..\src\jpils\jpils-thread.cpp" />
+    <ClCompile Include="..\..\..\src\jpils\jpils.cpp" />
+    <ClCompile Include="..\..\..\src\jpils\jpils_DynamicLibraryWin32.cpp" />
+    <ClCompile Include="..\..\..\src\jpils\juce_PDFWriter.cpp" />
+    <ClCompile Include="..\..\..\src\jpils\pils_boot_expression.cpp" />
+    <ClCompile Include="..\..\..\src\jpils\pils_configuration_get_user_language.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\jpils\jpils-autodeclare.h" />
+    <ClInclude Include="..\..\..\src\jpils\jpils-autodefine.h" />
+    <ClInclude Include="..\..\..\src\jpils\jpils-autoplumming.h" />
+    <ClInclude Include="..\..\..\src\jpils\jpils-binding-base.h" />
+    <ClInclude Include="..\..\..\src\jpils\jpils-commander.h" />
+    <ClInclude Include="..\..\..\src\jpils\jpils-file.h" />
+    <ClInclude Include="..\..\..\src\jpils\jpils-graph-define.h" />
+    <ClInclude Include="..\..\..\src\jpils\jpils-graph.h" />
+    <ClInclude Include="..\..\..\src\jpils\jpils-opengl.h" />
+    <ClInclude Include="..\..\..\src\jpils\jpils-plughost.h" />
+    <ClInclude Include="..\..\..\src\jpils\jpils-plumming.h" />
+    <ClInclude Include="..\..\..\src\jpils\jpils-standard-specials.h" />
+    <ClInclude Include="..\..\..\src\jpils\jpils-supplement.h" />
+    <ClInclude Include="..\..\..\src\jpils\jpils-thread.h" />
+    <ClInclude Include="..\..\..\src\jpils\jpils_DynamicLibrary.h" />
+    <ClInclude Include="..\..\..\src\jpils\juce_PDFWriter.h" />
+    <ClInclude Include="..\..\..\src\jpils\resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\..\src\jpils\app.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\src\jpils\icon1.ico" />
+    <None Include="..\..\..\src\jpils\icon2.ico" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,3163 @@
+[pils: .use "<pils>/english/parse/testbench",]
+><:[module: . parse, .timestamp 2007-11-26T01:31:18.419+01 .language system]><;
+><:[module: . parse language .language system]><;
+><:[module: . parse language vhdl .timestamp 2009-01-29T15:56:53.370+01 .language system]><;
+{ parse: .text .tag
+| :try
+  @ tokenize (.text .tag)
+  first [design-file: .?]
+  fold (@@ rules)
+}
+><:[module: . parse language vhdl positions .timestamp 2008-08-13T11:58:53.576+02 .language system]><;
+{ positions: .text
+| :ok @@ . [tokenize split]
+  split (.text) first 0 fold {p := ?, ? $ c|:ok list := p + c} .(:list . := 0;)
+}
+><:[module: . parse language vhdl positions test .timestamp 2008-08-12T17:04:57.666+02 .language system]><;
+{ .test
+| :ok
+  ;filename
+    this module filename <-#=* "/lib/".
+    "/testdata/vhdl/dsp6415/dsp6415.vhd"
+  ;
+  ;text file (filename) text;
+!  (now,
+ positions (.text) !and: now)
+}
+><:[module: . parse language vhdl rules .timestamp 2009-08-23T23:50:05.541+02 .language system]><;
+{ state := phrase = token:. [identifier], ? .tag? | :ok phrase:.; state }
+{ (design-unit:.context?; ?) := token:. [identifier], ? .tag? | ? }
+{ (design-file:.?) := token:. [identifier], ? .tag? | ? }
+{ state := all = token:. "all" .tag? | :ok phrase: . (all: .); state }
+{ state := . = token:. ":=" .tag?
+| :ok level: . [expression]; initial-value: .":=" =.; state
+}
+{ (declare: .; state) :=
+| :who :ok
+  state call (who) (:= declare:.. &&.) call (who) :=
+}
+{ (declare:.; state) := declaration:.
+| :ok declare: ...(&: . declaration;); state
+}
+{ (design-unit: .context; design-file:.) := library-unit: .
+| :ok design-file: .. & design-unit: .context .library-unit
+}
+{ (state = design-unit: .context?; ?) := . = token:. "use" .tag?
+| :ok phrase: phrase-list:. (); use: ."use" =.; state
+}
+{ (state = design-unit: .context?; ?) := . = token:. "library" .tag?
+| :ok phrase: phrase-list:. (); library-import: ."library" =.; state
+}
+{ (state = design-unit: .context?; ?) := . = token:. "package" .tag?
+| :ok package: ."package" =.; state
+}
+{ (package: ."package"; state) := . = token:. "body" .tag?
+| :ok package-body: ."package" ."body" =.; state
+}
+{ (package: ."package"; state)
+  := identifier = token: . [identifier], ? .tag?
+| :ok package: ."package" .identifier; state
+}
+{ (package: ."package" .identifier; state) := . = token:. "is" .tag?
+| :ok declare: . (); package: ."package" .identifier ."is" =.; state
+}
+{ ( declare: .;
+     package: ."package" .identifier . = (token:. .tag?)  ."is"; state
+  )
+  := . = token:. "end" .tag?
+| :ok
+  end:. =., .optional "package", token;
+  package: ."package" .identifier ."is" .declare . &&.; state
+}
+{ (package: ."package" .identifier ."is" .declare; state) := end:.
+| :who :ok
+  state call (who)
+  := library-unit:. package: ."package" .identifier ."is" .declare .end
+}
+{ (package-body: ."package" ."body"; state)
+  := identifier = token:. [identifier], ? .tag?
+| :ok package-body: ."package" ."body" .identifier; state
+}
+{ (package-body: ."package" ."body" .identifier; state)
+  := . = token:. "is" .tag?
+| :ok
+  declare:. ();
+  package-body: ."package" ."body" .identifier ."is" =.;
+  state
+}
+{ (declare:.; package-body: ."package" ."body" .identifier ."is"; state)
+  := . = token:. "end" .tag?
+| :ok
+  package-body: ."package" ."body" .identifier ."is" .declare . &&. .end =.,; state
+}
+{ ( package-body:
+    ."package"
+    ."body"
+    .identifier . = (token:. .tag?)
+    ."is"
+    .declare
+    .end
+    ;
+    state)
+  :=
+| :who :ok
+  ( end:. .optional token,;
+    package-body: ."package" ."body" .identifier ."is" .declare;
+    state
+  )
+  call (who) :=
+}
+{ ( package-body: ."package" ."body" .identifier ."is" .declare .end . = (?,);
+     state
+  )
+  := . = token:. "package" .tag?
+| :ok
+  package-body: ."package" ."body" .identifier ."is" .declare .end' end & =.;
+  state
+}
+{ (package-body: ."package" ."body" .identifier ."is" .declare .end'; state)
+  := . = token:. "body" .tag?
+| :ok
+  package-body: ."package" ."body" .identifier ."is" .declare .end end' & =.;
+  state
+}
+{ (package-body: ."package" ."body" .identifier ."is" .declare; state)
+  := end:.
+| :who :ok
+  state call (who) := library-unit:.
+  package-body: ."package" ."body" .identifier ."is" .declare .end
+}
+{ (phrase:.; state) := | :who :ok state call (who) (:= phrase:.) call (who) := }
+{ (phrase: phrase-list:.; state) := phrase:.
+| :ok phrase-list:. .phrase; state
+}
+{ (phrase:. prefix; state) := . = token:. "'" .tag?
+| :ok phrase: .prefix .signature () ."'" =.; state
+}
+{ (phrase: .prefix .signature ."'"; state)
+  := attribute-name = token:. [identifier], ? .tag?
+| :ok phrase:. (phrase: .prefix .signature () ."'" .attribute-name); state
+}
+{ (phrase: .prefix type-mark .signature () ."'"; state)
+  := . = token:. "(" .tag?
+| :ok
+  level:. [expression];
+  primary: ."(" =.;
+  qualified-expression: .type-mark ."'";
+  state
+}
+{ (qualified-expression: .type-mark ."'"; state) := expression:.
+| :who :ok
+  state call (who) := expression:.
+  qualified-expression: .type-mark ."'" .expression
+}
+{ (phrase:. prefix; state) := . = token:. "." .tag?
+| :ok phrase: .prefix ."." =.; state
+}
+{ (phrase:.; state) := . = token:. "(" .tag?
+| :ok level:. [expression]; argument: argument-list:. (); phrase:. ."(" =.; state
+}
+{ (phrase: .prefix ."."; state) := phrase:.
+| :who :ok state call (who) := phrase:. phrase: .prefix ."." .suffix phrase
+}
+{ (phrase-list:. .phrase item; state) :=
+| :who :ok state call (who) (:= phrase-list:. . & item:.) call (who) :=
+}
+{ (phrase-list:. .phrase item; state) := separator = token:. "," .tag?
+| :ok phrase: phrase-list:.. & (item:. .separator); state
+}
+{ (phrase:. subtype-indication; state) := . = token:. "range" .tag?
+| :who :ok state call (who) := range: .subtype-indication ."range" =.
+}
+{ (library-import: ."library"; state) := phrase-list:.
+| :ok library-import: ."library" .import phrase-list; state
+}
+{ (use: ."use"; state) := phrase-list:. use | :ok use:. ."use"; state }
+{ (use:. ."use"; state) := . = token:. ";" .tag?
+| :who :ok state call (who) := context-clause:. use:. ."use" .";" =.
+}
+{ (library-import: ."library" .import; state) := . = token:. ";" .tag?
+| :who :ok
+  state call (who) := context-clause:. library-import: ."library" .import .";" =.
+}
+{ (state = design-file:.) := . = token:.? .tag?
+| :who :ok (design-unit: .context (); state) call (who) :=
+}
+{ (design-unit: .context; state) := context-clause:.
+| :ok design-unit: .context . & context-clause; state
+}
+{ (ok = design-file:.) := token:. "" .tag? | :ok }
+{ (design-file:.) := declaration:.
+| :ok design-file:.. & declaration
+}
+{ (state = design-unit: .context?; ?) := . = token:. "entity" .tag?
+| :ok entity-declaration: ."entity" =.; state
+}
+{ (entity-declaration: ."entity"; state) := identifier = token:. [identifier], ? .tag?
+| :ok entity-declaration: ."entity" .identifier; state
+}
+{ (entity-declaration: ."entity" .identifier; state) := . = token:. "is" .tag?
+| :ok entity-header: .generic-clause (); entity-declaration: ."entity" .identifier ."is" =.; state
+}
+{ (state = declare:.?; ?) := . = token:. "component" .tag?
+| :ok component-declaration: ."component" =.; state
+}
+{ (component-declaration: ."component"; state)
+  := identifier = token:. [identifier], ? .tag?
+| :ok component-declaration: ."component" .identifier; state
+}
+{ (component-declaration: ."component" .identifier; state) :=
+| :who :ok
+  ( entity-header: .generic-clause ();
+    component-declaration: ."component" .identifier ."is" ();
+    state
+  )
+  call (who) :=
+}
+{ (component-declaration: ."component" .identifier; state)
+  := . = token:. "is" .tag?
+| :ok
+  entity-header: .generic-clause ();
+  component-declaration: ."component" .identifier ."is" =.; state
+}
+{ (component-declaration: ."component" .identifier ."is"; state)
+  := entity-header:.
+| :ok component-declaration: ."component" .identifier ."is" .entity-header; state
+}
+{ (component-declaration: ."component" .identifier ."is" .entity-header; state)
+  := . = token:. "end" .tag?
+| :ok
+  component-declaration: ."component" .identifier ."is" .entity-header ."end" =.;
+  state
+}
+{ ( component-declaration:
+    ."component"
+    .identifier . = (token:. .tag?)
+    ."is"
+    .entity-header
+    ."end" end
+    ;
+    state)
+  := . = token:. "component" .tag?
+| :ok
+  end:.., =. .optional token,;
+  component-declaration: ."component" .identifier ."is" .entity-header;
+  state
+}
+{ ( component-declaration: ."component" .identifier ."is" .entity-header;
+    declare:.; state
+  )
+  := end:.
+| :ok
+  declare:...(
+    &:. (component-declaration: ."component" .identifier ."is" .entity-header .end);
+  );
+  state
+}
+{ (state = entity-header: .generic-clause?; ?)
+  := . = token:. "port" .tag?
+| :ok interface-list: port-clause: ."port" =.; state
+}
+{ (entity-header: .generic-clause; state) :=
+| :who :ok
+  state call (who)
+  (:= entity-header:. entity-header: .generic-clause .port-clause ()) call (who) :=
+}
+{ (entity-header: .generic-clause (); state) := . = token:. ? .tag?
+| :who :ok state call (who) (:= entity-header:. ()) call (who) :=
+}
+{ (state = entity-header: .generic-clause?; ?) 
+  := . = token:. "port" .tag?
+| :ok interface-list: port-clause: ."port" =.; state
+}
+{ (entity-header: .generic-clause; state) 
+  := port-clause = port-clause: ."port"? .interface-list? .";"?
+| :who :ok
+  state call (who) :=
+  entity-header:. entity-header: .generic-clause .port-clause
+}
+{ (entity-header: .generic-clause (); state)
+  := generic-clause = generic-clause: ."generic"? .interface-list? .";"?
+| :ok entity-header: .generic-clause; state
+}
+{ (state = entity-header: .generic-clause (); ?)
+  := . = token:. "generic" .tag?
+| :ok interface-list: generic-clause: ."generic" =.; state
+}
+{ (generic-clause: ."generic"; state)
+  :=  interface-list = interface-list:.? ."("? .")"?
+| :ok generic-clause: ."generic" .interface-list; state
+}
+{ (generic-clause: ."generic" .interface-list; state) := . = token:. ";" .tag?
+| :who :ok
+  state call (who) := generic-clause: ."generic" .interface-list .";" =.
+}
+{ (entity-declaration: ."entity" .identifier ."is"; state) := entity-header:.
+| :ok declare:. (); entity-declaration: ."entity" .identifier ."is" .entity-header; state
+}
+{ (entity-declaration: ."entity" .identifier ."is" .entity-header; state) := declare:.
+| :ok
+  statement-part:
+  entity-declaration: ."entity" .identifier ."is" .entity-header .declare;
+  state
+}
+{ ( entity-declaration: ."entity" .identifier ."is" .entity-header .declare;
+    state
+  )
+  := statement-part:.
+| :ok
+  end: .optional "entity", identifier token;
+  entity-declaration: ."entity" .identifier ."is" .entity-header .declare .statement-part;
+  state
+}
+{ ( entity-declaration: ."entity" .identifier ."is" .entity-header .declare .statement-part;
+    state
+  )
+  := end:.
+| :who :ok
+  state call (who) := library-unit:.
+  entity-declaration:
+  ."entity" .identifier ."is" .entity-header .declare .statement-part .end
+}
+{ (interface-list: state) := . = token:. "(" .tag?
+| :ok interface-declaration: interface-list:. () ."(" =.; state
+}
+{ (interface-declaration: state) :=
+| :who :ok (identifier-list: interface-declaration: .specifier (); state) call (who) :=
+}
+{ ( interface-declaration: state )
+  := specifier = token:. ? call [."constant" ."file" ."signal" ."variable"] .tag?
+| :ok identifier-list: interface-declaration: .specifier; state
+}
+{ (identifier-list: state) := identifier = token:. [identifier], ? .tag?
+| :ok
+  identifier-list:. () .identifier; state
+}
+{ (identifier-list:. .identifier; state) :=
+| :who :ok
+  state call (who) (:= identifier-list:.. & item:. identifier) call (who) :=
+}
+{ (identifier-list:. .identifier item; state) := separator = token:. "," .tag?
+| :ok
+  identifier-list:.. & (item:. .separator); state
+}
+{ (identifier-list:.; state) := identifier = token:. [identifier], ? .tag?
+| :ok identifier-list:. .identifier; state
+}
+{ (interface-declaration: .specifier; state) := identifier-list:.
+| :ok interface-declaration: .specifier .identifier-list; state
+}
+{ (interface-declaration: .specifier .identifier-list; state)
+  := . = token:. ":" .tag?
+| :ok interface-declaration: .specifier .identifier-list .":" =.; state
+}
+{ (interface-declaration: .specifier .identifier-list .":"; state)
+  := . = token:. ? .tag?
+| :who :ok
+  ( subtype-indication: interface-declaration: .specifier .identifier-list .":" .mode (); state )
+  call (who) :=
+}
+{ (interface-declaration: .specifier .identifier-list .":"; state)
+  := mode = token:. ? call [."in" ."out" ."inout" ."buffer" ."linkage"] .tag?
+| :ok
+  subtype-indication:
+  interface-declaration: .specifier .identifier-list .":" .mode; state
+}
+{ (subtype-indication: state)
+  := phrase:. | :ok subtype-indication: .phrase; state }
+{ ( subtype-indication: .phrase resolution-function;
+    (? <> [resolution-function]) * state
+  )
+  :=
+| :who :ok
+  (subtype-indication: resolution-function:.; state) call (who) :=
+}
+{ (resolution-function:.; state) := subtype-indication:.
+| :who :ok
+  state call (who)
+  := subtype-indication:. subtype-indication:. .resolution-function
+}
+{ (subtype-indication: .phrase; state)
+  := . = token:. ? call [.")" .";" .":=" ."is" ."open"] .tag?
+| :who :ok state call (who) (:= subtype-indication:. phrase) call (who) :=
+}
+{ (subtype-indication: state) := . = range: ."range" .subtype-indication
+| :ok level:. [expression]; range: subtype-indication:. ."range" =.; state
+}
+{ (subtype-indication:. ."range"; state) := range:.
+| :who :ok
+  state call (who) := subtype-indication:.
+  subtype-indication:. ."range" .range
+}
+{ (interface-declaration: .specifier .identifier-list .":" .mode; state)
+  := subtype-indication:.
+| :ok
+  interface-declaration: .specifier .identifier-list .":" .mode .subtype-indication; state
+}
+{ (interface-declaration: .specifier .identifier-list .":" .mode .subtype-indication; state)
+  := . = token:. ? <> ":=" .tag?
+| :who :ok
+  state call (who)
+  ( :=
+    interface-declaration:.
+    interface-declaration:
+    .specifier .identifier-list .":" .mode .subtype-indication .initial-value ()
+  )
+  call (who) :=
+}
+{ (interface-declaration: .specifier .identifier-list .":" .mode .subtype-indication; state)
+  := initial-value:.
+| :who :ok
+  state call (who) := interface-declaration:.
+  interface-declaration:
+  .specifier .identifier-list .":" .mode .subtype-indication .initial-value
+}
+{ (initial-value: .":="; state) := expression:.
+| :who :ok state call (who) := initial-value:. initial-value: .":=" .expression
+}
+{ (interface-list:. ."("; state) := interface-declaration:.
+| :ok
+  interface-list:. ."(" .interface-declaration; state
+}
+{ (interface-list:. ."(" .interface-declaration; state) := . = token:. ";" .tag?
+| :ok
+  interface-declaration:
+  interface-list:.. & (item:. interface-declaration .separator =.) ."("; state
+}
+{ (level:. .operator; state) := expression:. operand
+| :ok level:. .expression (operation: .operator .operand); state
+}
+{ (level:. .expression; state) :=
+| :who :ok state call (who) (:= expression:.) call (who) :=
+}
+{ (level:.. call [.expression .relation .shift .simple]; state)
+  := sign = token:. ? call [."+" ."-"] .tag?
+| :ok level:. [term]; level:. .sign; state
+}
+{ (level:. .sign; state) := expression:.
+| :ok level:. .expression (sign:. .expression); state
+}
+{ (state = level:.?; ?) := . = token:. "new" .tag?
+| :ok subtype-indication: allocator: ."new" =.; state
+}
+{ (subtype-indication: allocator: ."new"; level:.; state)
+  :=
+  expression:.
+  qualified-expression = qualified-expression: .type-mark? ."'"? .expression?
+| :ok level:. .expression (allocator: ."new" .qualified-expression); state
+}
+{ (allocator: ."new"; level:.; state) := subtype-indication
+| :ok level:. .expression (allocator: ."new" .subtype-indication); state
+}
+{ (level:.; state) := expression:. | :ok level:. .expression; state }
+{ (level:.; state) := literal =
+  token:.
+    ? call
+    [ .character-literal
+      .string-literal
+      .bit-string-literal
+      .decimal-literal
+      .based-literal
+    ],
+    ?
+  .tag?
+| :ok level:. .expression (literal:.); state
+}
+{ (level:.; state) := null = token:. "null" .tag?
+| :ok level:. .expression (null:.); state
+}
+{ ( level:.
+    .expression
+    ( literal:.. = token:. ? call [.decimal-literal .based-literal], ? .tag? )
+    ;
+    state
+  )
+  := unit-name = token:. [identifier], ? .tag?
+| :ok
+  level:. .expression (physical-literal: .literal .unit-name); state
+}
+{ ( level:
+    .. call
+      [ .expression expression
+        .relation relation
+        .shift shift
+        .simple simple
+        .term term
+        .factor primary
+      ]
+    .expression
+    ;
+    state
+  )
+  := operator = token:. "**" .tag?
+| :ok
+  level:. [primary]; level:. .expression .operator; state
+}
+{ ( level:
+    .. call
+      [ .expression expression
+        .relation relation
+        .shift shift
+        .simple simple
+        .term term
+        .factor primary
+      ]
+    ;
+    state
+  )
+  := operator = token:. ? call [."abs" ."not"] .tag?
+| :ok level:. [primary]; level:. .operator; state
+}
+{ ( level:. . call [.expression .relation .shift .simple .term] .expression; state)
+  := operator = token:. ? call [."*" ."/" ."mod" ."rem"] .tag?
+| :ok level:. [factor]; level:. .expression .operator; state
+}
+{ ( level:.. call [.expression .relation .shift .simple] .expression; state)
+  := operator = token:. ? call [."+" ."-" ."&"] .tag?
+| :ok level:. [term]; level:. .expression .operator; state
+}
+{ ( level:.. call [.expression .relation shift] .expression; state )
+  := operator = token:. ? call [."=" ."/=" ."<" ."<=" .">" .">="] .tag?
+| :ok level:. [simple]; level:. .expression .operator; state
+}
+{ ( level:.. call [.expression .relation .shift simple] .expression; state)
+  := operator = token:. ? call [."sll" ."srl" ."sla" ."sra" ."rol" ."ror"] .tag?
+| :ok level:. [simple]; level:. .expression .operator; state
+}
+{ ( level:. [expression] .expression; state )
+  := operator = token:. ? call [."and" ."or" ."xor" ."xnor" ."nand" ."nor"] .tag?
+| :ok level:. [relation]; level:. [relation] .expression .operator; state
+}
+{ ( level:. [relation] .expression . = (operation: .operator (token:. op .tag?)
+    .operands? )
+    ;
+    state
+  )
+  := operator = token:. op call [."and" ."or" ."xor" ."xnor"] .tag?
+| :ok
+  level:. [relation]; level:. [relation] .expression .operator; state
+}
+{ ( level:. .expression a .operator; state ) := expression:. b
+| :ok level:. .expression (operation: .operator .operands a, b); state
+}
+{ ( level:. [expression] .expression from; state)
+  := direction = token:. ? call [."to" ."downto"] .tag?
+| :ok level:. [simple]; range: .from .direction; state
+}
+{ (range: .from .direction; state) := expression:. to
+| :who :ok
+  state call (who) := range: .from .direction .to
+}
+{ (range: state) := range: ."range" .subtype-indication
+| :ok level:. [expression]; range: range: ."range" .subtype-indication; state
+}
+{ (range: ."range" .subtype-indication; state) := range:.
+| :who :ok state call (who) := range:. range:. ."range" .subtype-indication
+}
+{ (range: state) := range = range: .from? .direction? .to?
+| :who :ok state call (who) := range:.
+}
+{ (argument: state) := argument = range: .from? .direction? .to?
+| :who :ok state call (who) := argument:.
+}
+{ (argument-list:.; state) := argument:.
+| :ok argument-list:. .argument; state
+}
+{ (argument-list:. .argument; phrase:. ."("; state) := . = token:. ")" .tag?
+| :ok phrase:. (phrase:. ."(" .arguments argument-list & argument .")" =.);
+  state
+}
+{ (argument-list:. .association; phrase:. ."("; state) := . = token:. ")" .tag?
+| :ok phrase:. (phrase:. ."(" .arguments argument-list & association .")" =.);
+  state
+}
+{ (argument-list:. .argument; state) := . = token:. "=>" .tag?
+| :ok level:. [expression]; argument-list:. .formal argument ."=>" =.; state
+}
+{ (argument-list:. .formal ."=>"; state) := expression:. actual
+| :ok argument-list:. .association (association: .formal ."=>" .actual); state
+}
+{ (interface-list:. ."(" .interface-declaration; state) :=  . = token:. ")" .tag?
+| :who :ok
+  state call (who) := interface-list:.. & (item:. interface-declaration) ."(" .")" =.
+}
+{ (port-clause: ."port"; state) := interface-list = interface-list:.? ."("? .")"?
+| :ok port-clause: ."port" .interface-list; state
+}
+{ (port-clause: ."port" .interface-list; state) := . = token:. ";" .tag?
+| :who :ok state call (who) := port-clause: ."port" .interface-list .";" =.
+}
+{ (statement-part: state) :=
+| :who :ok (statement-part:. () ."begin" (); state) call (who) :=
+}
+{ (statement-part: state) := . = token:. "begin" .tag?
+| :ok statement-part:. () ."begin" =.; state
+}
+{ (statement-part:. ."begin"; state) := . = token:. "end" .tag?
+| :who :ok
+  state call (who) (:= statement-part:. statement-part:. ."begin") call (who) :=
+}
+{ (end: .optional; state) := end = token:. "end" .tag?
+| :ok end:. .optional; state
+}
+{ (end:. .optional . +&.; state) :=
+| :who :ok (end:. .optional . -# 1; state) call (who) := }
+{ (end:. .optional . = token . 1; state) := . = token:. .tag?
+| :ok end:.. & =. .optional . -# 1; state
+}
+{ (end:. .optional?; state) := . = token:. ";" .tag?
+| :who :ok state call (who) := end:.. & =.
+}
+{ (state = design-unit: .context?; ?) := . = token:. "architecture" .tag?
+| :ok architecture: ."architecture" =.; state
+}
+{ (architecture: ."architecture"; state) := identifier = token:. [identifier], ? .tag?
+| :ok architecture: ."architecture" .identifier; state
+}
+{ (architecture:  ."architecture" .identifier; state) := . = token:. "of" .tag?
+| :ok architecture: ."architecture" .identifier ."of" =.; state
+}
+{ (phrase:.; architecture: ."architecture" .identifier ."of"; state)
+  := . = token:. "is" .tag?
+| :ok
+  declare:. ();
+  architecture: ."architecture" .identifier ."of" .of phrase ."is" =.;
+  state
+}
+{ (architecture: ."architecture" .identifier ."of" .of ."is"; state)
+  := declare:. declarative-part
+| :ok
+  architecture: ."architecture" .identifier ."of" .of ."is" .declarative-part; state
+}
+{ ( architecture: ."architecture" .identifier ."of" .of ."is" .declarative-part; state )
+  := . = token:. "begin" .tag?
+| :ok
+  statements:. ();
+  architecture: ."architecture" .identifier ."of" .of ."is" .declarative-part ."begin" =.;
+  state
+}
+{ ( statements:.;
+    architecture: ."architecture" .identifier ."of" .of ."is" .declarative-part ."begin";
+    state
+  )
+  := end = token:. "end" .tag?
+| :ok
+  end:. .optional "architecture", identifier token;
+  architecture:
+  ."architecture" .identifier ."of" .of ."is" .declarative-part ."begin" .statements;
+  state
+}
+{ ( architecture:
+    ."architecture"
+    .identifier
+    ."of"
+    .of
+    ."is"
+    .declarative-part
+    ."begin"
+    .statements
+    ;
+    state
+  )
+  := end:.
+| :who :ok state call (who) := library-unit:.
+  architecture:
+  ."architecture"
+  .identifier
+  ."of"
+  .of
+  ."is"
+  .declarative-part
+  ."begin"
+  .statements
+  .end
+}
+{ (state = declare:.?; ?) := . = token:. "subtype" .tag?
+| :ok subtype-declaration: ."subtype" =.; state
+}
+{ (subtype-declaration: ."subtype"; state) := identifier = token:. [identifier], ? .tag?
+| :ok subtype-declaration: ."subtype" .identifier; state
+}
+{ (subtype-declaration: ."subtype" .identifier; state) := . = token:. "is" .tag?
+| :ok
+  subtype-indication: subtype-declaration: ."subtype" .identifier ."is" =.; state
+}
+{ (subtype-declaration: ."subtype" .identifier ."is"; state)
+  := subtype-indication:.
+| :ok subtype-declaration: ."subtype" .identifier ."is" .subtype-indication; state
+}
+{ ( subtype-declaration: ."subtype" .identifier ."is" .subtype-indication; state )
+  := . = token:. ";" .tag?
+| :who :ok
+  state call (who) := declaration:.
+  subtype-declaration: ."subtype" .identifier ."is" .subtype-indication .";" =.
+}
+{ (state = declare:.?; ?) := . = token:. "type" .tag?
+| :ok type-declaration: ."type" =.; state
+}
+{ (type-declaration: ."type"; state) := identifier = token:. [identifier], ? .tag?
+| :ok type-declaration: ."type" .identifier; state
+}
+{ (type-declaration: ."type" .identifier; state) := . = token:. ";" .tag?
+| :who :ok state call (who) :=
+  declaration:. incomplete-type-declaration: ."type" .identifier .";" =.
+}
+{ (type-declaration: ."type" .identifier; state) := . = token:. "is" .tag?
+| :ok
+  type-definition: type-declaration: ."type" .identifier ."is" =.; state
+}
+{ (type-definition: state) := . = token:. "(" .tag?
+| :ok enumeration-type-definition:. () ."(" =.; state
+}
+{ (enumeration-type-definition:. ."("; state)
+  := enumeration-literal = token:. ? call [.identifier .character-literal], ? .tag?
+| :ok enumeration-type-definition:. ."(" .enumeration-literal; state
+}
+{ (enumeration-type-definition:. ."(" .enumeration-literal item; state)
+  := separator = token:. "," .tag?
+| :ok enumeration-type-definition:.. & (item:. .separator) ."("; state
+}
+{ (enumeration-type-definition:. ."(" .enumeration-literal item; state)
+  := . = token:. ")" .tag?
+| :who :ok
+  state call (who) :=
+  type-definition:. enumeration-type-definition:.. & (item:.) ."(" .")" =.
+}
+{ (type-definition: state) := . = token:. "array" .tag?
+| :ok
+  array-definition: ."array" =.; state
+}
+{ (array-definition: ."array"; state) := . = token:. "(" .tag?
+| :ok level:. [expression]; array-definition: ."array" ."(" =. .dimensions (); state
+}
+{ (array-definition: ."array" ."(" .dimensions; state)
+  := dimension = range: .from? .to? .direction?
+| :ok array-definition: ."array" ."(" .dimensions .dimension; state
+}
+{ (array-definition: ."array" ."(" .dimensions; state)
+  := range: .subtype-indication ."range"
+| :ok
+  array-definition: ."array" ."(" .dimensions .subtype-indication ."range"; state
+}
+{ (array-definition: ."array" ."(" .dimensions .subtype-indication ."range"; state)
+  := range = range: .from? .to? .direction?
+| :who :ok
+  array-definition:
+  ."array"
+  ."("
+  .dimensions .dimension (range:. .subtype-indication ."range")
+  ;
+  state
+}
+{ ( state =
+     array-definition: ."array"? ."("? .dimensions? .subtype-indication? ."range"?; ? )
+  := . = token:.? .tag?
+| :who :ok (level:. [expression]; state) call (who) :=
+}
+{ (array-definition: ."array" ."(" .dimensions .subtype-indication ."range"; state)
+  := . = token:. "<>" .tag?
+| :ok
+  array-definition:
+  ."array"
+  ."("
+  .dimensions .dimension (range: .subtype-indication ."range" ."<>" =.)
+  ;
+  state
+}
+{ ( phrase:. dimension;
+    level:. [expression];
+    array-definition: ."array" ."(" .dimensions;
+    state
+  )
+  := . = token:.? call [.")" .","] .tag?
+| :who :ok
+  (array-definition: ."array" ."(" .dimensions .dimension; state) call (who) :=
+}
+{ (array-definition: ."array" ."(" .dimensions .dimension; state)
+  := separator = token:. "," .tag?
+| :ok
+  level:. [expression];
+  array-definition:
+  ."array"
+  ."("
+  .dimensions . & (item:. dimension .separator)
+  ;
+  state
+}
+{ (array-definition: ."array" ."(" .dimensions .dimension; state)
+  := . = token:. ")" .tag?
+| :ok
+  array-definition: ."array" ."(" .dimensions . & (item:. dimension) .")" =.; state
+}
+{ (array-definition: ."array" ."(" .dimensions .")"; state) := . = token:. "of" .tag?
+| :ok
+  subtype-indication: array-definition: ."array" ."(" .dimensions .")" ."of" =.;
+  state
+}
+{ (array-definition: ."array" ."(" .dimensions .")" ."of"; state)
+  := subtype-indication:.
+| :who :ok
+  state call (who) := type-definition:.
+  array-definition: ."array" ."(" .dimensions .")" ."of" .subtype-indication
+}
+{ (type-definition: state) := . = token:. "record" .tag?
+| :ok
+  record-definition: ."record" =. .elements () .identifier-list (); state
+}
+{ (record-definition: ."record" .elements .identifier-list; state)
+  := identifier = token:. [identifier], ? .tag?
+| :ok record-definition: ."record" .elements .identifier-list .identifier; state
+}
+{ (record-definition: ."record" .elements .identifier-list .identifier item; state)
+  := separator = token: "," .tag?
+| :ok
+  record-definition:
+  ."record"
+  .elements
+  .identifier-list . & (item:. .separator)
+  ;
+  state
+}
+{ (record-definition: ."record" .elements .identifier-list .identifier item; state)
+  := . = token:. ":" .tag?
+| :ok
+  subtype-indication:
+  record-definition: ."record" .elements .identifier-list . & (item:.) .":" =.;
+  state
+}
+{ (record-definition: ."record" .elements .identifier-list .":"; state)
+  := subtype-indication:.
+| :ok
+  record-definition: ."record" .elements .identifier-list .":" .subtype-indication; state
+}
+{ (record-definition: ."record" .elements .identifier-list .":" .subtype-indication; state)
+  := . = token:. ";" .tag?
+| :ok
+  record-definition:
+  ."record"
+  .elements . & (element-declaration: .identifier-list .":" .subtype-indication .";" =.)
+  .identifier-list ();
+  state
+}
+{ (record-definition: ."record" .elements .identifier-list (); state)
+  := . = token:. "end" .tag?
+| :ok record-definition: ."record" .elements ."end" =.; state
+}
+{ (record-definition: ."record" .elements ."end" end; state)
+  := . = token:. "record" .tag?
+| :ok record-definition: ."record" .elements .end ., =.; state
+}
+{ (record-definition: ."record" .elements .end; state)
+  := . = token:. ";" .tag?
+| :who :ok
+  state
+  call (who)
+  (:= type-definition:. record-definition: ."record" .elements .end)
+  call (who) :=
+}
+{ (type-definition: state) := . = token:. "access" .tag?
+| :ok subtype-indication: access-type-definition: ."access" =.; state
+}
+{ (access-type-definition: ."access" =.; state) := subtype-indication:.
+| :who :ok
+  state call (who) := type-definition:.
+  access-type-definition: ."access" =. .subtype-indication
+}
+{ (type-declaration: ."type" .identifier ."is"; state = declare:.?; ?)
+  := type-definition:.
+| :ok
+  type-declaration: ."type" .identifier ."is" .type-definition; state
+}
+{ (type-declaration: ."type" .identifier ."is" .type-definition; declare:.; state)
+  := . = token:. ";" .tag?
+| :ok
+  declare:..
+  .(&:. (type-declaration: ."type" .identifier ."is" .type-definition .";" =.);)
+  ;
+  state
+}
+{ (type-definition: state) := . = token:. "file" .tag?
+| :ok file-type-definition: ."file" =.; state
+}
+{ (file-type-definition: ."file"; state) := . = token:. "of" .tag?
+| :ok file-type-definition: ."file" ."of" =.; state
+}
+{ (file-type-definition: ."file" ."of"; state) := phrase:. type-mark
+| :who :ok
+  state call (who) := type-definition:. file-type-definition: ."file" ."of" .type-mark
+}
+{ (type-definition: state) := . = token:. "range" .tag?
+| :ok level:. [expression]; range: range-type-definition: ."range" =.; state
+}
+{ (range-type-definition: ."range"; state) := range:.
+| :who :ok
+  range-type-definition: ."range" .range .units (); state
+}
+{ (range-type-definition: ."range" .range .units; state) :=
+| :who :ok
+  state
+  call (who) (:= type-definition:. range-type-definition: ."range" .range .units)
+  call (who) :=
+}
+{ (state = range-type-definition: ."range"? .range? .units (); ?)
+  := . = token:. "units" .tag?
+| :ok
+  units: ."units" =.; state
+}
+{ (units: ."units"; state) := identifier = token:. [identifier], ? .tag?
+| :ok units:. () ."units" .identifier .value (); state
+}
+{ (units:. ."units" .identifier .value; state) := . = token:. ";" .tag?
+| :ok units:.. & (unit: .identifier .value .";" =.) ."units"; state
+}
+{ (units:. ."units"; state) := identifier = token:. [identifier], ? .tag?
+| :ok units:. ."units" .identifier; state
+}
+{ (units:. ."units" .identifier; state) := . = token:. "=" .tag?
+| :ok units:. ."units" .identifier ."=" =.; state
+}
+{ (units:. ."units" .identifier ."="; state)
+  := literal = token:. ? call [.decimal-literal .based-literal], ? .tag?
+| :ok units:. ."units" .identifier ."=" .literal; state
+}
+{ (units:. ."units" .identifier ."=" .literal; state)
+  := unit-name = token:. [identifier], ? .tag?
+| :ok
+  units:. ."units" .identifier .value (unit-value: ."=" .literal .unit-name);
+  state
+}
+{ (units:. ."units"; state) := . = token:. "end" .tag?
+| :ok units:. ."units" ."end" =.; state
+}
+{ (units:. ."units" ."end" end; state) := . = token:. "units" .tag?
+| :ok units:. ."units" .end . & =.; state
+}
+{ ( units:. ."units" .end;
+    state =
+    range-type-definition: ."range"? .range? .units?;
+    type-declaration: ."type"? .identifier (token:. .tag?) ."is"?; ?
+  )
+  := . = token:. .tag?
+| :ok units:. ."units" .end . & =.; state
+}
+{ ( units:. ."units" .end;
+    range-type-definition: ."range" .range .units ();
+    state
+  )
+  := . = token:. ";" .tag?
+| :who :ok
+  (range-type-definition: ."range" .range .units (units:. ."units" .end); state)
+  call (who) :=
+}
+{ (state = declare:.?; ?)
+  := specifier = token:. ? call [."signal" ."constant" ."variable"] .tag?
+| :ok identifier-list: field-declaration: .specifier; state
+}
+{ (state = declare:.?; ?) := . = token:. "file" .tag?
+| :ok identifier-list: file-declaration: ."file" =.; state
+}
+{ (state = declare:.?; ?) := . = token:. "shared" .tag?
+| :ok shared-variable-declaration: ."shared" =.; state
+}
+{ (shared-variable-declaration: ."shared"; state) := . = token:. "variable" .tag?
+| :ok
+  identifier-list: field-declaration: .specifier (shared-variable: ."shared" ."variable" =.);
+  state
+}
+{ (file-declaration: ."file"; state) := identifier-list:.
+| :ok file-declaration: ."file" .identifier-list; state
+}
+{ (file-declaration: ."file" .identifier-list; state) := . = token:. ":" .tag?
+| :ok subtype-indication: file-declaration: ."file" .identifier-list .":" =.; state
+}
+{ (file-declaration: ."file" .identifier-list .":"; state) := subtype-indication:.
+| :ok
+  file-open-information: .open () .is ();
+  file-declaration: ."file" .identifier-list .":" .subtype-indication; state
+}
+{ ( file-declaration: ."file" .identifier-list .":" .subtype-indication;
+    declare:.;
+    state
+   )
+  := file-open-information:. .";"
+| :ok
+  declare:..
+  .(&:.
+    ( file-declaration:
+    ."file" .identifier-list .":" .subtype-indication .file-open-information .";"
+    )
+    ;
+  )
+  ;
+  state
+}
+{ (file-open-information: .open .is; state) := . = token:. ";" .tag?
+| :who :ok
+  state call (who) := file-open-information:. (file-open-information: .open .is) .";" =.
+}
+{ (file-open-information: .open () .is (); state) := . = token:. "open" .tag?
+| :ok level:. [expression]; file-open-information: ."open" =.; state
+}
+{ (file-open-information: ."open"; state) := expression:.
+| :ok
+  file-open-information: .open (file-open-kind:. expression ."open") .is (); state
+}
+{ (file-open-information: .open .is (); state) := . = token:. "is" .tag?
+| :ok level:. [expression]; file-open-information: .open ."is" =.; state
+}
+{ (file-open-information: .open ."is"; state) := expression:.
+| :ok
+  file-open-information: .open .is (file-logical-name:. expression ."is"); state
+}
+{ (level:. [expression]; file-open-information: .open () ."is"; state)
+  := open = token:. ? call [."in" ."out"] .tag?
+| :ok level:. [expression]; file-open-information: .open ..(deprecated:.) ."is"; state
+}
+{ (field-declaration: .specifier; state) := identifier-list:.
+| :ok field-declaration: .specifier .identifier-list; state
+}
+{ (field-declaration: .specifier .identifier-list; state) := . = token:. ":" .tag?
+| :ok subtype-indication: field-declaration: .specifier .identifier-list .":" =.; state
+}
+{ (field-declaration: .specifier .identifier-list .":"; state)
+  := subtype-indication:.
+| :ok field-declaration: .specifier .identifier-list .":" .subtype-indication; state
+}
+{ (field-declaration: .specifier .identifier-list .":" .subtype-indication; state) :=
+| :who :ok
+  ( initial-value:
+    field-declaration: .specifier .identifier-list .":" .subtype-indication .signal-kind ();
+    state
+  )
+  call (who) :=
+}
+{ (fieldl-declaration: .specifier .identifier-list .":" .subtype-indication; state)
+  := signal-kind = token:. ? call [."register" ."bus"] .tag?
+| :ok
+  initial-value:
+  field-declaration: .specifier .identifier-list .":" .subtype-indication .signal-kind;
+  state
+}
+{ (initial-value: state) :=
+| :who :ok
+  state call (who) (:= initial-value:. ()) call (who) :=
+}
+{ (initial-value: state) := . = token:. ":=" .tag?
+| :ok level:. [expression]; initial-value: .":=" =.; state
+}
+{ ( field-declaration: .specifier .identifier-list .":" .subtype-indication .signal-kind;
+    state
+  )
+  := initial-value:.
+| :ok
+  field-declaration:
+  .specifier .identifier-list .":" .subtype-indication .signal-kind .initial-value;
+  state
+}
+{ ( field-declaration:
+    .specifier .identifier-list .":" .subtype-indication .signal-kind .initial-value;
+    declare:.;
+    state
+  )
+  := . = token:. ";" .tag?
+| :ok
+  declare: ..
+  .(
+    &:.
+    ( field-declaration:
+      .specifier .identifier-list .":" .subtype-indication .signal-kind .initial-value .";" =.
+    )
+    ;
+  )
+  ;
+  state
+}
+{ (state = statements:.?; ?) := phrase:.
+| :ok
+  statement: .phrase; state
+}
+{ (state = statements:.?; ?)
+  := . = token:. ? call
+  [."assert" ."block" ."case" ."exit" ."for" ."if" ."loop" ."next" ."null"
+    ."postponed" ."process" ."report" ."return" ."wait" ."while" ."with" ."("
+   ] .tag?
+| :who :ok (statement: state) call (who) :=
+}
+{ (statement: state) := . = token:. "process" .tag?
+| :ok
+  process: ."process" =.; state
+}
+{ (process: ."process"; state) :=
+| :who :ok (process: ."process" .sensitivity (); state) call (who) :=
+}
+{ (state = process: ."process"?; ?) := . = token:. "(" .tag?
+| :ok sensitivity-list:. () ."(" =.; state
+}
+{ (sensitivity-list:. ."("; state) := phrase:.
+| :ok sensitivity-list:. ."(" .item phrase; state
+}
+{ (sensitivity-list:. ."(" .item; state) := separator = token:. "," .tag?
+| :ok sensitivity-list:.. & (item:. .separator) ."("; state
+}
+{ (sensitivity-list:. ."(" .item; process: ."process"; state) := . = token:. ")" .tag?
+| :ok
+  process: ."process" .sensitivity (sensitivity-list:.. & (item:.) ."(" .")" =.);
+  state
+}
+{ (process: ."process" .sensitivity; state) :=
+| :who :ok (declare:. (); process: ."process" .sensitivity ."is" (); state) call (who) :=
+}
+{ (process: ."process" .sensitivity; state) := . = token:. "is" .tag?
+| :ok declare:. (); process: ."process" .sensitivity ."is" =.; state
+}
+{ (process: ."process" .sensitivity ."is"; state) := declare:.
+| :ok process: ."process" .sensitivity ."is" .declare; state
+}
+{ (process: ."process" .sensitivity ."is" .declare; state) := . = token:. "begin" .tag?
+| :ok
+  statements:. (); process: ."process" .sensitivity ."is" .declare ."begin" =.; state
+}
+{ (statement: state) := . = token:. "if" .tag?
+| :ok level:. [expression]; if: ."if" =.; state
+}
+{ (if: ."if"; state) := expression:.
+| :ok if: ."if" .condition expression; state
+}
+{ (if: ."if" .condition; state) := . = token:. "then" .tag?
+| :ok statements:. (); if: ."if" .condition ."then" =.; state
+}
+{ (state = level:.?; ?) := . = token:. "(" .tag?
+| :ok level:. [expression]; primary: ."(" =.; state
+}
+{ (level:.; state) := phrase:. expression | :ok level:. .expression; state }
+
+{ (primary: ."("; state) := choice = range: .from? .direction? .to?
+| :ok
+  aggregate: ."(" .associations () .choices () .choice; state
+}
+{ (primary: ."("; state) := expression:.
+| :ok primary: ."(" .expression; state
+}
+{ (primary: ."(" .expression; state) := . = token:. ")" .tag?
+| :who :ok state call (who) := expression:. primary: ."(" .expression .")" =.
+}
+{ (primary: ."(" .expression item; state) := . = token:. "=>" .tag?
+| :ok
+  level:. [expression];
+  aggregate: ."(" .associations () .choices (item:.), ."=>" =.; state
+}
+{ (primary: ."(" .expression item; state) := separator = token:. "|" .tag?
+| :ok
+  level:. [expression];
+  aggregate: ."(" .associations () .choices (item:. .separator); state
+}
+{ (primary: ."(" .expression; state) := separator = token:. "," .tag?
+| :ok
+  level:. [expression];
+  aggregate: ."(" .associations (item:. expression .separator),; state
+}
+{ (statement: .phrase; state) := . = token:. ";" .tag?
+| :who :ok state call (who) := statement:. procedure-call:. phrase .";" =.
+}
+{ (statement: .phrase; state) := . = token:. ":=" .tag?
+| :ok level:. [expression]; variable-assignment: .target phrase .":=" =.; state
+}
+{ (statement: state) := . = token:. "(" .tag?
+| :ok
+  level:. [expression];
+  aggregate: ."(" =. .associations () .choices ();
+  variable-assignment: state
+}
+{ (variable-assignment: state)
+  := expression:. target = aggregate: ."("? .associations? .")"?
+| :ok
+  variable-assignment: .target; state
+}
+{ (variable-assignment: .target; state) := . = token:. ":=" .tag?
+| :ok level:. [expression]; variable-assignment: .target .":=" =.; state
+}
+{ (variable-assignment: .target .":="; state) := expression:.
+| :ok variable-assignment: .target .":=" .expression; state
+}
+{ (variable-assignment: .target .":=" .expression; state) := . = token:. ";" .tag?
+| :who :ok
+  state call (who)
+  := statement:. variable-assignment: .target .":=" .expression .";" =.
+}
+{ (statement: .phrase; state) := . = token:. "<=" .tag?
+| :ok options: statement: .target phrase ."<=" =.; state
+}
+{ (options: state) :=
+| :who :ok state call (who) (:= options:. ()) call (who) :=
+}
+{ (statement: .target ."<="; state) := options:.
+| :ok level:. [expression]; waveforms: statement: .target ."<=" .options; state
+}
+{ (options: state) := . = token:. ? call [."transport" ."inertial"] .tag?
+| :who :ok state call (who) := options:. =.
+}
+{ (options: state) := . = token: ."reject" .tag?
+| :ok level:. [expression]; options: ."reject" =.; state
+}
+{ (options: ."reject"; state) := expression:. reject
+| :ok options: ."reject" .reject; state
+}
+{ (options: ."reject" .reject; state) := . = token:. "inertial" .tag?
+| :who :ok state call (who) := options:. inertial: ."reject" .reject ."inertial"
+}
+{ (aggregate: ."(" .associations .choices; state)
+  := expression:. choice
+| :ok
+  aggregate: ."(" .associations .choices .choice; state
+}
+{ (level:. [expression]; primary: ."("; state) := choice = token:. "others" .tag?
+| :ok aggregate: ."(" .associations () .choices () .choice; state
+}
+{ (aggregate: ."(" .associations .choices .choice item; state)
+  := separator = token:. "|" .tag?
+| :ok
+  level:. [expression];
+  aggregate: ."(" .associations .choices . & (item:. .separator); state
+}
+{ (aggregate: ."(" .associations .choices () .choice association; state)
+  := . = token:. ? call [."," .")"] .tag?
+| :who :ok
+  (aggregate: ."(" .associations .association; state) call (who) :=
+}
+{ (aggregate: ."(" .associations .choices .choice item; state)
+  := . = token:. "=>" .tag?
+| :ok
+  level:. [expression];
+  aggregate: ."(" .associations .choices . & (item:.) ."=>" =.; state
+}
+{ (aggregate: ."(" .associations .choices ."=>"; state) := expression:.
+| :ok
+  aggregate: ."(" .associations .association (association: .choices ."=>" .expression);
+  state
+}
+{ (aggregate: ."(" .associations; state) := expression:. choice
+| :ok aggregate: ."(" .associations .choices () .choice; state
+}
+{ (aggregate: ."(" .associations .association; state)
+  := separator = token:. "," .tag?
+| :ok
+  level:. [expression];
+  association:
+  aggregate: ."(" .associations . & (item:. association .separator);
+  state
+}
+{ (aggregate: ."(" .associations .association; state)
+  := . = token:. ")" .tag?
+| :who :ok
+  state call (who) :=
+  expression:. aggregate: ."(" .associations . & (item:. association) .")" =.
+}
+{ (level:. [expression]; association: aggregate: ."(" .associations; state)
+  := choice = token:. "others" .tag?
+| :ok aggregate: ."(" .associations .choices () .choice; state
+}
+{ (state = waveforms: ?) := expression:.
+| :ok waveform:. () .expression; state
+}
+{ (waveform:.; state) := expression:.
+| :ok waveform:. .expression; state
+}
+{ (waveform:. .expression; state) :=
+| :who :ok state call (who) (:= waveform:.. & expression) call (who) :=
+}
+{ (waveform:. .expression; state) := . = token:. "after" .tag?
+| :ok level:. [expression]; waveform:. .expression ."after" =.; state
+}
+{ (waveform:. .expression ."after"; state) := expression:. delay
+| :ok
+  waveform:. .waveform-element (waveform-element: .expression ."after" .delay);
+  state
+}
+{ (waveform:. .waveform-element; state) :=
+| :who :ok state call (who) (:= waveform:.. & waveform-element) call (who) :=
+}
+{ (waveform:. .waveform-element item; state) := separator = token:. "," .tag?
+| :ok level:. [expression]; waveform:.. & (item:. .separator); state
+}
+{ (waveform:. .expression item; state) := separator = token:. "," .tag?
+| :ok level:. [expression]; waveform:.. & (item:. .separator); state
+}
+{ (waveforms: state) := waveform:.
+| :who :ok waveforms:. () .waveform; state
+}
+{ (waveforms:. .waveform; state) :=
+| :who :ok state call (who) (:= waveforms:.. & waveform) call (who) :=
+}
+{ (waveforms:. .waveform; state) := . = token:. "when" .tag?
+| :ok level:. [expression]; waveforms:. .waveform ."when" =.; state
+}
+{ (waveforms:. .waveform ."when"; state) := expression:. condition
+| :ok
+  waveforms:. .waveform ."when" .condition; state
+}
+{ (waveforms:. .waveform ."when" .condition; state) := . = token:.? .tag?
+| :who :ok
+  state call (who) (:= waveforms:.. & waveform:. ."when" .condition) call (who) :=
+}
+{ (waveforms:. .waveform ."when" .condition; state) := . = token:. "else" .tag?
+| :ok
+  level:. [expression];
+  waveform:. ();
+  waveforms:.. & (waveform:. ."when" .condition ."else" =.);
+  state
+}
+{ (waveform: state = waveforms:.?; ?) := expression:.
+| :ok waveform: .expression; state
+}
+{ (statement: .target ."<=" .options; state) := waveforms:.
+| :ok statement: .target ."<=" .options .waveforms; state
+}
+{ (waveforms:.; state) := waveform:. | :ok waveforms:. .waveform; state }
+{ (waveforms:.; state) := . = token:.? .tag?
+| :who :ok state call (who) (:= waveforms:.) call (who) :=
+}
+{ (statement: .target ."<=" .options .waveforms; statements:.; state)
+  := . = token:. ";" .tag?
+| :who :ok
+  statements:.. & (assignment: .target ."<=" .options .waveforms .";" =.); state
+}
+{ (statements: .; if: ."if" .condition ."then"; state)
+  := . = token:. ? call [."else" ."elsif" ."end"] .tag?
+| :who :ok
+  ( conditionals:. (conditional: ."if" .condition ."then" .statements),; state )
+  call (who) :=
+}
+{ (conditionals:.; state) := . = token:. "elsif" .tag?
+| :ok level:. [expression]; conditionals:. ."elsif" =.; state
+}
+{ (conditionals:. ."elsif"; state) := expression:.
+| :ok conditionals:. ."elsif" .condition expression; state
+}
+{ (conditionals:. ."elsif" .condition; state) := . = token:. "then" .tag?
+| :ok statements:. (); conditionals:. ."elsif" .condition ."then" =.; state
+}
+{ (statements:.; conditionals:. ."elsif" .condition ."then"; state)
+  := . = token:. ? call [."else" ."elsif" ."end"] .tag?
+| :who :ok
+  (conditionals:.. & (conditional: ."elsif" .condition ."then" .statements); state)
+  call (who) :=
+}
+{ (argument: state) := . = expression:.? | :who :ok state call (who) := }
+{ (argument-list:.; state) := expression:.
+| :ok argument-list:. .argument expression; state
+}
+{ (argument-list:. .argument item; state) := separator = token:. "," .tag?
+| :ok
+  level:. [expression]; argument: argument-list:.. & (item:. .separator);
+  state
+}
+{ (argument-list:. .association item; state) := separator = token:. "," .tag?
+| :ok
+  level:. [expression]; argument: argument-list:.. & (item:. .separator);
+  state
+}
+{ (conditionals:.; state) := . = token:. "end" .tag?
+| :ok conditionals:. ."end" =.; state
+}
+{ (conditionals:. ."end" end; state) := if = token:. "if" .tag?
+| :ok conditionals:. .end ., if; state
+}
+{ (conditionals:. .end; statements:.; state) := . = token:. ";" .tag?
+| :ok
+  statements:.. & (conditionals:. .end . & =.); state
+}
+{ (conditionals:.; state) := . = token:. "else" .tag?
+| :ok statements:. (); conditionals:. ."else" =.; state
+}
+{ (statements:.; conditionals:. ."else"; state)
+  := . = token:. "end" .tag?
+| :ok
+  conditionals:.. & (conditional: ."else" .statements) ."end" =.; state
+}
+{ (statements:.; process: ."process" .sensitivity ."is" .declare ."begin"; state)
+  := . = token:. "end" .tag?
+| :ok process: ."process" .sensitivity ."is" .declare ."begin" .statements ."end" =.; state
+}
+{ (process: ."process" .sensitivity ."is" .declare ."begin" .statements ."end" end; state)
+  := . = token:. "process" .tag?
+| :ok process: ."process" .sensitivity ."is" .declare ."begin" .statements .end ., =.; state
+}
+{ ( process: ."process" .sensitivity ."is" .declare ."begin" .statements .end;
+    state )
+  := . = token:. ";" .tag?
+| :who :ok
+  state call (who)
+  := statement:.
+  process: ."process" .sensitivity ."is" .declare ."begin" .statements .end . & =.
+}
+{ ( process: ."process" .sensitivity ."is" .declare ."begin" .statements .end ., end';
+    state = label:. (token:. .tag?)  .":"; ?
+  )
+  := end'' = token:. .tag?
+| :ok
+  process:
+  ."process" .sensitivity ."is" .declare ."begin" .statements .end ., end', end'';
+  state
+}
+{ (statement: state) := . = token:. "case" .tag?
+| :ok level:. [expression]; case-statement: ."case" =.; state
+}
+{ (case-statement: ."case"; state) := expression:.
+| :ok case-statement: ."case" .expression; state
+}
+{ (case-statement: ."case" .expression; state) := . = token:. "is" .tag?
+| :ok case-statement: ."case" .expression ."is" =. .alternatives (); state
+}
+{ (case-statement: ."case" .expression ."is" .alternatives; state)
+  := . = token:. "when" .tag?
+| :ok
+  level:. [expression];
+  alternative: ."when" =. .choices ();
+  case-statement: ."case" .expression ."is" .alternatives;
+  state
+}
+{ (alternative: ."when" .choices; state) := expression:. choice
+| :ok alternative: ."when" .choices .choice; state
+}
+{ (alternative: ."when" .choices .choice item; state) := . = token:. "=>" .tag?
+| :ok
+  statements:. (); alternative: ."when" .choices . & (item:.) ."=>" =.;
+  state
+}
+{ (alternative: ."when" .choices .choice item; state)
+  := separator = token:. "|" .tag?
+| :ok
+  level:. [expression]; alternative: ."when" .choices . & (item:. .separator); state
+}
+{ ( level:. [expression]; alternative: ."when" .choices; state )
+  := choice = token:. "others" .tag?
+| :ok alternative: ."when" .choices .choice; state
+}
+{ (alternative: ."when" .choices; state) := choice = range: .from .direction .to
+| :ok alternative: ."when" .choices .choice; state
+}
+{ ( statements:.;
+    alternative: ."when" .choices ."=>";
+    case-statement: ."case" .expression ."is" .alternatives;
+    state )
+  := . = token:. ? call [."when" ."end"] .tag?
+| :who :ok
+  ( case-statement:
+    ."case" .expression ."is"
+    .alternatives . & (alternative: ."when" .choices ."=>" .statements)
+    ;
+    state
+  )
+  call (who) :=
+}
+{ (case-statement: ."case" .expression ."is" .alternatives; state)
+  := . = token:. "end" .tag?
+| :ok case-statement: ."case" .expression ."is" .alternatives ."end" =.; state
+}
+{ (case-statement: ."case" .expression ."is" .alternatives ."end" end; state)
+  := . = token:. "case" .tag?
+| :ok case-statement: ."case" .expression ."is" .alternatives .end ., =.; state
+}
+{ ( case-statement: ."case" .expression ."is" .alternatives .end . & 2;
+    state = label:. (token:. .tag?) .":"; ?
+  )
+  := . = token:. .tag?
+| :ok
+  case-statement: ."case" .expression ."is" .alternatives .end . & =.;
+  state
+}
+{ (case-statement: ."case" .expression ."is" .alternatives .end; state)
+  := . = token:. ";" .tag?
+| :who :ok
+  state call (who) :=
+  statement:. case-statement: ."case" .expression ."is" .alternatives .end . & =.
+}
+{ (state = declare:.?; ?) := . = token:. "attribute" .tag?
+| :ok
+  attribute-declaration: ."attribute" =.; state
+}
+{ (attribute-declaration: ."attribute"; state)
+  := identifier = token:. [identifier], ? .tag?
+| :ok attribute-declaration: ."attribute" .identifier; state
+}
+{ (attribute-declaration: ."attribute" .identifier; state) := . = token:. "of" .tag?
+| :ok
+  entity-specification: .entity-name-list ();
+  attribute-specification: ."attribute" .identifier ."of" =.; state
+}
+{ (attribute-declaration: ."attribute" .identifier; state) := . = token:. ":" .tag?
+| :ok
+  attribute-declaration: ."attribute" .identifier .":" =.; state
+}
+{ (attribute-declaration: ."attribute" .identifier .":"; state) := phrase:. type-mark
+| :ok
+  attribute-declaration: ."attribute" .identifier .":" .type-mark; state
+}
+{ (attribute-declaration: ."attribute" .identifier .":" .type-mark; declare:.; state)
+  := . = token:. ";" .tag?
+| :ok
+  declare:..
+  .( &:.
+    ( attribute-declaration: ."attribute" .identifier .":" .type-mark .";" =. )
+    ;
+  )
+  ;
+  state
+}
+{ (entity-specification: .entity-name-list; state)
+  := entity-name = token:. ? call [.identifier .string-literal], ? .tag?
+| :ok
+  signature: entity-specification: .entity-name-list .entity-name; state
+}
+{ (entity-specification: .entity-name-list .entity-name; state)
+  := signature:.
+| :ok
+  entity-specification:
+  .entity-name-list
+  .entity-name (entity-name:. .signature)
+  ;
+  state
+}
+{ (entity-specification: .entity-name-list .entity-name; state)
+  := . = token:. ":" .tag?
+| :ok
+  entity-specification:
+  .entity-name-list . & (item:. entity-name) .":" =.; state
+}
+{ (entity-specification: .entity-name-list .":"; state)
+  := entity-class = token:
+  . ? call
+  [ ."entity" ."architecture" ."configuration" ."procedure" ."function" ."package"
+    ."type" ."subtype" ."constant" ."signal" ."variable" ."component" ."label"
+    ."literal" ."units" ."group" ."file"
+  ]
+  .tag?
+| :who :ok
+  state call (who) := entity-specification: .entity-name-list .":" .entity-class
+}
+{ (attribute-specification: ."attribute" .identifier ."of"; state)
+  := entity-specification = entity-specification: .entity-name-list .":" .entity-class
+| :ok
+  attribute-specification: ."attribute" .identifier ."of" .entity-specification; state
+}
+{ (attribute-specification: ."attribute" .identifier ."of" .entity-specification; state)
+  := . = token:. "is" .tag?
+| :ok
+  level:. [expression];
+  attribute-specification: ."attribute" .identifier ."of" .entity-specification ."is" =.;
+  state
+}
+{ (attribute-specification: ."attribute" .identifier ."of" .entity-specification ."is"; state)
+  := expression:.
+| :ok
+  attribute-specification:
+  ."attribute" .identifier ."of" .entity-specification ."is" .expression;
+  state
+}
+{ ( attribute-specification:
+  ."attribute" .identifier ."of" .entity-specification ."is" .expression;
+  declare:.;
+  state
+  )
+  := . = token:. ";" .tag?
+| :ok
+  declare:..
+  .( &:.
+    ( attribute-specification:
+      ."attribute"
+      .identifier
+      ."of"
+      .entity-specification
+      ."is"
+      .expression
+      .";" =.
+    )
+    ;
+  )
+  ;
+  state
+}
+{ (statement: .phrase label = (token:. [identifier], ? .tag?); state)
+  := . = token:. ":" .tag?
+| :ok
+  statement: label:. .":" =.; state
+}
+{ (statement: state) := . = token:. "block" .tag?
+| :ok
+  block-statement: ."block" =.; state
+}
+{ (block-statement: ."block"; state) :=
+| :who :ok (block-statement: ."block" .block-guard (); state) call (who) :=
+}
+{ (block-statement: ."block"; state) := . = token:. "(" .tag?
+| :ok level:. [expression]; block-statement: ."block" ."(" =.; state
+}
+{ (block-statement: ."block" ."("; state) := expression:.
+| :ok block-statement: ."block" ."(" .expression; state
+}
+{ (block-statement: ."block" ."(" .expression; state) := . = token:. ")" .tag?
+| :ok block-statement:
+  ."block"
+  .block-guard (block-guard: ."(" .expression .")" =.)
+  ;
+  state
+}
+{ (block-statement: ."block" .block-guard; state) :=
+| :who :ok
+  (block-header: block-statement: ."block" .block-guard ."is" (); state) call (who) :=
+}
+{ (block-statement: ."block" .block-guard; state) := . = token:. "is" .tag?
+| :ok block-header: block-statement: ."block" .block-guard ."is" =.; state
+}
+{ (block-header: state) :=
+| :who :ok state call (who) (:= block-header:. ()) call (who) :=
+}
+{ (block-header: state) := . = token:. "port" .tag?
+| :ok
+  interface-list:
+  port-clause: ."port" =.;
+  port-map-aspect:
+  block-header: .generic ();
+  state
+}
+{ (port-map-aspect: state)
+  := port-clause = port-clause: ."port"? .interface-list? .";"?
+| :ok port-map-aspect: .port-clause; state
+}
+{ (port-map-aspect: .port-clause; state) :=
+| :who :ok state call (who) := port-clause:.
+}
+{ (port-map-aspect: .port-clause; state) := . = token:. "port" .tag?
+| :ok map-aspect: port-map-aspect: .port-clause ."port" =.; state
+}
+{ (map-aspect: state) := . = token:. "map" .tag?
+| :ok association-list: map-aspect: ."map" =.; state
+}
+{ (association-list: state) := . = token:. "(" .tag?
+| :ok association-element: association-list:. () ."(" =.; state
+}
+{ (association-element: state) := phrase:.
+| :ok association-element: .phrase; state
+}
+{ (association-element: .phrase expression; state) :=
+| :who :ok
+  (level:. [expression] .expression; state) call (who) :=
+}
+{ (association-element: .phrase; state) := . = token:. "=>" .tag?
+| :ok level:. [expression]; association-element: .formal-part phrase ."=>" =.; state
+}
+{ (level:. [expression]; association-element: .formal-part ."=>" =.; state)
+ := actual-part = token:. "open" .tag?
+| :who :ok state call (who) := association-element:.
+  association-element: .formal-part ."=>" =. .actual-part
+}
+{ (association-element: .formal-part ."=>"; state) := expression:.
+| :who :ok state call (who) := association-element:.
+  association-element: .formal-part ."=>" .actual-part expression
+}
+{ (association-list:. ."("; state) := association-element:.
+| :ok association-list:. ."(" .association-element; state
+}
+{ (association-list:. ."("; state) := expression:. association-element
+| :ok association-list:. ."(" .association-element; state
+}
+{ (association-list:. ."(" .association-element item; state)
+  := . = token:. "," .tag?
+| :ok association-element: association-list:.. & (item:. .separator =.) ."("; state
+}
+{ (association-list:. ."(" .association-element item; state)
+  := . = token:. ")" .tag?
+| :who :ok
+  state call (who) := association-list:. association-list:.. & (item:.) ."(" .")" =.
+}
+{ (map-aspect: ."map"; state) := association-list:.
+| :who :ok state call (who) := map-aspect: ."map" .association-list
+}
+
+{ (port-map-aspect: .port-clause ."port"; state)
+  := map-aspect: ."map" .association-list
+|:who :ok
+  port-map-aspect:. (port-map-aspect: ."port" ."map" .association-list)
+  .port-clause
+  ;
+  state
+}
+{ (port-map-aspect:. .port-clause; block-header: .generic; state)
+  := . = token:. ";" .tag?
+|:who :ok
+  state call (who) := block-header:.
+  block-header: .generic .port
+  port-clause-map-aspect: .port-clause .port-map-aspect .";" =.
+}
+{ (block-statement: ."block" .block-guard ."is"; state) := block-header:.
+| :ok declare:. (); block-statement: ."block" .block-guard ."is" .block-header; state
+}
+{ (block-statement: ."block" .block-guard ."is" .block-header; state)
+  := declare:.
+| :ok block-statement: ."block" .block-guard ."is" .block-header .declare; state
+}
+{ (block-statement: ."block" .block-guard ."is" .block-header .declare; state)
+  := . = token:. "begin" .tag?
+| :ok
+  statements:. ();
+  block-statement: ."block" .block-guard ."is" .block-header .declare ."begin" =.;
+  state
+}
+{ (statement: state) := phrase:. | :ok statement: .phrase; state }
+{ (label:. .":"; statements:.; state) := statement:.
+| :ok statements:.. & (label:. .":" .statement); state
+}
+{ ( statements:.;
+    block-statement: ."block" .block-guard ."is" .block-header .declare ."begin";
+    state
+  )
+  := . = token:. "end" .tag?
+| :ok
+  block-statement:
+  ."block"
+  .block-guard
+  ."is"
+  .block-header
+  .declare
+  ."begin"
+  .statements
+  ."end" =.;
+  state
+}
+{ ( block-statement:
+    ."block"
+    .block-guard
+    ."is"
+    .block-header
+    .declare
+    ."begin"
+    .statements
+    ."end" end;
+    state
+  )
+  := . = token:. "block" .tag?
+| :ok
+  block-statement:
+  ."block"
+  .block-guard
+  ."is"
+  .block-header
+  .declare
+  ."begin"
+  .statements
+  .end ., =.
+  ;
+  state
+}
+{ ( block-statement:
+    ."block"
+    .block-guard
+    ."is"
+    .block-header
+    .declare
+    ."begin"
+    .statements
+    .end
+    ;
+    state = label:. (token:. .tag?) .":"?; ?
+  )
+  := . = token:. .tag?
+| :ok
+  block-statement:
+  ."block"
+  .block-guard
+  ."is"
+  .block-header
+  .declare
+  ."begin"
+  .statements
+  .end . & =.;
+  state
+}
+{ ( block-statement:
+    ."block"
+    .block-guard
+    ."is"
+    .block-header
+    .declare
+    ."begin"
+    .statements
+    .end
+    ;
+    state
+  )
+  := . = token:. ";" .tag?
+| :who :ok
+  state call (who) := statement:.
+  block-statement:
+  ."block"
+  .block-guard
+  ."is"
+  .block-header
+  .declare
+  ."begin"
+  .statements
+  .end . & =.
+}
+{ (state = declare:.?; ?) := . = token:. "alias" .tag?
+| :ok alias-declaration: ."alias" =.; state
+}
+{ (alias-declaration: ."alias"; state)
+  :=
+  alias-designator
+  = token:. ? call [.identifier .string-literal .character-literal], ? .tag?
+| :ok
+  alias-declaration: ."alias" .alias-designator; state
+}
+{ (alias-declaration: ."alias" .alias-designator; state)
+  := . = token:. ":" .tag?
+| :ok
+  subtype-indication:
+  alias-declaration: ."alias" .alias-designator .":" =.; state
+}
+{ (alias-declaration: ."alias" .alias-designator .":"; state)
+  := subtype-indication:.
+| :ok
+  alias-declaration: ."alias" .alias-designator .":" .subtype-indication; state
+}
+{ ( alias-declaration:
+    ."alias"
+    .alias-designator
+    .":"
+    .subtype-indication
+    ;
+    state
+  )
+  := . = token:. "is" .tag?
+| :ok
+  alias-declaration: ."alias" .alias-designator .":" .subtype-indication ."is" =.;
+  state
+}
+{ (alias-declaration: ."alias" .alias-designator; state)
+  := . = token:. "is" .tag?
+| :ok
+  alias-declaration:
+  ."alias" .alias-designator .":" () .subtype-indication () ."is" =.;
+  state
+}
+{ ( alias-declaration: ."alias" .alias-designator .":" .subtype-indication ."is";
+    state
+  )
+  := phrase:.
+| :ok
+  signature:
+  alias-declaration:
+  ."alias" .alias-designator .":" .subtype-indication ."is" .name phrase;
+  state
+}
+{ (signature: state) :=
+| :who :ok state call (who) (:= signature:. ()) call (who) :=
+}
+{ (signature: state) := . = token:. "[" .tag?
+| :ok signature: ."[" =. .type-marks () .return-type (); state
+}
+{ (signature: ."[" .type-marks .return-type (); state) := phrase:. typemark
+| :ok signature: ."[" .type-marks .typemark; state
+}
+{ (signature: ."[" .type-marks .typemark item; state)
+  := separator = token:. "," .tag?
+| :ok signature: ."[" .type-marks . & (item:. .separator) .return-type (); state
+}
+{ (signature: ."[" .type-marks .typemark item; state)
+  := . = token:.? call [."]" ."return"] .tag?
+| :who :ok
+  (signature: ."[" .type-marks . & (item:.) .return-type (); state) call (who) :=
+}
+{ (signature: ."[" .type-marks .return-type (); state) := . = token:. "return" .tag?
+| :ok signature: ."[" .type-marks ."return" =.; state
+}
+{ (signature: ."[" .type-marks ."return"; state) := phrase:. type
+| :ok
+  signature: ."[" .type-marks .return-type (return-type: ."return" .type); state
+}
+{ (signature: ."[" .type-marks .return-type; state) := . = token:. "]" .tag?
+| :who :ok
+  state call (who) := signature:.
+  signature: ."[" .type-marks .return-type ."]" =. 
+}
+{ ( alias-declaration: ."alias" .alias-designator .":" .subtype-indication ."is" .name;
+    state
+  )
+  := signature:.
+| :ok
+  alias-declaration: ."alias" .alias-designator .":" .subtype-indication ."is" .name
+  .signature;
+  state
+}
+{ ( alias-declaration:
+    ."alias" .alias-designator .":" .subtype-indication ."is" .name .signature;
+    declare:.;
+    state
+  )
+  := . = token:. ";" .tag?
+| :ok
+  declare:..
+  .( &:.
+    ( alias-declaration:
+      ."alias" .alias-designator .":" .subtype-indication ."is" .name .signature .";" =.
+    )
+    ;
+  )
+  ;
+  state
+}
+{ (statements:.; state) := statement:.
+| :ok statements:.. & statement; state
+}
+{ (statement: state) := . = token:. "wait" .tag?
+| :ok wait-statement: ."wait" =.; state
+}
+{ (wait-statement: ."wait"; state) :=
+| :who :ok (wait-statement: ."wait" .sensitivity (); state) call (who) :=
+}
+{ (wait-statement: ."wait" .sensitivity; state) :=
+| :who :ok (wait-statement: ."wait" .sensitivity .until (); state) call (who) :=
+}
+{ (wait-statement: ."wait" .sensitivity; state) := . = token:. "on" .tag?
+| :ok level:. [expression]; wait-statement: ."wait" ."on" =. .sensitivity-list (); state
+}
+{ (wait-statement: ."wait" ."on" .sensitivity-list; state) := expression:. item
+| :ok wait-statement: ."wait" ."on" .sensitivity-list .item; state
+}
+{ (wait-statement: ."wait" ."on" .sensitivity-list .item; state) :=
+| :who :ok
+  ( wait-statement:
+    ."wait"
+    .sensitivity (sensitivity: ."on" .sensitivity-list . & item:.)
+    .until ()
+    ;
+    state
+  )
+  call (who) :=
+}
+{ (wait-statement: ."wait" ."on" .sensitivity-list .item; state)
+  := separator = token:. "," .tag?
+| :ok
+  level:. [expression];
+  wait-statement: ."wait" ."on" .sensitivity-list . & (item:. .separator);
+  state
+}
+{ (wait-statement: ."wait" .sensitivity; state) := . = token:. "until" .tag?
+| :ok level:. [expression]; wait-statement: ."wait" .sensitivity ."until" =.; state
+}
+{ (wait-statement: ."wait" .sensitivity ."until"; state) := expression:. condition
+| :ok
+  wait-statement: ."wait" .sensitivity .until (until: ."until" .condition); state
+}
+{ (wait-statement: ."wait" .sensitivity .until; state) :=
+| :who :ok
+  (wait-statement: ."wait" .sensitivity .until  .timeout (); state)
+  call (who) :=
+}
+{ (wait-statement: ."wait" .sensitivity .until (); state)
+  := . = token:. "until" .tag?
+| :ok level:. [expression]; wait-statement: ."wait" .sensitivity ."until" =.; state
+}
+{ (wait-statement: ."wait" .sensitivity .until; state) := . = token:. "for" .tag?
+| :ok
+  level:. [expression];
+  wait-statement: ."wait" .sensitivity .until ."for" =.; state
+}
+{ (wait-statement: ."wait" .sensitivity .until ."for"; state)
+  := expression:. timeout
+| :ok
+  wait-statement: ."wait" .sensitivity .until .timeout (timeout:. ."for"); state
+}
+{ (wait-statement: ."wait" .sensitivity .until .timeout; state) := . = token:. ";" .tag?
+| :who :ok
+  state call (who)
+  := statement:. wait-statement: ."wait" .sensitivity .until .timeout .";" =.
+}
+{ (statement: state) := null = token:. "null" .tag?
+| :ok null-statement: .null; state
+}
+{ (null-statement: .null; state) := . = token:. ";" .tag?
+| :who :ok state call (who) := statement:. null-statement: .null .";" =.
+}
+{ (association: state) := expression:.
+| :ok association: .expression; state
+}
+{ (association: .expression; state) :=
+| :who :ok
+  state call (who) (:= expression:.) call (who) :=
+}
+{ (association: .expression item; state) := . = token:. "=>" .tag?
+| :who :ok
+  level:. [expression]; association: .choices (item:.), ."=>" =.; state
+}
+{ (association: .choices ."=>"; state) := expression:.
+| :who :ok state call (who) := expression:. association: .choices ."=>" .expression
+}
+{ (association: aggregate: ."(" .associations; state)
+  := choice = range: .from? .direction? .to?
+| :who :ok
+  aggregate: ."(" .associations .choices () .choice; state
+}
+{ (state = declare:.?; ?) := . = token:. "procedure" .tag?
+| :ok
+  procedure: ."procedure" =.; state
+}
+{ (procedure: ."procedure"; state) := identifier = token:. [identifier], ? .tag?
+| :ok
+  formal-parameter-list: procedure: ."procedure" .identifier; state
+}
+{ (procedure: ."procedure" .identifier; state)
+  := formal-parameter-list:.
+| :ok
+  subprogram:. (procedure: ."procedure" .identifier .formal-parameter-list);
+  state
+}
+{ (formal-parameter-list: state) :=
+| :who :ok state call (who) (:= formal-parameter-list:. ()) call (who) :=
+}
+{ (state = formal-parameter-list: ?) := . = token:. "(" .tag?
+| :who :ok
+  (interface-list: state) call (who) :=
+}
+{ (formal-parameter-list: state)
+  := formal-parameter-list = interface-list:. ."(" .")"
+| :who :ok
+  state call (who) := formal-parameter-list:.
+}
+{ (state = declare:.?; ?) := purity = token:. ? call [."pure" ."impure"] .tag?
+| :ok function: .purity; state
+}
+{ (state = declare:.?; ?) := . = token:. "function" .tag?
+| :ok function: .purity () ."function" =.; state
+}
+{ (function: .purity; state) := . = token:. "function" .tag?
+| :ok function: .purity ."function" =.; state
+}
+{ (function: .purity ."function"; state)
+  := identifier = token:. ? call [.identifier .string-literal], ? .tag?
+| :ok
+  formal-parameter-list: function: .purity ."function" .identifier; state
+}
+{ (function: .purity ."function" .identifier; state)
+  := formal-parameter-list:.
+| :ok
+  function: .purity ."function" .identifier .formal-parameter-list; state
+}
+{ (function: .purity ."function" .identifier .formal-parameter-list; state)
+  := . = token:. "return" .tag?
+| :ok
+  function: .purity ."function" .identifier .formal-parameter-list ."return" =.;
+  state
+}
+{ (function: .purity ."function" .identifier .formal-parameter-list ."return"; state)
+  := phrase:. type
+| :ok
+  subprogram:.
+  ( function:
+    .purity
+    ."function"
+    .identifier
+    .formal-parameter-list
+    .return-type return-type: ."return" .type
+  )
+  ; state
+}
+{ (statement: state) := . = token:. "return" .tag?
+| :ok level:. [expression]; return-statement: ."return" =.; state
+}
+{ (return-statement: ."return"; state) := expression:.
+| :ok return-statement: ."return" .expression; state
+}
+{ (return-statement: ."return" .expression; state) := . = token:. ";" .tag?
+| :who :ok
+  state call (who)
+  := statement:. return-statement: ."return" .expression .";" =.
+}
+{ (level:. [expression]; return-statement: ."return"; state)
+  := . = token:. ";" .tag?
+| :who :ok
+  state call (who) := statement:. return-statement: ."return" .";" =.
+}
+{ (subprogram:.; declare:.; state) := . = token:. ";" .tag?
+| :ok declare:.. .(&:. (subprogram:. .";" =.);); state
+}
+{ (subprogram:.; state) := . = token:. "is" .tag?
+| :ok
+  declare:. (); subprogram:. ."is" =.; state
+}
+{ (subprogram:. ."is"; state) := declare:.
+| :ok subprogram:. ."is" .declare; state
+}
+{ (subprogram:. ."is" .declare; state) := . = token:. "begin" .tag?
+| :ok statements:. (); subprogram:. ."is" .declare ."begin" =.; state
+}
+{ (statements:.; subprogram:. ."is" .declare ."begin"; state)
+  := end = token:. "end" .tag?
+| :ok subprogram:. ."is" .declare ."begin" .statements .end; state
+}
+{ (subprogram:. ."is" .declare ."begin" .statements .end; state) :=
+| :ok subprogram:. ."is" .declare ."begin" .statements .end . & =.; state
+}
+{ ( subprogram:. ."is" .declare local ."begin" .statements .end; declare:.;
+    state
+  )
+  := . = token:. ";" .tag?
+| :ok
+  declare:..
+  .( &:. (subprogram:. ."is" .declare local ."begin" .statements .end . & =.);
+  )
+  ;
+  state
+}
+{ (statement: state) := . = token:. "for" .tag?
+| :ok loop-statement: ."for" =.; state
+}
+{ (loop-statement: ."for"; state) := identifier = token:. [identifier], ? .tag?
+| :ok loop-statement: ."for" .identifier; state
+}
+{ (loop-statement: ."for" .identifier; state) := . = token:. "in" .tag?
+| :ok level:. [expression]; range: loop-statement: ."for" .identifier ."in" =.; state
+}
+{ (loop-statement: ."for" .identifier ."in"; state) := range:.
+| :ok loop-statement: .iteration (for: ."for" .identifier ."in" .range); state
+}
+{ (range: loop-statement: ."for" .identifier ."in"; state) := expression:. range
+| :ok loop-statement: .iteration (for: ."for" .identifier ."in" .range); state
+}
+{ (statement: state) := . = token:. "while" .tag?
+| :ok level:. [expression]; loop-statement: ."while" =.; state
+} 
+{ (loop-statement: ."while"; state) := expression:. condition
+| :ok loop-statement: .iteration (while: ."while" .condition); state
+}
+{ (loop-statement: .iteration; state) := . = token:. "loop" .tag?
+| :ok statements:. (); loop-statement: .iteration ."loop" =.; state
+}
+{ (statement: state) := . = token:. "loop" .tag?
+| :ok statements:. (); loop-statement: .iteration () ."loop" =.; state
+}
+{ (statements:.; loop-statement: .iteration ."loop"; state) := . = token:. "end" .tag?
+| :ok loop-statement: .iteration ."loop" .statements ."end" =.; state
+}
+{ (loop-statement: .iteration ."loop" .statements ."end" end; state)
+  := . = token:. "loop" .tag?
+| :ok loop-statement: .iteration ."loop" .statements .end ., =.; state
+}
+{ ( loop-statement: .iteration ."loop" .statements .end . = ?, ?;
+    state = label:. (token:. .tag?) .":"?; ?)
+  := . = token:. .tag?
+| :ok loop-statement: .iteration ."loop" .statements .end . & =.; state
+}
+{ (loop-statement: .iteration ."loop" .statements .end; state)
+  := . = token:. ";" .tag?
+| :who :ok
+  state call (who)
+  := statement:. loop-statement: .iteration ."loop" .statements .end . & =.
+}
+{ (statement: state) := . = token:. "exit" .tag?
+| :ok exit-statement: ."exit" =. .label () .when (); state
+}
+{ (exit-statement: ."exit" .label .when; state) := . = token:. ";" .tag?
+| :who :ok
+  state call (who) := statement:. exit-statement: ."exit" .label .when .";" =.
+}
+{ (exit-statement: ."exit" .label .when (); state) := . = token:. "when" .tag?
+| :who :ok
+  level:. [expression]; exit-statement: ."exit" .label ."when" =.; state
+}
+{ (exit-statement: ."exit" .label () .when (); state)
+  := label = token:. [identifier], ? .tag?
+| :ok exit-statement: ."exit" .label .when (); state
+}
+{ (exit-statement: ."exit" .label ."when"; state) := expression:. condition
+| :ok
+  exit-statement: ."exit" .label .when (when: ."when" .condition); state
+}
+{ (statement: state) := . = token:. "assert" .tag?
+| :ok level:. [expression]; assertion: ."assert" =.; state
+}
+{ (assertion: ."assert"; state) := expression:.
+| :ok assertion: ."assert" .expression; state
+}
+{ (assertion: ."assert"; state) := expression:. condition
+| :ok assertion: ."assert" .condition .report () .severity (); state
+}
+{ (assertion: ."assert" .condition .report () .severity (); state)
+  := . = token:. "report" .tag?
+| :ok level:. [expression]; assertion: ."assert" .condition ."report" =.; state
+}
+{ (assertion:  ."assert" .condition ."report"; state) := expression:.
+| :ok
+  assertion: ."assert" .condition .report (report: ."report" .expression) .severity ();
+  state
+}
+{ (assertion: ."assert" .condition .report .severity (); state)
+  := . = token:. "severity" .tag?
+| :ok
+  level:. [expression]; assertion: ."assert" .condition .report ."severity" =.; state
+}
+{ (assertion:  ."assert" .condition .report ."severity"; state)
+  := expression:. severity
+| :ok
+  assertion: ."assert" .condition .report .severity (severity:. ."severity");
+  state
+}
+{ (assertion:  ."assert" .condition .report .severity; state)
+  := . = token:. ";" .tag?
+| :who :ok
+  state call (who) := statement:.
+  assertion: ."assert" .condition .report .severity .";" =.
+}
+{ (statement: state) := . = token:. "report" .tag?
+| :ok level:. [expression]; report-statement: ."report" =.; state
+}
+{ (report-statement: ."report"; state) := expression:.
+| :ok report-statement: ."report" .expression .severity (); state
+}
+{ (report-statement: ."report" .expression .severity; state) := . = token:. ";" .tag?
+| :who :ok
+  state call (who)
+  := statement:. report-statement: ."report" .expression .severity .";" =.
+}
+{ (report-statement: ."report" .expression .severity (); state)
+  := . = token:. "severity" .tag?
+| :ok
+  level:. [expression]; report-statement: ."report" .expression ."severity" =.; state
+}
+{ (report-statement: ."report" .expression ."severity"; state)
+  := expression:. severity
+| :ok
+  report-statement:
+  ."report"
+  .expression
+  .severity (severity:. ."severity")
+  ;
+  state
+}
+{ (statement: state) := . = token:. "next" .tag?
+| :ok
+  next-statement: ."next" =. .identifier (); state
+}
+{ (next-statement: ."next" .identifier (); state)
+  := identifier = token:. [identifier], ? .tag?
+| :ok next-statement: ."next" .identifier; state
+}
+{ (next-statement: ."next" .identifier; state) := . = token:. "when" .tag?
+| :ok level:. [expression]; next-statement: ."next" .identifier ."when" =.; state
+}
+{ (next-statement: ."next" .identifier; state) := . = token:. ";" .tag?
+| :who :ok
+  state call (who) := statement:. next-statement: ."next" .identifier .";" =.
+}
+{ (next-statement: ."next" .identifier ."when"; state)
+  := expression:. condition
+| :ok next-statement: ."next" .identifier ."when" .condition; state
+}
+{ (next-statement: ."next" .identifier ."when" .condition; state)
+  :=  . = token:. ";" .tag?
+| :who :ok
+  state call (who)
+  := statement:. next-statement: ."next" .identifier ."when" .condition .";" =.
+}
+{ (loop-statement: .iteration; state) := . = token:. "generate" .tag?
+| :ok
+  declare:. ();
+  generate-statement: .generation-scheme iteration ."generate" =.; state
+}
+{ (if: ."if" .condition; state)
+  := . = token:. "generate" .tag?
+| :ok
+  declare:. ();
+  generate-statement: .generation-scheme (if: ."if" .condition) ."generate" =.;
+  state
+}
+{ (generate-statement: .generation-scheme ."generate"; state)
+  := declare:.
+| :ok generate-statement: .generation-scheme ."generate" .declare; state
+}
+{ (generate-statement: .generation-scheme ."generate"; state .declare)
+  :=
+| :who :ok
+  ( statements:. ();
+    generate-statement: .generation-scheme ."generate" .declare ."begin" ();
+    state
+  )
+  call (who) :=
+}
+{ (generate-statement: .generation-scheme ."generate"; state .declare)
+  := . = token:. "begin" .tag?
+| :ok
+  statements:. ();
+  generate-statement: .generation-scheme ."generate" .declare ."begin" =.;
+  state
+}
+{ ( statements:.;
+    generate-statement: .generation-scheme ."generate" .declare ."begin";
+    state
+  )
+  := . = token:. "end" .tag?
+| :ok
+  generate-statement:
+  .generation-scheme
+  ."generate"
+  .declare
+  ."begin"
+  .statements
+  ."end" =.
+  ;
+  state
+}
+{ ( generate-statement:
+    .generation-scheme
+    ."generate"
+    .declare
+    ."begin"
+    .statements
+    ."end" end
+    ;
+    state
+  )
+  := . = token:. "generate" .tag?
+| :ok
+  generate-statement:
+  .generation-scheme
+  ."generate"
+  .declare
+  ."begin"
+  .statements
+  .end ., =.
+  ;
+  state
+}
+{ ( generate-statement:
+    .generation-scheme
+    ."generate"
+    .declare
+    ."begin"
+    .statements
+    .end . = (?, ?)
+    ;
+    state = label:. (token:. .tag?)  .":"; ?
+  )
+  := . = token:. .tag?
+| :ok
+  generate-statement:
+  .generation-scheme
+  ."generate"
+  .declare
+  ."begin"
+  .statements
+  .end . & =.
+  ;
+  state
+}
+{ ( generate-statement:
+    .generation-scheme
+    ."generate"
+    .declare
+    ."begin"
+    .statements
+    .end
+    ;
+    state
+  )
+  := . = token:. ";" .tag?
+| :who :ok
+  state call (who) := statement:.
+  generate-statement:
+  .generation-scheme
+  ."generate"
+  .declare
+  ."begin"
+  .statements
+  .end . & =.
+}
+{ (statement: state) := . = token:. "with" .tag?
+| :ok level:. [expression]; selected-signal-assignment: ."with" =.; state
+}
+{ (selected-signal-assignment: ."with"; state) := expression:.
+| :ok selected-signal-assignment: ."with" .expression; state
+}
+{ (selected-signal-assignment: ."with" .expression; state)
+  := . = token:. "select" .tag?
+| :ok
+  selected-signal-assignment: ."with" .expression ."select" =.; state
+}
+{ (selected-signal-assignment: ."with" .expression ."select"; state)
+  := phrase:. target
+| :ok
+  selected-signal-assignment: ."with" .expression ."select" .target; state
+}
+{ (selected-signal-assignment: ."with" .expression ."select" .target; state)
+  := . = token:. "<=" .tag?
+| :ok
+  options:
+  selected-signal-assignment: ."with" .expression ."select" .target ."<=" =.;
+  state
+}
+{ ( selected-signal-assignment: ."with" .expression ."select" .target ."<=";
+    state
+  )
+  := options:.
+| :ok
+  level:. [expression]; waveform:. ();
+  selected-waveforms:. ();
+  selected-signal-assignment: ."with" .expression ."select" .target ."<=" .options;
+  state
+}
+{ ( selected-signal-assignment: ."with" .expression ."select" .target ."<=" .options;
+    state
+  )
+  := selected-waveforms:.
+| :ok
+  selected-signal-assignment:
+  ."with"
+  .expression
+  ."select"
+  .target
+  ."<="
+  .options
+  .selected-waveforms
+  ;
+  state
+}
+{ ( selected-signal-assignment:
+    ."with"
+    .expression
+    ."select"
+    .target
+    ."<="
+    .options
+    .selected-waveforms
+    ;
+    state
+  )
+  := . = token:. ";" .tag?
+| :who :ok
+  state call (who)
+  :=
+  statement:.
+  selected-signal-assignment:
+  ."with"
+  .expression
+  ."select"
+  .target
+  ."<="
+  .options
+  .selected-waveforms
+  .";" =.
+}
+{ (selected-waveforms:.; state) := waveform:.
+| :ok selected-waveforms:. .waveform; state
+}
+{ (selected-waveforms:. .waveform; state) := . = token:. "when" .tag?
+| :ok
+  level:. [simple];
+  choices:. ();
+  selected-waveforms:. .waveform ."when" =.;
+  state
+}
+{ (selected-waveforms:. .waveform ."when"; state) := choices:.
+| :ok
+  selected-waveforms:. .item (waveform:. ."when" .choices); state
+}
+{ (selected-waveforms:. .item; state) :=
+| :who :ok
+  state call (who) (:= selected-waveforms:.) call (who) :=
+}
+{ (selected-waveforms:. .item; state) := separator = token:. "," .tag?
+| :ok
+  level:. [expression];
+  waveform:. (); selected-waveforms:.. & (item:. .separator); state
+}
+{ (choices:.; state) := expression:. choice
+| :ok choices:. .choice; state
+}
+{ (choices:. .choice item; state) :=
+| :who :ok state call (who) (:= choices:.. & item:.) call (who) :=
+}
+{ (choices:. .choice item; state) := separator = token:. "|" .tag?
+| :ok choices:.. & (item:. .separator); state
+}
+{ (level:. [simple]; choices:.; state) := choice = token:. "others" .tag?
+| :ok choices:. .choice; state
+}
+{ (level:. [expression]; state)
+  := . = range: .subtype-indication ."range"
+| :who :ok state call (who) :=
+}
+{ (state = declare:.?; ?) := . = token:. "for" .tag?
+| :ok declaration: ."for" =.; state
+}
+{ (declaration: ."for"; state) := . = token:. ? call [."all" ."others"] .tag?
+| :ok
+  configuration-specification: ."for" .instantiation-list =.; state
+}
+{ (declaration: ."for"; state) := identifier = token:. [identifier], ? .tag?
+| :ok
+  declaration: ."for" .identifier; state
+}
+{ (declaration: ."for" .identifier item; state)
+  := . = token:. ? call [.":" ","] .tag?
+| :who :ok
+  (configuration-specification: ."for" .instantiation-list (item:.),; state)
+  call (who) :=
+}
+{ (configuration-specification: ."for" .instantiation-list; state)
+  := . = token:. ":" .tag?
+| :ok configuration-specification: ."for" .instantiation-list .":" =.; state
+}
+{ (configuration-specification: ."for" .instantiation-list .":"; state)
+  := phrase:. name
+| :ok
+  binding-indication: .use () .generic () .port ();
+  configuration-specification: ."for" .instantiation-list .":" .name; state
+}
+{ (configuration-specification: ."for" .instantiation-list .":" .name; state)
+  := binding-indication
+| :ok
+  configuration-specification: ."for" .instantiation-list .":" .name .binding-indication;
+  state
+}
+{ ( configuration-specification:
+    ."for"
+    .instantiation-list
+    .":"
+    .name
+    .binding-indication
+    ;
+    declare:.;
+    state
+  )
+  := . = token:. ";" .tag?
+| :ok
+  declare:..
+  .( &:.
+    ( configuration-specification:
+      ."for"
+      .instantiation-list
+      .":"
+      .name
+      .binding-indication
+    )
+    ;
+  )
+  ;
+  state
+}
+{ (binding-indication: .use () .generic () .port (); state) := . = token:. "use" .tag?
+| :ok binding-indication: ."use" =.; state
+}
+{ (binding-indication: ."use"; state) := . = token:. "entity" .tag?
+| :ok binding-indication: ."use" ."entity" =.; state
+}
+{ (binding-indication: ."use" ."entity"; state) := phrase:.
+| :ok
+  binding-indication:
+  .use (entity-aspect: ."use" ."entity" .phrase)
+  .generic ()
+  .port()
+  ;
+  state
+}
+{ (binding-indication: .use .generic () .port (); state) := . = token:. "generic" .tag?
+| :ok
+  map-aspect: binding-indication: .use ."generic" =.; state
+}
+{ (binding-indication: .use ."generic"; state) := . = token:. "generic" .tag?
+| :ok
+  map-aspect: binding-indication: .use ."generic" =.; state
+}
+{ (binding-indication: .use ."generic"; state)
+  := map-aspect: ."map" .association-list
+| :ok
+  binding-indication:
+  .use .generic (generic-map-asect: ."generic" ."map" .association-list)
+  .port ();
+  state
+}
+{ (binding-indication: .use .generic .port (); state) := . = token:. "port" .tag?
+| :ok
+  map-aspect: binding-indication: .use .generic ."port" =.; state
+}
+{ (binding-indication: .use .generic ."port"; state)
+  := map-aspect: ."map" .association-list
+| :ok
+  binding-indication:
+  .use
+  .generic
+  .port  (port-map-asect: ."port" ."map" .association-list);
+  state
+}
+{ (binding-indication: .use .generic .port; state) := . = token:. ";" .tag?
+| :who :ok
+  state call (who)
+  (:= binding-indication:. binding-indication: .use .generic .port) call (who) :=
+}
+
+{ (statement: .phrase component; state = label:.? .":"?; ?)
+  := . = token:. ? call [."generic" ."port"] .tag?
+| :who :ok
+  ( instantiation-statement:
+    .instantiated-unit (instantiated-unit: ."component" () .component)
+    .generic-map-aspect ()
+    .port-map-aspect ()
+    ;
+    state
+  )
+  call (who) :=
+}
+{ (statement: state = label:.? .":"?; ?)
+  := . = token:. "component" .tag?
+| :ok instantiation-statement: ."component" =.; state
+}
+{ (statement: state = label:.? .":"?; ?)
+  := . = token:. "entity" .tag?
+| :ok instantiation-statement: ."entity" =.; state
+}
+{ (statement: state = label:.? .":"?; ?)
+  := . = token:. "configuration" .tag?
+| :ok instantiation-statement: ."configuration" =.; state
+}
+{ (instantiation-statement: ."component"; state) := phrase:. name
+| :ok
+  instantiation-statement:
+  .instantiated-unit (instantiated-unit: ."component" .name)
+  .generic-map-aspect ()
+  .port-map-aspect ()
+  ;
+  state
+}
+{ (instantiation-statement: ."entity"; state) := phrase:.
+| :ok
+  instantiation-statement:
+  .instantiated-unit (instantiated-unit: ."entity" .phrase)
+  .generic-map-aspect ()
+  .port-map-aspect ()
+  ;
+  state
+}
+{ (instantiation-statement: ."configuration"; state) := phrase:. name
+| :ok
+  instantiation-statement:
+  .instantiated-unit (instantiated-unit: ."configuration" .name)
+  .generic-map-aspect ()
+  .port-map-aspect ()
+  ;
+  state
+}
+{ ( state = instantiation-statement:
+    .instantiated-unit?
+    .generic-map-aspect ()
+    .port-map-aspect ()
+    ;
+    ?
+  )
+  := . = token:. "generic" .tag?
+| :ok map-aspect: generic-map-aspect: ."generic" =.; state
+}
+{ (generic-map-aspect: ."generic"; state) := map-aspect: ."map" .association-list
+| :who :ok
+  state call (who) := generic-map-aspect: ."generic" ."map" .association-list
+}
+{ ( instantiation-statement:
+    .instantiated-unit
+    .generic-map-aspect ()
+    .port-map-aspect ()
+    ;
+    state
+  )
+  :=
+  generic-map-aspect = generic-map-aspect: ."generic"? ."map"? .association-list?
+| :ok
+  instantiation-statement:
+  .instantiated-unit
+  .generic-map-aspect
+  .port-map-aspect ()
+  ;
+  state
+}
+{ ( state = instantiation-statement:
+    .instantiated-unit?
+    .generic-map-aspect
+    .port-map-aspect ()
+    ;
+    ?
+  )
+  := . = token:. "port" .tag?
+| :ok map-aspect: port-map-aspect: ."port" =.; state
+}
+{ (port-map-aspect: ."port"; state) := map-aspect: ."map" .association-list
+| :who :ok
+  state call (who) := port-map-aspect: ."port" ."map" .association-list
+}
+{ ( instantiation-statement:
+    .instantiated-unit
+    .generic-map-aspect
+    .port-map-aspect ()
+    ;
+    state
+  )
+  :=
+  port-map-aspect = port-map-aspect: ."port"? ."map"? .association-list?
+| :ok
+  instantiation-statement:
+  .instantiated-unit
+  .generic-map-aspect
+  .port-map-aspect
+  ;
+  state
+}
+{ ( instantiation-statement:
+    .instantiated-unit
+    .generic-map-aspect
+    .port-map-aspect
+    ;
+    state
+  )
+  := . = token:. ";" .tag?
+| :who :ok
+  state call (who) := statement:.
+  instantiation-statement:
+  .instantiated-unit
+  .generic-map-aspect
+  .port-map-aspect
+  .";" =.
+}
+===
+{ && try
+| :try . repeat {&:.; ok|:ok list := &.; ok}
+  call {|:ok ()} .:need
+  .:list reverse
+}
+{ && () | :ok () }
+{ try = ::error
+| (oops,) and: :try . call (channel: parsing: .thread)
+}
+><:[module: . parse language vhdl test .timestamp 2009-01-29T16:00:38.620+01 .language system]><;
+{ .test
+| @ testbench: .text "" .language [vhdl]
+}
+><:[module: . parse language vhdl tokenize .timestamp 2008-12-06T22:57:35.119+01 .language system]><;
+{ tokenize: .text .tag
+| :ok @ split (.text)
+  & [symbol "",]
+  legs
+  { at := token = (?, original) | :ok token: ..tag tag: ..at .original }
+  { at := [symbol] // ?, original
+  | :ok token: . original .tag tag: ..at .original
+  }
+  { at := [symbol], original
+  | :ok token: . original .tag tag: ..at .original
+  }
+  { at := [all], original | :ok token: . "all" .tag tag: ..at .original }
+  { at := [keyword], original
+  | :ok token: . original lower .tag tag: ..at .original
+  }
+  { at := [basic-identifier], original
+  | :ok token: . [identifier], original lower .tag tag: ..at .original
+  }
+  { ? := [blank] // ?, ? | ? }
+  { ? := [blank], ? | ? }
+}
+><:[module: . parse language vhdl tokenize keywords .timestamp 2008-08-12T15:22:04.182+02 .language system]><;
+! This module is not used - keywords are recognized in the splitter
+
+{ [test test]
+| :ok
+[
+! VHDL-87
+  "abs", "access", "after", "alias", "all", "and", "architecture", "array", "assert",
+  "attribute", "begin", "block", "body", "buffer", "bus",
+  "case", "component", "configuration", "constant", "disconnect", "downto",
+  "else", "elsif", "end", "entity", "exit", "file", "for", "function",
+  "generate", "generic", "guarded", "if", "in", "inout", "is",
+  "label", "library", "linkage", "loop", "map", "mod",
+  "nand", "new", "next", "nor", "not", "null",
+  "of", "on", "open", "or", "others", "out",
+  "package", "port", "procedure", "process",
+  "range", "record", "register", "rem", "report", "return",
+  "select", "severity", "signal", "subtype", "then", "to", "transport", "type",
+  "units", "until", "use", "variable", "wait", "when", "while", "with", "xor",
+! VHDL-93
+  "group", "impure", "inertial", "literal", "postponed", "pure",
+  "reject", "rol", "ror", "shared", "sla", "sll", "sra", "srl", "unaffected", "xnor",
+! VHDL-2001
+  "protected"
+]
+each
+  {keyword|:ok (keyword) " " (keyword upper) ""/} splice ""}
+><:[module: . parse language vhdl tokenize split .timestamp 2008-08-12T15:26:19.994+02 .language system]><;
+{ split: .text . $.
+| :ok
+  text split
+  [ [blank|tickable] [blank|ticked] blank symbol keyword all
+    bit-string-literal
+    basic-identifier identifier
+    [symbol|tick] character-literal [symbol|tickable] string-literal
+    decimal-literal based-literal
+    .[blank|tickable] tickable blank,
+    .[blank|ticked] [/: [symbol|tick]] blank,
+    .nonticked [-: /: [symbol|tick] [blank|ticked]]
+    .blank [+: " ", "">, ""=, ""<, "--" [*: [-: ""<, ""=] 1,]]
+    ! extended-identifier-s are read directly as identifier,
+    ! basic-identifier must be lowered for case insensitivity
+    .basic-identifier letter [*: letter, "0-9", "_" [-: "_"]],
+    .identifier "\" [*: [-: "\"] 1,] "\",
+    .letter "A-Z", "a-z"
+    .symbol
+      "(", "[", ":=", ";", "<=", ">=", "=>", "=", "<>", "<", ">",
+      ":", ",", ".", "**", "*", "+", "-", "/=", "/", "&", "|"
+    .[symbol|tickable] ")", "]"
+    .[symbol|tick] tickable "'",
+    .tickable
+      [ /:
+        [symbol|tickable]
+        [blank|tickable]
+        all
+        identifier
+        basic-identifier
+        string-literal
+        character-literal
+      ]
+    .string-literal """" [*: [-: """"] 1, """"""] """",
+    .bit-string-literal base-specifier """" based-integer """",
+    .based-integer extended-digit [*: ["_", []] extended-digit,],
+    .base-specifier "B", "O", "X", "b", "o", "x"
+    .extended-digit "0-9", "A-Z", "a-z"
+!!
+PILS works with utf-8 encoded VHDL, i.e. some char literals are multibyte-encoded
+!!
+    .character-literal "'" [""20"-"7e, utf-8-encoded-prinatble-high-ansi-character] "'",
+    .utf-8-encoded-prinatble-high-ansi-character ""c2. ""a0"-"bf, ""c3. ""80"-"bf,
+    .decimal-literal integer ["." integer, [-: "#"]] [exponent, []],
+    .integer "0-9" [*: ["_", []] "0-9",],
+    .exponent ["E", "e"] ["+", "-", []] integer,
+    .based-literal integer "#" based-integer ["." based-integer, []] "#" [exponent, []],
+    ! Keywords must be recognized by the splitter, to deal correctly with ticks.
+    ! For case insensitivity, letters are defined by symbolic names.
+    ! For speed, keywords are grouped by initial letter, and sectioned.
+    .a "a", "A"
+    .b "b", "B"
+    .c "c", "C"
+    .d "d", "D"
+    .e "e", "E"
+    .f "f", "F"
+    .g "g", "G"
+    .h "h", "H"
+    .i "i", "I"
+    .j "j", "J"
+    .k "k", "K"
+    .l "l", "L"
+    .m "m", "M"
+    .n "n", "N"
+    .o "o", "O"
+    .p "p", "P"
+    .q "q", "Q"
+    .r "r", "R"
+    .s "s", "S"
+    .t "t", "T"
+    .u "u", "U"
+    .v "v", "V"
+    .w "w", "W"
+    .x "x", "X"
+    .y "y", "Y"
+    .z "z", "Z"
+    ! The only keyword that can be followed by a tick is  all
+    .all "a" l l [-: letter, "0-9", "_"], "A" l l [-: letter, "0-9", "_"],
+    .keyword
+    [-: -: "a-m"]
+    nonticked
+    [ "a"
+      [ b s, c c e s s, f t e r, l i a s, n d, r c h i t e c t u r e, r r a y,
+        s s e r t, t t r i b u t e
+      ],
+      "b" [e g i n, l o c k, o d y, u f f e r, u s],
+      "c" [a s e, o m p o n e n t, o n f i g u r a t i o n, o n s t a n t],
+      "d" [i s c o n n e c t, o w n t o],
+      "e" [l s e, l s i f, n d, n t i t y, x i t],
+      "f" [i l e, o r, u n c t i o n],
+      "g" [e n e r a t e, e n e r i c, u a r d e d, r o u p],
+      !  Note order: n o u t, n e r t i a l  must be before  n
+      "i" [f, m p u r e, n e r t i a l, n o u t, n, s],
+      "l" [a b e l, i b r a r y, i n k a g e, o o p, i t e r a l],
+      "m" [a p, o d],
+    ]
+    [-: letter, "0-9", "_"]
+    ,
+    [-: -: "n-z"]
+    nonticked
+    [ "n" [a n d, e w, e x t, o r, o t, u l l],
+      "o" [f, n, p e n, r, t h e r s, u t],
+      "p"
+      [ a c k a g e, o r t, r o c e d u r e, r o c e s s, o s t p o n e d, u r e,
+        r o t e c t e d
+      ],
+      "r"
+      [ a n g e, e c o r d, e g i s t e r, e m, e p o r t, e t u r n, e j e c t,
+        o l, o r
+      ],
+      "s" [e l e c t, e v e r i t y, i g n a l, u b t y p e, h a r e d, l a, l l, r a, r l],
+      "t" [h e n, o, r a n s p o r t, y p e],
+      "u" [n i t s, n t i l, s e, n a f f e c t e d],
+      "v" a r i a b l e,
+      "w" [a i t, h e n, h i l e, i t h],
+      "x" [o r, n o r],
+    ]
+    [-: letter, "0-9", "_"]
+    ,
+    [-: -: "A-M"]
+    nonticked
+    [ "A"
+      [ b s, c c e s s, f t e r, l i a s, n d, r c h i t e c t u r e, r r a y,
+        s s e r t, t t r i b u t e
+      ],
+      "B" [e g i n, l o c k, o d y, u f f e r, u s],
+      "C" [a s e, o m p o n e n t, o n f i g u r a t i o n, o n s t a n t],
+      "D" [i s c o n n e c t, o w n t o],
+      "E" [l s e, l s i f, n d, n t i t y, x i t],
+      "F" [i l e, o r, u n c t i o n],
+      "G" [e n e r a t e, e n e r i c, u a r d e d, r o u p],
+      !  Note order:  (i) n o u t, (i) n e r t i a l  must be before  (i) n
+      "I" [f, m p u r e, n e r t i a l, n o u t, n, s],
+      "L" [a b e l, i b r a r y, i n k a g e, o o p, i t e r a l],
+      "M" [a p, o d],
+    ]
+    [-: letter, "0-9", "_"]
+    ,
+    [-: -: "N-Z"]
+    nonticked
+    [ "N" [a n d, e w, e x t, o r, o t, u l l],
+      "O" [f, n, p e n, r, t h e r s, u t],
+      "P"
+      [ a c k a g e, o r t, r o c e d u r e, r o c e s s, o s t p o n e d, u r e,
+        r o t e c t e d
+      ],
+      "R"
+      [ a n g e, e c o r d, e g i s t e r, e m, e p o r t, e t u r n, e j e c t,
+        o l, o r
+      ],
+      "S" [e l e c t, e v e r i t y, i g n a l, u b t y p e, h a r e d, l a, l l, r a, r l],
+      "T" [h e n, o, r a n s p o r t, y p e],
+      "U" [n i t s, n t i l, s e, n a f f e c t e d],
+      "V" a r i a b l e,
+      "W" [a i t, h e n, h i l e, i t h],
+      "X" [o r, n o r],
+    ]
+    [-: letter, "0-9", "_"]
+    ,
+  ]
+}
+><:[module: . parse language vhdl tokenize test .timestamp 2008-08-12T16:23:35.010+02 .language system]><;
+{ .test
+| :ok
+  ;filename
+    this module filename <-#=* "/lib/".
+    "/testdata/vhdl/dsp6415/dsp6415.vhd"
+  ;
+  ;text file (filename) text;
+  (now, tokenize (.text .tag ()) and: now)
+!  tokenize (.text .tag ())= tokenize (.text .x ())
+}
+><:[module: . parse language vhdl tokenize' .timestamp 2008-03-31T02:11:50.467+02 .language system]><;
+{ tokenize: .text .tag
+| :ok @ split (.text)
+  & [symbol "",]
+  first 0 fold
+  { p := token = (type, original $ c)
+  | :ok
+    list :=
+    ( token: .. try
+      { [symbol] // ?, ok | :ok }
+      { [symbol], ok | :ok }
+      { [all], ok | :ok "all" }
+      { [keyword], ok | :ok . lower }
+      { [basic-identifier], ok | :ok [identifier], ok lower }
+      .tag tag: ..at p, p + c .original
+    )
+    ;
+    p + c
+  }
+  { p := [blank] // ?, ? $ c | :ok p + c }
+  { p := [blank], ? $ c | :ok p + c }
+  .:list
+}
+><:[module: . parse language vhdl tokenize' keywords .timestamp 2008-05-03T00:28:47.280+02 .language system]><;
+! this module is not used - keywords are recognized letter-by-letter in the tokenizer
+
+{ [test test]
+| :ok
+[
+! VHDL-87
+  "abs", "access", "after", "alias", "all", "and", "architecture", "array", "assert",
+  "attribute", "begin", "block", "body", "buffer", "bus",
+  "case", "component", "configuration", "constant", "disconnect", "downto",
+  "else", "elsif", "end", "entity", "exit", "file", "for", "function",
+  "generate", "generic", "guarded", "if", "in", "inout", "is",
+  "label", "library", "linkage", "loop", "map", "mod",
+  "nand", "new", "next", "nor", "not", "null",
+  "of", "on", "open", "or", "others", "out",
+  "package", "port", "procedure", "process",
+  "range", "record", "register", "rem", "report", "return",
+  "select", "severity", "signal", "subtype", "then", "to", "transport", "type",
+  "units", "until", "use", "variable", "wait", "when", "while", "with", "xor",
+! VHDL-93
+  "group", "impure", "inertial", "literal", "postponed", "pure",
+  "reject", "rol", "ror", "shared", "sla", "sll", "sra", "srl", "unaffected", "xnor",
+! VHDL-2001
+  "protected"
+]
+each
+  {keyword|:ok (keyword) " " (keyword upper) ""/} splice ""}
+><:[module: . parse language vhdl tokenize' split .timestamp 2008-06-03T13:33:43.491+02 .language system]><;
+{ split: .text . $.
+| :ok
+  text split
+  [ [blank|tickable] [blank|ticked] blank symbol keyword all
+    bit-string-literal
+    basic-identifier identifier
+    [symbol|tick] character-literal [symbol|tickable] string-literal
+    decimal-literal based-literal
+    .[blank|tickable] tickable blank,
+    .[blank|ticked] [/: [symbol|tick]] blank,
+    .nonticked [-: /: [symbol|tick] [blank|ticked]]
+    .blank [+: " ", "">, ""=, ""<, "--" [*: [-: ""<, ""=] 1,]]
+    ! extended-identifier-s are read directly as identifier,
+    ! basic-identifier must be lowered for case insensitivity
+    .basic-identifier letter [*: letter, "0-9", "_" [-: "_"]],
+    .identifier "\" [*: [-: "\"] 1,] "\",
+    .letter "A-Z", "a-z"
+    .symbol
+      "(", "[", ":=", ";", "<=", ">=", "=>", "=", "<>", "<", ">",
+      ":", ",", ".", "**", "*", "+", "-", "/=", "/", "&", "|"
+    .[symbol|tickable] ")", "]"
+    .[symbol|tick] tickable "'",
+    .tickable
+      [ /:
+        [symbol|tickable]
+        [blank|tickable]
+        all
+        identifier
+        basic-identifier
+        string-literal
+        character-literal
+      ]
+    .string-literal """" [*: [-: """"] 1, """"""] """",
+    .bit-string-literal base-specifier """" based-integer """",
+    .based-integer extended-digit [*: ["_", []] extended-digit,],
+    .base-specifier "B", "O", "X", "b", "o", "x"
+    .extended-digit "0-9", "A-Z", "a-z"
+!!
+PILS works with utf-8 encoded VHDL, i.e. some char literals are multibyte-encoded
+!!
+    .character-literal "'" [""20"-"7e, utf-8-encoded-prinatble-high-ansi-character] "'",
+    .utf-8-encoded-prinatble-high-ansi-character ""c2. ""a0"-"bf, ""c3. ""80"-"bf,
+    .decimal-literal integer ["." integer, [-: "#"]] [exponent, []],
+    .integer "0-9" [*: ["_", []] "0-9",],
+    .exponent ["E", "e"] ["+", "-", []] integer,
+    .based-literal integer "#" based-integer ["." based-integer, []] "#" [exponent, []],
+    ! Keywords must be recognized by the splitter, to deal correctly with ticks.
+    ! For case insensitivity, letters are defined by symbolic names.
+    ! For speed, keywords are grouped by initial letter, and sectioned.
+    .a "a", "A"
+    .b "b", "B"
+    .c "c", "C"
+    .d "d", "D"
+    .e "e", "E"
+    .f "f", "F"
+    .g "g", "G"
+    .h "h", "H"
+    .i "i", "I"
+    .j "j", "J"
+    .k "k", "K"
+    .l "l", "L"
+    .m "m", "M"
+    .n "n", "N"
+    .o "o", "O"
+    .p "p", "P"
+    .q "q", "Q"
+    .r "r", "R"
+    .s "s", "S"
+    .t "t", "T"
+    .u "u", "U"
+    .v "v", "V"
+    .w "w", "W"
+    .x "x", "X"
+    .y "y", "Y"
+    .z "z", "Z"
+    ! The only keyword that can be followed by a tick is  all
+    .all "a" l l [-: letter, "0-9", "_"], "A" l l [-: letter, "0-9", "_"],
+    .keyword
+    [-: -: "a-m"]
+    nonticked
+    [ "a" [b s, c c e s s, f t e r, l i a s, n d, r c h i t e c t u r e, r r a y, s s e r t, t t r i b u t e],
+      "b" [e g i n, l o c k, o d y, u f f e r, u s],
+      "c" [a s e, o m p o n e n t, o n f i g u r a t i o n, o n s t a n t],
+      "d" [i s c o n n e c t, o w n t o],
+      "e" [l s e, l s i f, n d, n t i t y, x i t],
+      "f" [i l e, o r, u n c t i o n],
+      "g" [e n e r a t e, e n e r i c, u a r d e d, r o u p],
+      !  Note order: n o u t, n e r t i a l  must be before  n
+      "i" [f, m p u r e, n e r t i a l, n o u t, n, s],
+      "l" [a b e l, i b r a r y, i n k a g e, o o p, i t e r a l],
+      "m" [a p, o d],
+    ]
+    [-: letter, "0-9", "_"]
+    ,
+    [-: -: "n-z"]
+    nonticked
+    [ "n" [a n d, e w, e x t, o r, o t, u l l],
+      "o" [f, n, p e n, r, t h e r s, u t],
+      "p" [a c k a g e, o r t, r o c e d u r e, r o c e s s, o s t p o n e d, u r e, r o t e c t e d],
+      "r" [a n g e, e c o r d, e g i s t e r, e m, e p o r t, e t u r n, e j e c t, o l, o r],
+      "s" [e l e c t, e v e r i t y, i g n a l, u b t y p e, h a r e d, l a, l l, r a, r l],
+      "t" [h e n, o, r a n s p o r t, y p e],
+      "u" [n i t s, n t i l, s e, n a f f e c t e d],
+      "v" a r i a b l e,
+      "w" [a i t, h e n, h i l e, i t h],
+      "x" [o r, n o r],
+    ]
+    [-: letter, "0-9", "_"]
+    ,
+    [-: -: "A-M"]
+    nonticked
+    [ "A" [b s, c c e s s, f t e r, l i a s, n d, r c h i t e c t u r e, r r a y, s s e r t, t t r i b u t e],
+      "B" [e g i n, l o c k, o d y, u f f e r, u s],
+      "C" [a s e, o m p o n e n t, o n f i g u r a t i o n, o n s t a n t],
+      "D" [i s c o n n e c t, o w n t o],
+      "E" [l s e, l s i f, n d, n t i t y, x i t],
+      "F" [i l e, o r, u n c t i o n],
+      "G" [e n e r a t e, e n e r i c, u a r d e d, r o u p],
+      !  Note order: n o u t, n e r t i a l  must be before  n
+      "I" [f, m p u r e, n e r t i a l, n o u t, n, s],
+      "L" [a b e l, i b r a r y, i n k a g e, o o p, i t e r a l],
+      "M" [a p, o d],
+    ]
+    [-: letter, "0-9", "_"]
+    ,
+    [-: -: "N-Z"]
+    nonticked
+    [ "N" [a n d, e w, e x t, o r, o t, u l l],
+      "O" [f, n, p e n, r, t h e r s, u t],
+      "P" [a c k a g e, o r t, r o c e d u r e, r o c e s s, o s t p o n e d, u r e, r o t e c t e d],
+      "R" [a n g e, e c o r d, e g i s t e r, e m, e p o r t, e t u r n, e j e c t, o l, o r],
+      "S" [e l e c t, e v e r i t y, i g n a l, u b t y p e, h a r e d, l a, l l, r a, r l],
+      "T" [h e n, o, r a n s p o r t, y p e],
+      "U" [n i t s, n t i l, s e, n a f f e c t e d],
+      "V" a r i a b l e,
+      "W" [a i t, h e n, h i l e, i t h],
+      "X" [o r, n o r],
+    ]
+    [-: letter, "0-9", "_"]
+    ,
+  ]
+}
+><:[module: . test, .timestamp 2008-04-21T10:49:51.225+02 .language system]><;
+><:[module: . test timing .timestamp 2008-04-21T10:51:26.130+02 .language system]><;
+{ .test
+| :ok
+  ;text file (platform path documents . "vhdl/samples/dsp6415/dsp6415.vhd") text;
+  now,
+  @@ [parse language vhdl] parse (.text .tag ())
+  and (now)
+}

@@ -1,0 +1,213 @@
+[pils: .use? .language system]
+><:[module: . compute, .timestamp 2009-04-26T18:01:35.776+02 .language system]><;
+><:[module: . compute clans .timestamp 2009-04-26T18:51:24.089+02 .language system]><;
+!!
+@ [compute] clans
+
+Input: a list of families.
+A family is a constant list of one or more members. A member
+may occur in several families.
+
+Output: a list of clans.
+Each member belongs to exactly one clan. Every family group
+is contained in a clan, and all members of a clan are related.
+
+Why:
+Useful for grouping related items, based on sparse relation indications.
+
+How:
+Family heads are appointed and grouped by shared family members
+These grous are clanned (recursively) and clan heads appointed, so
+that each family head refers to a clan head. The whole population is
+then grouped by the clan heads of their family heads.
+
+For simplicity of ordering, all members are kept in a population list
+and the clanning is done with indices.
+!!
+
+{ clans: families
+| families every {= +& ok|:ok} .:need and:
+  :ok
+  ;population families splice distinct;
+  ( ;index population legs {value := name|:ok ;name .value} singles [ok];
+    families every {family|:ok family distinct every (index) order [ok]}
+  )
+  call
+  { families
+  | :who :try
+    ;heads
+      families
+      every {family = head . 1|:ok family every {x|:ok x, head}} splice
+      distinct groups {x, head| :ok ;name x .value head}
+    ;
+    ;clanheads
+      heads legs {? := ok|:ok . distinct order [ok]} distinct
+      call (who)
+      every
+      { group = clanhead . 1
+      | :ok group every {head|:ok ;name head .value clanhead}
+      }
+      splice groups [ok]
+    ;
+    population count up groups (heads -> [call: 1] -> clanheads)
+    legs {? := ok|:ok}
+  }
+  { families | :try families every {ok = (x,)|:ok} }
+  **=** population
+}
+><:[module: . compute clans test .timestamp 2009-04-26T18:03:19.541+02 .language system]><;
+! Group some connected cities by continent.
+{ .test
+| :ok
+  @ clans
+  [ Oslo Stockholm Copenhagen,
+    Copenhagen Berlin Vienna Rome,
+    London Paris Rome Paris London,
+    Washington NewYork,
+    Washington Detroit,
+    Calcutta Calcutta Calcutta
+  ]
+}
+><:[module: . compute order .timestamp 2009-04-26T18:05:45.682+02 .language system]><;
+!!
+@ [compute] order: .; items
+
+Input: a list of distinct constant items, and a partial order, mapping
+some items to lists of items on which they depend.
+
+Output: the list, reordered so that items are after the items on which
+they depend, whenever possible. In case of circular dependencies,
+some dependencies will be ignored.
+
+Why:
+Useful to construct a build order from dependencies.
+
+How:
+The list is processed from the start, to preserve the original order
+when possible. For each item that has not already been included,
+dependencies are followed recursively.
+
+The implementation is a bit tricky: dependencies are inserted in
+the stream by means of a callback that is tunnelled through a
+distinct pipe.
+!!
+
+{ order: .; = & items
+| ;guard items singles [ok] .:need; :ok
+  items every {item|:self :ok list := callback: . self .item} .:list
+  distinct [call: item]
+  every
+  { callback: .? .item | :ok item }
+  { callback: ..item
+  | item call (order) .:need listwise each (guard) every (callback)
+  }
+}
+><:[module: . compute order test .timestamp 2009-04-26T18:09:07.245+02 .language system]><;
+{ .test
+| :ok
+  @ order: .
+  [order:
+    .airport jet
+    .bike wheel
+    .car wheel engine
+    .dingy oar rudder
+    .frog lung leg toe vein
+    .garage car bike
+    .house man queen napkin
+    .iron wheel
+    .jet wheel wing
+    .man knife lung leg toe vein zipper
+    .queen lung leg throne kingdom holy royal smoke toe uterus vein
+    .ship engine rudder
+    .toe vein
+    .lung vein
+    .wheel iron
+    .xmas santa
+    .yacht rudder
+  ]
+  ;
+  [ airport bike car dingy engine frog garage house iron jet knife lung
+    man napkin oar plum queen rudder ship toe uterus vein wheel xmas
+    yacht zipper
+  ]
+}
+><:[module: . compute thread .timestamp 2009-04-26T18:50:46.058+02 .language system]><;
+!!
+@ [compute] thread: .next .compute .save
+
+Input:
+  next - an object,  next next  gets next item to compute
+  compute - function to apply to items
+  save - function for saving results
+
+The  next  and  save  objects may use system calls and manipulate
+the user interface directly. The  compute  function must use knots if
+it needs such operations.
+
+Output: Returns [], creates a worker thread that repeatedly
+gets requests, computes them and saves the results.
+
+Why:
+Useful for parsing files and doing other lengthy computations while
+staying responsive to user input.
+
+How:
+The worker thread enters a loop, using knotted calls to get
+and save items.
+!!
+
+{ thread: .next .compute .save
+| :ok
+  :thread :exit
+  [next] call (knot: next) or (exit := ())
+  repeat: compute -> knot: save -> [ok: next] -> next
+}
+><:[module: . compute trees .timestamp 2009-04-26T18:06:01.604+02 .language system]><;
+!!
+@ [compute] trees
+
+Input: a list of name-value pairs, the names being constant lists.
+
+Output: a list of trees, grouping the paths by common beginnings.
+Order is preserved when possible.
+
+Why:
+Useful for populating tree views, and for multi-level categorizing.
+!!
+
+{ trees: & items
+| :try
+  ( items:
+    .. every
+      {& = name|:ok ;name .value name}
+      {ok = ;name & = ? .value?|:ok}
+      .:need
+      legs {n := item|:ok n: .; item}
+    .prefix 0
+  )
+  call
+  { items: ..prefix
+  | :who :ok
+    items groups {n: .; ;name .value?|:ok name -# prefix ++# 1}
+    legs
+    {(branch,) := items = (n: .; ?) 1|:ok n: .; branch: .; who items: ..prefix . + 1}
+    {() := ok | :ok}
+    splice order [call: n] every
+    {n: .; ok|:ok}
+    {n: .; ;name .value|:ok value: .}
+  }
+}
+><:[module: . compute trees test .timestamp 2009-04-26T18:07:01.354+02 .language system]><;
+{ .test
+| :ok yx:
+  @
+  trees:
+  [ Oslo Stockholm Copenhagen,
+    Copenhagen Berlin Vienna Rome,
+    London Paris Rome Paris London,
+    Washington NewYork,
+    Washington Detroit,
+    Calcutta Calcutta Calcutta
+  ]
+  every {name|:ok ;name .value name}
+}

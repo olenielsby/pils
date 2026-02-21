@@ -1,0 +1,740 @@
+[pils: .use "<pils>/english/parse/testbench",]
+><:[module: . parse, .timestamp 2009-01-20T14:29:07.833+01 .language system]><;
+><:[module: . parse language .timestamp 2009-01-29T01:27:20.923+01 .language system]><;
+><:[module: . parse language matlab .timestamp 2009-01-29T01:30:01.205+01 .language system]><;
+{ parse: .text .tag
+| :try
+  @ tokenize (.text .tag)
+  first [matlab-file: .?]
+  fold (@@ rules)
+}
+><:[module: . parse language matlab rules .timestamp 2009-02-01T17:26:41.435+01 .language system]><;
+{ state := . = token: . "[" .tag?
+| :ok term: .level [=] .embrace "]"; matrix: ."[" =. .rows () .items (); state
+}
+{ state := . = token: . "{" .tag?
+| :ok term: .level [=] .embrace "}";
+  cell-array: ."{" =. .rows () .items (); state
+}
+{ state := token: . " " .tag? | :ok space: state }
+{ (space: state) := | :who :ok state call (who) := }
+{ [-test-] := | :who :ok [matlab] call (who) := }
+{ [matlab] := | :who :ok [statements: .?; matlab] call (who) := }
+{ [matlab] := . = token: . "function" .tag
+| :ok function: ."function" =.; [matlab]
+}
+{ (state = statements: .?; ?) := . = token: . "function" .tag
+| :ok function: ."function" =.; state
+}
+{ (function: ."function"; state) := name = token: . [identifier], ? .tag?
+| :ok function: ."function" .name; state
+}
+{ (function: ."function"; state) := . = token: . "[" .tag?
+| :ok function: ."function" ."[" =. .output (); state
+}
+{ (function: ."function" ."[" .output; state)
+  := item = token: . [identifier], ? .tag?
+| :ok function: ."function" ."[" .output .item; state
+}
+{ (function: ."function" ."[" .output .item; state)
+  := . = token: . [identifier], ? .tag?
+| :ok function: ."function" ."[" .output . & (item: .) .item =.; state
+}
+{ (function: ."function" ."[" .output .item; state) := . = token: . "]" .tag?
+| :ok function: ."function" ."[" .output . & (item: .) ."]" =.; state
+}
+{ (function: ."function" ."[" .output .item; state) := . = token: . "," .tag?
+| :ok function: ."function" ."[" .output . & (item: .."," =.); state
+}
+{ (function: ."function" ."[" .output ."]"; state) := . = token: . "=" .tag?
+| :ok function: ."function" .output (output: .."[" ."]" ."=" =.); state
+}
+{ (function: ."function" .name; state) := . = token: . "=" .tag?
+| :ok function: ."function" .output (output: . (item: . name), ."=" =.); state
+}
+{ (function: ."function" .name; state) := . = token: . "(" .tag?
+| :ok input: . () ."(" =.; function: ."function" .output () .name; state
+}
+{ (function: ."function" .output; state)
+  := name = token: . [identifier], ? .tag?
+| :ok function: ."function" .output .name; state
+}
+{ (state = function: ."function"? .output? .name?; ?)
+  := . = token: . "(" .tag?
+| :ok input: . () ."(" =.; state
+}
+{ (input: . () ."("; state) := . = token: . ")" .tag?
+| :who :ok state call (who) := input: . () ."(" .")" =.
+}
+{ (input: .."("; state) := name = token: . [identifier], ? .tag?
+| :ok input: .."(" .name; state
+}
+{ (input: .."(" .name; state) := . = token: . ")" .tag?
+| :who :ok state call (who) := input: .. & (item: . name) ."(" .")" =.
+}
+{ (input: .."(" .name; state) := . = token: . "," .tag?
+| :ok input: .. & (item: . name ."," =.) ."("; state
+}
+{ (function: ."function" .output .name; state) := input = input: .? ."(" .")"
+| :ok function: ."function" .output .name .input; state
+}
+{ (function: ."function" .output .name .input; state)
+  := stop = token: .? call [.""= .";"] .tag?
+| :ok
+  statements: . (); function: ."function" .output .name .input .stop; state
+}
+{ (function: ."function" .name; state)
+  := stop = token: .? call [.""= .";"] .tag?
+| :ok
+  statements: . ();
+  function: ."function" .output () .name .input () .stop;
+  state
+}
+{ (function: ."function" .output .name; state)
+  := stop = token: .? call [.""= .";"] .tag?
+| :ok
+  statements: . ();
+  function: ."function" .output .name .input () .stop;
+  state
+}
+{ (function: ."function" .output .name .input .stop; state)
+  := statements: ..end
+| :who :ok
+  state call (who) :=
+  function: ."function" .output .name .input .stop .statements .end
+}
+{ (statements: .; state = [function] *?)
+  := statement =
+  function: ."function"? .output? .name? .input? .stop? .statements? .end?
+| :ok statements: .. & (statement: .); state
+}
+{ (state = statements: .?; ?) := . = token: . "global" .tag?
+| :ok global: . () ."global" =.; state
+}
+{ (global: .."global"; state) := item = token: . [identifier], ? .tag?
+| :ok global: .. & (item: .) ."global"; state
+}
+{ (global: .."global"; statements: .; state)
+  := stop = token: .? call [.""= .";"] .tag?
+| :ok statements: .. & (statement: . (global: .."global") .stop); state
+}
+{ (state = statements: .?; ?) := name = token: . [identifier], ? .tag?
+| :ok term: . name .level [=] .embrace (); state
+}
+{ (statements: .; state) := . = token: . "end" .tag?
+| :ok statements: .."end" =.; state
+}
+{ (statements: .."end"; state) := stop = token: .? call [.""= .";"] .tag?
+| :who :ok state call (who) := statements: ..end (end: ."end" .stop)
+}
+{ (statements: .."end"; state) := . = token: . "" .tag?
+| :who :ok
+  state call (who) (:= statements: ..end end: ."end" .stop ()) call (who) :=
+}
+{ (state = statements: .?; ?) := term: . | :ok statement: .term; state }
+{ (statement: .term; state) := . = token: . call [.""= .";"] .tag?
+| :who :ok
+  (statement: . term; state) call (who) :=
+}
+{ (statement: .term; state) := . = token: . "=" .tag?
+| :ok term: .level [=] .embrace (); assign: . term ."=" =.; state
+}
+{ (term: .level .embrace; state)
+  := name =
+  token: . ? call [.identifier .text .double .integer .imaginary], ? .tag?
+| :ok term: . name .level .embrace; state
+}
+{ (term: ..level .embrace?; state) :=
+| :who :ok state call (who) (:= term: .) call (who) :=
+}
+{ (state = term: .? .level? .embrace?; ?) := token: . " " .tag? | :ok state }
+{ (state = term: .? .level? .embrace?; ?) := . = token: . "(" .tag?
+| :ok term: .level [=] .embrace ")"; args: . () ."(" =.; state
+}
+{ (term: .level [=] .embrace?; args: . () ."("; state)
+  := . = token: . ")" .tag?
+| :who :ok state call (who) := args: . args: . () ."(" .")" =.
+}
+{ (term: ..level .embrace; state) := args: .
+| :ok term: . (term: ..args) .level .embrace; state
+}
+{ (args: .."("; state) := term: .
+| :ok args: .."(" .arg term; state
+}
+{ (args: .."("; state) := arg = token: . ":" .tag?
+| :ok args: .."(" .arg; state
+}
+{ (args: .."(" .arg; state) := . = token: . "," .tag?
+| :ok
+  term: .level [=] .embrace ")";
+  args: .. & (item: . arg ."," =.) ."("; state
+}
+{ (args: .."(" .arg; state) := . = token: . ")" .tag?
+| :who :ok state call (who) := args: . args: .. & (item: . arg) ."(" .")" =.
+}
+{ (state = term: .? .level? .embrace?; ?) := . = token: . "{" .tag?
+| :ok term: .level [=] .embrace "}"; args: . () ."{" =.; state
+}
+{ (term: .level [=] .embrace?; args: . () ."{"; state)
+  := . = token: . "}" .tag?
+| :who :ok state call (who) := args: . () ."{" ."}" =.
+}
+{ (args: .."{"; state) := term: .
+| :ok args: .."{" .arg term; state
+}
+{ (args: .."{"; state) := arg = token: . ":" .tag?
+| :ok args: .."{" .arg; state
+}
+{ (args: .."{" .arg; state) := . = token: . "," .tag?
+| :ok
+  term: .level [=] .embrace ();
+  args: .. & (item: . arg ."," =.) ."{"; state
+}
+{ (args: .."{" .arg; state) := . = token: . "}" .tag?
+| :who :ok state call (who) := args: . args: .. & (item: . arg) ."{" ."}" =.
+}
+{ (state = term: .? .level? .embrace?; ?) := . = token: . "." .tag?
+| :ok dot: ."." =.; state
+}
+{ (dot: ."."; state) := dot = token: . [identifier], ? .tag?
+| :who :ok state call (who) := dot: .."."
+}
+{ (term: ..level .embrace; state) := dot: .."."
+| :who :ok term: . (term: .."." .dot) .level .embrace; state
+}
+{ (assign: .."="; state) := term: .
+| :ok statement: . (assign: .."=" .term); state
+}
+{ (statement: .; statements: .; state) := . = token: . "," .tag?
+| :ok statements: .. & (statement: .."," =.); state
+}
+{ (statement: .; statements: .; state)
+  := stop = token: .? call [.""= .";"] .tag?
+| :ok statements: .. & (statement: ..stop); state
+}
+{ (statements: .; state) := stop = token: .? call [.""= .";" .","] .tag?
+| :ok statements: .. & (statement: . () .stop); state
+}
+{ (term: .level .embrace; state) := . = token: . "@" .tag?
+| :ok term: .level .embrace ."@" =.; state
+}
+{ (term: .level .embrace ."@"; state)
+  := name = token: . [identifier], ? .tag?
+| :ok term: . (handle: ."@" .name) .level .embrace; state
+}
+{ (term: .level? .embrace ."@"; state)
+  := . = token: . "(" .tag?
+| :ok input: . () ."(" =.; anonymous-function: ."@"; state
+}
+{ (anonymous-function: ."@"; state) := input = input: .? ."("? .")"?
+| :ok term: .level [=] .embrace (); anonymous-function: ."@" .input; state
+}
+{ (anonymous-function: ."@" .input; state) := term: .
+| :who :ok
+  state call (who) := term: . anonymous-function: ."@" .input .term
+}
+{ (state = statements: .?; ?) := keyword = token: . "if" .tag?
+| :ok term: .level [=] .embrace (); conditional: . () .keyword; state
+}
+{ (conditional: ..keyword; state) := term: . condition
+| :ok conditional: ..keyword .condition; state
+}
+{ (conditional: ..keyword .condition; state) :=
+| :who :ok
+  ( statements: . (); conditional: ..keyword .condition .stop (); state )
+  call (who) :=
+}
+{ (conditional: ..keyword .condition; state)
+  := stop = token: .? call [.""= .";" .","] .tag?
+| :ok statements: . (); conditional: ..keyword .condition .stop; state
+}
+{ (conditional: ..keyword .condition .stop; state) := statements: ..end
+| :who :ok
+  state call (who) := statement: .
+  conditional: .. & (condition: ..keyword .stop .statements) .end
+}
+{ (statements: .; conditional: ..keyword .condition .stop; state)
+  := . = token: . "elseif" .tag?
+| :ok
+  term: .level [=] .embrace ();
+  conditional: .. & (item: . condition: ..keyword .stop .statements)
+  .keyword
+  ;
+  state
+}
+{ (statements: .; conditional: ..keyword .condition .stop; state)
+  := . = token: . "else" .tag?
+| :ok
+  conditional: .. & (item: . condition: ..keyword .stop .statements)
+  ."else" =.
+  ;
+  state
+}
+{ (conditional: .."else"; state) :=
+| :who :ok
+  (statements: . (); conditional: .."else" .stop (); state) call (who) :=
+}
+{ (conditional: .."else"; state) := stop = token: .? call [.";" .""=] .tag?
+| :ok statements: . (); conditional: .."else" .stop; state
+}
+{ (conditional: .."else" keyword .stop; state) := statements: ..end
+| :who :ok
+  state call (who) := statement: .
+  conditional: .. & (item: . condition: . () .keyword .stop .statements) .end
+}
+{ (state = statements: .?; ?) := . = token: . "for" .tag?
+| :ok for: ."for" =.; state
+}
+{ (for: ."for"; state) := variable = token: . [identifier], ? .tag?
+| :ok for: ."for" .variable; state
+}
+{ (for: ."for" .variable; state) := . = token: . "=" .tag?
+| :ok term: .level [=] .embrace (); for: ."for" .variable ."=" =.; state
+}
+{ (for: ."for" .variable ."="; state)
+  := term: . range
+| :ok
+  for: ."for" .variable ."=" .range; state
+}
+{ (for: ."for" .variable ."=" .range; state)
+  := stop = token: .? call [.";" ."," .""=] .tag?
+| :ok
+  statements: . (); for: ."for" .variable ."=" .range .stop; state
+}
+{ (for: ."for" .variable ."=" .range .stop; state) := statements: ..end
+| :who :ok
+  state call (who) :=
+  statement: . for: ."for" .variable ."=" .range .stop .statements .end
+}
+{ (state = term: .level? .embrace; ?) := . = token: . "~" .tag?
+| :ok term: .level [~] .embrace; operator: . =.; state
+}
+{ (operator: .; state) := term: .
+| :who :ok state call (who) := term: . operator: ..term
+}
+{ (term: .level .embrace; state) := term: .
+| :ok term: ..level .embrace; state
+}
+{ (state = statements: .?; ?) := . = token: . "return" .tag?
+| :ok statement: . (return: ."return" =.); state
+}
+{ (statements: .; state) := . = statement: .?
+| :ok statements: .. & =.; state
+}
+{ (state = statements: .?; ?) := . = token: . "[" .tag?
+| :ok
+  term: .level [=] .embrace "]";
+  matrix: ."[" =. .rows () .items ();
+  term: .level [=] .embrace ();
+  state
+}
+{ (matrix: ."[" .rows .items; state) := term: .
+| :ok
+  matrix: ."[" .rows .items .item term; state
+}
+{ (matrix: ."[" .rows .items .item; state) :=
+| :who :ok
+  ( term: .level [=] .embrace "]";
+    matrix: ."[" .rows .items . & (item: .);
+    state
+  )
+  call (who) :=
+}
+{ (matrix: ."[" .rows .items .item; state) := . = token: . "," .tag?
+| :ok
+  term: .level [=] .embrace "]";
+  matrix: ."[" .rows .items . & (item: .."," =.);
+  state
+}
+{ (matrix: ."[" .rows .items .item; state)
+ := stop = token: .? call [.";" .""=] .tag?
+| :ok
+  term: .level [=] .embrace "]";
+  matrix: ."[" .rows . & (item: . (row: . items & item: .) .stop) .items ();
+  state
+}
+{ ( state = term: .level? .embrace?; matrix: ."[" .rows? .items (); ? )
+   := token: . ""= .tag?
+| :ok state
+}
+{ (term: .level? .embrace?; matrix: ."[" .rows .items . +&.; state)
+  := . = token: . "]" .tag?
+| :who :ok
+  state call (who) := term: .
+  matrix: ."[" .rows . & (item: . items) ."]" =.
+}
+{ (term: .level? .embrace?; matrix: ."[" .rows () .items (); state)
+  := . = token: . "]" .tag?
+| :who :ok
+  state call (who) := term: .
+  matrix: ."[" .rows () ."]" =.
+}
+{ (cell-array: ."{" .rows .items; state) := term: .
+| :ok
+  cell-array: ."{" .rows .items .item term; state
+}
+{ (cell-array: ."{" .rows .items .item; state) :=
+| :who :ok
+  ( term: .level [=] .embrace "}";
+    cell-array: ."{" .rows .items . & (item: .);
+    state
+  )
+  call (who) :=
+}
+{ (cell-array: ."{" .rows .items .item; state) := . = token: . "," .tag?
+| :ok
+  term: .level [=] .embrace "}";
+  cell-array: ."{" .rows .items . & (item: .."," =.);
+  state
+}
+{ (cell-array: ."{" .rows .items .item; state)
+ := stop = token: .? call [.";" .""=] .tag?
+| :ok
+  term: .level [=] .embrace "}";
+  cell-array: ."{" .rows . & (item: . (row: . items & item: .) .stop) .items ();
+  state
+}
+{ ( state = term: .level? .embrace?; cell-array: ."{" .rows? .items (); ? )
+   := token: . ""= .tag?
+| :ok state
+}
+{ (term: .level? .embrace?; cell-array: ."{" .rows .items . +&.; state)
+  := . = token: . "}" .tag?
+| :who :ok
+  state call (who) := term: .
+  cell-array: ."{" .rows . & (item: . items) ."}" =.
+}
+{ (term: .level? .embrace?; cell-array: ."{" .rows () .items (); state)
+  := . = token: . "}" .tag?
+| :who :ok
+  state call (who) := term: .
+  cell-array: ."{" .rows () ."}" =.
+}
+{ (operator: ..[operand: 1]; state) := term: . operand 2
+| :who :ok
+  state call (who) := term: . operator: ..[operand: 1] .[operand: 2]
+}
+{ (term: ..level . call [.=] .embrace; state)
+  := operator = token: .? call [."||" ."|"] .tag?
+| :ok
+  term: .level [&] .embrace;
+  operator: ..[operand: 1] term;
+  term: .level .embrace;
+  state
+}
+{ (term: ..level . call [.= .?:"|"] .embrace; state)
+  := operator = token: .? call [."&&" ."&"] .tag?
+| :ok
+  term: .level [&] .embrace;
+  operator: ..[operand: 1] term;
+  term: .level .embrace;
+  state
+}
+{ (term: . operand 1 .level . call [.= .?:"|" .&] .embrace; state)
+  := operator = token: .? call [."==" ."~=" ."<" .">" ."<=" .">="] .tag?
+| :ok
+  term: .level [==] .embrace;
+  operator: ..[operand: 1];
+  term: .level .embrace;
+  state
+}
+{ (term: ..level . call [.= .?:"|" .& .==] .embrace; state)
+  := . = token: . ":" .tag?
+| :ok
+  term: .level [?:":"] .embrace;
+  range: .":" =. .from term .step ();
+  term: .level .embrace;
+  state
+}
+{ (term: ..level . call [.= .?:"|" .& .== .?:":"] .embrace; state)
+  := operator = token: .. call [."+" ."-"] .tag?
+| :ok
+  term: .level [+] .embrace;
+  operator: ..[operand: 1] term;
+  term: .level .embrace;
+  state
+}
+{ (term: ..level . call [.= .?:"|" .& .== .?:":" .+] .embrace; state)
+  := operator = token: .. call [."*" ."/" ."\" .".*" ."./" .".\"] .tag?
+| :ok
+  term: .level [*] .embrace;
+  operator: ..[operand: 1] term;
+  term: .level .embrace;
+  state
+}
+{ (term: ..level . call [.= .?:"|" .& .== .?:":" .+ .*] .embrace; state)
+  := operator = token: .? call [."^" .".^"] .tag?
+| :ok
+  term: .level [^] .embrace;
+  operator: ..[operand: 1] term;
+  term: .level .embrace;
+  state
+}
+{ (state = term: .level? .embrace; ?)
+  := sign = token: .? call [."+" ."-"] .tag?
+| :ok term: .level [sign] .embrace; sign: .; state
+}
+{ (sign: .; state) := term: .
+| :who :ok state call (who) := term: . sign: ..term
+}
+{ (term: . operand .level .embrace; state)
+  := operator = token: .? call [.".'" ."'"] .tag?
+| :ok term: . (operator: ..operand) .level .embrace; state
+}
+{ (state = term: .level? .embrace?; ?) := . = token: . "(" .tag?
+| :ok
+  term: .level [=] .embrace ")"; term: ."(" =.; state
+}
+{ (term: ."("; state) := term: . | :ok term: .."("; state }
+{ (term: .."("; state) := . = token: . ")" .tag?
+| :who :ok state call (who) := term: . term: .."(" .")" =.
+}
+{ (range: .":" .from .step; state) := term: . to
+| :ok range: .":" .from .step .to; state
+}
+{ (range: .":" .from .step .to; state) := . = token: .? <> " " .tag?
+| :who :ok
+  state call (who) (:= term: . range: .":" .from .step .to) call (who) :=
+}
+{ (range: .":" .from .step () .to step; state) := . = token: . ":" .args?
+| :ok
+  term: .level [?:":"] .embrace;
+  range: .":" .from .step (step: ..":" =.);
+  state
+}
+{ (term: .level .embrace . call [.")" ."]" ."}"]; state)
+  := . = token: . "end" .tag?
+| :ok term: . =. .level .embrace; state
+}
+{ (term: .level .embrace?; state) := . = token: . ":" .tag?
+| :who :ok state call (who) :=
+}
+{ (state = statements: .?; ?) := . = token: . "switch" .tag?
+| :ok term: .level [=] .embrace (); switch: ."switch" =.; state
+}
+{ (switch: ."switch"; state) := term: . switch
+| :ok switch: .."switch"; state
+}
+{ (switch: .."switch"; state) := stop = token: .? call [.";" .""=] .tag?
+| :ok cases: . (); switch: .."switch" .stop; state
+}
+{ (cases: .; state) := . = token: . "case" .tag?
+| :ok term: .level [=] .embrace (); cases: .."case" =.; state
+}
+{ (cases: .."case"; state) := term: . case
+| :ok cases: .."case" .case; state
+}
+{ (cases: .."case" .case; state)
+  := stop = token: .? call [.";" ."," .""=] .tag?
+| :ok statements: . (); cases: .."case" .case .stop; state
+}
+{ (statements: .; cases: .."case" .case .stop; state)
+  := . = token: . "case" .tag?
+| :ok
+  term: .level [=] .embrace ();
+  cases: .. & (item: . case: .."case" .stop .statements) ."case" =.; state
+}
+{ (cases: .."case" .case .stop; state) := statements: ..end
+| :who :ok
+  state call (who) :=
+  cases: .. & (item: . case: .."case" .stop .statements) .end
+}
+{ (statements: .; cases: .."case" .case .stop; state)
+  := . = token: . "otherwise" .tag?
+| :ok
+  cases: .. & (item: . case: .."case" .stop .statements) ."otherwise" =.;
+  state
+}
+{ (cases: .."otherwise"; state)
+ := stop = token: .? call [.";" ."," .""=] .tag?
+| :ok statements: . (); cases: .."otherwise" .stop; state
+}
+{ (cases: .."otherwise" .stop; state) := statements: ..end
+| :who :ok
+  state call (who)
+  := cases: .. & (item: . otherwise: ."otherwise" .stop .statements) .end
+}
+{ (switch: .."switch" .stop; statements: .; state) := cases: ..end
+| :ok
+  statements: .. & ( statement: . switch: .."switch" .stop .cases .end);
+  state
+}
+{ (state = statements: .?; ?) := . = token: . "while" .tag?
+| :ok term: .level [=] .embrace (); while: ."while" =.; state
+}
+{ (while: ."while"; state) := term: . while | :ok while: .."while"; state }
+{ (while: .."while"; state) := stop = token: .? call [.";" .""=] .tag?
+| :ok statements: . (); while: .."while" .stop; state
+}
+{ (while: .."while" .stop; state) := statements: ..end
+| :who :ok
+  state call (who) := statement: . while: .."while" .stop .statements .end
+}
+{ (state = statements: .?; ?) := . = token: . "try" .tag?
+| :ok try: ."try" =.; state
+}
+{ (try: ."try"; state) :=
+| :who :ok (statements: . (); try: ."try" .stop (); state) call (who) :=
+}
+{ (try: ."try"; state) := stop = token: .? call [.""= .";" .","] .tag?
+| :ok statements: . (); try: ."try" .stop; state
+}
+{ (statements: .; try: ."try" .stop; state) := . = token: . "catch" .tag?
+| :ok try: ."try" .stop .statements ."catch" =.; state
+}
+{ (try: ."try" .stop .statements ."catch"; state)
+  := . = token: . [identifier], ? .tag?
+| :ok
+  try: ."try" .stop .statements ."catch" .catch =.; state
+}
+{ (try: ."try" .stop .statements ."catch"; state)
+  := . = token: .? call [.""= .";" .","] .tag?
+| :ok
+  statements: . ();
+  try: ."try" .stop .statements ."catch" .catch () .[stop: "catch"] =.; state
+}
+{ (try: ."try" .stop .statements ."catch" .catch; state)
+  := . = token: .? call [.""= .";" .","] .tag?
+| :ok
+  statements: . ();
+  try: ."try" .stop .statements ."catch" .catch .[stop: "catch"] =.; state
+}
+{ ( try: ."try" .stop .statements ."catch" .catch .[stop: "catch"]; state )
+  := statements: . statements [catch] .end
+| :who :ok
+  state call (who) :=
+  statement: .
+  try: ."try" .stop .statements .end .catch
+  catch: ..stop stop "catch" .statements statements [catch]
+}
+{ (state = statements: .?; ?) := . = token: . "break" .tag?
+| :ok statement: . (break: ."break" =.); state
+}
+{ (statement: .term command = (token: . [identifier], ? .tag?); state)
+  := mash = token: . [identifier], ? .tag?
+| :ok command: ..arguments () .mash .,; state
+}
+{ (command: ..arguments .mash; state) :=
+| :ok command: ..arguments .mash . & =.; state
+}
+{ (command: ..arguments .mash; state) := token: . " " .tag?
+| :ok command: ..arguments . & (mash,) .mash (); state
+}
+{ (command: ..arguments .mash; state)
+  := stop = token: .? call [."," .";" .""=] .tag?
+| :who :ok
+  state call (who) := statement: . command: ..arguments . & (mash,) .stop
+}
+{ (statements: .; state) := token: . "" .tag?
+| :who :ok state call (who) := statements: ..end ()
+}
+{ [matlab] := [function] * done
+| :ok done: .
+}
+><:[module: . parse language matlab samples .timestamp 2009-01-29T01:38:57.423+01 .language system]><;
+{ .samples
+| :ok
+  folder (platform path documents . "matlab-samples/") files
+  each
+  { ok file: filename <$* ".zip"
+  | :ok . zip each
+    {name <$* ".m", data, ?|:ok filename . "::" . name, data}
+    === ;filename . <+#-* "/"
+  }
+  splice
+}
+><:[module: . parse language matlab test .timestamp 2009-02-01T16:47:48.075+01 .language system]><;
+;at 323;
+{ .test
+| :ok
+  @ testbench (.text @ samples . (at) 2 .language [matlab])
+}
+><:[module: . parse language matlab tokenize .timestamp 2009-01-29T17:51:56.589+01 .language system]><;
+{ tokenize: .text .tag
+| :ok @ split (.text)
+  & [symbol "",]
+  legs
+  { at := token = (?, original) | :ok token: ..tag tag: ..at .original }
+  { at := ? call [.symbol .symbol'], token
+  | :ok token: ..tag tag: ..at .original token
+  }
+  { at := token call [.space " " .newline ""=], original
+  | :ok token: ..tag tag: ..at .original
+  }
+  { at := [identifier], token call
+    [ ."break" ."case" ."catch" ."continue" ."else" ."elseif" ."end"
+      ."for" ."function" ."global" ."if" ."otherwise" ."persistent"
+      ."return" ."switch" ."try" ."while" 
+    ]
+  | :ok token: ..tag tag: ..at .original token
+  }
+}
+><:[module: . parse language matlab tokenize positions .timestamp 2009-01-29T17:34:12.605+01 .language system]><;
+{ positions: .text
+| :ok
+  @ split (.text)
+  first 0 fold {at := ?, ? $ (count)|:ok ;at' at + count; list := (at, at'); at'}
+  .:list
+}
+><:[module: . parse language matlab tokenize split .timestamp 2009-01-31T23:49:47.523+01 .language system]><;
+{ split: .text . $.
+| :ok
+  text split
+  [ newline space identifier double integer imaginary
+    shell-escape symbol' symbol text
+    .hspace " ", "">, ""1a
+    .space [+: hspace, "..." [*: [-: linefeed] 1,] linefeed]
+    .linefeed ""<, ""=, ""0c
+    .newline
+      [ space,, ]
+      [ +:
+        [ "%" [-: "{"] [*: [-: linefeed] 1,],,]
+        linefeed
+        [ *: hspace ]
+        [ *:
+          "%{"
+          [ *: hspace ]
+          linefeed
+          [ *: [*: [-: "%}", linefeed] 1,] linefeed, ]
+          [ *: hspace ]
+          "%}"
+          [ *: hspace ]
+          [ linefeed, -: 1 ]
+          [ *: hspace ]
+          ,
+        ]
+        [ space,, ]
+        ,
+        "%" [-: "{"] [*: [-: linefeed] 1,] [-: 1]
+      ]
+      ,
+    .shell-escape "!" [*: [-: newline] 1,] newline,
+    .identifier ["a-z", "A-Z"] [*: "a-z", "A-Z", "0-9", "_"],
+    .digit "0-9"
+    .integer [sign,,] [+: digit] [-: "i", "j"],
+    .exponent ["D", "d", "E", "e"] ["+", "-",,] [+: digit],
+    .decimal-point "." [-: "'", "*", "/", "\", "^"],
+    .double
+      [sign,,]
+      [ [+: digit] [decimal-point [*: digit] [exponent,,], exponent],
+        "." [+: digit] [exponent,,]
+      ]
+      [-: "i", "j"]
+      ,
+    .imaginary
+      [sign,,] [[+: digit] ["." [*: digit]], "." [+: digit]] [exponent,,] ["i", "j"],
+    .' [/: identifier integer double imaginary text symbol'] "'",
+    .text "'" [*: [-: "'", linefeed] 1, "''"] "'",
+    .symbol'
+      ")",
+      ".'",
+      "]",
+      [/: identifier integer double imaginary text symbol'] "'"
+    .symbol
+      "(", "[", "{", "}", ",", ";", ":", "+", "-", "*", "/", "\", "^", "@",
+      "." ["*", "/", "\", "^", [-: "."]],
+      ["~", "<", ">", "="] ["=",,],
+      "&" ["&",,],
+      "|" ["|",,],
+  ]
+}

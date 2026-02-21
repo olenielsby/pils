@@ -1,0 +1,305 @@
+[pils: .use "<pils>/english/parse/xml", .language system]
+><:[module:. job, .timestamp 2008-05-18T18:11:51.124+02 .language system]><;
+><:[module:. job online-docs .timestamp 2011-09-29T23:43:07.438+02 .language system]><;
+{ .generate
+| :ok
+  folder (bootfilename <-#=* "/pils/" . "/doc/")
+  call { folder | :who :ok folder files &: folder folders each (who) splice }
+  each
+  { file file: filename <$* ".odt"
+  | :ok
+    file,
+    file
+    (  filename *=* ("/doc/openoffice/", "/doc/html/")
+      <$*=* [".odt", ".html"]
+    )
+  }
+  each
+  { source, target file: path
+  | path call
+    { path
+    | :who :ok
+      ;path ' <-#-* "/"; folder (path) ok or:
+      path <-# 1 call (who) and:
+      folder (path) create
+    }
+    and:
+    target text :=
+    @ html:
+    @ transform: .source ' name <+#-* "/" .data @@ parse xml:
+    source zip find {"content.xml", ok, ?|:ok}
+  }
+}
+><:[module:. job online-docs comparable-version .timestamp 2011-09-29T23:44:18.541+02 .language system]><;
+{ .comparable-version
+| :ok
+  ;path bootfilename <-#=* "/pils/". "/doc/openoffice/";
+  ["english/The PILS language", "danish/PILS sproget"] reverse
+  every {ok|:ok ' . ".odt" .((path))}
+  every
+  { filename
+  | :ok
+    @ transform: .source filename <+#-* "/" .data @@ parse xml:
+    file (filename) zip find {"content.xml", ok, ?|:ok}
+  }
+  call
+  { (html: (head: title: title 1), body: body 1),
+    (html: (head: title: title 2), body: body 2)
+  | :ok
+    html: (head: title: title 1 & " / " & title 2),
+    table:
+    (col: .width "50%";) &:
+    (col: .width "50%";) &:
+    (body 1 count, body 2 count) largest [ok] up every
+    { n
+    | :ok
+      tr:
+      (td: body 1 . n or:),
+      (td: body 2 . n or:),
+    }
+  }
+  call (@@ html)
+  .(file (this program path . "test.html") text :=)
+}
+><:[module:. job online-docs data .timestamp 2008-05-18T18:35:07.862+02 .language openoffice-xml]><;
+{ .data
+| :ok
+  this module filename <-#=* "/utils/". "/doc/english/The PILS language.odt"
+  .(:call file:) zip
+  find {"content.xml", ok, ?|:ok}
+  .(@@ parse xml:)
+}
+><:[module:. job online-docs html .timestamp 2011-09-29T23:43:58.037+02 .language system]><;
+{ data = html: ?
+| :ok
+  data call
+  { node = ? // name * ;: data
+  | :who :ok
+    "<" (name)
+    ( node legs
+      {? // name := $ value
+      | :ok " " . name . "=""" (value call: who) """"
+      }
+      splice ""
+    )
+    ">"
+    (data listwise splice splice every (who) splice "") "</" (name) ">"
+  }
+  { ? // name ;: data
+  | :who :ok
+    "<" (name) ">"
+    (data listwise splice splice splice every (who) splice "")
+    "</" (name) ">"
+  }
+  { ? // name ;:
+  | :who :ok
+    "<" (name) "/>"
+  }
+  { nbsp: | :ok "&nbsp;" }
+  { $ ok
+  | :ok ' *=* ["&", "&amp;", "<", "&lt;", ">", "&gt;", """", "&quot;", "–", "&ndash;"]
+    utf-8 every
+    {ok|:ok}
+    {ok > 127|:ok "&#" ({} write (ok)) ";" bytes}
+    splice
+    bytes
+  }
+  {|:ok " "}
+}
+><:[module:. job online-docs test .timestamp 2009-09-11T08:18:50.128+02 .language system]><;
+{ .test
+| :ok
+  @ comparable-version
+}
+><:[module:. job online-docs transform .timestamp 2011-09-29T23:46:24.389+02 .language openoffice-xml]><;
+{ transform: .data .source
+| :ok
+  ;styles data? 3? singles [call: style:name];
+  html:
+  data? 4? 1? find {text:p: .text:style-name?; ok|:ok} .(head: title:),
+  body:
+  ;body
+    data? 4? 1?
+    first [first] fold
+    { ok := | :ok list :=; ok }
+    { numbering := text:h: .text:outline-level .text:style-name; text
+    | :ok
+      ;level {} read (text:outline-level);
+      ;numbering ' +# (level - 1) or () & (level call (numbering) or 0 + 1);
+      list :=
+      ( text:h: .text:style-name;
+        (numbering: .; text -#$*: [text:soft-page-break:],),
+      )
+      ;
+      numbering
+    }
+    { [first] := * text:p: $ header, | :ok list := (header: .); }
+    .:list
+    each
+    { x | oops }
+    { ok = header: .? | :ok }
+    { ? call [.office:forms .text:sequence-decls] * ? | ? }
+    { * ;text:style-name style; text | :ok style: ..text }
+  ;
+  body every
+  { numbering: .; text
+  | :who :ok
+    ;numbered numbering each {n|:ok {} write (n)} splice ".";
+    a: .name "sect-" (numbered);
+    numbered . " " & [nbsp:] &: text every (who) splice
+  }
+  { header: .
+  | :who :ok
+    (h1: i: header) &:
+    body each
+    { style: ..text (numbering: .; text),
+    | :ok
+      (numbering call {? > 1,|:ok br:} or:) &:
+      ;numbered numbering each {n|:ok {} write (n)} splice ".";
+      numbering -# 1 every
+      [ok:
+        [nbsp:] [nbsp:] [nbsp:] [nbsp:] [nbsp:] [nbsp:] [nbsp:] nbsp:]
+      splice &:
+      ( a: .href "#sect-" (numbered);
+        numbered . " " & [nbsp:] &: text every (who) ), br:
+    }
+    { style: ..text (numbering:. ' = (number,); text),
+    | :ok
+      (:if number <> 1; br:) &: b:
+      ;numbered {} write (number);
+      ( a: .href "#sect-" (numbered);
+        numbered . " " & [nbsp:] &: text every (who) ), br:
+    }
+  }
+  { style: ..text
+  | :who :ok
+    p: who text:span: .text:style-name style; text
+  }
+  { style: . "Heading_20_1" .text | :who :ok h1: text every (who) }
+  { style: . "Heading_20_2" .text | :who :ok h2: text every (who) }
+  { style: . "Heading_20_3" .text | :who :ok h3: text every (who) }
+  { style: . "Text_20_body" .text
+  | :who :ok p: text every (who)
+  }
+  { text:a: .xlink:type "simple" .xlink:href href; text
+  | :who :ok a: .href; text every (who)
+  }
+  { $ ok
+  | :who :ok
+    [font-weight font-style] every (who) call:
+    .["normal" "normal"] ok
+    .["bold" "normal"] (b: ok)
+    .["normal" "italic"] (i: ok)
+    .["bold" "italic"]  (b: i: ok)   
+  }
+  { text:p: .text:style-name; text
+  | :who :ok p: who text:span: .text:style-name; text
+  }
+  { text:p: ok | :who :ok ' every (who) }
+  { text:list: text | :who :ok text every (who) }
+  { text:list-item: text | :who :ok li: text every (who) }
+  { text:list-header: text | :who :ok text every (who) }
+  { text:bookmark-start: .text:name?; | :ok () }
+  { text:bookmark-end: .text:name?; | :ok () }
+  { text:span: .text:style-name; text
+  | :who :ok
+    text:style-name call (styles) call
+    { x | oops }
+    { text:list-style: .style:name?; [text:list-level-style-number] * ? 1
+    | :ok
+      ol: text every {* text:list-item: text|:ok li: text every (who)}
+    }
+    { text:list-style: .style:name?;
+      (* text:list-level-style-bullet: .text:bullet-char) 1
+    | :ok
+      ul: text every
+      {* text:list-item: text|:ok li: text every (who)}
+      {* text:list-header: text|:ok li: text every (who)}
+      splice
+    }
+    { * style:style: .style:family? .style:name?; ?
+    | :ok text every (who)
+    }
+    { * style:style: .style:family? .style:name?; style,
+    | :ok style call
+      { x | oops }
+      { * style:text-properties: .style:font-weight-complex "normal"
+      | :ok text every (who)
+      }
+      { * style:text-properties: .style:font-style-complex "normal"
+      | :ok text every (who)
+      }
+      { * style:text-properties: .fo:font-weight
+      | :ok text every: who bind: [font-weight], fo:font-weight
+      }
+      { * style:text-properties: .fo:font-style
+      | :ok text every: who bind: [font-style], fo:font-style
+      }
+      { * style:text-properties: .fo:font-weight .fo:font-style
+      | :ok text every:
+         who
+         bind ([font-weight], fo:font-weight)
+         bind ([font-style], fo:font-style)
+      }
+      { * style:paragraph-properties: .fo:text-align "center"
+      | :ok :exit
+        center: text every: who +++ {text:page-count: ?|exit := ()}
+      }
+      { * style:paragraph-properties: .fo:break-before "page"
+      | :ok text every (who)
+      }
+      { * style:paragraph-properties: (style:tab-stops: ?),
+      | :ok text every (who)
+      }
+      { * style:text-properties: .style:text-position "super 58%";
+      | :ok sup: text every (who)
+      }
+    }
+  }
+  { text:soft-page-break: | :ok () }
+  { text:s: | :ok nbsp: }
+  { text:s: .text:c; | :ok {} read (text:c) up each: ok: nbsp: }
+  { text:tab: | :ok 12 up every [ok: nbsp:] }
+  { text:line-break: | :ok br: }
+  { .font-weight | :ok "normal" }
+  { .font-style | :ok "normal" }
+  splice &: p: small: center:
+  "— This HTML is generated by PILS from ",
+  (i: source),
+  " —"
+}
+><:[module:. pils, .timestamp 2008-05-18T18:12:07.737+02 .language system]><;
+><:[module:. pils language .timestamp 2008-05-18T18:12:14.736+02 .language system]><;
+><:[module:. pils language openoffice-xml .timestamp 2011-09-29T23:42:16.984+02 .language system]><;
+language: {}? merge:
+;"office" ["urn:oasis:names:tc:opendocument:xmlns:office:1.0":]
+."style" ["urn:oasis:names:tc:opendocument:xmlns:style:1.0":]
+."text" ["urn:oasis:names:tc:opendocument:xmlns:text:1.0":]
+."table" ["urn:oasis:names:tc:opendocument:xmlns:table:1.0":]
+."draw" ["urn:oasis:names:tc:opendocument:xmlns:drawing:1.0":]
+."fo" ["urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0":]
+."xlink" ["http://www.w3.org/1999/xlink":]
+."dc" ["http://purl.org/dc/elements/1.1/":]
+."meta" ["urn:oasis:names:tc:opendocument:xmlns:meta:1.0":]
+."number" ["urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0":]
+."svg" ["urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0":]
+."chart" ["urn:oasis:names:tc:opendocument:xmlns:chart:1.0":]
+."dr3d" ["urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0":]
+."math" ["http://www.w3.org/1998/Math/MathML":]
+."form" ["urn:oasis:names:tc:opendocument:xmlns:form:1.0":]
+."script" ["urn:oasis:names:tc:opendocument:xmlns:script:1.0":]
+."ooo" ["http://openoffice.org/2004/office":]
+."ooow" ["http://openoffice.org/2004/writer":]
+."oooc" ["http://openoffice.org/2004/calc":]
+."dom" ["http://www.w3.org/2001/xml-events":]
+."xforms" ["http://www.w3.org/2002/xforms":]
+."xsd" ["http://www.w3.org/2001/XMLSchema":]
+."xsi" ["http://www.w3.org/2001/XMLSchema-instance":]
+><:[module:. pils run .language system]><;
+><:[module:. pils run command .timestamp 2008-12-21T14:41:52.464+01 .language system]><;
+><:[module:. pils run command open .timestamp 2008-12-21T14:44:57.437+01 .language system]><;
+{ .open
+| :ok
+  :if platform ask ok [. generate html documentation files];
+  @@ [job online-docs] generate
+}

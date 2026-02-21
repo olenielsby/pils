@@ -1,0 +1,167 @@
+[pils: .use "<pils>/danish/system/danish", .language danish]
+><:[modul: . job, .tidsstempel 2009-01-20T11:56:55.315+01]><;
+><:[modul: . job foodprofessor .tidsstempel 2009-01-20T11:56:55.314+01]><;
+><:[modul: . job foodprofessor billedbog .tidsstempel 2009-01-21T10:59:32.962+01 .sprog dansk]><;
+;fyldfarve [200, 200, 200];
+{ .billedbog
+| :ok
+  dette modul kanal luk pyt:
+  ;vindue platform vindue (sig [billedvælger]) stræk [1000 600];
+  :brug [galleri: .] -> (kanal: vindue);
+  vindue husk lukker := (dette modul kanal lyt: vindue);
+  ;splitning vindue splitning [væg];
+  ;mappe
+    splitning mappe (. dette program sti) når
+    { .ændret
+    | :hvem :prøv galleri mappe (. hvem varm eller ())
+    }
+  ;
+  ;rullet
+    splitning rullet [lodret] når
+    { .strakt | :kræv galleri opfrisk }
+    { mal: grafik | :ok grafik fyld (fyldfarve) }
+  ;
+  ;galleri
+    @@ galleri
+    ( . rullet lærred stræk [100 10]
+      når { prøv | :hvem :prøv . kald: :kræv hvem husk når }
+      .rullet
+    )
+  ;
+  vindue husk lyt := (kanal: vindue) lyt (;galleri);
+  splitning split (mappe, rullet) og:
+  mappe udpeg og:
+  vindue
+}
+><:[modul: . job foodprofessor billedbog galleri .tidsstempel 2009-01-16T14:12:52.334+01 .sprog dansk]><;
+{ galleri: ..rullet
+| :ok
+  { mappe: .
+  | :ok
+    galleri ryd husk filerne
+    := mappe filerne eller ()
+      hver
+      { ok fil: ? <$* ".jpg" | :ok }
+      { ok fil: ? <$* ".svg" | :ok }
+      { ok fil: ? <$* ".png" | :ok }
+    ;
+    galleri husk felterne :=
+      galleri husk filerne enhver
+      { fil fil: filnavn
+      | :ok
+        ;billede
+          platform billede (.stræk 48, 48) mal
+          { grafik
+          | grafik billede: . platform billede (.filnavn) .rektangel 0, 0, 48, 48
+          }
+        ;
+        galleri lærred når
+        { mal: grafik | :ok grafik billede (..rektangel 0, 0, 48, 48) }
+        { [mus venstre ned]: ? | :hvem . træk (.beskrivelse filnavn) }
+      }
+    ;
+    @@ opfrisk: .galleri .rullet
+  }
+  { .opfrisk | :ok @@ opfrisk: .galleri .rullet }
+  { .lærred | :ok galleri }
+  { når: =. | :hvem :ok galleri husk når := }
+}
+><:[modul: . job foodprofessor billedbog galleri opfrisk .tidsstempel 2009-01-13T22:05:52.139+01 .sprog dansk]><;
+{ opfrisk: .galleri .rullet
+| :ok
+  ;bredde rullet stræk . 1 - (rullet rul tykkelse);
+  ;[antal: søjlerne] bredde - 10 \ 60;
+  ;højde
+    galleri husk filerne eller () split (antal [søjlerne]) eller () antal * 80 + 10
+  ;
+  galleri stræk (bredde, højde) og:
+  @@ placeringerne (.bredde .billederne galleri husk felterne eller ())
+  enhver
+  { billede: . felt .rektangel x, y, bredde, højde
+  | :ok felt sted (x, y) stræk (bredde, højde)
+  }
+  og:
+  galleri opfrisk
+}
+><:[modul: . job foodprofessor billedbog galleri placeringerne .tidsstempel 2009-01-07T15:20:53.277+01 .sprog dansk]><;
+{ placeringerne: .billederne .bredde
+| :ok
+  billederne split (bredde - 10 \ 60) eller () benene
+  { række := billederne
+  | :ok
+    ;y række * 80 - 70;
+    billederne benene
+    { søjle := billede
+    | :ok
+      ;x søjle * 60 - 50;
+      billede: ..rektangel x, y, 48, 48
+    }
+  }
+  splejs
+}
+><:[modul: . job foodprofessor billedbog galleri udfyld .tidsstempel 2009-01-07T15:45:03.531+01 .sprog dansk]><;
+{ udfyld: .grafik .billederne .bredde
+| :ok
+  grafik fyld [240 240 240] og:
+  @@ placeringerne (.billederne .bredde) hver
+  { billede: . ? fil (filnavn) .rektangel
+  | grafik billede (. platform billede (.filnavn) .:kræv .rektangel)
+  }
+}
+><:[modul: . job foodprofessor billedbog galleri valg .tidsstempel 2009-01-07T15:21:05.402+01 .sprog dansk]><;
+{ valg: .filerne .placering
+| :ok
+  grafik fyld [240 240 240] og:
+  filerne split (bredde - 10 \ 60) eller () benene
+  { række := filerne
+  | ;y række * 80 - 70;
+    filerne benene
+    { søjle := ? fil: filnavn
+    | ;x søjle * 60 - 50;
+      grafik
+      billede (. platform billede (.filnavn) .:kræv .rektangel x, y, 48, 48)
+    }
+  }
+}
+><:[modul: . job foodprofessor billedbog mus .tidsstempel 2009-01-13T16:39:48.471+01 .sprog dansk]><;
+{ mus: ..galleri
+| :prøv mus kald
+  { [mus venstre ned]: x [mus], y [mus]
+  | ;lærred galleri lærred;
+    @@ [galleri] placeringerne
+    ( .billederne lærred husk filerne
+      .bredde lærred stræk . 1
+    )
+    find
+    { billede: ..rektangel x, y, bredde, højde
+    | :hvis
+        x < x [mus], x + bredde > x [mus],
+        y < y [mus], y + højde > y [mus]
+      ;
+      :ok billede
+    }
+    .:kræv
+    prøv
+    { ? fil: filnavn
+    | :prøv lærred træk:
+      .beskrivelse filnavn
+      .billede
+      platform billede (.stræk 48, 48) mal
+      { grafik
+      | ! grafik billede (. platform billede (.filnavn) .rektangel 48, 48)
+        grafik billede:
+        . platform billede (.filnavn)
+        .rektangel 0, 0, 48, 48
+      }
+    }
+!    prøv {x|hovsa}
+  }
+}
+><:[modul: . job foodprofessor billedbog stierne .tidsstempel 2009-01-07T13:53:45.605+01 .sprog system]><;
+;paths
+;over [pils-configuration:documents-directory] 
+.under this module path <-#=* "/pils/" "/data/grafik/"
+><:[modul: . job foodprofessor billedbog test .tidsstempel 2009-01-07T14:47:33.995+01 .sprog dansk]><;
+{ .test
+| :ok @@ billedbog
+}

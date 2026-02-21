@@ -1,0 +1,120 @@
+><:[module:. platform, .timestamp 2008-08-04T13:19:19.382+02 .language system]><;
+><:[module:. platform juce .language system]><;
+><:[module:. platform juce entry .timestamp 2008-08-12T11:12:04.583+02 .language system]><;
+><:[module:. platform juce entry pils-filetype .timestamp 2011-10-01T11:07:37.619+02 .language juce]><;
+;pils-filetype
+{ .unregister
+| :ok
+  j:WindowsRegistry
+  j:deleteKey
+  ( "HKEY_CLASSES_ROOT\." [pils-configuration:pils-filetype] "\ShellNew")
+  j:deleteKey
+  ( "HKEY_CLASSES_ROOT\." [pils-configuration:pils-filetype] )
+  j:deleteKey
+  ( "HKEY_CLASSES_ROOT\PILS." [pils-configuration:pils-filetype]
+    "\shell\edit\command"
+  )
+  j:deleteKey
+  ( "HKEY_CLASSES_ROOT\PILS." [pils-configuration:pils-filetype]
+    "\shell\open\command"
+  )
+  j:deleteKey
+  ( "HKEY_CLASSES_ROOT\PILS." [pils-configuration:pils-filetype]
+    "\shell\edit"
+  )
+  j:deleteKey
+  ( "HKEY_CLASSES_ROOT\PILS." [pils-configuration:pils-filetype]
+   "\shell\open"
+  )
+  j:deleteKey
+  ( "HKEY_CLASSES_ROOT\PILS." [pils-configuration:pils-filetype]
+    "\shell"
+  )
+  j:deleteKey
+  ( "HKEY_CLASSES_ROOT\PILS." [pils-configuration:pils-filetype] )
+}
+{ .register
+| :who :ok
+  entries every {ok|:ok j:setValue: ok} every (j:WindowsRegistry)
+  and: [done]
+}
+{ .registered
+| :ok
+  entries find
+  { key, value
+  | :if j:WindowsRegistry j:getValue (key) or () <> value; :ok 0
+  }
+  or 1
+}
+{ .entries | :ok entries }
+===
+{ .entries
+| :ok
+  ( "HKEY_CLASSES_ROOT\." [pils-configuration:pils-filetype] "\",
+    "PILS." [pils-configuration:pils-filetype]
+  ),
+  ( "HKEY_CLASSES_ROOT\." [pils-configuration:pils-filetype]
+    "\ShellNew\NullFile",
+    " "
+  ),
+  ( "HKEY_CLASSES_ROOT\PILS." [pils-configuration:pils-filetype] "\",
+    [pils-configuration:pils-filetype] title . " file"
+  ),
+  ( "HKEY_CLASSES_ROOT\PILS." [pils-configuration:pils-filetype]
+    "\shell\edit\command\",
+    """" (executable) """ -edit ""%1"""
+  ),
+  ( "HKEY_CLASSES_ROOT\PILS." [pils-configuration:pils-filetype]
+    "\shell\register\command\",
+    """" (executable) """ -register ""%1"""
+  ),
+  ( "HKEY_CLASSES_ROOT\PILS." [pils-configuration:pils-filetype]
+    "\shell\open\command\",
+    """" (executable) """ ""%1"""
+  )
+}
+===
+{ .executable
+| :ok
+  [pils-configuration:open-command] split ":"
+  try {drive $ 1, path|:ok drive upper, path}
+  splice ":"
+}
+! WindowsRegistry is not in juce 1.5.3
+{ .j:WindowsRegistry
+| :ok j:WindowsRegistry or:
+  { j:getValue: key
+  | :try j:PlatformUtilities j:getRegistryValue: key
+  }
+  { j:setValue: key/value
+  | :try j:PlatformUtilities j:setRegistryValue: key/value
+  }
+}
+><:[module:. platform juce entry pils-filetype test .timestamp 2008-12-21T15:51:04.649+01 .language system]><;
+@ pils-filetype
+><:[module:. platform juce system .timestamp 2008-08-04T13:20:05.804+02 .language system]><;
+><:[module:. platform juce system win32 .timestamp 2011-10-01T11:13:10.434+02 .language juce]><;
+{ .explorer | :who :try who explorer: .folder this program path }
+{ explorer: .folder $ '
+| :try
+  j:WindowsRegistry j:getValue
+  "HKEY_LOCAL_MACHINE\SOFTWARE\"-
+  "Microsoft\Windows NT\CurrentVersion\SystemRoot"
+  .:need
+  "\explorer.exe"
+  .(j:File)
+  j:startAsProcess: "/e, """ (folder *=* ["/", "\"]) """"
+}
+{ filename:. $ ok | :ok ' *=* ["/", "\"] }
+{ registry: path | :try j:WindowsRegistry j:getValue (path) }
+===
+! WindowsRegistry is not in juce 1.5.3
+{ .j:WindowsRegistry
+| :ok j:WindowsRegistry or:
+  { j:getValue: key
+  | :try j:PlatformUtilities j:getRegistryValue: key
+  }
+  { j:setValue: key/value
+  | :try j:PlatformUtilities j:setRegistryValue: key/value
+  }
+}

@@ -1,0 +1,213 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <LastAuthor>Ole Nielsby</LastAuthor>
+  <Created>2008-12-31T18:36:49Z</Created>
+  <LastSaved>2009-01-01T16:56:48Z</LastSaved>
+  <Version>12.00</Version>
+ </DocumentProperties>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>9000</WindowHeight>
+  <WindowWidth>13860</WindowWidth>
+  <WindowTopX>240</WindowTopX>
+  <WindowTopY>75</WindowTopY>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Bottom"/>
+   <Borders/>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11" ss:Color="#000000"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="s62" ss:Name="Default">
+   <Font ss:FontName="Arial1"/>
+  </Style>
+  <Style ss:ID="s66" ss:Parent="s62">
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Arial2" ss:Bold="1"/>
+  </Style>
+  <Style ss:ID="s67" ss:Parent="s62">
+   <Alignment ss:Horizontal="Left" ss:Vertical="Bottom"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Arial2"/>
+  </Style>
+  <Style ss:ID="s68" ss:Parent="s62">
+   <Alignment ss:Horizontal="Left" ss:Vertical="Bottom"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Arial2"/>
+  </Style>
+  <Style ss:ID="s69" ss:Parent="s62">
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Color="#000000"/>
+   </Borders>
+  </Style>
+  <Style ss:ID="s70" ss:Parent="s62">
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#000000"/>
+   </Borders>
+   <Font ss:FontName="Arial1" ss:Bold="1"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Ark1">
+  <Table ss:ExpandedColumnCount="15" ss:ExpandedRowCount="54" x:FullColumns="1"
+   x:FullRows="1" ss:StyleID="s62">
+   <Column ss:StyleID="s62" ss:Width="150"/>
+   <Column ss:StyleID="s62" ss:Width="92.25"/>
+   <Column ss:StyleID="s62" ss:Width="55.5"/>
+   <Column ss:StyleID="s62" ss:Width="54.75"/>
+   <Column ss:StyleID="s62" ss:Width="43.5"/>
+   <Column ss:StyleID="s62" ss:Width="66.75"/>
+   <Column ss:StyleID="s62" ss:Width="56.25"/>
+   <Column ss:StyleID="s62" ss:Width="59.25"/>
+   <Column ss:StyleID="s62" ss:Width="83.25"/>
+   <Column ss:StyleID="s62" ss:Width="111.75"/>
+   <Column ss:StyleID="s62" ss:AutoFitWidth="0" ss:Width="55.5"/>
+   <Column ss:StyleID="s62" ss:Width="39"/>
+   <Column ss:StyleID="s62" ss:Width="45"/>
+   <Column ss:StyleID="s62" ss:AutoFitWidth="0" ss:Width="44.25"/>
+   <Row ss:AutoFitHeight="0" ss:Height="13.5">
+    <Cell ss:StyleID="s70"><Data ss:Type="String">Kategori</Data></Cell>
+    <Cell ss:StyleID="s66"><Data ss:Type="String">Varenavn</Data></Cell>
+    <Cell ss:StyleID="s67"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40">Energi<B> (kJ)</B></ss:Data></Cell>
+    <Cell ss:StyleID="s67"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40">Protein<B> (g)</B></ss:Data></Cell>
+    <Cell ss:StyleID="s67"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40">Fedt<B> (g)</B></ss:Data></Cell>
+    <Cell ss:StyleID="s67"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40">Kulhydrat<B> (g)</B></ss:Data></Cell>
+    <Cell ss:StyleID="s67"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40">Alkohol<B> (g)</B></ss:Data></Cell>
+    <Cell ss:StyleID="s67"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40">Glukose<B> (g)</B></ss:Data></Cell>
+    <Cell ss:StyleID="s68"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40">Tilsat Sukker <B>(g)</B></ss:Data></Cell>
+    <Cell ss:StyleID="s69"><Data ss:Type="String">Billede</Data></Cell>
+    <Cell ss:StyleID="s69"><Data ss:Type="String">Filtype</Data></Cell>
+    <Cell ss:StyleID="s69"><Data ss:Type="String">Mappe</Data></Cell>
+    <Cell ss:StyleID="s69"><Data ss:Type="String">Synlig</Data></Cell>
+    <Cell ss:StyleID="s69"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40">Vægt<B> (g)</B></ss:Data></Cell>
+    <Cell ss:StyleID="s69"><ss:Data ss:Type="String"
+      xmlns="http://www.w3.org/TR/REC-html40">Hak<B> (g)</B></ss:Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="15"/>
+   <Row ss:AutoFitHeight="0" ss:Height="15">
+    <Cell><Data ss:Type="String">Skagen Fiskerestaurant</Data></Cell>
+    <Cell><Data ss:Type="String">Tatar af laks</Data></Cell>
+    <Cell><Data ss:Type="Number">490</Data></Cell>
+    <Cell><Data ss:Type="Number">8.9</Data></Cell>
+    <Cell><Data ss:Type="Number">4.5999999999999996</Data></Cell>
+    <Cell><Data ss:Type="Number">9.1999999999999993</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">9.1999999999999993</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="String">tallerken</Data></Cell>
+    <Cell><Data ss:Type="String">svg</Data></Cell>
+    <Cell><Data ss:Type="String">mad</Data></Cell>
+    <Cell><Data ss:Type="Number">1</Data></Cell>
+    <Cell><Data ss:Type="Number">100</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="15">
+    <Cell ss:Index="2"><Data ss:Type="String">Helleflynderfilet</Data></Cell>
+    <Cell><Data ss:Type="Number">2933</Data></Cell>
+    <Cell><Data ss:Type="Number">25.9</Data></Cell>
+    <Cell><Data ss:Type="Number">62.2</Data></Cell>
+    <Cell><Data ss:Type="Number">8.8000000000000007</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">8.8000000000000007</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="String">tallerken</Data></Cell>
+    <Cell><Data ss:Type="String">svg</Data></Cell>
+    <Cell><Data ss:Type="String">mad</Data></Cell>
+    <Cell><Data ss:Type="Number">1</Data></Cell>
+    <Cell><Data ss:Type="Number">100</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="15">
+    <Cell ss:Index="2"><Data ss:Type="String">Hjemmelavet is</Data></Cell>
+    <Cell><Data ss:Type="Number">1153</Data></Cell>
+    <Cell><Data ss:Type="Number">5</Data></Cell>
+    <Cell><Data ss:Type="Number">10.199999999999999</Data></Cell>
+    <Cell><Data ss:Type="Number">100.8</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">100.8</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="String">tallerken</Data></Cell>
+    <Cell><Data ss:Type="String">svg</Data></Cell>
+    <Cell><Data ss:Type="String">mad</Data></Cell>
+    <Cell><Data ss:Type="Number">1</Data></Cell>
+    <Cell><Data ss:Type="Number">100</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="15">
+    <Cell ss:Index="2"><Data ss:Type="String">Uspec. dessert</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="String">tallerken</Data></Cell>
+    <Cell><Data ss:Type="String">svg</Data></Cell>
+    <Cell><Data ss:Type="String">mad</Data></Cell>
+    <Cell><Data ss:Type="Number">1</Data></Cell>
+    <Cell><Data ss:Type="Number">100</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="15" ss:Span="47"/>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <Print>
+    <ValidPrinterInfo/>
+    <PaperSizeIndex>9</PaperSizeIndex>
+    <VerticalResolution>0</VerticalResolution>
+   </Print>
+   <Selected/>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+ <Worksheet ss:Name="Ark2">
+  <Table ss:ExpandedColumnCount="1" ss:ExpandedRowCount="1" x:FullColumns="1"
+   x:FullRows="1" ss:StyleID="s62">
+   <Column ss:StyleID="s62" ss:Width="64.5"/>
+   <Row ss:AutoFitHeight="0" ss:Height="15"/>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+ <Worksheet ss:Name="Ark3">
+  <Table ss:ExpandedColumnCount="1" ss:ExpandedRowCount="1" x:FullColumns="1"
+   x:FullRows="1" ss:StyleID="s62">
+   <Column ss:StyleID="s62" ss:Width="64.5"/>
+   <Row ss:AutoFitHeight="0" ss:Height="15"/>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+</Workbook>

@@ -1,0 +1,1353 @@
+[pils: .use "<pils>/parse/parse",]
+><:[module: . parse, .timestamp 2007-11-26T00:38:08.860+01 .language system]><;
+><:[module: . parse language .language system]><;
+><:[module: . parse language C++ .timestamp 2007-11-28T23:09:40.417+01]><;
+{ .tokens | :try @@ [kvernbitr show token-placement] items }
+{ [test tokens] | :self :try self tokens }
+{ ok bug | :ok . call [channel: bugs] anyway: ok }
+><:[module: . parse language C++ parse .timestamp 2007-11-26T00:38:23.879+01 .language system]><;
+{ [test test]
+| :self . parse:
+  .source {|:ok @@? tokenize: .text @@? [test again]}
+  .state [declaration-sequence: .names; global]
+  .sink {|}
+}
+
+{ parse: .source .state .sink
+| :try
+  source? first (state) fold
+  ( { state := token | exit() := @@ error: .state . bug {} .token }
+    +++: @@ rules
+  )
+  exit()
+}
+><:[module: . parse language C++ parse error .timestamp 2007-11-26T00:38:30.264+01 .language system]><;
+{ error: .state .token | oops }
+{ error: .state .token :;item .at $ filename, (?, p 1 count), (p 2 count, ?)
+| :try @@ presentation: .filename .item .at p 1, p 2 .state .text file (filename) text .(:need)
+}
+><:[module: . parse language C++ parse error presentation .timestamp 2008-05-02T23:28:27.178+02 .language text]><;
+{ try = presentation: .filename .text .item .at .state
+| :try . call: module channel window or (window) mind present
+}
+===
+{ .window
+| :ok
+  ;frame wx:Frame "";
+  frame mind listening := module channel listen (;window frame);
+  ;split frame wx:SplitterWindow;
+  ;statepane split wx:StyledTextCtrl wx:SetZoom 2;
+  ;textpane split wx:StyledTextCtrl wx:SetZoom 2;
+  split wx:SplitVertically (statepane, textpane) and:
+  frame mind present :=
+  { presentation: .filename .text .item .at .state
+  | :ok
+    frame wx:SetTitle (filename) and:
+    statepane wx:SetText (statetext (.item .state)) and:
+    textpane wx:SetText (text) wx:SetSelection (at)
+    wx:SetFocus
+  }
+  ;
+  frame
+}
+===
+{ statetext: .item .state
+|:ok 
+  ({} write: item)
+  ""/
+  ({} write (state) *=* ["; ", ";"/" ", ": .", ": .", ": ", ":"/" "] <$*=* ["]", ""/"]"])
+}
+><:[module: . parse language C++ parse rules .timestamp 2007-11-26T00:39:06.094+01 .language system]><;
+{ ok := directive: .?; ? | :ok }
+{ (state = declaration-sequence: .names?; ?) := . = :;at? .item ?, ?
+| :who :try (specifier: state) call (who) :=
+}
+{ (state = specifier: ?) := . = :;at? .item ?, ?
+| :who :try (type-specifier: state) call (who) :=
+}
+{ (type-specifier: tail) := :;at .item [keyword "void"]
+| :who :try tail call (who) := ;at .item [type-specifier: void]
+}
+{ (specifier: tail) := :;at? .item specifier = type-specifier: ?
+| :ok declaration: .specifier; tail
+}
+
+{ (state = declaration: .specifier; ?) := . = :;at? .item ?, ?
+| :who :try (declarator: state) call (who) :=
+}
+
+{ (state = declarator: tail) := :;at? .item [identifier], name
+| :ok declarator: .name; tail
+}
+
+{ (declarator: .name; declaration: .specifier; tail) := :;at .item [? "("]
+| :ok
+  parameter-declaration-list: function-declarator: .name .specifier; tail
+}
+
+{ (state = parameter-declaration-list: ?) := . = :;at .item ?, ?
+| :who :try (specifier: parameter-declaration: state) call (who) :=
+}
+><:[module: . parse language C++ syntax .timestamp 2007-11-26T00:39:12.136+01 .language system]><;
+><:[module: . parse language C++ test .timestamp 2007-11-26T00:39:17.241+01 .language system]><;
+{ [test test] | :ok @@? tokenize . [test test] }><:[module: . parse language C++ test ?:"generate tokens.tmp" .timestamp 2007-11-26T00:39:32.775+01 .language system]><;
+{ [test generate tokens.tmp]
+| :ok
+  tokens
+  each
+  {:;at file, from, to .item ?, item|:ok ;item .file .from .to}
+  first 0 fold
+  { ? := . = :;item? .file . [$] .from? .to?
+  | :self
+    :try self file (..text file (file) text) (:=)
+    ===
+    { file: file
+    | :try node [file] (file);
+      ;text file (file) text .(:need);
+      list() := "/* " (file) " */", "", "", ""/, file;
+      :try node [file] (file) := ;text
+    }
+  }
+  { (ok = file: ..text) := :;item .file .from f1, f2 .to t1, t2
+  | :ok list() := item, text +# f2 -# f1, text +# t1 -# f2, text +# t2 -# t1, file; ok
+  }
+  node [file] or ()
+  list()
+  every
+  {v|z}
+  {ok, ?, ?, ?, file|:ok . " "}
+  {ok, ?, ?, "", file|:ok}
+  {ok, ?, ?, y =* ""=, file|:ok . ""< (y <+#=* ""= +#-* "/") }
+  splice ""
+  .(file ("C:/test/tokens.tmp") text :=)
+}
+{ [test token-list]
+| :ok tokens ++# 100
+!  each {x|:ok {} write (x,) ""/} splice ""
+}
+===
+{ .tokens | :ok @@?? tokenize: .text @@? testdata }
+><:[module: . parse language C++ test again .timestamp 2007-11-26T00:39:26.811+01 .language text]><;
+// file "C:/test/tokens.tmp" text
+
+#pragma kvernbitr include_path "C:/test"
+
+#include "tokens.tmp"
+><:[module: . parse language C++ test testdata .edit source .timestamp 2007-11-26T00:39:39.613+01 .language text]><;
+#define stringize(id) a #id b
+
+#define S stringize(S)
+
+r S t
+><:[module: . parse language C++ test testdata' .edit source .timestamp 2007-11-26T00:39:45.015+01 .language text]><;
+#pragma kvernbitr exclude \
+  "* /assert.h" \
+  "* /cpp_type_traits.h" \
+  "* /math.h" \
+  "* /cstddef" \
+  "* /stdio.h" \
+  "* /stdlib.h" \
+  "* /string.h" \
+  "* /cmath" \
+  "* /cstdio" \
+  "* /cstdlib" \
+  "* /cstring" \
+
+#pragma kvernbitr system_include_path \
+  "C:/MinGW/include/c++/3.4.2" \
+  "C:/MinGW/include" \
+  "C:/test/systemc-2.2.0/src"
+
+#pragma kvernbitr include_path \
+  "C:/test/ADCInput"
+
+#define __declspec(...)
+#define __cdecl
+
+#include "main.cpp"
+><:[module: . parse language C++ tokenize .timestamp 2008-01-06T21:26:01.647+01 .language system]><;
+{ [test test]
+| :self :ok
+!  :call show:
+  self tokenize: .text
+  @@ . [test testdata]
+}
+{ [test original]
+| :self :ok :call show: self tokenize: .text @@ . [test testdata] }
+{ [test again]
+| :self :ok :call show: self tokenize: .text @@ . [test again] }
+
+{ [test first]
+| :self :ok self tokenize (.text @@? [test testdata]) ++# 100 }
+
+{ tokenize: .text
+| :ok :mind
+  ( @@ preprocess:
+    .filename (direct: text)
+    .text
+    .settings @@ settings: .mind
+    { call | :try mind . call }
+    { call := | :try mind . call := }
+  )
+  each {ok|:ok . bug {}}
+}
+===
+{ show: items
+| :ok
+  @@ [kvernbitr show token-placement] token-placement: .items .host
+  { write: item | :ok {} write: item try [call: item] }
+  { selection: :;item? .at filename, (?, from), (to, ?)
+  | :ok selection: .filename .at from, to
+  }
+}
+><:[module: . parse language C++ tokenize preprocess .timestamp 2008-01-06T21:39:20.568+01 .language system]><;
+{ preprocess: .text .settings .filename
+| :ok
+  @@ macro
+  { macro: .
+  | :ok
+    @@ tokenize (.text .filename)
+    first [normal] fold
+    { [finish: normal] | :who :ok who }
+    { finish: macro: .parameters? .replacement? .missing? .item .at?; state
+    | :who :ok who finish (state) pass (item) 
+    }
+    { pass: item
+    | :who :ok list [outer] := item; who }
+    { bypass: item
+    | :who :ok list [outer] := item; who }
+    { pass: :;at .item [blocked-identifier], name
+    | :who :ok list [outer] := (;at .item [identifier], name); who }
+    { pass: :;at? .item [space], ? | :who :ok who }
+    { state := item | :who :ok who pass (item) and: state }
+    { state := item = :;at? .item [identifier], name
+    | :who :try macro use: .item .who; state
+    }
+    { state := directive: . "pragma"; ++& tail
+    | ;tail . each {:;at? .item ok|:ok} {:;at? .item [space], ?|?};
+      tail . 1
+      call {[identifier "kvernbitr"]|:ok ()} .:need
+      and:
+      settings pragma
+      ( . tail . 2 call {?, ok|:ok} .:need;
+        tail -# 2 every {[string-literal], ok|:ok} .:need
+      )
+      anyway:
+      :ok state
+    }
+    { state := directive: . "include"; tail = (:;at .item?) 1
+    | :who
+      :if
+        ( ;who . +++ {pass: item|:who :ok list := item; who};
+          who finish: tail first [normal] fold (who)
+        )
+        .:list
+        every {:;at? .item ?, ok|:ok} {:;at? .item [space], ?|:ok " "}
+        splice ""
+        split [fn .fn """" [*: [-: """"] ?,] """", "<" [*: [-: ">"] ?,] ">"]
+        => (([fn], include-filename),)
+        ,
+        settings include-filename (..at) => (:;text .filename)
+      ;
+      :ok
+      who include: .text .filename .state
+    }
+    { state := directive: . "include";
+      (:;at .item [include-filename], include-filename),
+    | :who
+      :if settings include-filename (..at) => (;text .filename); :ok
+      who include: .text .filename .state
+    }
+    { include: .text .filename .state
+    | :who :ok
+      ! list [outer] := (->: filename);
+      @@ tokenize (.text .filename) first (state) fold (who)
+    }
+    { state := directive: . "undef"; (:;at? .item [identifier], name),
+    | :ok macro undefine (.name) and: state
+    }
+    { state := directive: . "define"; items | :try macro define: .items; state }
+    { state := directive: . flag call [."ifdef" 1 ."ifndef" 0];
+      (:;at? .item [identifier], name),
+    | :ok :if flag = macro defined (.name); (if-true: state)
+      .else if-false: state
+    }
+    { (ok = if-false: ?) := ? | :ok }
+    { (ok = if-skip: ?) := ? | :ok }
+    { state := directive: . "if"; condition
+    | :who :ok
+      (@@ condition: ..who .macro; state)
+      call
+      { x | xxx }
+      { % ? | :ok if-true: state }
+      { 0 | :ok if-false: state }
+    }
+    { (if-true: ok) := directive: . "elif"; ? | :ok ..(if-skip:) }
+    { (if-true: ok) := directive: . "else"; | :ok ..(if-skip:) }
+    { (if-false: ok) := directive: . "else"; | :ok ..(if-true:) }
+    { (if-false: ok) := directive: . "elif"; tail
+    | :who :ok (who) (ok) := directive: . "if"; tail
+    }
+    { (ok = if-false: ?) := directive: .? $* "if"; ? | :ok ..(if-skip:) }
+    { (ok = if-skip: ?) := directive: .? $* "if"; ? | :ok ..(if-skip:) }
+    { (?: ok) := directive: . "endif"; | :ok }
+    { ok := :;at? .item [directive-start], ? | :ok ..(directive-start:) }
+    { (directive-start: ok) := :;at? .item [directive-keyword], directive
+    | :ok ..(directive: ..tail ();) }
+    { (directive-start: ok) := :;at? .item [include-keyword], ?
+    | :ok ..(directive: . "include" .tail ();) }
+    { (directive: ..tail; state) := item | :ok directive: ..tail . & (item,); state }
+    { (ok = directive: . ? .tail (); ?) := :;at? .item [space], ? | :ok }
+    { (directive: ..tail; state) := :;at? .item [directive-end], ?
+    | :who :ok (who) (state) := directive: .;
+      tail <-#: :if tail <+# 1 => ((:;at? .item [space], ?),); 1 .else 0
+    }
+    { (macro: .parameters .item .at .missing .replacement; state) :=
+    | :who :ok who pass (item) and: who . state :=
+    }
+    { (ok = macro: .parameters? .item? .at? .missing? .replacement?; ?) :=
+      :;at? .item [space], ?
+    | :ok
+    }
+    { (macro: .parameters .item .at .missing .replacement; state) :=
+      :;at? .item [, "("]
+    | :who :ok
+      arguments: . () .missing;
+      macro: .parameters .item .at .replacement; state
+    }
+    { (state = arguments: .? .missing; ?) := item
+    | :ok argument: . (item,) .level 0; state
+    }
+    { (arguments: . () .missing 0; state) := :;at .item [, ")"]
+    | :who :ok @@ expand: .arguments () .who; state
+    }
+    { (state = arguments: . () .missing; macro) := . = :;at .item [, ","]
+    | :who :ok who argument (. () .level 0; state) :=
+    }
+    { (argument: ..level; state) := item
+    | :ok argument: .. & (item,) .level; state
+    }
+    { (argument: ..level; state) := item = :;at .item [, "("]
+    | :ok argument: .. & (item,) .level . + 1; state
+    }
+    { (arguments: . () .missing; state) := item = :;at .item [, "("]
+    | :ok argument: . item, .level 1; arguments: . () .missing; state
+    }
+    { (argument: ..level; state) := item = :;at .item [, ")"]
+    | :ok argument: .. & (item,) .level . - 1; state
+    }
+    { (argument: ..level 0; state) := item = :;at .item [, ")"]
+    | :who :ok
+      state call
+      { arguments: ..missing 2; state = * macro: .parameters ? <$* ["...",]
+      | :ok @@ expand: .arguments . & (argument, [empty]) .who; state
+      }
+      { arguments: ..missing 1; state
+      | :ok @@ expand: .arguments . & (argument,) .who; state
+      }
+    }
+    { (argument: ..level 0; state) := item = :;at .item [, ","]
+    | :who :ok
+      state call
+      { x | zvuk }
+      { arguments: ..missing 1; * macro: .parameters ? <$* ["...",]
+      | :ok argument: .. & (item,) .level 0; state
+      }
+      { arguments: ..missing; macro
+      | :if missing >= 2;
+        :ok arguments: .. & (argument,) .missing . - 1; macro
+      }
+    }
+    { .state := :;at file, front, back .item
+    | list [outer] := [****BAD STATE*****];
+      bwadr,
+      exit [punk] := 0
+    }
+{ x := y | x bug {} }
+  }
+  call
+  {state|oops}
+  {.normal|:ok [done]}
+  .(:exit [punk];)
+  .(:list [outer];)
+  every (@@ keyword-replacement)
+!list [files]
+!call {files|fnat}
+}
+><:[module: . parse language C++ tokenize preprocess condition .timestamp 2007-11-03T13:12:17.106+01]><;
+{ condition: ..who .macro; state
+|:ok
+  ;expanded
+  condition first [normal] fold
+  { x := y | z }
+  { [normal] := | :ok list [defined-processing] :=; [normal] }
+  { [normal] := :;at? .item [identifier "defined"] | :ok [defined: normal] }
+  { [defined: normal] := :;at? .item [? "("] | :ok [defined: parenthesis] }
+  { (defined: ok) := :;at? .item [identifier], name
+  | :ok list [defined-processing] := macro defined (.name); ok
+  }
+  { [parenthesis] := :;at? .item [? ")"] | :ok [normal] }
+  { ok := :;at? .item [space], ? | :ok }
+  call {[normal]|:ok ()}
+  .(:list [defined-processing];)
+  first [normal] fold (who) .(who finish:)
+  ( ===: ;who . +++ { pass: item | :who :ok list [expanded] := item; who } )
+  .(:list [expanded];)
+  ;
+  expanded
+  every
+  { x | y }
+  { :;at? .item [space], ? | :ok [space] }
+  { % ok | :ok }
+  { :;at? .item [identifier], ? | :ok 0 }
+  { :;at? .item try | :try . call (@@ item) }
+  first [priority: . 0; done] fold
+  { x := y | snask }
+  { ok := [space] | :ok }
+  { stack := % value | :ok value: .; stack }
+  { stack := value = undefined: ? | :ok value: .; stack }
+  { stack := * operator: .prefix | :ok operator: .prefix; stack }
+  { (ok = value: .; ?) := * operator: .infix .priority
+  | :ok . repeat (@@ reduction (priority))
+    call
+    { value: .; stack | :ok priority: .. + 1; operator: .pending value .infix; stack }
+  }
+  { ok := [left-parenthesis] | :ok parenthesis: ok }
+  { ok := [right-parenthesis]
+  | :ok . repeat (@@ reduction 0)
+    call
+    {x|y}
+    { value: .; parenthesis: stack | :ok value: .; stack }
+  }
+  repeat (@@ reduction 0)
+  call
+  { x | y }
+  { value: .. [%]; [done] | :ok value }
+}
+><:[module: . parse language C++ tokenize preprocess condition item .timestamp 2008-05-03T00:02:51.393+02]><;
+:;[identifier "false"] 0
+.[identifier "true"] 1
+.[? "("] [left-parenthesis]
+.[? ")"] [right-parenthesis]
+.[operator "!"] [operator: .prefix ?:"!"]
+.[operator "*"] [operator: .infix * .priority 10]
+.[operator "/"] [operator: .infix / .priority 10]
+.[operator "%"] [operator: .infix % .priority 10]
+.[operator "+"] [operator: .infix + .priority 9 .prefix +]
+.[operator "-"] [operator: .infix - .priority 9 .prefix -]
+.[operator "<<"] [operator: .infix << .priority 8]
+.[operator ">>"] [operator: .infix >> .priority 8]
+.[operator "<"] [operator: .infix < .priority 7]
+.[operator ">"] [operator: .infix > .priority 7]
+.[operator "<="] [operator: .infix <= .priority 7]
+.[operator ">="] [operator: .infix >= .priority 7]
+.[operator "=="] [operator: .infix == .priority 6]
+.[operator "!="] [operator: .infix ?:"!=" .priority 6]
+.[operator "&"] [operator: .infix & .priority 5]
+.[operator "^"] [operator: .infix ^ .priority 4]
+.[operator "|"] [operator: .infix ?:"|" .priority 3]
+.[operator "&&"] [operator: .infix && .priority 2]
+.[operator "||"] [operator: .infix ?:"||" .priority 1]
+;
+{ [character-literal], literal
+| :try literal -#$* "'" <-#=* "'"
+  try [*: ."\n". ""= ."\t". ""> ."\r". ""< ."\'". "'" ."\\". "\"]
+  call
+  { char $* "\x" | :if {} read (char $*=* ["\", "0"]) => % ok; :ok }
+  { char $ 1 | :ok char bytes . 1 }
+}
+{ [integer-literal], ok
+| :ok . lower <-#+* "lu" call
+  { literal $* "0x" | :if {} read (literal) => % ok; :ok }
+  { literal +* "123456789" | :if {} read (literal) => % ok; :ok }
+  { "0" | :ok 0 }
+}
+><:[module: . parse language C++ tokenize preprocess condition reduction .timestamp 2007-11-28T22:42:46.981+01]><;
+{ reduction: p
+| :ok
+  { value: .; try
+  | :try . call
+    { priority: .; stack | :if p <= priority; :ok value: .; stack }
+    { operator: .prefix [?:"!"]; stack | :ok value: .. = 0; stack }
+    { operator: .prefix [+]; stack | :ok value: .; stack }
+    { operator: .prefix [-]; stack | :ok value: .. [-]; stack }
+    { operator: .pending .infix; stack
+    | :ok value: . infix(..pending .value); stack
+    }
+  }
+}
+
+{ [test test] | :ok infix (. [?:"|"] .pending 7 .value 12) }
+===
+{|}
+{ infix: . [>=] .pending .value | :ok pending >= value }
+{ infix: . [<=] .pending .value | :ok pending <= value }
+{ infix: . [>] .pending .value | :ok pending > value }
+{ infix: . [<] .pending .value | :ok pending < value }
+{ infix: . [?:"!="] .pending .value | :ok pending <> value }
+{ infix: . [==] .pending .value | :ok pending = value }
+{ infix: . [+] .pending .value | :ok pending + value }
+{ infix: . [-] .pending .value | :ok pending - value }
+{ infix: . [*] .pending .value | :ok pending * value }
+{ infix: . [/] .pending .value | :ok pending \ value }
+{ infix: . [%] .pending .value | :ok pending % value }
+{ infix: . [?:"||"] .pending ok .value? | :ok }
+{ infix: . [?:"||"] .pending 0 .value ok | :ok }
+{ infix: . [&&] .pending .value ok | :ok }
+{ infix: . [&&] .pending 0 .value? | :ok 0 }
+{ infix: . [&] .pending % a  .value % b
+| :ok @@ bitwise (.a .b .table table: .[0 0] 0 .[0 1] 0 .[1 0] 0 .[1 1] 1)
+}
+{ infix: . [?:"|"] .pending % a .value % b
+| :ok @@ bitwise (.a .b .table table: .[0 0] 0 .[0 1] 1 .[1 0] 1 .[1 1] 1)
+}
+><:[module: . parse language C++ tokenize preprocess condition reduction bitwise .timestamp 2007-11-26T00:40:41.125+01 .language system]><;
+{ bitwise: .a .b .table
+| :ok (bits (a), bits (b)) traverse every (table) .(:call gather:)
+}
+===
+{ bits: % n
+| :ok 31 up first (n - 0x80000000) fold { n := ? | :ok ;m n \ 2; list := m * 2 <> n; m }
+  and (list := 1)
+  .:list
+}
+{ bits: n count
+| :ok 32 up first (n) fold { n := ? | :ok ;m n \ 2; list := m * 2 <> n; m }
+  .:list
+}
+{ gather: list = 0 0 | :ok list reverse fold {n := v|:ok n * 2 + v} }
+{ gather: list = 1 0 | :ok list <-# 1 reverse fold {n := v|:ok n * 2 + v} + 0x80000000 }
+><:[module: . parse language C++ tokenize preprocess expand .timestamp 2008-05-03T00:04:49.881+02]><;
+{ expand: .who .arguments;
+  macro: .parameters .item (:;at? .item) .at .replacement;
+  state
+| :ok
+  replacement every
+  ( ;who . +++
+      { pass: item | :who :ok list [expand-parameters] := item; who }
+    ;
+    { item | :ok list [expand-parameters] := item }
+    { parameter: .? .number
+    | :ok who finish: arguments . number first [normal] fold (who)
+    }
+    { escaped-parameter: .parameter? .number
+    | :ok
+      arguments . number
+      repeat {ok = (:;item [space], ? .at?) 1|:ok . -# 1}
+      repeat {ok = (:;item [space], ? .at?) 0|:ok . <-# 1}
+      every {item|:ok list [expand-parameters] := item}
+    }
+    { suppress-va_args: item
+    | :self :ok :if arguments <$* [empty,]; .else item call (self)
+    }
+  )
+  .(:list [expand-parameters];)
+  first [] fold
+  { pending := item | :ok list [preprocessor-operations] := pending; item }
+  { [] := ok | :ok }
+  { [] := [preprocessor-stringize] | :ok }
+  { (:;item ?, text .at?) := [preprocessor-concat] | :ok concatenating: .text }
+  { (concatenating: .text) := :;item ?, more .at
+  | :ok concatenated: .text .. more .at
+  }
+  { (ok = concatenating: .text?) := :;item [space], ? .at? | :ok }
+  { (concatenated: .text .at .space) := item
+  | :ok
+    list [preprocessor-operations] := (concatenated: .text .at);
+    list [preprocessor-operations] := space;
+    item
+  }
+  { (* concatenated: .text .at) := [preprocessor-concat]
+  | :ok concatenating: .text
+  }
+  { (concatenated: .text .at) := space = :;item [space], ? .at?
+  | :ok concatenated: .text .at .space
+  }
+  call
+  {final|:ok list [preprocessor-operations] := final}
+  {|:ok []}
+  .(:list [preprocessor-operations];)
+  every
+  { ok | :ok }
+  { concatenated: .at .text
+  | :ok ;at .item text call (@@? [tokenize split])
+    call {ok,|:ok}
+    call (@@? keywords)
+  }
+  { preprocessor-stringize: .parameter? .number
+  | :ok
+    ;argument arguments . number;
+    ;at argument find {:;at ok .item?|:ok} or (at)
+    .item [string-literal],
+    """"
+    ( argument
+      every
+      {:;at? .item?, ok|:ok}
+      {:;at? .item[space], ?|:ok " "}
+      {:;at? .item ? call [.character-literal .string-literal], ok
+      |:ok . *=* ["""", "\""", "\", "\\"]
+      }
+      -#$* [" ",] <-#$* [" ",]
+      splice ""
+    )
+    """"
+  }
+  first (state) fold: who +++
+  { state := :;at .item blocking = ([identifier], name)
+  | :who :if blocking = item; :ok
+    who . state := ;at .item [blocked-identifier], name
+  }
+}
+><:[module: . parse language C++ tokenize preprocess keyword-replacement .timestamp 2007-08-30T14:50:31.736+02]><;
+{ ok | :ok }
+{ :;at .item [identifier], name = kind call
+  [ ."asm" keyword
+    ."auto" keyword
+    ."bool" keyword
+    ."break" keyword
+    ."case" keyword
+    ."catch" keyword
+    ."char" keyword
+    ."class" keyword
+    ."const" keyword
+    ."const_cast" keyword
+    ."continue" keyword
+    ."default" keyword
+    ."delete" keyword
+    ."do" keyword
+    ."double" keyword
+    ."dynamic_cast" keyword
+    ."else" keyword
+    ."enum" keyword
+    ."explicit" keyword
+    ."export" keyword
+    ."extern" keyword
+    ."float" keyword
+    ."for" keyword
+    ."friend" keyword
+    ."goto" keyword
+    ."if" keyword
+    ."inline" keyword
+    ."int" keyword
+    ."long" keyword
+    ."mutable" keyword
+    ."namespace" keyword
+    ."new" keyword
+    ."operator" keyword
+    ."private" keyword
+    ."protected" keyword
+    ."public" keyword
+    ."register" keyword
+    ."reinterpret_cast" keyword
+    ."return" keyword
+    ."short" keyword
+    ."signed" keyword
+    ."sizeof" keyword
+    ."static" keyword
+    ."static_assert" keyword
+    ."static_cast" keyword
+    ."struct" keyword
+    ."switch" keyword
+    ."template" keyword
+    ."this" keyword
+    ."throw" keyword
+    ."try" keyword
+    ."typedef" keyword
+    ."typeid" keyword
+    ."typename" keyword
+    ."union" keyword
+    ."unsigned" keyword
+    ."using" keyword
+    ."virtual" keyword
+    ."void" keyword
+    ."volatile" keyword
+    ."wchar_t" keyword
+    ."while" keyword
+    ."false" boolean-literal
+    ."true" boolean-literal
+    ."and" operator
+    ."and_eq" operator
+    ."bitand" operator
+    ."bitor" operator
+    ."compl" operator
+    ."not" operator
+    ."not_eq" operator
+    ."or" operator
+    ."or_eq" operator
+    ."xor" operator
+    ."xor_eq" operator
+  ]
+| :ok ;at .item kind, name
+}
+><:[module: . parse language C++ tokenize preprocess keywords .timestamp 2007-11-03T12:55:55.747+01]><;
+[
+!  identifier boolean-literal "true false",
+  identifier operator
+  "and and_eq bitand bitor compl not not_eq or or_eq xor xor_eq",
+!  ? operator "! % & * + , - . / : < = > ? ^ | ~",
+!  ? separator "( ) [ ] { } ;",
+]
+every {old, new, items|:ok items split " " every {item|:ok old, new, item}}
+splice
+every {old, new, item|:ok node . (old, item) := new, item}
+and (node? := [ok])
+.:node
+><:[module: . parse language C++ tokenize preprocess macro .timestamp 2007-11-04T12:22:29.167+01]><;
+{ macro: run
+| :try
+  :mind
+  :need run macro: .
+  { define: .items . [&]; state
+  | :ok
+    items first [define] fold
+    { x := y | z }
+    { (want: .; ok) := :;at? .item want | :ok }
+    { .define := :;at? .item [space], ? | :ok [define] }
+    { .define := :;at .item [identifier], name | :ok define: .name .at }
+    { (define: .name .at) := item
+    | :self :ok self replacement (.() .parameters (); define) := item
+    }
+    { (define = define: .name .at) := :;at? .item [space], ?
+    | :ok replacement: . () .parameters (); define
+    }
+    { (define = define: .name .at) := :;at? .item [? "("]
+    | :ok parameters: . () .name .at
+    }
+    { (replacement: ..parameters; define) := item
+    | :ok replacement: .. & (item,) .parameters; define
+    }
+    { (replacement = replacement: .; define) :=
+      space = :;at? .item [space], ?
+    | :ok space: ..replacement
+    }
+    { (parameters: ..name .at) := :;at? .item [identifier], parameter
+    | :ok
+      more: parameters: .. & (parameter,) .name .at
+    }
+    { (parameters: ..name .at) := :;at? .item [ellipsis "..."]
+    | :ok
+      ;parameters . & "...";
+      want: . [? ")"];
+      replacement: . () .parameters; define: .name .at .parameters
+    }
+    { (parameters: . () .name .at) := :;at? .item [? ")"]
+    | :ok
+      replacement: . () .parameters (); define: .name .at .parameters ()
+    }
+    { (more: parameters: ..name .at) := :;at? .item [? ")"]
+    | :ok
+      replacement: . () .parameters; define: .name .at .parameters
+    }
+    { (more: ok) := :;at? .item [? ","] | :ok }
+    { (ok = more: ?) := :;at? .item [space], ? | :ok }
+    { (ok = parameters: .? .name? .at ?) := :;at? .item [space], ? | :ok }
+    { (replacement: ..parameters . [+&]; define) :=
+      :;at? .item [identifier], parameter
+    | :if parameters =* (parameter,) +> number; :ok
+      replacement: .. & (parameter: ..number) .parameters; define
+    }
+    { (replacement: ..parameters . & number <$* ["...",]; define) :=
+      :;at? .item [identifier], "__VA_ARGS__"
+    | :ok
+      replacement: .
+      . call
+      { +& try
+      | :self :try . <+# 1 1 item call:
+        ;try . <-# 1;
+        { [space], ? | :try . call (self) }
+        { [?, ","]
+        | :ok
+          try .
+          ( replacement -# (try count) every
+            { item | :ok suppress-va_args: item }
+          )
+        }
+      }
+      or (replacement)
+      ( (suppress-va_args: parameter:  . "__VA_ARGS__" .number), )
+      .parameters;
+      define
+    }
+    { (ok = replacement: . () .parameters?; ?) := :;at? .item [space], ? | :ok }
+    { (replacement: ..parameters; define) :=
+      :;at? .item [preprocessor-concat], ?
+    | :ok
+      preprocessor-concat: define .parameters .replacement .
+      try { ok | :if ok <+# 1 => ((:;at? .item [space], ?),); :ok . <-# 1 }
+      try
+      { ok
+      | :if ok <+# 1 => ((parameter: ..number),);
+        :ok . <-# 1 & (escaped-parameter: .parameter .number)
+      }
+    }
+    { (ok = preprocessor-concat: .replacement? .parameters?; ?) :=
+      :;at? .item [space], ?
+    | :ok
+    }
+    { (preprocessor-concat: .replacement .parameters; define) := item
+    | :ok
+       replacement: .. & ([preprocessor-concat], item) .parameters;
+       define
+    }
+    { (preprocessor-concat: .replacement .parameters; define) :=
+      item = :;at? .item [identifier], name
+    | :if parameters =* (name,) +> number; :ok
+       replacement: .. &
+       ( [preprocessor-concat],
+         escaped-parameter: .parameter name .number )
+       .parameters;
+       define
+    }
+    { ( preprocessor-concat:
+        .replacement
+        .parameters . & number <$* ["...",];
+        define) :=
+      item = :;at? .item [identifier], "__VA_ARGS__"
+    | :ok
+       replacement: .. &
+       ( [preprocessor-concat],
+         escaped-parameter: .parameter "__VA_ARGS__" .number )
+       .parameters;
+       define
+    }
+    { (state = replacement: .? .parameters?; ?) :=
+      :;at? .item [preprocessor-stringize], ?
+    | :ok preprocessor-stringize: state
+    }
+    { (ok = preprocessor-stringize: ?) := :;at? .item [space], ? | :ok }
+    { (preprocessor-stringize: replacement: ..parameters; define) :=
+      :;at? .item [identifier], parameter
+    | :if parameters =* (parameter,) +> number;
+      :ok
+      replacement: .. & (preprocessor-stringize: .parameter .number)
+      .parameters;
+      define
+    }
+    { (preprocessor-stringize:
+      replacement: ..parameters ? & number <$* ["...",]; define) :=
+      :;at? .item [identifier], "__VA_ARGS__"
+    | :ok
+      replacement: .. & ((preprocessor-stringize: .parameter .number),)
+      .parameters;
+      define
+    }
+    call
+    { x | y }
+    { replacement: ..parameters; define: .name .parameters .at
+    | :ok
+      mind . name := function: .replacement .name .at .parameters
+    }
+    { replacement: ..parameters (); define: .name .at
+    | :ok
+      mind . name := object: .replacement .name .at
+    }
+    { define: .name .parameters .at
+    | :ok
+      mind . name := function: .replacement () .name .at .parameters
+    }
+    { define: .name .at
+    | :ok
+      mind . name := object: .replacement () .name .at
+    }
+    and: state
+  }
+  { use: .item . = (:;at? .item [identifier], name) .who; state
+  | :try mind . name .:need
+    call {ok|:ok}{|?} .:need
+    call
+    { function: .at .name .parameters . & missing .replacement
+    | :ok macro: .item .at .missing .replacement .parameters; state
+    }
+    { object: .at? .name? .replacement
+    | :ok
+      replacement first (state) fold: who +++
+      { state := :;at .item [identifier], name'
+      | :who :if name' = name; :ok
+        who . state := ;at .item [blocked-identifier], name'
+      }
+    }
+    call [ok]
+  }
+  { defined: .name | :ok mind . name or [] <> [] }
+  { undefine: .name
+  | :ok
+    :if mind . name => ?; mind . name := []
+  }
+}
+><:[module: . parse language C++ tokenize preprocess tokenize .timestamp 2008-01-06T21:03:38.100+01]><;
+{ [test lexer]
+| :self :ok self tokenize (.filename [testing] .text file "C:/test/tokens.tmp" text)
+  count
+}
+{ [test split]
+| :self :ok @@ split . (file "C:/test/tokens.tmp" text)
+  count
+}
+{ tokenize: .text . $ total-length .filename
+| :if text call (@@ line-splicing+trigraphs) => (:;text trimmed .adjustments);
+  :ok
+  trimmed call (@@ split)
+  every (@@ keywords)
+  first (;from 0 .adjustments .state [normal]) fold
+  { (;from .adjustments .state) := kind, string $ count
+  | :ok
+    (;to from + count .slack 0 .adjustments)
+    repeat
+    { :;to .slack .adjustments splice: .count .at; adjustments
+    | :if at <= to; :ok
+      ;to . + count .adjustments .slack . + :if at = to; count .else 0
+    }
+    { :;to .slack .adjustments trigraph: .at; adjustments
+    | :if at < to; :ok ;to . + 2 .adjustments .slack
+    }
+    call
+    { ;to .slack .adjustments
+    | :ok ;from to .adjustments .state . call
+      { state := ? | :ok list := (;item kind, string .from .to . - slack); state }
+      { [normal] := [directive-start]
+      | :ok list := (;item [directive-start], string .from .to . - slack); [directive]
+      }
+      { [directive] := [linefeed]
+      | :ok list := (;item [directive-end], string .from .to . - slack);
+        [normal]
+      }
+      := kind
+    }
+  }
+  .:list
+  first 0 fold
+  { a := b | pulimut }
+  { 0 := :;item .from .to | :ok ;front 0, from .item .to }
+  { 0 := :;item ? call [.linefeed .space], space .from .to | :ok space: . }
+  { (space: .) := :;item .from .to
+  | :ok
+    list := (;item [space], space .at [0 0], (from, from));
+    ;front 0, from .item .to
+  }
+  { (space: .) := :;item ? call [.linefeed .space], space 1 .from .to
+  | :ok space: .. (space 1)
+  }
+  { (:;front .item .to) := next
+  | :ok
+    ;back to, next from;
+    list := (;item .at filename, front, back);
+    ;front back .item next item .to next to
+  }
+  { (pending = :;front? .item? .to?) :=
+    :;item ? call [.linefeed .space], space .from? .to?
+  | :ok
+    space: ..pending
+  }
+  { (space: ..pending) := next = :;item .from .to
+  | :ok
+    ;back pending to, from;
+    list := (;item .at filename, front, back) === pending;
+    list := (;item [space], space .at (to, to) === pending, (from, from));
+    ;front back .item .to
+  }
+  { (space: ..pending) := :;item ? call [.linefeed .space], space 1 .from? .to?
+  | :ok space: .. (space 1) .pending
+  }
+  call
+  { x | zzz }
+  { 0 | :ok 0 }
+  { space: .
+  | :ok list := ;item [space], space .at [0 0], (total-length total-length)
+  }
+  { (:;front .item .to)
+  | :ok list := ;item .at filename, front, (to, text count)
+  }
+  { space: ..pending :;item .front .to
+  | :ok
+    list := (;item .at filename, front, (to, total-length));
+    list := ;item [space], space .at (to, to), (total-length, total-length)
+  }
+  .:list
+}
+><:[module: . parse language C++ tokenize preprocess tokenize line-splicing+trigraphs .timestamp 2008-05-03T00:06:12.560+02]><;
+{ $ ok
+| :ok .
+  [ split: splice trigraph text
+    .splice ["\", "??/"] [""/, ""=],
+    .trigraph "??" ["=", "(", "/", ")", "'", "<", "!", ">", "-"],
+    .text [+: [-: splice] 1, ] ]
+  first 0 fold
+  { at := [text], text $ count | :ok list := text; at + count }
+  { at := [splice], ? $ count | :ok list := (splice: .count .at); at + count }
+  { at := [trigraph], trigraph
+  | :ok list := (trigraph: .at);
+    list := trigraph call
+    [ trigraph-translations:
+      ."??=". "#"
+      ."??(". "["
+      ."??/". "\"
+      ."??)". "]"
+      ."??'". "^"
+      ."??<". "{"
+      ."??!". "|"
+      ."??>". "}"
+      ."-". "~"
+    ]
+    ;
+    at + 3
+  }
+  .:list
+  call
+  { list
+  | :ok
+    ;text list each {$ ok|:ok} splice ""
+    .adjustments list reverse each {* ok|:ok} first [?] fold
+    { gaps := splice: .count .at | :ok splice: .count .at; gaps }
+    { gaps := trigraph: .at | :ok trigraph: .at; gaps }
+  }
+}
+><:[module: . parse language C++ tokenize preprocess tokenize split .timestamp 2008-05-03T00:08:51.903+02]><;
+{ $ ok
+| :ok .
+  [ split:
+    directive-start
+    space
+    linefeed
+    include-head
+    include-filename
+    string-literal
+    character-literal
+    ellipsis
+    floating-literal
+    integer-literal
+    include-keyword
+    directive-keyword
+    identifier
+    separator
+    operator
+    preprocessor-concat
+    preprocessor-stringize
+    .linefeed ""=, ""/, ""<
+    .space [+: " ", "">, "/*" [*: [-: "*/"] 1,] "*/", "//" [*: [-: linefeed] 1,]]
+    .identifier ["A-Z", "a-z", "_", "$"] [*: "A-Z", "a-z", "_", "$", "0-9"],
+    .directive-start [/: $ linefeed] [*: " ", "">] "#" [-: "#"] [*: " ", "">],
+    .directive-keyword [/: directive-start] identifier,
+    .include-keyword
+      [/: directive-start] "include" [-: "A-Z", "a-z", "_", "$", "0-9"] [*: " ", "">],
+    .include-filename
+      [/: include-keyword]
+      [ """" [+: [-: """" linefeed] 1,] """", "<" [+: [-: ">" linefeed] 1,] ">" ]
+      [ -: -: [space, []] linefeed, ]
+      ,
+    .string-literal ["L" []] """" [*: [-: """"] string-character,] """",
+    .character-literal ["L" []] "'" [-: "'"] string-character "'",
+    .string-character
+      [-: "\"] 1,
+      "\"
+      [ "'", """", "?", "\", "a", "b", "f", "n", "r", "t", "v",
+        octal-digit [octal-digit [octal-digit [],], []],
+        "x" [+: hexadecimal-digit],
+        "u" hex-quad,
+        "U" hex-quad hex-quad
+      ],
+    .integer-literal
+      [ "1-9" [*: "0-9"],
+        "0" [["X", "x"] [+: hexadecimal-digit], [*: octal-digit]]
+      ]
+      [ ["U", "u"] ["ll", "l", "LL", "L", []],
+        ["ll", "l", "LL", "L", []] ["U", "u", []]
+      ]
+      ,
+    .floating-literal
+      [ [ +: "0-9" ] [ "." [*: "0-9"] [exponent-part, []], exponent-part ],
+        "." [+: "0-9"] [exponent-part, []]
+      ]
+      [ "f", "l", "F", "L", [] ]
+      ,
+    .exponent-part ["e", "E"] ["+", "-", []] [+* "0-9"]
+    .hexadecimal-digit "0-9", "a-f", "A-F"
+    .hex-quad
+      hexadecimal-digit hexadecimal-digit hexadecimal-digit hexadecimal-digit,
+    .octal-digit "0-7"
+    .ellipsis "..."
+    .operator
+      ["!", "%", "*", "/", "=", "^"] ["=", []],
+      "&" ["&", "=", []],
+      "|" ["|", "=", []],
+      "+" ["+", "=", []],
+      "-" ["-", "=", ">*", ">", []],
+      "." ["*", []],
+      ":" [":", []],
+      "<" ["<", []] ["=", []],
+      ">" [">", []] ["=", []],
+      "?" [-: "?" ["'", "!", "/", "<", ">", "(", ")"],],
+      "~"
+    .preprocessor-concat "##", "%:%:"
+    .preprocessor-stringize "#", "%:"
+    .separator "<%", "%>", "<:", ":>"
+  ]
+}
+><:[module: . parse language C++ tokenize settings .timestamp 2008-12-06T22:57:55.088+01 .language system]><;
+{ settings: .mind
+| :ok
+   mind exclude := ();
+  { x | y }
+  { include-filename: .? .at?|?}
+  { include-filename: ..at
+  | :try
+    ( :if include-filename $* """";
+      at call {ok =* "/", ?, ?|:ok . <-#=* "/"} or ()
+      &:
+      mind pragma "include_path" or: )
+    &
+    ( mind pragma "system_include_path" or: )
+    find
+    { $ path
+    | (path *=* ["\", "/"] <-#$* "/", include-filename -# 1 <-# 1)
+      repeat
+      { path =* "/", filename $* "../"
+      | :ok path <-#=* "/", filename -#$* "../"
+      }
+      call {path, filename|:ok (path) "/" (filename)} {?, ? $* "../"|?} .(:need)
+      call
+      { filename
+      | ;exclude-list mind exclude;
+        exclude-list find {exclude|:try exclude (..filename)} or:
+        :try ;filename .text file (filename) text .(:need)
+      }
+      .(:try)
+    }
+  }
+  { include-filename: .. =* ":\" .at?
+  | :if include-filename -# 1 <-# 1 => filename, file (filename) text => text;
+    :ok ;text .filename
+  }
+  { pragma: . ; path | agurk }
+  { pragma: path .pragma . = ? call [."system_include_path" ."include_path"]
+  | path every {$ string|:if {} read (string) => +$ ok; :ok} .(:need)
+    .(mind pragma (pragma) :=) and: :ok ()
+  }
+  { pragma: exclude-list .pragma "exclude"
+  | :ok mind exclude := mind exclude & exclude-list
+    every {ok|:ok . -#$* """" <-#$* """"}
+    ;
+  }
+}
+===
+{ exclude: ..filename
+| :try
+  exclude split
+  [ skip-match-end skip-match skip-end skip match
+    .skip "*"
+    .match [+: [-: "*"] ?,]
+    .skip-match [/: skip] match,
+    .skip-match-end skip-match [-: ?],
+    .skip-end skip [-: ?],
+  ]
+  first (filename) fold
+  { ok := [skip "*"] | :ok }
+  { ok := [match], match $ count | :if ok $* match; :ok . -# count }
+  { ok := [skip-match], match | :if ok =* match +> count; :ok . -# count }
+  { ok := [skip-match-end], match | :if ok <$* match; :ok "" }
+  { ok := [skip-end], match | :ok "" }
+  .(:need)
+  call {""|:ok()}
+}
+><:[module: . parse language C++ tokentoot .timestamp 2007-11-26T00:41:45.743+01 .language system]><;
+{ [test test] | @@ [kvernbitr show tokentoot] tokentoot: .language [C++] }
+{ :tokentoot .y
+| :where :ok tokentoot: ..y .where .name where module name <+# 1 1 }
+><:[module: . parse language C++ tokentoot decl-specifier-seq .timestamp 2007-11-26T00:41:50.302+01 .language system]><;
+:y 70 .tokentoot .
+bar
+right 30
+	down 220
+fork
+	right 30 toot "-type+" right 30
+	right 60 box "type-specifier"
+	right 540
+	right 140 right 60
+	right 20
+	right 30 bar
+join
+fork
+	down 270
+	right 70 toot "-storage+" right 70
+	fork right 130 hit "register" right 60 up 30 join
+	up 20
+	fork right 50 hit "static" right 140 up 30 join
+	up 20
+	fork right 130 hit "mutable" right 60 up 30 join
+	up 20
+	fork right 50 hit "extern" right 140 up 20 right 10 join
+	up 20
+	right 130 hit "auto" right 100 up 20 left 390 down 10
+join
+><:[module: . parse language C++ tokentoot declaration .timestamp 2007-11-26T00:41:54.408+01 .language system]><;
+:y 70 .tokentoot .
+bar
+right 50
+fork
+	right 60 toot "+namespace-scope" right 50
+	fork
+		right 70 hit "extern" right 130 box "string-literal" right 80
+		fork up 30 left 420 down 30 right 10 join
+		right 60
+		hit "{" right 40
+		fork up 25 right 360 down 25 right 10 join
+		right 180 box "declaration (namespace-scope)" right 170
+		fork down 25 left 340 up 25 right 10 join
+		right 50
+		hit "}" right 80 bar
+	join
+	down 65
+	right 80 hit "namespace" right 80
+	fork right 140 up 10 join
+	down 25
+	right 70 box "identifier" right 70
+	fork up 90 right 10 join
+	right 40 hit "=" right 160
+	fork up 25 right 60 down 25 right 10 join
+	right 30 hit "::"
+	right 100 box "identifier" right 70
+	fork down 25 left 230 up 25 right 10 join
+	right 70 hit ";" right 40 up 90 right 10
+join
+fork
+	down 140
+	right 60 hit "using" right 60
+	fork
+		right 30 toot "-class-scope" right 120 hit "namespace"
+                right 230 up 50 right 10
+	join
+	down 50
+	right 340
+	fork up 25 right 60 down 25 right 10 join
+	right 30 hit "::"
+	right 110 box "identifier" right 70
+	fork down 25 left 240 up 25 right 10 join
+	right 70 hit ";" right 40
+
+
+
+join
+down 290
+fork
+	right 80 hit "asm" right 70 hit "(" right 90 box "asm-code" right 90 hit ")" right 50 hit ";"
+        right 480 up 150
+join
+down 50
+fork
+	right 430 hit ";"
+        right 430 up 150
+join
+down 100
+fork
+	right 30
+	fork up 30 right 150 down 30 right 10 join
+	right 50 hit "export" toot "export+" right 160
+	hit "template" right 80
+	hit "<" right 40
+	fork up 25 right 110 toot "-export" right 110 down 25 right 10 join
+	right 110 box "template-parameter" right 100
+	fork down 35 left 100 hit "," left 100 up 35 right 10 end join
+	right 50 hit ">" right 35 down 60 left 110 down 40 right 10
+join
+down 100
+fork right 700 box "simple-declaration-or-function-definition" right 160 up 300 join
+><:[module: . parse language C++ tokentoot specifier .timestamp 2007-11-26T00:41:59.747+01 .language system]><;
+:y 50 .tokentoot .
+bar
+right 30 
+fork
+  right 30
+  fork down 40 right 60 hit "volatile" right 60 up 40 right 20 join
+  right 60 hit "const" right 90 toot "CV+" right 60
+join
+up 30 right 210 down 30 right 30
+box "typeid"
+fork right 30 up 30 right 180 down 30 right 30 join
+right 60 toot "-CV" right 30
+fork right 60 hit "const" right 70 join
+down 40 right 60 hit "volatile" right 60 up 40 right 30
+bar><:[module: . parse language C++ tokentoot type-specifier .timestamp 2007-11-26T00:42:03.432+01 .language system]><;
+:y 70 .tokentoot .
+bar
+right 30
+	down 220
+fork
+	right 30 toot "-type+" right 30
+	fork
+		right 600
+		fork right 60 hit "double" right 140 down 10 join
+		up 20
+		fork right 140 hit "float" right 60 down 10 join
+		up 20
+		fork right 60 hit "unsigned" right 140 down 30 join
+		up 20
+		fork right 140 hit "signed" right 60 down 10 join
+		up 20
+		fork right 60 hit "long" right 140 down 70 join
+		up 20
+		fork right 140 hit "int" right 60 down 10 join
+		up 20
+		fork right 60 hit "short" right 140 down 30 join
+		up 20
+		fork right 140 hit "bool" right 60 down 10 join
+		up 20
+		fork right 60 hit "wchar_t" right 140 down 10 join
+		up 20
+		right 140 hit "char" right 60 down 200
+		fork left 220 up 20 right 10 join
+		right 20 up 220 left 480 up 20 right 30 right 480 bar
+	join
+	fork
+		down 80 right 40
+		fork up 25 right 60 down 25 right 10 join
+		right 30 hit "::" right 50
+		fork up 25 right 270 down 25 right 10 join
+		right 110 box "identifier(namespace)" right 120 hit "::" right 30
+		fork down 20 left 250 up 20 right 10 join
+		right 90 hit "template" right 110 box "identifier(type-name)" right 70 hit "<" right 100
+		box "template-argument" right 100 hit ">"
+	join
+join
+fork
+	down 270
+	right 70 toot "-storage+" right 70
+	fork right 130 hit "register" right 60 up 30 join
+	up 20
+	fork right 50 hit "static" right 140 up 30 join
+	up 20
+	fork right 130 hit "mutable" right 60 up 30 join
+	up 20
+	fork right 50 hit "extern" right 140 up 20 right 10 join
+	up 20
+	right 130 hit "auto" right 100 up 20 left 390 down 10
+join
+><:[module: . test, .timestamp 2007-11-26T00:37:55.309+01 .language system]><;
+{ [test test]
+| :ok
+  @@ [test /] test
+}><:[module: . test data .timestamp 2007-09-13T11:19:12.009+02 .language text]><;
+char ``char'' 
+unsigned char ``unsigned char'' 
+signed char ``signed char'' 
+bool ``bool'' 
+unsigned ``unsigned int'' 
+unsigned int ``unsigned int'' 
+signed ``int'' 
+signed int ``int'' 
+int ``int'' 
+unsigned short int ``unsigned short int'' 
+unsigned short ``unsigned short int'' 
+unsigned long int ``unsigned long int'' 
+unsigned long ``unsigned long int'' 
+signed long int ``long int'' 
+signed long ``long int'' 
+long int ``long int'' 
+long ``long int'' 
+signed short int ``short int'' 
+signed short ``short int'' 
+short int ``short int'' 
+short ``short int'' 
+wchar_t ``wchar_t'' 
+float ``float'' 
+double ``double'' 
+long double ``long double'' 
+void ``void'' 

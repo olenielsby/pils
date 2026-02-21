@@ -1,0 +1,30 @@
+/* This file is public domain */
+#ifndef _PILS_PILSATOMIC_H_
+#define _PILS_PILSATOMIC_H_
+#include "datamodel.h"
+
+#ifdef _MSC_VER
+#include <intrin.h>
+#define PILS_INTERLOCKED_INCREMENT(x) _InterlockedIncrement(&x)
+#define PILS_INTERLOCKED_DECREMENT(x) _InterlockedDecrement(&x)
+#define PILS_INTERLOCKED_INCREMENT_RETURN PILS_INTERLOCKED_INCREMENT
+#define PILS_INTERLOCKED_DECREMENT_RETURN PILS_INTERLOCKED_DECREMENT
+//#else
+//#include <libkern/OSAtomic.h>
+//#define PILS_INTERLOCKED_INCREMENT(x) OSAtomicAdd32 (1, (int32_t*) &x)
+//#define PILS_INTERLOCKED_DECREMENT(x) OSAtomicAdd32 (-1, (int32_t*) &x)
+#elif !defined(_JUCE)
+//TODO: find proper way to detect Qt
+#include <QAtomicInt>
+#define PILS_INTERLOCKED_INCREMENT(x) ((QAtomicInt &)(x)).fetchAndAddOrdered(1)
+#define PILS_INTERLOCKED_DECREMENT(x) ((QAtomicInt &)(x)).fetchAndAddOrdered(-1)
+#define PILS_INTERLOCKED_INCREMENT_RETURN(x) (PILS_INTERLOCKED_INCREMENT(x)+1)
+#define PILS_INTERLOCKED_DECREMENT_RETURN(x) (PILS_INTERLOCKED_DECREMENT(x)-1)
+#else
+#define PILS_INTERLOCKED_INCREMENT(x) __sync_add_and_fetch(&x, 1)
+#define PILS_INTERLOCKED_DECREMENT(x) __sync_add_and_fetch(&x, -1)
+#define PILS_INTERLOCKED_INCREMENT_RETURN PILS_INTERLOCKED_INCREMENT
+#define PILS_INTERLOCKED_DECREMENT_RETURN PILS_INTERLOCKED_DECREMENT
+#endif
+
+#endif

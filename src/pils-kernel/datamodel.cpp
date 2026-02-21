@@ -1,0 +1,1985 @@
+/* This file is public domain */
+#include "datamodel.h"
+#include <string.h>
+
+namespace PILS
+{
+	Any::Any()
+	{
+		referenceCount = 0;
+	}
+
+	/* For protection against circularity when inserting callbacks in non-aliens */
+
+	bool Any::isMultipleReferenced() const
+	{
+		return referenceCount != 0;
+	}
+
+	void Any::disposeRoot()
+	{
+		scrapLink = NULL;
+		for (Any *unroll = destroy(); unroll; unroll = unroll->destroy());
+	}
+
+	Any *Any::destroy()
+	{
+		size_t size = unlinkAndGetSize();
+		Any *link = scrapLink;
+		Heap::free(this, size);
+		return link;
+	}
+
+	bool Any::isList(const Any *const *&element, const Integer *&count) const
+	{
+		return false;
+	}
+
+	bool Any::isList(const Any *const *&element, size_t &count) const
+	{
+		const Integer *c;
+		if (isList(element, c))
+		{
+			count = c->value;
+			return true;
+		}
+		else return false;
+	}
+
+	bool Any::isNode(const Any *const *&element, const Cliche *&cliche) const
+	{
+		return false;
+	}
+
+	const ClicheShort *Any::as_ClicheShort() const
+	{
+		return NULL;
+	}
+
+	const ClicheTiny *Any::as_ClicheTiny() const
+	{
+		return NULL;
+	}
+
+	const Constant *Any::as_Constant() const
+	{
+		return NULL;
+	}
+
+	const Integer *Any::as_Integer() const
+	{
+		return NULL;
+	}
+
+	const NodeConstant *Any::as_NodeConstant() const
+	{
+		return NULL;
+	}
+
+	const NodeConstantTiny *Any::as_NodeConstantTiny() const
+	{
+		return NULL;
+	}
+
+	const ListConstant *Any::as_ListConstant() const
+	{
+		return NULL;
+	}
+
+	const NodeExpress *Any::as_NodeExpress() const
+	{
+		return NULL;
+	}
+
+	const Slot *Any::as_Slot() const
+	{
+		return NULL;
+	}
+
+	const Rule *Any::as_Rule() const
+	{
+		return NULL;
+	}
+
+	const Ruleset *Any::as_Ruleset() const
+	{
+		return NULL;
+	}
+
+	const PilsString *Any::as_String() const
+	{
+		return NULL;
+	}
+
+	const Channel *NodeConstantShort::as_Channel() const
+	{
+		return NULL;
+	}
+
+	HashedConstant::HashedConstant(const HashedConstant *&link)
+	{
+		hashLink = link;
+		link = this;
+	}
+
+	const HashedConstant *&HashedConstant::hashChain(size_t hash)
+	{
+		return hashTable[(hash + (hash >> 16)) & 0xFFFF].hashLink;
+	}
+
+	HashedConstant::HashedConstant()
+	{
+		hashLink = this;
+	}
+
+	const Constant *Constant::as_Constant() const
+	{
+		return this;
+	}
+
+	const ListConstant *ListConstant::as_ListConstant() const
+	{
+		return this;
+	}
+
+	bool Any::isNumber(double &number) const
+	{
+		return false;
+	}
+
+	bool Any::isNumber(float &number) const
+	{
+		double buffer;
+		if (isNumber(buffer))
+		{
+			number = (float) buffer;
+			return true;
+		}
+		else return false;
+	}
+
+	bool Integer::isNumber(double &number) const
+	{
+		number = value;
+		return true;
+	}
+
+	bool Float::isNumber(double &number) const
+	{
+		number = value;
+		return true;
+	}
+
+	void HashedConstant::unhash()
+	{
+		const HashedConstant **link = &hashLink->hashLink;
+		while (*link != this)
+			link = &(*link)->hashLink;
+		*link = hashLink;
+	}
+
+	const ClicheShort *Empty::newCliche(const HashedConstant *&link, const Constant *a) const
+	{
+		return new (Heap::allocate(sizeof(ClicheShort))) EmptyClicheShort(link, this, a);
+	}
+
+	const ClicheLong *Empty::newCliche(const HashedConstant *&link, const Constant *const *a, size_t c) const
+	{
+		if (a[0] == &Empty::singleton)
+		{
+			switch(c)
+			{
+			case 2:
+				return new (Heap::allocate(sizeof(BindCliche1))) BindCliche1(link, this, a, c);
+			case 3:
+				return new (Heap::allocate(sizeof(BindCliche2))) BindCliche2(link, this, a, c);
+			case 4:
+				return new (Heap::allocate(sizeof(BindCliche3))) BindCliche3(link, this, a, c);
+			default:
+				return new
+					(Heap::allocate(sizeof(BindCliche) + (c - 1) * sizeof(Constant*)))
+					BindCliche(link, this, a, c);
+			}
+		}
+		else
+			return new
+			(Heap::allocate(sizeof(BindCliche) + (c - 1) * sizeof(Constant*)))
+			EmptyClicheLong(link, this, a, c);
+	}
+
+	const Any *EmptyClicheShort::node(const Constant *element) const
+	{
+		return new (Heap::allocate(sizeof(NodeExpressShort))) NodeExpressShort(*this, element);
+	}
+
+	const Any *EmptyClicheLong::node(const Any *const *element) const
+	{
+		return new
+			(Heap::allocate(sizeof(NodeExpressLong) + (count - 1) * sizeof(Any*)))
+			NodeExpressLong(*this, element);
+	}
+
+	const Any *EmptyClicheLong::node(const Constant *const *element) const
+	{
+		return new
+			(Heap::allocate(sizeof(NodeExpressLong) + (count - 1) * sizeof(Any*)))
+			NodeExpressLong(*this, (const Any *const *)element);
+	}
+
+	const ClicheLong *JumperHead::newCliche(const HashedConstant *&link, const Constant *const *a, size_t c) const
+	{
+		if (a[0] == &Empty::singleton)
+		{
+			switch(c)
+			{
+			case 2:
+				return new (Heap::allocate(sizeof(JumperCliche1))) JumperCliche1(link, this, a, c);
+			case 3:
+				return new (Heap::allocate(sizeof(JumperCliche2))) JumperCliche2(link, this, a, c);
+			case 4:
+				return new (Heap::allocate(sizeof(JumperCliche3))) JumperCliche3(link, this, a, c);
+			default:
+				return new
+					(Heap::allocate(sizeof(JumperCliche) + (c - 1) * sizeof(Constant*)))
+					JumperCliche(link, this, a, c);
+			}
+		}
+		else return Constant::newCliche(link, a, c);
+	}
+
+	const Any *JumperHead::node(const Constant *element) const
+	{
+		return new
+			(Heap::allocate(sizeof(NodeExpressTiny)))
+			NodeExpressTiny(*this, element);
+	}
+
+	size_t Integer::unlinkAndGetSize()
+	{
+		unhash();
+		return sizeof(Integer);
+	}
+
+	const Integer* Integer::as_Integer() const
+	{
+		return this;
+	}
+
+	const Integer *HashedConstant::hashLookup(long v) const
+	{ return hashLink->hashLookup(v);}
+	const Float *HashedConstant::hashLookup(double v) const
+	{ return hashLink->hashLookup(v);}
+	const PilsString *HashedConstant::hashLookup(const PILS_CHAR *text, size_t count) const
+	{ return hashLink->hashLookup(text, count); }
+	const ClicheShort *HashedConstant::hashLookup(const Constant *h, const Constant *a) const
+	{ return hashLink->hashLookup(h, a); }
+	const ClicheLong *HashedConstant::hashLookup(const Constant *h, const Constant *const *a, size_t c) const
+	{ return hashLink->hashLookup(h, a, c); }
+	const NodeConstantShort *HashedConstant::hashLookup(const ClicheShort &cliche, const Constant *value) const
+	{ return hashLink->hashLookup(cliche, value); }
+	const NodeConstantLong *HashedConstant::hashLookup(const ClicheLong &cliche, const Constant *const *value) const
+	{ return hashLink->hashLookup(cliche, value); }
+	const ListConstant *HashedConstant::hashLookup(const Constant *const *a, size_t c, bool copying) const
+	{ return hashLink->hashLookup(a, c, copying); }
+	const ReallySpecial *HashedConstant::hashLookup(SpecialLookup &lookup) const
+	{ return hashLink->hashLookup(lookup);}
+	const PilsColor *HashedConstant::hashLookupPilsColor(unsigned int v) const
+	{ return hashLink->hashLookupPilsColor(v);}
+
+	const Integer *Integer::get(long v)
+	{
+		if ((unsigned long)v < 0x10000)
+		{
+			const Integer *got = &ShortInteger::hashTable[v];
+			got->addReference();
+			return got;
+		}
+		else
+		{
+			const HashedConstant *&link = HashedConstant::hashChain(v);
+			Mutex::Lock lock(Heap::mutex);
+			return link->hashLookup(v);
+		}
+	}
+
+	const Integer *Integer::getInsideLock(long v)
+	{
+		if ((unsigned long)v < 0x10000)
+		{
+			const Integer *got = &ShortInteger::hashTable[v];
+			got->addReference();
+			return got;
+		}
+		else
+		{
+			const HashedConstant *&link = HashedConstant::hashChain(v);
+			return link->hashLookup(v);
+		}
+	}
+
+	const Step *Integer::caller(Runner &run, const Any &where_) const
+	{
+		return where_.calling(run, *this);
+	}
+
+	const Integer *Integer::hashLookup(long v) const
+	{
+		if (v == value && duplicateReference())	return this;
+		else return hashLink->hashLookup(v);
+	}
+
+	const Integer *ShortInteger::hashLookup(long v) const
+	{
+		/* End of hash chain - construct integer */
+		return new (Heap::allocate(sizeof(Integer))) Integer(((ShortInteger*)this)->hashLink, v);
+	}
+
+	const Number *Number::get(double v)
+	{
+		long truncated = (long)v;
+		if (v == (double)truncated)
+			return Integer::get(truncated);
+		unsigned long const *slice = (unsigned long const*)&v;
+		const HashedConstant *&link = HashedConstant::hashChain(slice[0] + slice[1]);
+		Mutex::Lock lock (Heap::mutex);
+		return link->hashLookup(v);
+	}
+
+	const Float *ShortInteger::hashLookup(double v) const
+	{
+		/* End of hash chain - construct float */
+		return new (Heap::allocate(sizeof(const Float))) Float(hashLink, v);
+	}
+
+	size_t Float::unlinkAndGetSize()
+	{
+		unhash();
+		return sizeof(Float);
+	}
+
+	const Float *Float::hashLookup(double v) const
+	{
+		if (v == value && duplicateReference()) return this;
+		else return hashLink->hashLookup(v);
+	}
+
+	void Float::Split::resetAndReadIntegerDigits(const unsigned char *&at, const unsigned char *end)
+	{
+		mantissa = 0;
+		exponent = 0;
+		while (at < end && *at >= '0' && *at <= '9')
+		{
+			if (mantissa < 100000000000000000LL)
+			{
+				mantissa *= 10;
+				mantissa += *at++ - '0';
+			}
+			else
+			{
+				at++;
+				exponent++;
+			}
+		}
+	}
+
+	void Float::Split::readFractionDigits(const unsigned char *&at, const unsigned char *end)
+	{
+		while (at < end && *at >= '0' && *at <= '9')
+		{
+			if (mantissa < 100000000000000000LL)
+			{
+				exponent--;
+				mantissa *= 10;
+				mantissa += *at++ - '0';
+			}
+		}
+	}
+
+	void Float::Split::resetAndReadHexadecimalDigits(const unsigned char *&at, const unsigned char *end)
+	{
+		mantissa = 0;
+		exponent = 0;
+		for (; at < end; at++)
+		{
+			switch (*at)
+			{
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9':
+				mantissa <<= 4;
+				mantissa += *at - '0';
+				continue;
+			case 'a':
+			case 'b':
+			case 'c':
+			case 'd':
+			case 'e':
+			case 'f':
+				mantissa <<= 4;
+				mantissa += *at - 'a' + 10;
+				continue;
+			default:
+				return;
+			}
+		}
+	}
+
+	CountedConstant::CountedConstant(const HashedConstant *&link, size_t c)
+		: HashedConstant(link), count(Integer::getInsideLock((long)c))
+	{
+	}
+
+	const PilsColor *PilsColor::get(unsigned int v)
+	{
+		const HashedConstant *&link = HashedConstant::hashChain((long)v);
+		Mutex::Lock lock(Heap::mutex);
+		return link->hashLookupPilsColor(v);
+	}
+
+	const PilsColor *PilsColor::hashLookupPilsColor(unsigned int v) const
+	{
+		if (v == value && duplicateReference())
+			return this;
+		else return hashLink->hashLookupPilsColor(v);
+	}
+
+	const NodeConstantShort *PilsColor::newSpecializeNode(const HashedConstant *&link, const ClicheShort &cliche) const
+	{
+		return cliche.newNode(link, this);
+	}
+
+	size_t PilsColor::unlinkAndGetSize()
+	{
+		unhash();
+		return sizeof(PilsColor);
+	}
+
+	const PilsString *PilsString::get(const PILS_CHAR *text)
+	{
+		return get(text, strlen /*wcslen*/(text));
+	}
+
+	const HashedConstant *&PilsString::hashChain(const PILS_CHAR *text, size_t count)
+	{
+		unsigned long hash = 7913;
+		for (size_t index = 0; index < count; index++)
+		{
+			hash += text[index];
+			hash *= 47;
+		}
+		return HashedConstant::hashChain(hash);
+	}
+
+	const PilsString *PilsString::get(const PILS_CHAR *text, size_t count)
+	{
+		const HashedConstant *&chain = hashChain(text, count);
+		Mutex::Lock lock (Heap::mutex);
+		return chain->hashLookup(text, count);
+	}
+
+	PilsString::PilsString(const PILS_CHAR *text, size_t count)
+		: CountedConstant(hashChain(text, count), count), value()
+	{
+		memcpy((void*)&value[0], text, count * sizeof(PILS_CHAR));
+		(PILS_CHAR&)value[count] = 0;
+	}
+
+	const PilsString *PilsString::hashLookup(const PILS_CHAR *text, size_t c) const
+	{
+		if ((size_t)count->value != c) goto bad;
+		for (size_t i = 0; i < c; i++)
+		{
+			if (text[i] != value[i])
+				goto bad;
+		}
+		if (duplicateReference())
+		{
+			return this;
+		}
+	bad:
+		return hashLink->hashLookup(text, c);
+	}
+
+	const PilsString *ShortInteger::hashLookup(const PILS_CHAR *text, size_t c) const
+	{
+		void *buffer = Heap::allocate(sizeof(CountedConstant) + sizeof(PILS_CHAR) + c * sizeof(PILS_CHAR));
+		return new (buffer) PilsString(hashLink, text, c);
+	}
+
+	PilsString::PilsString(const HashedConstant *&link, const PILS_CHAR *text, size_t c)
+		: CountedConstant(link, c), value()
+	{
+		memcpy((void*)value, text, c * sizeof(PILS_CHAR));
+		(PILS_CHAR&)value[c] = 0;
+	}
+
+	const PilsString *PilsString::as_String() const
+	{
+		return this;
+	}
+
+	NameSkin PilsString::nameSkin() const
+	{
+		//Is this string a valid PILS name/operator/relation?
+
+		size_t c = count->value;
+		if (c == 0) return NAMESKIN_STRING; // empty string
+		switch (value[0])
+		{
+		case '0': // nonnegative numbers
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+		case '.': // initial full stop
+		case '#': // color etc.
+			return NAMESKIN_STRING;
+		case '-':
+			if (c > 1 && value[1] >= '0' && value[1] <= '9')
+				return NAMESKIN_STRING; // negative number
+			break;
+		}
+
+		for (size_t i = 0; i < c; i++)
+		{
+			// multibyte characters must be well-formed
+			if (value[i] & 0x80)
+			{
+				unsigned int shifter = value[i];
+				if ((shifter & 0x40) == 0) return NAMESKIN_STRING;
+				for (;shifter & 0x40; shifter <<= 1)
+				{
+					if (i == c || (value[++i] & 0xC0) != 0x80) return NAMESKIN_STRING;
+				}
+			}
+			// space, punctuation, non-printable characters etc.
+			else if (value[i] <= '"') return NAMESKIN_STRING;
+			else switch (value[i])
+			{
+				case '(':
+				case ')':
+				case ',':
+				case ':':
+				case ';':
+				case '?':
+				case '[':
+				case ']':
+				case '{':
+				case '|':
+				case '}':
+				case 0x7F:
+					return NAMESKIN_STRING;
+			}
+		}
+
+		switch (value[c - 1])
+		{
+		case '#':
+		case '$':
+		case '*':
+		case '%':
+		case '&':
+		case '/':
+		case '\\':
+		case '^':
+			return NAMESKIN_OPERATOR;
+
+		case '+':
+		case '-':
+			return NAMESKIN_ADDITION;
+
+		case '<':
+		case '=':
+		case '>':
+		case '~':
+			return NAMESKIN_RELATION;
+
+		case '\'':
+			for (int cc = c - 1; cc--;)
+			{
+				switch (value[cc])
+				{
+				case '\'':
+					break;
+				case '+':
+				case '-':
+				case '#':
+				case '$':
+				case '*':
+				case '%':
+				case '&':
+				case '/':
+				case '\\':
+				case '^':
+				case '<':
+				case '=':
+				case '>':
+				case '~':
+					return NAMESKIN_ASTERISKED;
+				default:
+					return NAMESKIN_NAME;
+				}
+			}
+			return NAMESKIN_ASTERISKED;
+		default:
+			return NAMESKIN_NAME;
+		}
+	}
+
+	size_t PilsString::unlinkAndGetSize()
+	{
+		/* Note: size must be computed before count is released */
+		size_t size = sizeof(CountedConstant) + sizeof(PILS_CHAR) + count->value * sizeof(PILS_CHAR);
+		count->releaseFrom(*this);
+		unhash();
+		return size;
+	}
+
+	Cliche::Cliche(const HashedConstant *&link, const Constant *h, const Constant *const *a, size_t c)
+		: HashedConstant(link), count(c), head(h)
+	{
+		for (size_t i = 0; i < c; i++)
+			attributes[i] = a[i];
+	}
+
+	Cliche::Cliche(const Constant *h, const Constant *a1, const Constant *a2)
+		: HashedConstant(hashChain(h, a1, a2)), count(2), head(h)
+	{
+		attributes[0] = a1;
+		attributes[1] = a2;
+	}
+
+	Cliche::Cliche(const Constant *h, const Constant *a1, const Constant *a2, const Constant *a3)
+		: HashedConstant(hashChain(h, a1, a2, a3)), count(3), head(h)
+	{
+		attributes[0] = a1;
+		attributes[1] = a2;
+		attributes[2] = a3;
+	}
+
+	Cliche::Cliche(const Constant *h, const Constant *a1, const Constant *a2, const Constant *a3, const Constant *a4)
+		: HashedConstant(hashChain(h, a1, a2, a3, a4)), count(4), head(h)
+	{
+		attributes[0] = a1;
+		attributes[1] = a2;
+		attributes[2] = a3;
+		attributes[3] = a4;
+	}
+
+	const HashedConstant *&Cliche::hashChain(const Constant *h, const Constant *a1, const Constant *a2)
+	{
+		unsigned long hash = (unsigned long)reinterpret_cast<size_t>(h);
+		hash *= 3;
+		hash += (unsigned long)reinterpret_cast<size_t>(a1);
+		hash *= 3;
+		hash += (unsigned long)reinterpret_cast<size_t>(a2);
+		return HashedConstant::hashChain(hash);
+	}
+
+	const HashedConstant *&Cliche::hashChain(const Constant *h, const Constant *a1, const Constant *a2, const Constant *a3)
+	{
+		unsigned long hash = (unsigned long)reinterpret_cast<size_t>(h);
+		hash *= 3;
+		hash += (unsigned long)reinterpret_cast<size_t>(a1);
+		hash *= 3;
+		hash += (unsigned long)reinterpret_cast<size_t>(a2);
+		hash *= 3;
+		hash += (unsigned long)reinterpret_cast<size_t>(a3);
+		return HashedConstant::hashChain(hash);
+	}
+
+	const HashedConstant *&Cliche::hashChain(const Constant *h, const Constant *a1, const Constant *a2, const Constant *a3, const Constant *a4)
+	{
+		unsigned long hash = (unsigned long)reinterpret_cast<size_t>(h);
+		hash *= 3;
+		hash += (unsigned long)reinterpret_cast<size_t>(a1);
+		hash *= 3;
+		hash += (unsigned long)reinterpret_cast<size_t>(a2);
+		hash *= 3;
+		hash += (unsigned long)reinterpret_cast<size_t>(a3);
+		hash *= 3;
+		hash += (unsigned long)reinterpret_cast<size_t>(a4);
+		return HashedConstant::hashChain(hash);
+	}
+
+	const Cliche *Any::as_Cliche() const
+	{
+		return NULL;
+	}
+
+	const Cliche *Cliche::as_Cliche() const
+	{
+		return this;
+	}
+
+	const Constant *Cliche::lookupNonempty(const NodeConstant *node, size_t start, const Constant *key) const
+	{
+		const Constant *const *end = attributes + count;
+		const Constant *const *at = std::upper_bound(attributes + start, end, key);
+		if (at > attributes && *--at == key)
+			return node->element[at - attributes];
+		else return NULL;
+	}
+
+	const Any *Cliche::lookupNonempty(const NodeExpress *node, size_t start, const Constant *key) const
+	{
+		const Constant *const *end = attributes + count;
+		const Constant *const *at = std::upper_bound(attributes + start, end, key);
+		if (at > attributes && *--at == key)
+			return node->element[at - attributes];
+		else return NULL;
+	}
+
+	const Constant *NodeConstant::getAttribute(const Constant &name) const
+	{
+		return cliche->lookupNonempty(this, 0, &name);
+	}
+
+	const Constant *NodeConstantTrailer::getAttribute(const Constant &name) const
+	{
+		if (&name == &Empty::singleton)	return element[0];
+		else return cliche->lookupNonempty(this, 1, &name);
+	}
+
+	const Any *NodeExpress::getAttribute(const Constant &name) const
+	{
+		return cliche->lookupNonempty(this, 0, &name);
+	}
+
+	const Any *NodeExpressTrailer::getAttribute(const Constant &name) const
+	{
+		if (&name == &Empty::singleton)	return element[0];
+		else return cliche->lookupNonempty(this, 1, &name);
+	}
+
+	const Any *ClicheLong::node(const Any *const *element) const
+	{
+		for(size_t i = 0; i < count; i++)
+		{
+			if(element[i]->as_Constant() == NULL)
+			{
+				return new
+					(Heap::allocate(sizeof(NodeExpressLong) + (count - 1) * sizeof(Constant*)))
+					NodeExpressLong((const ClicheLong&)*this, element);
+			}
+		}
+		return node((const Constant *const *)(void *const *)element);
+	}
+
+	const Any *ClicheLong::node(const Constant *const *element) const
+	{
+		return nodeConstant(element);
+	}
+
+	const Any *ClicheTrailer::node(const Any *const *element) const
+	{
+		for(size_t i = 0; i < count; i++)
+		{
+			if(element[i]->as_Constant() == NULL)
+			{
+				return new
+					(Heap::allocate(sizeof(NodeExpressTrailer) + (count - 1) * sizeof(Constant*)))
+					const NodeExpressTrailer((const ClicheTrailer&)*this, element);
+			}
+		}
+		return ((const ClicheLong*)this)->node((const Constant *const *)(void*const *)element);
+	}
+
+	const NodeConstant *Cliche::nodeConstant(const Constant *const *attributes) const
+	{
+		return nodifyingConstant(attributes);
+	}
+
+	const ClicheShort *Constant::clichefy(const Constant *attribute) const
+	{
+		if (attribute == &Empty::singleton)
+		{
+			attribute->unduplicateReference();
+			return clichefy();
+		}
+		Mutex::Lock lock (Heap::mutex);
+		return clichefying(attribute);
+	}
+
+	const ClicheShort *Constant::clichefying(const Constant *attribute) const
+	{
+		return ClicheShort::hashChain(this, attribute)->hashLookup(this, attribute);
+	}
+
+	const HashedConstant *&ClicheShort::hashChain(const Constant *h, const Constant *a)
+	{
+		unsigned long hash =
+			(unsigned long)reinterpret_cast<size_t>(h) * 3
+			+ (unsigned long)reinterpret_cast<size_t>(a);
+		return HashedConstant::hashChain(hash);
+	}
+
+	const ClicheShort *ClicheShort::hashLookup(const Constant *h, const Constant *a) const
+	{
+		if (head == h && attributes[0] == a && duplicateReference()) return this;
+		else return hashLink->hashLookup(h, a);
+	}
+
+	const ClicheShort *Constant::newCliche(const HashedConstant *&link, const Constant *a) const
+	{
+		return new (Heap::allocate(sizeof(ClicheShort))) const ClicheShort(link, this, a);
+	}
+
+	const ClicheShort* ClicheShort::as_ClicheShort() const
+	{
+		return this;
+	}
+
+	const Any *ClicheShort::node(const Any *const *element) const
+	{
+		return node(element[0]);
+	}
+
+	const Any *ClicheShort::node(const Constant *const *element) const
+	{
+		return node(element[0]);
+	}
+
+	const Any *ClicheShort::node(const Any *element) const
+	{
+		const Constant *constant = element->as_Constant();
+		if (constant) return node(constant);
+		else return node((const Express *)element);
+	}
+
+	const Any *ClicheShort::node(const Constant *element) const
+	{
+		return nodeConstant(element);
+	}
+
+	const NodeExpressShort *ClicheShort::node(const Express *element) const
+	{
+		return new
+			(Heap::allocate(sizeof(NodeExpressShort)))
+			const NodeExpressShort(*this, element);
+	}
+
+	const ClicheShort *ShortInteger::hashLookup(const Constant *h, const Constant *a) const
+	{
+		return h->newCliche(hashLink, a);
+	}
+
+	void ClicheShort::unduplicateChildren() const
+	{
+		head->unduplicateReference();
+		attributes[0]->unduplicateReference();
+	}
+
+	size_t ClicheShort::unlinkAndGetSize()
+	{
+		unhash();
+		head->releaseFrom(*this);
+		attributes[0]->releaseFrom(*this);
+		return sizeof(ClicheShort);
+	}
+
+	const NodeConstant *ClicheShort::nodifyingConstant(const Constant *const *attributes) const
+	{
+		return nodeConstant(attributes[0]);
+	}
+
+	const ClicheTiny *Constant::clichefy() const
+	{
+		Mutex::Lock lock (Heap::mutex);
+		return clichefying();
+	}
+
+	const ClicheTiny *Constant::clichefying() const
+	{
+		Empty::singleton.addReference();
+		return (const ClicheTiny*)clichefying(&Empty::singleton);
+	}
+
+	const ClicheTiny *HashedConstant::clichefying() const
+	{
+		const ClicheTiny *next = hashLink->as_ClicheTiny();
+		if (next != NULL && next->head == this && next->duplicateReference())
+			return next;
+		else return newCliche();
+	}
+
+	const ClicheTiny *HashedConstant::newCliche() const
+	{
+		return new (Heap::allocate(sizeof(ClicheTiny))) const ClicheTiny(this);
+	}
+
+	ClicheTiny::ClicheTiny(const HashedConstant *h)
+		:  ClicheShort(h->hashLink, h, &Empty::singleton)
+	{
+		Empty::singleton.addReference();
+	}
+
+	const ClicheTiny *ClicheTiny::as_ClicheTiny() const
+	{
+		return this;
+	}
+
+	const NodeExpressShort *ClicheTiny::node(const Express *element) const
+	{
+		return new
+			(Heap::allocate(sizeof(NodeExpressTiny)))
+			NodeExpressTiny(*this, element);
+	}
+
+	void ClicheTiny::unduplicateChildren() const
+	{
+		head->unduplicateReference();
+	}
+
+	const ClicheShort *ClicheTiny::hashLookup(const Constant *h, const Constant *a) const
+	{
+		return hashLink->hashLookup(h, a);
+	}
+
+	const ClicheLong *Constant::clichefy(const Constant *const *attribute, size_t count) const
+	{
+		Mutex::Lock lock (Heap::mutex);
+		return clichefying(attribute, count);
+	}
+
+	const ClicheLong *Constant::clichefying(const Constant *const *attribute, size_t count) const
+	{
+		unsigned long hash = (unsigned long)reinterpret_cast<size_t>(this);
+		for (size_t i = 0; i < count; i++)
+		{
+			hash *= 3;
+			hash += (unsigned long)reinterpret_cast<size_t>(attribute[i]);
+		}
+		hash += hash >> 16;
+		return HashedConstant::hashTable[(unsigned short)(hash & 0xFFFF)].hashLink->hashLookup(this, attribute, count);
+	}
+
+	const ClicheLong *ShortInteger::hashLookup(const Constant *h, const Constant *const *a, size_t c) const
+	{
+		return h->newCliche(hashLink, a, c);
+	}
+
+	const ClicheLong *ClicheLong::hashLookup(const Constant *h, const Constant *const *a, size_t c) const
+	{
+		if (c == count
+			&& h == head
+			&& memcmp(&attributes, a, c * sizeof(Constant*)) == 0
+			&& duplicateReference())
+			return this;
+		else return hashLink->hashLookup(h, a, c);
+	}
+
+	const ClicheLong *Constant::newCliche(const HashedConstant *&link, const Constant *const *a, size_t c) const
+	{
+		void *chunk = Heap::allocate(sizeof(ClicheLong) + (c - 1) * sizeof(Constant*));
+		if (a[0] == &Empty::singleton)
+			return	new (chunk) const ClicheTrailer(link, this, a, c);
+		else return	new (chunk) const ClicheLong(link, this, a, c);
+	}
+
+	ClicheLong::ClicheLong(const HashedConstant *&link, const Constant *h, const Constant *const *a, size_t c)
+		:  Cliche(link, h, a, c)
+	{}
+
+	void ClicheLong::unduplicateChildren() const
+	{
+		head->unduplicateReference();
+		for (size_t i = 0; i < count; i++)
+			attributes[i]->unduplicateReference();
+	}
+
+	size_t ClicheLong::unlinkAndGetSize()
+	{
+		unhash();
+		head->releaseFrom(*this);
+		for (size_t i = 0; i < count; i++)
+			attributes[i]->releaseFrom(*this);
+		return sizeof(ClicheLong) + (count - 1) * sizeof(Constant*);
+	}
+
+	const NodeConstant *ClicheLong::nodifyingConstant(const Constant *const *attributes) const
+	{
+		return nodeConstant(attributes);
+	}
+
+	const NodeConstantLong *ClicheLong::nodeConstant(const Constant *const *attributes) const
+	{
+		unsigned long hash = (unsigned long)reinterpret_cast<size_t>(this);
+		for (size_t i = 0; i < count; i++)
+		{
+			hash *= 5;
+			hash += (unsigned long)reinterpret_cast<size_t>(attributes[i]);
+		}
+		const HashedConstant *&link = HashedConstant::hashChain(hash);
+		Mutex::Lock lock (Heap::mutex);
+		return link->hashLookup(*this, attributes);
+	}
+
+	PokerClicheShort::PokerClicheShort(const HashedConstant *&link, const Constant *a)
+		:  ClicheShort(link, &PokerHead::singleton, a)
+	{
+		PokerHead::singleton.addReference();
+	}
+
+	const Any *PokerClicheShort::node(const Constant *element) const
+	{
+		return new
+			(Heap::allocate(sizeof(PokerShort)))
+			const PokerShort(*this, element);
+	}
+
+	const NodeExpressShort *PokerClicheShort::node(const Express *element) const
+	{
+		return new
+			(Heap::allocate(sizeof(PokerShort)))
+			const PokerShort(*this, element);
+	}
+
+	PokerClicheLong::PokerClicheLong(const HashedConstant *&link, const Constant *const *a, size_t c)
+		:  ClicheLong(link, &PokerHead::singleton, a, c)
+	{
+		PokerHead::singleton.addReference();
+	}
+
+	const Any *PokerClicheLong::node(const Constant *const *element) const
+	{
+		return node((const Any*const *)element);
+	}
+
+	const Any *PokerClicheLong::node(const Any *const *element) const
+	{
+		return new
+			(Heap::allocate(sizeof(PokerLong) + (count - 1) * sizeof(Any*)))
+			const PokerLong(*this, element);
+	}
+
+	PokerClicheTrailer::PokerClicheTrailer(const HashedConstant *&link, const Constant *const *a, size_t c)
+		: ClicheTrailer(link, &PokerHead::singleton, a, c)
+	{
+		PokerHead::singleton.addReference();
+	}
+
+	const Any *PokerClicheTrailer::node(const Constant *const *element) const
+	{
+		return node((const Any *const *)element);
+	}
+
+	const Any *PokerClicheTrailer::node(const Any *const *element) const
+	{
+		return new
+			(Heap::allocate(sizeof(PokerTrailer) + (count - 1) * sizeof(Any*)))
+			const PokerTrailer(*this, element);
+	}
+
+	const Any* BindCliche::node(const Constant *const *element) const
+	{
+		return node((const Any*const *)element);
+	}
+
+	const Any* BindCliche::node(const Any *const *element) const
+	{
+		return new
+			(Heap::allocate(sizeof(Bind) + (count - 1) * sizeof(Any*)))
+			Bind(*this, element);
+	}
+
+	const Any* BindCliche1::node(const Any *const *element) const
+	{
+		return new
+			(Heap::allocate(sizeof(Bind1)))
+			Bind1(*this, element);
+	}
+
+	const Any* BindCliche2::node(const Any *const *element) const
+	{
+		return new
+			(Heap::allocate(sizeof(Bind2)))
+			Bind2(*this, element);
+	}
+
+	const Any* BindCliche3::node(const Any *const *element) const
+	{
+		return new
+			(Heap::allocate(sizeof(Bind3)))
+			Bind3(*this, element);
+	}
+
+	const Any* JumperCliche::node(const Any *const *element) const
+	{
+		return new
+			(Heap::allocate(sizeof(Bind) + (count - 1) * sizeof(Any*)))
+			Jumper(*this, element);
+	}
+
+	const Any* JumperCliche1::node(const Any *const *element) const
+	{
+		return new
+			(Heap::allocate(sizeof(Jumper1)))
+			Jumper1(*this, element);
+	}
+
+	const Any* JumperCliche2::node(const Any *const *element) const
+	{
+		return new
+			(Heap::allocate(sizeof(Jumper2)))
+			Jumper2(*this, element);
+	}
+
+	const Any* JumperCliche3::node(const Any *const *element) const
+	{
+		return new
+			(Heap::allocate(sizeof(Jumper3)))
+			Jumper3(*this, element);
+	}
+
+	NodeConstant::NodeConstant(const HashedConstant *&link, const Cliche &c)
+		: HashedConstant(link), cliche(&c)
+	{
+		/* The node cliche is uncounted - most nodes are created
+		   from known cliches. */
+		c.addReference();
+	}
+
+	const NodeConstant *NodeConstant::as_NodeConstant() const
+	{
+		return this;
+	}
+
+	bool NodeConstant::isNode(const Any *const *&element, const Cliche *&cliche) const
+	{
+		element = (const Any *const *)this->element;
+		cliche = this->cliche;
+		return true;
+	}
+
+	const NodeConstantShort *NodeConstantShort::hashLookup(const ClicheShort &c, const Constant* v) const
+	{
+		if (&c == cliche && v == element[0] && duplicateReference()) return this;
+		else return hashLink->hashLookup(c, v);
+	}
+
+	const NodeConstantShort *ShortInteger::hashLookup(const ClicheShort &cliche, const Constant *value) const
+	{
+		return value->newSpecializeNode(hashLink, cliche);
+	}
+
+	const NodeConstantShort *Integer::newSpecializeNode(const HashedConstant *&link, const ClicheShort &cliche) const
+	{ return cliche.newNode(link, this); }
+	const NodeConstantShort *Float::newSpecializeNode(const HashedConstant *&link, const ClicheShort &cliche) const
+	{ return cliche.newNode(link, this); }
+	const NodeConstantShort *Timestamp::newSpecializeNode(const HashedConstant *&link, const ClicheShort &cliche) const
+	{ return cliche.newNode(link, this); }
+	const NodeConstantShort *Duration::newSpecializeNode(const HashedConstant *&link, const ClicheShort &cliche) const
+	{ return cliche.newNode(link, this); }
+	const NodeConstantShort *PilsDate::newSpecializeNode(const HashedConstant *&link, const ClicheShort &cliche) const
+	{ return cliche.newNode(link, this); }
+	const NodeConstantShort *PilsString::newSpecializeNode(const HashedConstant *&link, const ClicheShort &cliche) const
+	{ return cliche.newNode(link, this); }
+	const NodeConstantShort *ListConstant::newSpecializeNode(const HashedConstant *&link, const ClicheShort &cliche) const
+	{ return cliche.newNode(link, this); }
+	const NodeConstantShort *Cliche::newSpecializeNode(const HashedConstant *&link, const ClicheShort &cliche) const
+	{ return cliche.newNode(link, this); }
+	const NodeConstantShort *NodeConstant::newSpecializeNode(const HashedConstant *&link, const ClicheShort &cliche) const
+	{ return cliche.newNode(link, this); }
+	const NodeConstantShort *Special::newSpecializeNode(const HashedConstant *&link, const ClicheShort &cliche) const
+	{ return cliche.newNode(link, this); }
+
+	const Constant *Special::type() const
+	{
+		return NULL;
+	}
+
+	const NodeConstantShort *ClicheShort::newNode(const HashedConstant *&link, const Integer *value) const
+	{
+		return
+			new (Heap::allocate(sizeof(NodeConstantShort)))
+			const NodeConstantShort(link, *this, value);
+	}
+
+	const NodeConstantShort *ClicheShort::newNode(const HashedConstant *&link, const Float *value) const
+	{
+		return
+			new (Heap::allocate(sizeof(NodeConstantShort)))
+			const NodeConstantShort(link, *this, value);
+	}
+
+	const NodeConstantShort *ClicheShort::newNode(const HashedConstant *&link, const PilsColor *value) const
+	{
+		return
+			new (Heap::allocate(sizeof(NodeConstantShort)))
+			const NodeConstantShort(link, *this, value);
+	}
+
+	const NodeConstantShort *ClicheShort::newNode(const HashedConstant *&link, const Timestamp *value) const
+	{
+		return
+			new (Heap::allocate(sizeof(NodeConstantShort)))
+			const NodeConstantShort(link, *this, value);
+	}
+
+	const NodeConstantShort *ClicheShort::newNode(const HashedConstant *&link, const Duration *value) const
+	{
+		return
+			new (Heap::allocate(sizeof(NodeConstantShort)))
+			const NodeConstantShort(link, *this, value);
+	}
+
+	const NodeConstantShort *ClicheShort::newNode(const HashedConstant *&link, const PilsDate *value) const
+	{
+		return
+			new (Heap::allocate(sizeof(NodeConstantShort)))
+			const NodeConstantShort(link, *this, value);
+	}
+
+	const NodeConstantShort *ClicheShort::newNode(const HashedConstant *&link, const PilsString *value) const
+	{
+		return
+			new (Heap::allocate(sizeof(NodeConstantShort)))
+			const NodeConstantShort(link, *this, value);
+	}
+
+	const NodeConstantShort *ClicheShort::newNode(const HashedConstant *&link, const Cliche *value) const
+	{
+		return
+			new (Heap::allocate(sizeof(NodeConstantShort)))
+			const NodeConstantShort(link, *this, value);
+	}
+
+	const NodeConstantShort *ClicheShort::newNode(const HashedConstant *&link, const NodeConstant *value) const
+	{
+		return
+			new (Heap::allocate(sizeof(NodeConstantShort)))
+			const NodeConstantShort(link, *this, value);
+	}
+
+	const NodeConstantShort *ClicheShort::newNode(const HashedConstant *&link, const ListConstant *value) const
+	{
+		return
+			new (Heap::allocate(sizeof(NodeConstantShort)))
+			const NodeConstantShort(link, *this, value);
+	}
+
+	const NodeConstantShort *ClicheShort::newNode(const HashedConstant *&link, const Special *value) const
+	{
+		return
+			new (Heap::allocate(sizeof(NodeConstantShort)))
+			const NodeConstantShort(link, *this, value);
+	}
+
+	const NodeConstantShort *ClicheTiny::newNode(const HashedConstant *&link, const Integer *value) const
+	{
+		return
+			new (Heap::allocate(sizeof(NodeConstantTiny)))
+			NodeConstantTiny(link, *this, value);
+	}
+
+	const NodeConstantShort *ClicheTiny::newNode(const HashedConstant *&link, const Float *value) const
+	{
+		return
+			new (Heap::allocate(sizeof(NodeConstantTiny)))
+			NodeConstantTiny(link, *this, value);
+	}
+
+	const NodeConstantShort *ClicheTiny::newNode(const HashedConstant *&link, const PilsColor *value) const
+	{
+		return
+			new (Heap::allocate(sizeof(NodeConstantTiny)))
+			NodeConstantTiny(link, *this, value);
+	}
+
+	const NodeConstantShort *ClicheTiny::newNode(const HashedConstant *&link, const Timestamp *value) const
+	{
+		return
+			new (Heap::allocate(sizeof(NodeConstantTiny)))
+			NodeConstantTiny(link, *this, value);
+	}
+
+	const NodeConstantShort *ClicheTiny::newNode(const HashedConstant *&link, const Duration *value) const
+	{
+		return
+			new (Heap::allocate(sizeof(NodeConstantTiny)))
+			NodeConstantTiny(link, *this, value);
+	}
+
+	const NodeConstantShort *ClicheTiny::newNode(const HashedConstant *&link, const PilsDate *value) const
+	{
+		return
+			new (Heap::allocate(sizeof(NodeConstantTiny)))
+			NodeConstantTiny(link, *this, value);
+	}
+
+	const NodeConstantShort *ClicheTiny::newNode(const HashedConstant *&link, const PilsString *value) const
+	{
+		return
+			new (Heap::allocate(sizeof(NodeConstantTiny)))
+			NodeConstantTiny(link, *this, value);
+	}
+
+	const NodeConstantShort *ClicheTiny::newNode(const HashedConstant *&link, const Cliche *value) const
+	{
+		return
+			new (Heap::allocate(sizeof(NodeConstantTiny)))
+			NodeConstantTiny(link, *this, value);
+	}
+
+	const NodeConstantShort *ClicheTiny::newNode(const HashedConstant *&link, const NodeConstant *value) const
+	{
+		return
+			new (Heap::allocate(sizeof(NodeConstantTiny)))
+			NodeConstantTiny(link, *this, value);
+	}
+
+	const NodeConstantShort *ClicheTiny::newNode(const HashedConstant *&link, const ListConstant *value) const
+	{
+		return
+			new (Heap::allocate(sizeof(NodeConstantTiny)))
+			NodeConstantTiny(link, *this, value);
+	}
+
+	const NodeConstantShort *ClicheTiny::newNode(const HashedConstant *&link, const Special *value) const
+	{
+		return
+			new (Heap::allocate(sizeof(NodeConstantTiny)))
+			NodeConstantTiny(link, *this, value);
+	}
+
+	NodeConstantShort::NodeConstantShort(const HashedConstant *&link, const ClicheShort &cliche, const Constant *v)
+		: NodeConstant(link, cliche)
+	{
+		element[0] = v;
+	}
+
+	void NodeConstantShort::unduplicateChildren() const
+	{
+		element[0]->unduplicateReference();
+	}
+
+	size_t NodeConstantShort::unlinkAndGetSize()
+	{
+		unhash();
+		cliche->releaseFrom(*this);
+		element[0]->releaseFrom(*this);
+		return sizeof(NodeConstantShort);
+	}
+
+	const NodeConstantShort *ClicheShort::nodeConstant(const Constant *value) const
+	{
+		size_t hash = reinterpret_cast<size_t>(this) - 5 * reinterpret_cast<size_t>(value);
+		const HashedConstant *&link = HashedConstant::hashChain(hash);
+		Mutex::Lock lock (Heap::mutex);
+		return link->hashLookup(*this, value);
+	}
+
+	const NodeConstantTiny *NodeConstantTiny::as_NodeConstantTiny() const
+	{
+		return this;
+	}
+
+	const NodeConstantLong *NodeConstantLong::hashLookup(const ClicheLong &c, const Constant *const *v) const
+	{
+		if (&c == cliche && memcmp(v, &element, c.count * sizeof(Constant*)) == 0 && duplicateReference())
+			return this;
+		else return hashLink->hashLookup(c, v);
+	}
+
+	const NodeConstantLong *ShortInteger::hashLookup(const ClicheLong &cliche, const Constant *const *value) const
+	{
+		return cliche.newNodeConstant(hashLink, value);
+	}
+
+	const NodeConstantLong *ClicheLong::newNodeConstant(const HashedConstant *&link, const Constant *const *value) const
+	{
+		return
+			new (Heap::allocate(sizeof(NodeConstantLong) + (count - 1) * sizeof(Constant*)))
+			const NodeConstantLong(link, *this, value);
+	}
+
+	const NodeConstantLong *ClicheTrailer::newNodeConstant(const HashedConstant *&link, const Constant *const *value) const
+	{
+		return
+			new (Heap::allocate(sizeof(NodeConstantTrailer) + (count - 1) * sizeof(Constant*)))
+			const NodeConstantTrailer(link, *this, value);
+	}
+
+
+	NodeConstantLong::NodeConstantLong(const HashedConstant *&link, const ClicheLong &cliche, const Constant *const *v)
+		: NodeConstant(link, cliche)
+	{
+		for (size_t i = 0; i < cliche.count; i++)
+			element[i] = v[i];
+	}
+
+	void NodeConstantLong::unduplicateChildren() const
+	{
+		size_t count = cliche->count;
+		for (size_t i = 0; i < count; i++)
+			element[i]->unduplicateReference();
+	}
+
+	size_t NodeConstantLong::unlinkAndGetSize()
+	{
+		unhash();
+		size_t count = cliche->count;
+		cliche->releaseFrom(*this);
+		for (size_t i = 0; i < count; i++)
+			element[i]->releaseFrom(*this);
+		return sizeof(NodeConstantShort) + (count - 1)*sizeof(Constant*);
+	}
+
+	const ListConstant *ListConstant::hashLookup(const Constant *const *a, size_t c, bool copying) const
+	{
+		if (c == (size_t)count->value && memcmp(a, &element, c * sizeof(Constant*)) == 0 && duplicateReference(copying))
+			return this;
+		else return hashLink->hashLookup(a, c, copying);
+	}
+
+	const ListConstant *ShortInteger::hashLookup(const Constant *const *a, size_t c, bool copying) const
+	{
+		size_t size = sizeof(CountedConstant) + c * sizeof(Constant*);
+		return new (Heap::allocate(size)) const ListConstant(hashLink, a, c, copying);
+	}
+
+	ListConstant::ListConstant(const HashedConstant *&link, const Constant *const *a, size_t c, bool copying)
+		: CountedConstant(link, c)
+	{
+		if (copying)
+			for (size_t i = 0; i < c; i++)
+				(element[i] = a[i])->addReference();
+		else
+			memcpy(&element, a, c * sizeof(Constant*));
+	}
+
+	const ListConstant* ListConstant::get(const Constant *const *e, size_t c, bool copying)
+	{
+		if (c)
+		{
+			unsigned long hash = 7913991;
+			for (size_t i = 0; i < c; i++)
+			{
+				hash += (unsigned long)reinterpret_cast<size_t>(e[i]);
+				hash *= 19;
+			}
+			const HashedConstant *&link = HashedConstant::hashChain(hash);
+			Mutex::Lock lock (Heap::mutex);
+			return link->hashLookup(e, c, copying);
+		}
+		else
+		{
+			Empty::singleton.addReference();
+			return &Empty::singleton;
+		}
+	}
+
+	bool ListConstant::isList(const Any *const *&element, const Integer *&count) const
+	{
+		element = (const Any *const *)this->element;
+		count = this->count;
+		return true;
+	}
+
+	Empty::Empty()
+		: ListConstant(Empty::singleton.hashLink, NULL, 0, false)
+	{}
+
+	const ClicheShort* PokerHead::newCliche(const HashedConstant *&link, const Constant *a) const
+	{
+		return
+			new (Heap::allocate(sizeof(PokerClicheShort)))
+			const PokerClicheShort(link, a);
+	}
+
+	const ClicheLong* PokerHead::newCliche(const HashedConstant *&link, const Constant *const *a, size_t c) const
+	{
+		if (a[0] == &Empty::singleton) return
+			new (Heap::allocate(sizeof(PokerClicheTrailer) + (c - 1) * sizeof(Constant*)))
+			const PokerClicheTrailer(link, a, c);
+		else return
+			new (Heap::allocate(sizeof(PokerClicheLong) + (c - 1) * sizeof(Constant*)))
+			const PokerClicheLong(link, a, c);
+	}
+
+	bool Any::recognize(Recognizer &recognizer) const
+	{
+		return false;
+	}
+
+	const ReallySpecial *ShortInteger::hashLookup(SpecialLookup &lookup) const
+	{
+		return lookup.newSpecial(hashLink);
+	}
+
+	const ReallySpecial *Special::hashLookup(SpecialLookup &lookup) const
+	{
+		if (lookup.compare((const ReallySpecial&)*this) && duplicateReference(true))
+		{
+			lookup.unduplicate();
+			return (const ReallySpecial*)this;
+		}
+		else return hashLink->hashLookup(lookup);
+	}
+
+	const ReallySpecial *SpecialLookup::lookup()
+	{
+		size_t hash = this->hash();
+		Mutex::Lock lock (Heap::mutex);
+		return HashedConstant::hashTable[(hash + (hash >> 16)) & 0xFFFF].hashLink->hashLookup(*this);
+	}
+
+	void ListConstant::unduplicateChildren() const
+	{
+		size_t c = count->value;
+		for (size_t i = 0; i < c; i++)
+			element[i]->unduplicateReference();
+	}
+
+	size_t ListConstant::unlinkAndGetSize()
+	{
+		size_t c = count->value;
+		unhash();
+		count->releaseFrom(*this);
+		for (size_t i = 0; i < c; i++)
+			element[i]->releaseFrom(*this);
+		return sizeof(CountedConstant) + sizeof(Constant*) * c;
+	}
+
+	ListExpress::ListExpress(const Any *const *e, size_t c)
+		: count(Integer::get((long)c))
+	{
+		for (size_t i = 0; i < c; i++)
+			element[i] = e[i];
+	}
+
+	size_t ListExpress::unlinkAndGetSize()
+	{
+		size_t c = count->value;
+		count->releaseFrom(*this);
+		for (size_t i = 0; i < c; i++)
+			element[i]->releaseFrom(*this);
+		return sizeof(ListExpress) + (c - 1) * sizeof(Any*);
+	}
+
+	bool ListExpress::isList(const Any *const *&element, const Integer *&count) const
+	{
+		element = this->element;
+		count = this->count;
+		return true;
+	}
+
+	NodeExpress::NodeExpress(const Cliche &cliche, const Any *const *v)
+		: cliche(&cliche)
+	{
+		cliche.addReference();
+		for (size_t i = 0; i < cliche.count; i++)
+			element[i] = v[i];
+	}
+
+	NodeExpress::NodeExpress(const Cliche &cliche, const Any *value)
+		: cliche(&cliche)
+	{
+		cliche.addReference();
+		element[0] = value;
+	}
+
+	NodeExpress::NodeExpress(const Cliche &cliche, const Any *v1, const Any *v2)
+		: cliche(&cliche)
+	{
+		cliche.addReference();
+		element[0] = v1;
+		element[1] = v2;
+	}
+
+	NodeExpress::NodeExpress(const Cliche &cliche, const Any *v1, const Any *v2, const Any *v3)
+		: cliche(&cliche)
+	{
+		cliche.addReference();
+		element[0] = v1;
+		element[1] = v2;
+		element[2] = v3;
+	}
+
+	const NodeExpress *NodeExpress::as_NodeExpress() const
+	{
+		return this;
+	}
+
+	bool NodeExpress::isNode(const Any *const *&element, const Cliche *&cliche) const
+	{
+		element = this->element;
+		cliche = this->cliche;
+		return true;
+	}
+
+	size_t NodeExpressShort::unlinkAndGetSize()
+	{
+		cliche->releaseFrom(*this);
+		element[0]->releaseFrom(*this);
+		return sizeof(NodeExpressShort);
+	}
+
+	const CallWho *NodeExpressShort::callWho(const Any *who) const
+	{
+		return ((const ClicheShort*)cliche)->whoOperation(this, who);
+	}
+
+	size_t NodeExpressLong::unlinkAndGetSize()
+	{
+		size_t c = cliche->count;
+		cliche->releaseFrom(*this);
+		for (size_t i = 0; i < c; i++)
+			element[i]->releaseFrom(*this);
+		return sizeof(NodeExpressShort) + (c - 1) * sizeof(Any*);
+	}
+
+	bool NodeExpressLong::isNameValuePair(const Constant *&name, const Any *&value) const
+	{
+		return false;
+	}
+
+	template <> const Any *NodeBuilder<const Constant>::build()
+	{
+		size_t count = this->count();
+		const Any *node;
+		switch (count)
+		{
+		case 0:
+			return NULL;
+		case 1:
+			if (joker)
+			{
+				const ClicheTiny *cliche = head->clichefy();
+				node = cliche->ClicheShort::node(joker);
+				cliche->unduplicateReference();
+			}
+			else
+			{
+				map::iterator run = mapping.begin();
+				const ClicheShort *cliche = head->clichefy(run->first);
+				node = cliche->node(run->second);
+				cliche->unduplicateReference();
+			}
+			break;
+		default:
+			{
+				const Constant** attributes = new const Constant*[count];
+				const Constant** values = new const Constant*[count];
+				const Constant** a = attributes;
+				const Constant** v = values;
+				if (joker)
+				{
+					*a++ = &Empty::singleton;
+					*v++ = joker;
+				}
+				for (map::iterator run = mapping.begin(); run != mapping.end(); run++)
+				{
+					*a++ = run->first;
+					*v++ = (const Constant*)run->second;
+				}
+				const Cliche *cliche = head->clichefy(attributes, count);
+				delete attributes;
+				node = cliche->node(values);
+				delete values;
+				cliche->unduplicateReference();
+			}
+		}
+		alive = false;
+		return node;
+	}
+
+	template <> const Any *NodeBuilder<const Any>::build()
+	{
+		size_t count = this->count();
+		const Any *node;
+		switch (count)
+		{
+		case 0:
+			return NULL;
+		case 1:
+			if (joker)
+			{
+				const ClicheTiny *cliche = head->clichefy();
+				node = cliche->ClicheShort::node(joker);
+				cliche->releaseReference();
+			}
+			else
+			{
+				map::iterator run = mapping.begin();
+				const ClicheShort *cliche = head->clichefy(run->first);
+				node = cliche->node(run->second);
+				cliche->releaseReference();
+			}
+			break;
+		default:
+			{
+				const Constant** attributes = new const Constant*[count];
+				const Any** values = new const Any*[count];
+				const Constant** a = attributes;
+				const Any** v = values;
+				if (joker)
+				{
+					*a++ = &Empty::singleton;
+					*v++ = joker;
+				}
+				for (map::iterator run = mapping.begin(); run != mapping.end(); run++)
+				{
+					*a++ = run->first;
+					*v++ = run->second;
+				}
+				const Cliche *cliche = head->clichefy(attributes, count);
+				delete attributes;
+				node = cliche->node(values);
+				delete values;
+				cliche->releaseReference();
+			}
+		}
+		alive = false;
+		return node;
+	}
+
+	ClicheBuilder::~ClicheBuilder()
+	{
+		if (alive)
+		{
+			head->releaseReference();
+			if (joker)
+			{
+				Empty::singleton.releaseReference();
+			}
+			for (std::set<const Constant*>::iterator run = setting.begin(); run != setting.end();	run++)
+			{
+				(*run)->releaseReference();
+			}
+		}
+	}
+
+	bool ClicheBuilder::add(const Constant *key)
+	{
+		if (key == &Empty::singleton)
+		{
+			if (!joker)	return joker = true;
+		}
+		else
+		{
+			if (setting.insert(key).second) return true;
+		}
+		key->releaseReference();
+		return false;
+	}
+
+	bool ClicheBuilder::add(const Constant &key)
+	{
+		if (&key == &Empty::singleton)
+		{
+			if (joker) return false;
+			else joker = true;
+		}
+		else
+		{
+			if (!setting.insert(&key).second) return false;
+		}
+		key.addReference();
+		return true;
+	}
+
+	const Cliche *ClicheBuilder::build()
+	{
+		size_t count = setting.size();
+		if (joker) count++;
+		const Cliche *cliche;
+		switch (count)
+		{
+		case 0:
+			return NULL;
+		case 1:
+			if (joker)
+				cliche = head->clichefy(&Empty::singleton);
+			else
+			{
+				std::set<const Constant*>::iterator run = setting.begin();
+				cliche = head->clichefy(*run);
+			}
+			break;
+		default:
+			{
+				const Constant** attributes = new const Constant*[count];
+				const Constant** a = attributes;
+				if (joker)
+				{
+					*a++ = &Empty::singleton;
+				}
+				for (std::set<const Constant*>::iterator run = setting.begin(); run != setting.end(); run++)
+				{
+					*a++ = *run;
+				}
+				cliche = head->clichefy(attributes, count);
+				delete attributes;
+			}
+		}
+		alive = false;
+		return cliche;
+	}
+
+	template <> const ListConstant *ListBuilder<const Constant, const ListConstant>::building(const Constant *const *element, size_t count)
+	{
+		return ListConstant::get(element, count);
+	}
+
+	template <> const Any *ListBuilder<const Any, const Any>::building(const Any *const *element, size_t count)
+	{
+		for (size_t i = 0; i < count; i++)
+		{
+			if (element[i]->as_Constant() == NULL)
+			{
+				return new
+					(Heap::allocate(sizeof(ListExpress) + (count - 1) * sizeof(Any*)))
+					const ListExpress(element, count);
+			}
+		}
+		return ListConstant::get((const Constant *const *)(element), count);
+	}
+
+	const Any *JumperCliche0::node(const Constant *element) const
+	{
+		return new (Heap::allocate(sizeof(Jumper0))) Jumper0(element);
+	}
+
+	const NodeExpressShort *JumperCliche0::node(const Express *element) const
+	{
+		return new (Heap::allocate(sizeof(Jumper0))) Jumper0(element);
+	}
+
+	void Any::unduplicateChildren() const
+	{}
+
+	bool Integer::convert(Converter &converter) const
+	{
+		return converter.convert(*this);
+	}
+	bool Float::convert(Converter &converter) const
+	{
+		return converter.convert(*this);
+	}
+	bool Timestamp::convert(Converter &converter) const
+	{
+		return converter.convert(*this);
+	}
+	bool Duration::convert(Converter &converter) const
+	{
+		return converter.convert(*this);
+	}
+	bool PilsDate::convert(Converter &converter) const
+	{
+		return converter.convert(*this);
+	}
+	bool PilsColor::convert(Converter &converter) const
+	{
+		return converter.convert(*this);
+	}
+	bool PilsString::convert(Converter &converter) const
+	{
+		return converter.convert(*this);
+	}
+	bool Cliche::convert(Converter &converter) const
+	{
+		return converter.convert(*this);
+	}
+	bool Special::convert(Converter &converter) const
+	{
+		return converter.convert((const ReallySpecial&)*this);
+	}
+	bool ListConstant::convert(Converter &converter) const
+	{
+		return converter.convert((const Any* const *)element, count->value);
+	}
+	bool ListExpress::convert(Converter &converter) const
+	{
+		return converter.convert(element, count->value);
+	}
+	bool NodeConstant::convert(Converter &converter) const
+	{
+		return converter.convert(*cliche->head, cliche->attributes, (const Any* const *)element, cliche->count);
+	}
+	bool NodeExpress::convert(Converter &converter) const
+	{
+		return converter.convert(*cliche->head, cliche->attributes, element, cliche->count);
+	}
+
+	bool Converter::convert(const Integer &value)
+	{
+		return false;
+	}
+	bool Converter::convert(const Float &value)
+	{
+		return false;
+	}
+	bool Converter::convert(const PilsString &value)
+	{
+		return false;
+	}
+	bool Converter::convert(const Cliche &value)
+	{
+		return false;
+	}
+	bool Converter::convert(const Constant &name, const Constant *const *attribute, const Any *const *value, size_t count)
+	{
+		return false;
+	}
+	bool Converter::convert(const Any *const *element, size_t count)
+	{
+		return false;
+	}
+	bool Converter::convert(const ReallySpecial &special)
+	{
+		return false;
+	}
+	bool Converter::convert(const Listener &value)
+	{
+		return false;
+	}
+	const Any *NodeConstantTiny::specialCall(Runner &run, const ReallySpecial &special) const
+	{
+		return ((const ClicheTiny*)cliche)->specialOperation(run, special, *element[0]);
+	}
+
+	const Any *NodeConstantTiny::specialCall(Runner &run, const ReallySpecial &special, const Any &assignValue) const
+	{
+		return ((const ClicheTiny*)cliche)->specialOperation(run, special, *element[0], assignValue);
+	}
+
+	const Any *NodeExpressTiny::specialCall(Runner &run, const ReallySpecial &special) const
+	{
+		return ((const ClicheTiny*) cliche)->specialOperation(run, special, *element[0]);
+	}
+
+	const Any *NodeExpressTiny::specialCall(Runner &run, const ReallySpecial &special, const Any &assignValue) const
+	{
+		return ((const ClicheTiny*) cliche)->specialOperation(run, special, *element[0], assignValue);
+	}
+
+	const Language *Any::as_Language() const
+	{
+		return NULL;
+	}
+
+	const Any *Special::queryInterface(const InterfaceDesignator &designator) const
+	{
+		return NULL;
+	}
+
+	size_t Timevalue::unlinkAndGetSize()
+	{
+		unhash();
+		return sizeof(Timestamp);
+	}
+}

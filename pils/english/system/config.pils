@@ -1,0 +1,18 @@
+[pils: .use "<pils>/english/pilssystem/english", "<pils>/english/pils/english"]
+><:[module:. pils, .timestamp 2008-05-25T01:23:57.006+02 .language system]><;
+><:[module:. pils edit .timestamp 2008-05-25T01:24:03.435+02 .language system]><;
+><:[module:. pils edit source .timestamp 2008-05-25T01:24:10.098+02 .language system]><;
+><:[module:. pils edit source zoom .timestamp 2008-05-25T01:24:16.714+02 .language system]><;
+2><:[module:. pils standard .timestamp 2008-05-25T01:24:21.988+02 .language system]><;
+><:[module:. pils standard menu .timestamp 2010-01-13T22:51:41.704+01 .language system]><;
+{ menu: .window
+| :ok
+  {[menu: . pils source]|:ok window pinpoint}
+  {[menu: . pils program]|:ok @@ [pils editor] window}
+  {[menu: . pils explorer]|:ok platform system explorer}
+  {[menu: . pils register]|:ok @ [pils run command] register}
+}
+><:[module:. pils user .timestamp 2008-05-25T01:23:39.202+02 .language system]><;
+;language {}
+.language-module [pils language english]
+.talk @@ [pils talk english]

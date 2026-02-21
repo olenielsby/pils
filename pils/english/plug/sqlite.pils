@@ -1,0 +1,64 @@
+[pils: .use "<pils>/danish/system/danish", .language system]
+><:[module:. plug, .timestamp 2009-01-05T11:31:03.808+01 .language danish]><;
+><:[module:. plug pils .timestamp 2008-10-31T18:37:38.519+01 .language danish]><;
+><:[module:. plug pils language .timestamp 2008-10-31T18:37:43.722+01 .language danish]><;
+><:[module:. plug pils language plug .timestamp 2008-10-31T18:40:03.581+01 .language system]><;
+language: {} .::? merge: "p", ["pils.org/ns/pilsplug"]:><:[module:. plug sqlite .timestamp 2009-08-04T14:31:52.756+02 .language system]><;
+;sqlite @ plug><:[module:. plug sqlite filename .timestamp 2009-08-04T10:33:57.368+02 .language system]><;
+{ .filename
+| :ok
+  ( [pils-configuration:compile-mode]
+    call:
+    ."debug"
+      this module path <-#~* "////"
+      ( [pils-configuration:system] call:
+        ."linux" "/src/glucplug/bin/Debug/libsqlite-plug."
+        ."win32" "/build/win32/vc9/Debug/sqlite-plug/sqlite-plug."
+        ."macos" "/build/macosx/jpils/build/Debug/libsqlite-plug."
+      )
+    ."release"
+    this module path <-#~* "////"
+    "/bin/"
+    ( [pils-configuration:system] call:
+      ."linux" "linux/plug/libsqlite-plug."
+      ."win32" "win32/plug/sqlite-plug."
+    )
+  )
+  [pils-configuration:plugtype]
+}
+><:[module:. plug sqlite interface .timestamp 2009-08-07T09:37:29.827+02 .language plug]><;
+p:plug:
+Root:
+.Root
+  [database: Database: p:string],
+.Database
+  [query: Query: p:string],
+.Query
+  [step: p:int:],
+  [column-count: p:int:],
+  [column-type: p:int: p:int],
+  [column-string: p:string: p:int],
+  [column-int: p:int: p:int],
+  [column-double: p:double: p:int],
+  [column-blob: p:blob: p:int],
+  [reset: p:void:],
+  [bind-string: p:void: p:int p:string],
+  [bind-int: p:void: p:int p:int],
+  [bind-double: p:void: p:int p:double],
+  [bind-blob: p:void: p:int p:blob],
+  [clear-bindings: p:void:],
+.error
+  [text: p:string:],
+><:[module:. plug sqlite plug .timestamp 2009-08-04T14:34:02.288+02 .language plug]><;
+{ .plug | :ok p:plug (. @ filename; @@ interface) }
+><:[module:. plug sqlite test .timestamp 2009-06-10T18:21:59.997+02 .language system]><;
+{ .test
+| :ok
+  ;database
+    platform path documents *=* ("/", "\") "testdatabase.sqlite"
+    .(@ plug database)
+  ;
+  ;query database query "select name from food";
+  query next and:
+  query columnString 0
+}

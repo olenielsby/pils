@@ -1,0 +1,34 @@
+/* This file is public domain */
+#ifndef DEFINE_PILS_RULE_H
+#define DEFINE_PILS_RULE_H
+#include "compile.h"
+namespace PILS
+{
+	class Ruleset
+		: public PokerShort
+	{
+	public:
+		Ruleset(const Any* rulelist, const Rule *const *rules, size_t count)
+			: PokerShort(BuiltinClicheRuleset::singleton, rulelist), compiled(rules, count)
+		{}
+		const Ruleset *as_Ruleset() const;
+		const Step *step_(Runner &run) const;
+		bool compileBuild(CompilingBuild &compiling) const;
+		bool write(Writing &writing, WriteState state, long level, const Constant *dot) const;
+		size_t unlinkAndGetSize();
+		class Compilation
+		{
+		public:
+			Compilation(const Rule *const *rules, size_t count);
+			void releaseFrom(Ruleset &ruleset);
+			const QuickCalling *calling;
+			const QuickCalling *assigning;
+		private:
+			size_t count;
+			size_t size;
+			const Cliche **cliche;
+		};
+		Compilation compiled;
+	};
+}
+#endif

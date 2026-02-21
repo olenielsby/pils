@@ -1,0 +1,146 @@
+[pils: .use "<.>/bergmann", "<pils>/danish/system/danish" .language danish]
+><:[modul:. program, .tidsstempel 2009-01-05T11:31:03.808+01 .sprog dansk]><;
+><:[modul:. program dansk .tidsstempel 2009-01-05T11:30:43.465+01 .sprog dansk]><;
+><:[modul:. program dansk maxi-projektet .tidsstempel 2009-01-05T11:31:18.652+01 .sprog dansk]><;
+><:[modul:. program dansk maxi-projektet diabeteshjælper .tidsstempel 2008-09-03T11:59:27.123+02 .sprog dansk]><;
+><:[modul:. program dansk maxi-projektet diabeteshjælper glukosemodel .tidsstempel 2009-04-21T11:06:54.331+02 .sprog dansk]><;
+><:[modul:. program dansk maxi-projektet diabeteshjælper glukosemodel hakkebakke .tidsstempel 2009-04-21T11:28:12.550+02 .sprog dansk]><;
+><:[modul:. program dansk maxi-projektet diabeteshjælper glukosemodel hakkebakke forløb .tidsstempel 2011-07-21T02:51:05.014+02 .sprog dansk]><;
+{ forløb:. ' = (tid:.; ?) 1 .brugerprofil
+| :ok
+  ;@@hændelse @@ hændelse .@@skridt @@ skridt;
+  forløb først (@ starttilstand: .brugerprofil .tid)
+  fold
+  { tilstand := tid:.; hændelserne
+  | :ok liste :=
+    @@skridt skridt (.tid .tilstand)
+    & (hændelserne -#+* (,)) fold (@@hændelse)
+  }
+  .:liste
+  hver {*;tid .glukose|:ok tid:.; glukose}
+}
+><:[modul:. program dansk maxi-projektet diabeteshjælper glukosemodel hakkebakke hændelse .tidsstempel 2011-09-30T00:53:10.404+02 .sprog dansk]><;
+{ a := b
+| :ok
+}
+{ (ok = * ;[delle: 1] .[delle: 2] .[delle: 3] .[delle: 4])
+  := insulin: .dosis .sammensætning
+  (sammensætning: .1 .2 .3 .4) pyt [.1 0 .2 0 .3 0 .4 0]
+| :ok ' flet:
+  ;[delle: 1] delle 1 + (1 .:kald + 4 .:kald * 0,09) * dosis
+  .[delle: 2] delle 2 + 2 .:kald * dosis
+  .[delle: 3] delle 3 + 3 .:kald * dosis
+  .[delle: 4] delle 4 + 4 .:kald * dosis
+}
+{ (tilstand = * ;madkø ' = (sidste) 0)
+  := indtag: .sukker .glukose .alkohol
+| :ok tilstand flet: ;madkø ' <-# 1 &
+  indtag:
+  .sukker ' + sidste sukker
+  .glukose ' + sidste glukose
+  .alkohol ' + sidste alkohol
+}
+{ (tilstand = * ;puls?) := motion: .puls | :ok tilstand flet: ;puls }
+{ (tilstand = * ;puls?) := blodsukkermåling: .værdi
+| :ok tilstand flet: ;glukose værdi
+}
+><:[modul:. program dansk maxi-projektet diabeteshjælper glukosemodel hakkebakke skridt .tidsstempel 2011-09-30T00:58:01.934+02 .sprog dansk]><;
+{ skridt: .tilstand .tid tid [ny]
+| :ok
+  :brug tilstand brugerprofil;
+  :brug tilstand;
+  tid:. tid [ny]
+  .brugerprofil
+  .madkø ' -# 1 & (indtag: .sukker 0 .glukose 0 .alkohol 0)
+  .[hals: sukker] hals [sukker] * 70% + madkø . 1 sukker
+  .[mave: sukker] mave [sukker] * 50% + hals [sukker] * 30%
+  .[hals: glukose]  hals [glukose] * 91% + madkø . 1 glukose
+  .[mave: glukose] mave [glukose] * 95% + hals [glukose] * 9%
+  .[hals: alkohol]  hals [alkohol] * 99% + madkø . 9 alkohol
+  .[mave: alkohol] mave [alkohol] * 97% + hals [alkohol] * 1%
+  .[delle: 1] delle 1 * 98,5%
+  .[insulin: 1] insulin 1 * 98% + delle 1 * 1,5%
+  .[delle: 2] delle 2 * 0,96
+  .[balle: 2] balle 2 * 0,993 + delle 2 * 4%
+  .[insulin: 2] insulin 2 * 0.98 + balle 2 * 0,7%
+  .[delle: 3] delle 3 * 99,5%
+  .[balle: 3] balle 3 * 99,5% + delle 3 * 0,5%
+  .[insulin: 3] insulin 3 * 0,995 + balle 3 * 0,5%
+  .[delle: 4] delle 4 * 99%
+  .[balle: 4] balle 4 * 99,8% + delle 4 * 1%
+  .[insulin: 4] insulin 4 * 99,5% + balle 4 * 0,2%
+  .puls (' * 9 + hvilepuls) / 10
+  .insulin ' * 80%
+    + insulin 1 * 80%
+    + insulin 2 * 70%
+    + insulin 3 * 30%
+    + insulin 4 * 45%
+  .glukose
+    ( '
+      - (puls - hvilepuls) * 0,0001 * glukose
+      + mave [sukker] * 0,045
+      + mave [glukose] * 0,0089
+      - insulin * 0,003 * glukose
+    )
+    * (1 - (hals [alkohol] / 10 + 1) * mave [alkohol] / 300)
+    * 99% + slutblodsukker * 1%
+}
+><:[modul:. program dansk maxi-projektet diabeteshjælper glukosemodel hakkebakke starttilstand .tidsstempel 2009-08-29T21:50:14.897+02 .sprog dansk]><;
+{ starttilstand: .brugerprofil .tid
+| :ok
+  tid:.
+  .madkø 9 op hver (ok: indtag: .sukker 0 .glukose 0 .alkohol 0)
+  .puls brugerprofil hvilepuls
+  .glukose brugerprofil startblodsukker
+  .[hals: sukker] 0
+  .[hals: glukose] 0
+  .[hals: alkohol] 0
+  .[mave: sukker] 0
+  .[mave: glukose] 0
+  .[mave: alkohol] 0
+  .[insulin: 1] 0
+  .[insulin: 2] 0
+  .[insulin: 3] 0
+  .[insulin: 4] 0
+  .[delle: 1] 0
+  .[delle: 2] 0
+  .[balle: 2] 0
+  .[delle: 3] 0
+  .[balle: 3] 0
+  .[delle: 4] 0
+  .[balle: 4] 0
+  .insulin 0
+  .brugerprofil
+}
+><:[modul:. program dansk maxi-projektet diabeteshjælper hændelsesreduktion .tidsstempel 2011-07-21T02:49:32.920+02 .sprog dansk]><;
+{ x | hovsa }
+
+{ emne:. (* madvare: .sukker .glukose .alkohol .gram)
+  pyt [.sukker 0 .alkohol 0] .flyder? .tid
+| :ok
+  tid:.;
+  indtag:
+  .glukose gram * glukose / 100
+  .sukker gram * sukker / 100
+  .alkohol gram * alkohol / 100
+}
+{ emne:. (* motion: .minutterne .puls) .flyder? .tid
+| :ok
+  ;motionsdosis (motion: .puls);
+  0 op (minutterne - 1) hver
+  {minut|:ok tid:. ' + (minut * 1m); motionsdosis }
+}
+{ emne:. (* måling: .vare [blodsukkermåler] .værdi) .flyder? .tid
+| :ok
+  tid:.; blodsukkermåling: .værdi
+}
+{ emne:. (* blodsukkermåling: .værdi) .flyder? .tid
+| :ok
+  tid:.; blodsukkermåling: .værdi
+}
+{ emne:
+  . (* medicinering: .sammensætning .dosis)
+  .flyder? .tid
+| :ok
+  tid:.; insulin: .sammensætning .dosis
+}

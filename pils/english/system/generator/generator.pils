@@ -1,0 +1,296 @@
+><:[module:. pils, .timestamp 2010-03-30T23:17:59.621+02 .language system]><;
+><:[module:. pils generator .timestamp 2011-01-16T09:49:07.269+01 .language system]><;
+><:[module:. pils generator output .timestamp 2011-01-16T12:21:00.062+01 .language system]><;
+><:[module:. pils generator output starter .timestamp 2011-01-16T21:13:55.308+01 .language system]><;
+{ .starter
+| :ok
+  @@ text
+}
+><:[module:. pils generator output starter text .timestamp 2011-01-16T18:56:56.437+01 .language text]><;
+extrn MessageBoxW: PROC
+extrn MultiByteToWideChar: PROC
+extrn SysAllocStringLen: PROC
+extrn SysFreeString: PROC
+CP_UTF8 equ 65001
+
+public pilsstart
+.data
+mytit db '64-bit assemblertest', 0
+mymsg db 'Hej verden! Spis brød til.', 0
+
+.code
+BstringFromUtf8:
+  push rdi
+  mov rdi,rsp
+  push r12
+  push r13
+  push r14
+  push r15
+  sub rsp,30h
+  mov r8,CP_UTF8
+  xor r9,r9
+  mov r12,rcx
+  mov r13,rdx
+  mov [rsp+20h],r9
+  mov [rsp+28h],r9
+  xchg r8,rcx
+  xchg r9,rdx
+  call MultiByteToWideChar
+  xor rcx,rcx
+  mov rdx,rax
+  xchg rax,r14
+  call SysAllocStringLen
+  mov [rsp+20h],rax
+  mov [rsp+28h],r14
+  xchg rax,r15
+  xchg r8,r12
+  xchg r9,r13
+  mov rcx,CP_UTF8
+  xor rdx,rdx
+  call MultiByteToWideChar
+  xchg rax,r15
+  add rsp,30h
+  pop r15
+  pop r14
+  pop r13
+  pop r12
+  pop rdi
+  ret
+
+pilsstart:
+  push rdi
+  mov rdi,rsp
+  push r12
+  push r13
+  sub rsp,20h
+  lea rcx,mymsg
+  mov rdx,-1
+  call BstringFromUtf8
+  xchg rax,r12
+  lea rcx,mytit
+  mov rdx,-1
+  call BstringFromUtf8
+  xchg rax,r13
+
+  mov r9d, 0       ; uType = MB_OK
+  mov r8,r13
+  mov rdx,r12
+  mov rcx, 0       ; hWnd = HWND_DESKTOP
+  call MessageBoxW
+
+  xchg rcx,r12
+  call SysFreeString
+
+  xchg rcx,r13
+  call SysFreeString
+
+  add rsp,20h
+  pop r13
+  pop r12
+  pop rdi
+  ret
+End
+><:[module:. pils generator specification .timestamp 2011-01-16T21:14:51.116+01 .language system]><;
+><:[module:. pils generator specification object .timestamp 2011-01-16T21:26:27.564+01 .language system]><;
+><:[module:. pils generator specification object class .timestamp 2011-01-16T21:33:59.116+01 .language system]><;
+><:[module:. pils generator specification object test .timestamp 2011-01-17T12:15:19.365+01 .language system]><;
+{ .test
+| :ok
+  this program libraries
+}
+><:[module:. pils generator specification object trait .timestamp 2011-01-16T23:27:07.303+01 .language system]><;
+!!
+A trait is a set of methods and properties shared by one or more object classes.
+
+Traits are similar to interfaces of object oriented programming, in that they guarantee the presence of certain methods in an object's vtable.
+!!
+><:[module:. pils generator specification object trait behavior .timestamp 2011-01-19T23:14:13.070+01 .language system]><;
+><:[module:. pils generator specification object trait behavior evaluation .timestamp 2011-01-19T22:12:13.214+01 .language system]><;
+><:[module:. pils generator specification object trait behavior evaluation constant .timestamp 2011-01-17T00:27:46.055+01 .language system]><;
+!!
+All PILS constans
+!!
+
+[ trait:
+  .name constant
+  .base any
+  .not expressive
+  ;
+]
+><:[module:. pils generator specification object trait behavior evaluation expressive .timestamp 2011-01-19T22:15:39.702+01 .language system]><;
+[ trait:
+  .name expressive
+  ;
+]
+><:[module:. pils generator specification object trait behavior evaluation expressive construct .timestamp 2011-01-19T23:38:33.422+01 .language system]><;
+[ trait:
+  .name construct
+  ;
+]
+><:[module:. pils generator specification object trait behavior evaluation expressive escape .timestamp 2011-01-19T23:35:28.502+01 .language system]><;
+[ trait:
+  .name escape
+  ;
+]
+><:[module:. pils generator specification object trait behavior evaluation expressive perform .timestamp 2011-01-22T16:00:28.762+01 .language system]><;
+[ trait:
+  .name perform
+  ;
+]
+><:[module:. pils generator specification object trait behavior evaluation expressive quote .timestamp 2011-01-19T23:34:29.302+01 .language system]><;
+[ trait: .name quote; ]><:[module:. pils generator specification object trait structure .timestamp 2011-01-19T23:13:52.582+01 .language system]><;
+><:[module:. pils generator specification object trait structure formation .timestamp 2011-01-20T00:31:48.182+01 .language system]><;
+[ trait: .name formation; ]><:[module:. pils generator specification object trait structure formation attributed .timestamp 2011-01-20T00:36:09.198+01 .language system]><;
+[ trait: .name attributed; ]><:[module:. pils generator specification object trait structure formation attributed notail .language system]><;
+{ .notail
+| :ok
+}
+><:[module:. pils generator specification object trait structure formation attributed tail .language system]><;
+{ .tail
+| :ok
+}
+><:[module:. pils generator specification object trait structure formation noattributes .timestamp 2011-01-20T00:41:43.510+01 .language system]><;
+[ trait: .name unattributed; ]><:[module:. pils generator specification object trait structure kin .timestamp 2011-01-19T23:20:39.390+01 .language system]><;
+[ trait:
+  .name [general]
+  ;
+  acquire
+  release
+  destroy
+]
+><:[module:. pils generator specification object trait structure kin atom .timestamp 2011-01-17T00:32:12.270+01 .language system]><;
+!!
+Indivisible objects such as numbers, strings, dates and system objects
+!!
+
+[ trait:
+  .name atom
+  .base constant
+  .either number, date, system, string
+  ;
+]
+><:[module:. pils generator specification object trait structure kin atom scalar .timestamp 2011-01-19T21:38:13.382+01 .language system]><;
+[ trait:
+  .name scalar
+  ;
+]
+><:[module:. pils generator specification object trait structure kin atom scalar number .timestamp 2011-01-19T21:06:36.918+01 .language system]><;
+[ trait:
+  .name number
+  ;
+]
+><:[module:. pils generator specification object trait structure kin atom scalar number float .timestamp 2011-01-17T12:48:54.205+01 .language system]><;
+[ trait:
+  .name float
+  ;
+]
+><:[module:. pils generator specification object trait structure kin atom scalar number integer .timestamp 2011-01-19T21:26:29.782+01 .language system]><;
+[ trait:
+  .name integer
+  ;
+]
+><:[module:. pils generator specification object trait structure kin atom scalar temporal .timestamp 2011-01-19T21:26:41.038+01 .language system]><;
+[ trait:
+  .name temporal
+  ;
+]
+><:[module:. pils generator specification object trait structure kin atom scalar temporal dating .timestamp 2011-01-17T12:44:35.725+01 .language system]><;
+[ trait:
+  .name string;
+]
+><:[module:. pils generator specification object trait structure kin atom scalar temporal duration .timestamp 2011-01-17T12:44:35.725+01 .language system]><;
+[ trait:
+  .name string;
+]
+><:[module:. pils generator specification object trait structure kin atom scalar temporal time .timestamp 2011-01-17T12:44:35.725+01 .language system]><;
+[ trait:
+  .name string;
+]
+><:[module:. pils generator specification object trait structure kin atom special .timestamp 2011-01-19T22:03:21.198+01 .language system]><;
+[ trait: .name special; ]
+><:[module:. pils generator specification object trait structure kin atom special listener .timestamp 2011-01-19T21:46:17.542+01 .language system]><;
+[ trait: .name listener; ]
+><:[module:. pils generator specification object trait structure kin atom special system .timestamp 2011-01-19T21:30:12.878+01 .language system]><;
+[ trait: .name system; ]
+><:[module:. pils generator specification object trait structure kin atom string .timestamp 2011-01-17T01:01:58.967+01 .language system]><;
+[ trait:
+  .name string
+  .base atom, listlike
+  ;
+]
+><:[module:. pils generator specification object trait structure kin composite .timestamp 2011-01-17T12:37:40.965+01 .language system]><;
+!! shared by all objects !!
+
+[ trait:
+  .name composite
+  .base any
+  .either node list cliche, large small empty
+  ;
+]
+><:[module:. pils generator specification object trait structure kin composite cliche .timestamp 2011-01-17T00:45:19.295+01 .language system]><;
+!!
+cliche trait
+!!
+
+[ trait:
+  .name cliche
+  .base composite constant
+  .either long short, tail notail
+  ;
+]
+><:[module:. pils generator specification object trait structure kin composite list .timestamp 2011-01-17T12:48:24.765+01 .language system]><;
+[ trait:
+  .name list
+  ;
+]
+><:[module:. pils generator specification object trait structure kin composite node .timestamp 2011-01-17T12:52:20.269+01 .language system]><;
+[ trait:
+  .name node
+  ;
+]
+><:[module:. pils generator specification object trait structure size .timestamp 2011-01-19T23:45:25.022+01 .language system]><;
+><:[module:. pils generator specification object trait structure size fixedsize .timestamp 2011-01-19T23:50:32.462+01 .language system]><;
+><:[module:. pils generator specification object trait structure size fixedsize fewlegs .timestamp 2011-01-20T00:26:21.078+01 .language system]><;
+[ trait: .name fewlegs; ]><:[module:. pils generator specification object trait structure size fixedsize nolegs .timestamp 2011-01-19T23:52:35.286+01 .language system]><;
+><:[module:. pils generator specification object trait structure size fixedsize oneleg .timestamp 2011-01-20T00:26:45.030+01 .language system]><;
+[ trait:
+  .name oneleg
+  ;
+]
+><:[module:. pils generator specification object trait structure size varyingsize .language system]><;
+{ .varyingsize
+| :ok
+}
+><:[module:. pils generator specification object trait structure size varyingsize anysize .timestamp 2011-01-20T00:08:17.350+01 .language system]><;
+[ trait:. anysize; ]
+><:[module:. pils generator specification object trait structure size varyingsize manylegs .timestamp 2011-01-20T00:28:38.958+01 .language system]><;
+[ trait: .name manylegs; ]><:[module:. pils generator specification object trait technique .language system]><;
+{ .technical
+| :ok
+}
+><:[module:. pils generator specification object trait technique storage .language system]><;
+{ .storage
+| :ok
+}
+><:[module:. pils generator specification object trait technique storage explicit .timestamp 2011-01-22T15:59:17.323+01 .language system]><;
+[ trait:
+  .name explicit
+  .base any
+  ;
+]
+><:[module:. pils generator specification object trait technique storage implicit .timestamp 2011-01-17T12:33:09.413+01 .language system]><;
+[ trait:
+  .name implicit
+  .base nodelike
+  .either string list,
+  ;
+]
+><:[module:. pils generator target .timestamp 2011-01-16T09:55:59.966+01 .language system]><;
+;target
+;path this program path <-#=* "/pils/" "/pils2011/pilskernel64/"
+><:[module:. pils generator target test .timestamp 2011-01-16T12:34:26.326+01 .language system]><;
+{ .test
+| :ok
+  @ target path . "pilsstart.asm"
+  .(file) text (@ [output] starter)
+}

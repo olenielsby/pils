@@ -1,0 +1,5 @@
+If you need help with PILS, please ask in the Sourceforge forums, or by
+mail to ole.nielsby@pils.org
+
+Note: Expect no support if you use PILS for military purposes or
+weapon's industry.

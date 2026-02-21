@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="48px"
+   height="48px"
+   id="svg5556"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   sodipodi:docname="insulin_pen.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <defs
+     id="defs5558">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient5693">
+      <stop
+         style="stop-color:#0000ff;stop-opacity:1;"
+         offset="0"
+         id="stop5695" />
+      <stop
+         style="stop-color:#0000ff;stop-opacity:0;"
+         offset="1"
+         id="stop5697" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5693"
+       id="linearGradient5554"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-24.748738,38.183766)"
+       x1="195.41609"
+       y1="946.3021"
+       x2="274.91741"
+       y2="946.3021" />
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 24 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="48 : 24 : 1"
+       inkscape:persp3d-origin="24 : 16 : 1"
+       id="perspective5564" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="7"
+     inkscape:cx="24"
+     inkscape:cy="29.714286"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:grid-bbox="true"
+     inkscape:document-units="px"
+     inkscape:window-width="640"
+     inkscape:window-height="675"
+     inkscape:window-x="154"
+     inkscape:window-y="154" />
+  <metadata
+     id="metadata5561">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer">
+    <g
+       id="insulin_pen"
+       transform="matrix(0.522301,0,0,0.522301,-85.489672,-492.4084)">
+      <path
+         id="path5671"
+         d="M 229.45615,962.20607 C 227.65985,963.04905 225.99061,965.67161 224.15285,967.50937 C 221.9305,969.73172 218.99558,971.25242 216.72823,973.51978 C 214.99281,975.25519 214.11482,976.13319 212.48559,977.76242 C 210.36281,979.8852 206.76753,981.60902 204.35386,983.41928 C 201.76972,985.35738 199.14594,987.14844 196.57568,989.07613 C 194.2886,990.79144 192.16145,993.13681 190.21172,995.08654 C 188.11502,997.18324 185.29238,998.23811 183.14065,1000.3898 C 181.52116,1002.0093 179.74314,1003.9102 177.83735,1005.3396 C 175.89506,1006.7963 173.7572,1008.7126 172.1805,1010.2893 C 170.57671,1011.8931 170.46126,1011.863 170.05918,1013.4713 C 169.74015,1014.7474 173.77886,1017.0989 174.30182,1017.3604 C 176.88218,1018.6506 176.5115,1018.0233 179.25157,1016.6533 C 182.22627,1015.1659 185.06018,1013.1681 188.0904,1011.35 C 190.73884,1009.7609 193.49842,1007.8243 195.86858,1006.0467 C 198.99389,1003.7027 201.88717,1000.7393 205.41452,998.97562 C 208.52893,997.41842 211.89712,994.61434 214.25335,992.25811 C 216.97714,989.53433 220.27054,986.94803 222.73863,984.47994 C 224.55237,982.6662 226.82899,980.55819 228.39549,978.46953 C 230.22861,976.02537 233.40686,973.81171 235.46656,971.75201 C 237.43643,969.78214 239.42621,967.79236 241.47696,965.74161 C 243.06457,964.154 244.4758,962.74277 246.07316,961.14541 C 247.73593,959.48264 249.95982,957.96586 251.0229,956.90277 C 251.2651,956.66058 246.67475,952.55462 246.42671,952.30658 C 244.72876,950.60862 242.59671,950.68604 241.47696,951.24592 C 238.93222,952.51829 236.96673,955.75615 235.113,957.60988 C 233.90774,958.81514 230.28457,960.02409 228.74904,960.79186 C 228.1344,961.09918 228.36222,962.42486 227.68838,962.55963"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         id="path5673"
+         d="M 172.53405,1016.2997 C 171.05636,1017.0386 169.69217,1018.4345 168.64496,1019.4817 C 168.05571,1020.071 167.46645,1020.6602 166.8772,1021.2495"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         id="path5675"
+         d="M 174.15469,1016.3679 C 171.88264,1015.0386 170.63412,1013.7993 170.87319,1013.1106 C 171.18208,1012.2208 173.32171,1010.0571 176.62956,1007.2895 C 178.28242,1005.9066 180.82801,1003.6479 182.28642,1002.2702 C 183.74482,1000.8924 185.97221,999.06679 187.23616,998.21318 C 188.50012,997.35959 191.0492,995.21391 192.90078,993.44504 C 196.59384,989.91694 199.3071,987.82799 207.03515,982.56291 C 210.0918,980.48044 213.44643,977.81973 215.34366,975.97307 C 217.09375,974.26963 219.63933,972.02938 221.00051,970.99475 C 222.36169,969.96012 224.92511,967.61601 226.69701,965.78562 C 229.49247,962.89788 229.85166,962.39069 229.41241,961.95144 C 228.97316,961.51218 229.03806,961.39513 229.9031,961.06655 C 233.63947,959.64731 235.23307,958.57397 237.58157,955.89486 C 238.91195,954.37721 240.61342,952.76392 241.36261,952.30978 C 243.33957,951.1114 244.43686,951.48397 247.46979,954.3834 L 249.99189,956.79448 L 248.4009,958.14485 C 246.05247,960.13811 228.31548,977.4878 225.71442,980.33596 C 224.48295,981.68441 220.34744,985.66189 216.5244,989.17479 C 211.12068,994.14013 208.68098,996.11279 205.56424,998.03676 C 203.3592,999.39794 200.36183,1001.4773 198.90343,1002.6577 C 197.44502,1003.838 195.05853,1005.6772 193.60013,1006.7448 C 188.87009,1010.2074 177.16805,1017.3091 176.20409,1017.3021 C 175.95197,1017.3002 175.02973,1016.8799 174.15469,1016.3679 L 174.15469,1016.3679 z"
+         style="opacity:0.50212767;fill:url(#linearGradient5554);fill-opacity:1;stroke:#ffffff;stroke-width:0.35355338;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+  </g>
+</svg>

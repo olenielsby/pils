@@ -1,0 +1,52 @@
+<html><head></head><body>
+<h1>Instructions for building PILS with Juce bindings on MS Windows</h1>
+
+<h2>Reqired downloads</h2>
+
+<ul>
+<li><a href="http://www.microsoft.com/express/vc/">VC 2008 Express</a> if you don't have VC 2008</li>
+<li>A Subversion client, such as <a href="http://tortoisesvn.net/download">TortoiseSVN</a></li>
+<li>The Juce trunk, SVN url: <b>https://juce.svn.sourceforge.net/svnroot/juce/trunk</b></br>
+<i>(JucePILS will be based on the next version of Juce (presumably 1.47) when that is released. It doesn't work with Juce 1.46</i></li>
+<li>The PILS trunk, SVN url: <b>https://juce.svn.sourceforge.net/svnroot/pilsprogramming/trunk</b></li>
+</ul>
+<h2><i>Optional download</i></h2>
+<ul><li><a href="http://dev.mysql.com/downloads/mysql/5.1.html">MySQL 5.1</a> or later (get the .msi installer, and do a full install) for compiling the MySQL pilsplug.</li></ul>
+
+<h2>Compiling Juce</h2>
+<ul>
+<li>Open juce\build\win32\vc8\JUCE.vcproj with Visual Studio. It will be converted to vc9.</li>
+<li> Unless you have the relevant SDKs installed, outcomment these two lines from <b/>juce_Config.h</b><br/>
+<code>
+   &nbsp;&nbsp;&nbsp;&nbsp;#define JUCE_ASIO 1<br/>
+   &nbsp;&nbsp;&nbsp;&nbsp;#define JUCE_QUICKTIME 1<br/>
+</code>
+</li>
+<li>Build the Debug and Release configurations.</li>
+</ul>
+
+<h2>Compiling and running PILS</h2>
+<ul>
+<li>
+Set these environment variables:<br/>
+<table rules="all" cellpadding="5" border="all">
+<tr><th>variable</th><th>value</th><th>example</th></tr>
+<tr><td>JUCE</td><td>root of Juce trunk</td><td>C:\juce</td></tr>
+<tr><td>MYSQL <i>(optional)</i></td><td>MySQL server installation dir</td><td>C:\Program files\MySQL\MySQL Server 5.1</td></tr>
+</table></li>
+<li>If VS 2008 is running, close it to ensure the environment variables take effect.</li>
+<li>Open build\win32\vc9\jpils.sln, and compile the Debug and Release versions.<br/>
+<i>If you did not install MySQL and set the MYSQL environment variable, the mysql-plug project will fail. Just ignore the failure or exclude the project from the builds.</i></li>
+<li>Run the Release configuration. Click <i>Yes</i> to register the .pils filetype.</li>
+<li>Close everything and open src\scripts\pils\html-generator.pils, to generate the HTML documentation from the openoffice writer files.</li>
+</ul>
+<h2>Updating the Juce bindings</h2>
+If you want to update the Juce bindings to incorporate recently added Juce classes and methods, you can try this:
+<ul>
+<li>Close all PILS programs</li>
+<li>Back up all <b>jpils-auto*.*</b> files in the <b>src/jpils</b> dir.</li>
+<li>Run pils\english\system\juce\plumming-generator.pils</li>
+<li>This will parse the <b>juce-amalgamated.h</b> file in the root of the Juce trunk, and generate updated versions of the auto-files.</li>
+<li>Try compiling and running the Debug configuration. <i><b>Don't compile the Release configuration unless the Debug configuration worked - or you will trash the executable needed to run the plumming generator.</li>
+</ul>
+</body></html>

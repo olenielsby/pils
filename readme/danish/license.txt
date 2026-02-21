@@ -1,0 +1,5 @@
+PILS systemets kildekode og dokumentation er offentligt fælleseje (public domain).
+
+Kompilering af PILS fortolkeren kræver Juce-biblioteket, som er GPL2 hvis
+der ikke er betalt licens, se. http://www.rawmaterialsoftware.com/juce/
+jpils-auto*.h filerne er afledt af Juce og underlagt Juce licens.

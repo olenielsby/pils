@@ -1,0 +1,9 @@
+><:[module: . pils, .timestamp 2009-01-04T01:48:38.044+01 .language system]><;
+><:[module: . pils language .language system]><;
+><:[module: . pils language İstanbul-express .timestamp 2009-01-04T01:50:21.669+01 .language system]><;
+{} **=** ;[[?:?]:]
+[ [?:?]:
+  ."upper" [upper|"i", "İ", "ı", "I"]
+  ."lower" [lower|"I", "ı", "İ", "i"]
+  ."title" [title|"i", "İ", "ı", "I"]
+]

@@ -1,0 +1,11 @@
+[pils: .use "<pils>/danish/system/danish", "<pils>/english/system/english" .language danish]
+><:[modul: . pils, .sprog dansk]><;
+><:[modul: . pils bruger .tidsstempel 2008-05-25T01:22:35.539+02 .sprog dansk]><;
+? +++
+;sprog @@ [pils sprog dansk]
+.sprogmodul [pils sprog dansk]
+.snak @@ [pils snak dansk]
+><:[modul: . pils rediger .tidsstempel 2008-12-06T23:04:14.998+01 .sprog dansk]><;
+><:[modul: . pils rediger kilde .tidsstempel 2008-05-25T01:23:04.754+02 .sprog dansk]><;
+><:[modul: . pils rediger kilde zoom .tidsstempel 2008-12-21T14:36:09.793+01 .sprog dansk]><;
+3

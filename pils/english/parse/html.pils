@@ -1,0 +1,325 @@
+[pils: .use? .language system]
+><:[module: . parse, .timestamp 2008-05-25T01:17:54.227+02 .language system]><;
+@><:[module: . parse html .timestamp 2008-05-25T01:16:29.439+02 .language system]><;
+{ html: text
+| :ok
+  @ split (.text)
+  first [] fold
+  { s := t | ;x text +# (mind position); puff }
+  { [] := (, ?) | :ok () }
+  { (done: .) := element: .|:ok done: .. & element }
+  { ok := ? call [.attribute-space .no-text .comment], ? | :ok }
+  { state := [< "<"] | :ok element: state }
+  { (element: state) := [head], head | :ok element: . (node:) head (name (head)); state }
+  { (element: .; state) := [>], ? | :ok content: . () .element; state }
+  { (content: ..element; state) := [text], text | :ok content: .. & text (text) .element; state }
+  { (element: .; state) := [attribute-name], name | :ok attribute: .name .element; state }
+  { (ok = attribute: .element? .name?; ?) := [=], ? | :ok }
+  { (attribute: .element .name; state) := [attribute-value], value
+  | :ok element: .. merge (name (name), value (value)); state
+  }
+  { (element: .; state) := [/>], ? | :who :ok who . state := element: . }
+  { (content: ..element; state) := element: . more | :ok content: .. & more .element; state }
+  { state := [</], ? | :ok end: state }
+  { (end: state) := [head], name | :ok end: .name name (name); state }
+  { (end: .name; state) := [>], ? | :who :ok who . state := end: .name }
+  { (content: . content' .element element'; content: ..element; state) := end: .name
+  | :who :ok who . (content: .. & element' & content' .element; state) := end: .name
+  }
+  { (content: ..element ..(name *); state) := end: .name
+  | :who :ok who . state := element: .. merge: ;: content
+  }
+  { () := element: . | :ok done: . element }
+  call {done: .|:ok done}
+}
+===
+{ name: +$ name | :ok [?:?] // (name lower) }
+{ value: ok | :self :ok ..(self text:) }
+{ value: ok $* """" <$* """" | :self :ok . -# 1 <-# 1 .(self text:) }
+{ value: ok $* "'" <$* "'" | :self :ok . -# 1 <-# 1 .(self text:) }
+{ text: $ ok
+| :ok . *=*
+  [ "&lt;", "<",
+    "&gt;", ">",
+    "&quot;", """",
+    "&quot", """",
+    "&apo;", "'"
+  ]
+}
+><:[module: . parse html split .timestamp 2008-12-06T22:57:49.916+01 .language system]><;
+{ split: .text
+| :ok
+  text split
+  [ comment </ < /> > head attribute-name attribute-space = attribute-value
+    no-text text
+    .comment "<!--" [*: [-: ["--", ">"],] 1,] "-". "->",
+    .< "<" [-: -: letter],
+    .</ "</" [-: -: letter],
+    .head [/: < </] identifier,
+    .identifier letter [*: letter, digit, ".", ":"],
+    .digit "0-9"
+    .letter "a-z", "A-Z", "_", "-"
+    .attribute-space [/: head attribute-value] [+: space],
+    .space [+: " ", "">, ""<, ""=],
+    .attribute-name [/: attribute-space] identifier,
+    .= [/: attribute-name] [*: space] "=" [*: space],
+    .attribute-value
+      [/: =]
+      [ """" [*: [-: """"] 1,] """",
+        "'" [*: [-: "'"] 1,] "'",
+        [+: [-: space, ">", "/" ] 1,]
+      ]
+      ,
+    ./> [/: attribute-space attribute-value head] "/" [*: space] ">",
+    .> [/: attribute-space attribute-value head] ">",
+    .text [/: > /> comment] [+: [-: element-start] 1,],
+    .no-text
+      [/: > /> comment] [+: " ", "">, ""<, ""= ] [-: -: element-start, -: 1],
+    .element-start <, </, comment
+  ]
+}
+><:[module: . parse html test .timestamp 2008-05-25T01:16:38.368+02 .language system]><;
+{ .test
+| :ok html (@@ data)
+}
+><:[module: . parse html test data .timestamp 2008-05-25T01:18:14.762+02 .language text]><;
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!-- ViewVC - http://viewvc.org/
+by Greg Stein - mailto:gstein@@lyra.org -->
+<head>
+<title>SourceForge.net Repository - [wxart2d] Index of /</title>
+<meta name="generator" content="ViewVC 1.0.3" />
+<link rel="stylesheet" href="/*docroot*/styles.css" type="text/css" />
+</head>
+<body>
+<table style="padding:0.1em;">
+<tr>
+<td>
+<strong>
+
+
+
+[wxart2d]
+
+
+</strong>
+
+</td>
+</tr>
+</table>
+
+
+<div style="float: right; padding: 5px;"><.a href="http://sourceforge.net"><.img src="/*docroot*/images/sflogo-210pxtrans.png" alt="(logo)" border=0 width=210 height=62><./a><./div>
+<h1>Index of /</h1>
+
+
+<!-- you may insert repository access instructions here -->
+
+<table class="auto">
+<tr><.td>Files shown:</td><.td><.strong>0</strong>
+
+
+</td><./tr>
+
+<tr>
+<td>Sticky Tag:</td>
+<td><.form method="get" action="/wxart2d/" style="display: inline">
+
+
+
+<select name="pathrev" onchange="submit()">
+<option value=""><./option>
+
+<optgroup label="Branches">
+
+
+<option>MAIN</option>
+
+
+</optgroup>
+
+<optgroup label="Non-branch tags">
+
+
+<option>HEAD</option>
+
+
+</optgroup>
+
+</select>
+
+<input type="submit" value="Set" />
+</form>
+
+</td>
+</tr>
+
+
+</table>
+
+
+<p><.a name="dirlist"><./a><./p>
+<hr />
+
+<table cellspacing="1" cellpadding="2">
+<thead>
+<tr>
+<th class="vc_header_sort" colspan="2">
+<a href="/wxart2d/?sortdir=down#dirlist">File
+
+<img class="vc_sortarrow" alt=""
+width="13" height="13"
+src="/*docroot*/images/up.png" />
+
+</a>
+</th>
+<th class="vc_header">
+<a href="/wxart2d/?sortby=rev#dirlist">Rev.
+
+</a>
+</th>
+<th class="vc_header">
+<a href="/wxart2d/?sortby=date#dirlist">Age
+
+</a>
+</th>
+<th class="vc_header">
+<a href="/wxart2d/?sortby=author#dirlist">Author
+
+</a>
+</th>
+
+<th class="vc_header">
+<a href="/wxart2d/?sortby=log#dirlist">Last log entry
+
+</a>
+</th>
+
+</tr>
+</thead>
+<tbody>
+
+
+<tr class="vc_row_even">
+<td colspan="2">
+
+<a name="Sharelib" href="/wxart2d/Sharelib/" title="View directory contents">
+
+<img src="/*docroot*/images/dir.png" alt="" width="16" height="16" />
+Sharelib/</a>
+
+</td>
+
+
+
+<td>&nbsp;</td>
+
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+
+
+<td>&nbsp;</td>
+
+
+
+</tr>
+
+<tr class="vc_row_odd">
+<td colspan="2">
+
+<a name="arg" href="/wxart2d/arg/" title="View directory contents">
+
+<img src="/*docroot*/images/dir.png" alt="" width="16" height="16" />
+arg/</a>
+
+</td>
+
+
+
+<td>&nbsp;</td>
+
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+
+
+<td>&nbsp;</td>
+
+
+
+ </tr>
+
+<tr class="vc_row_even">
+<td colspan="2">
+
+<a name="thirdparty" href="/wxart2d/thirdparty/" title="View directory contents">
+
+<img src="/*docroot*/images/dir.png" alt="" width="16" height="16" />
+thirdparty/</a>
+
+</td>
+
+
+
+<td>&nbsp;</td>
+
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+
+
+<td>&nbsp;</td>
+
+
+
+</tr>
+
+<tr class="vc_row_odd">
+<td colspan="2">
+
+<a name="wxArt2D" href="/wxart2d/wxArt2D/" title="View directory contents">
+
+<img src="/*docroot*/images/dir.png" alt="" width="16" height="16" />
+wxArt2D/</a>
+
+</td>
+
+
+
+<td>&nbsp;</td>
+
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+
+
+<td>&nbsp;</td>
+
+
+
+</tr>
+
+</tbody>
+</table>
+
+
+
+
+<hr />
+<table>
+<tr>
+<td>
+<address><.a href="http://sourceforge.net/">Back to SourceForge.net</a><./address><.br />
+Powered by <a href="http://viewvc.tigris.org/">ViewVC 1.0.3</a>
+</td>
+<td style="text-align:right;">
+<h3><.a href="/*docroot*/help_rootview.html">ViewVC and Help</a><./h3>
+</td>
+</tr>
+</table>
+</body>
+</html>
+
+

@@ -1,0 +1,6 @@
+[pils: .use "<pils>/danish/system/danish", .language danish]
+><:[modul: . test, .tidsstempel 2008-12-06T23:04:32.208+01 .sprog dansk]><;
+{ .test
+| :ok
+  ! skriv din testkode her
+}
