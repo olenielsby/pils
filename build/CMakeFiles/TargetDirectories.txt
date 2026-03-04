@@ -1,5 +1,0 @@
-/home/ole/pilsprogramming/build/CMakeFiles/edit_cache.dir
-/home/ole/pilsprogramming/build/CMakeFiles/rebuild_cache.dir
-/home/ole/pilsprogramming/build/src/pils-kernel/CMakeFiles/pils_kernel.dir
-/home/ole/pilsprogramming/build/src/pils-kernel/CMakeFiles/edit_cache.dir
-/home/ole/pilsprogramming/build/src/pils-kernel/CMakeFiles/rebuild_cache.dir
