@@ -371,13 +371,14 @@ namespace PILS
 		}
 		if (record.prefix && !validateString(*record.prefix)) return NAMESKIN_NONE;
 		if (!validateString(*record.local)) return NAMESKIN_STRING;
-		return record.local->nameSkin();
+        return record.local->nameSkin();
 	}
 
 	const Step *SinkBug::pass(Runner &run, const Any *value)
 	{
+        const int bugLevels = 5;
 		WritingString writing(run, language, value);
-		value->write(writing, WRITING_EXPRESSION, 10, NULL);
+        value->write(writing, WRITING_EXPRESSION, bugLevels, NULL);
 		const PilsString *string = writing.getString();
 		bug(run, *string);
 		string->releaseReference();

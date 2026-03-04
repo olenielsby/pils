@@ -2,21 +2,30 @@
 #ifndef _JPILS_SUPPLEMENT_H_
 #define _JPILS_SUPPLEMENT_H_
 
-#include "pils-kernel/writing.h"
+#include "writing.h"
 #include "jpils-thread.h"
-#include <juce.h>
+#include <juce_gui_basics/juce_gui_basics.h>
+#include <juce_gui_extra/juce_gui_extra.h>
+#include <juce_graphics/juce_graphics.h>
+#include <juce_audio_processors/juce_audio_processors.h>
+#include <juce_audio_formats/juce_audio_formats.h>
+#include <juce_audio_utils/juce_audio_utils.h>
+#include <juce_core/juce_core.h>
+#include <juce_cryptography/juce_cryptography.h>
 
 /* Additions to juce */
 
-BEGIN_JUCE_NAMESPACE
+// BEGIN_JUCE_NAMESPACE
+namespace juce
+{
 
 class mixin__Component : public DragAndDropTarget, public FileDragAndDropTarget
 {
 public:
-	bool isInterestedInDragSource(const SourceDetails& dragSourceDetails) {return false;}
-	void itemDropped(const SourceDetails& dragSourceDetails) {}
-	bool isInterestedInFileDrag(const StringArray &files) {return false;}
-	void filesDropped(const StringArray &files, int, int) {}
+    bool isInterestedInDragSource(const SourceDetails& dragSourceDetails) override {return false;}
+    void itemDropped(const SourceDetails& dragSourceDetails) override {}
+    bool isInterestedInFileDrag(const StringArray &files) override {return false;}
+    void filesDropped(const StringArray &files, int, int) override {}
 };
 
 class mixin__TopLevelWindow : public mixin__Component, public DragAndDropContainer
@@ -28,22 +37,23 @@ class pils__TreeView
 	: public TreeView
 {
 public:
-	pils__TreeView(const String &componentName = String::empty);
-	~pils__TreeView();
+//	pils__TreeView(const String &componentName = String::empty);
+    pils__TreeView(const String &componentName = {});
+    ~pils__TreeView();
 	pils__TreeViewItem *getRootItem() const throw ();
 	pils__TreeViewItem *newRootItem() throw ();
 	void clear() throw ();
-	virtual bool mightContainSubItems(pils__TreeViewItem &item);
-	virtual const String getUniqueName(const pils__TreeViewItem &item);
-	virtual void itemOpennessChanged(pils__TreeViewItem &item, bool isNowOpen);
-	virtual int getItemWidth(const pils__TreeViewItem &item);
-	virtual int getItemHeight(const pils__TreeViewItem &item);
-	virtual Component *createItemComponent(pils__TreeViewItem &item);
-	virtual void paintItem(pils__TreeViewItem &item, Graphics &g, int width, int height);
-	virtual void itemClicked(pils__TreeViewItem &item, const MouseEvent &e);
-	virtual void itemDoubleClicked(pils__TreeViewItem &item, const MouseEvent &e);
-	virtual void itemSelectionChanged(pils__TreeViewItem &item, bool isNowSelected);
-	virtual const String getDragSourceDescription(pils__TreeViewItem &item);
+    virtual bool mightContainSubItems(pils__TreeViewItem &item);
+    virtual const String getUniqueName(const pils__TreeViewItem &item);
+    virtual void itemOpennessChanged(pils__TreeViewItem &item, bool isNowOpen);
+    virtual int getItemWidth(const pils__TreeViewItem &item);
+    virtual int getItemHeight(const pils__TreeViewItem &item);
+    virtual Component *createItemComponent(pils__TreeViewItem &item);
+    virtual void paintItem(pils__TreeViewItem &item, Graphics &g, int width, int height);
+    virtual void itemClicked(pils__TreeViewItem &item, const MouseEvent &e);
+    virtual void itemDoubleClicked(pils__TreeViewItem &item, const MouseEvent &e);
+    virtual void itemSelectionChanged(pils__TreeViewItem &item, bool isNowSelected);
+    virtual const String getDragSourceDescription(pils__TreeViewItem &item);
 };
 
 class pils__TreeViewItem
@@ -59,17 +69,17 @@ public:
 	void setMind(const PILS::Constant *value);
 private:
 	friend class pils__TreeView;
-	virtual bool mightContainSubItems();
-	virtual const String getUniqueName() const;
-	virtual void itemOpennessChanged(bool isNowOpen);
-	virtual int getItemWidth() const;
-	virtual int getItemHeight() const;
-	virtual Component *createItemComponent();
-	virtual void paintItem(Graphics &g, int width, int height);
-	virtual void itemClicked(const MouseEvent &e);
-	virtual void itemDoubleClicked(const MouseEvent &e);
-	virtual void itemSelectionChanged(bool isNowSelected);
-	virtual const var getDragSourceDescription();
+    bool mightContainSubItems() override;
+    String getUniqueName() const override;
+    void itemOpennessChanged(bool isNowOpen) override;
+    int getItemWidth() const override;
+    int getItemHeight() const override;
+    std::unique_ptr<Component> createItemComponent() override;
+    void paintItem(Graphics &g, int width, int height) override;
+    void itemClicked(const MouseEvent &e) override;
+    void itemDoubleClicked(const MouseEvent &e) override;
+    void itemSelectionChanged(bool isNowSelected) override;
+    var getDragSourceDescription() override;
 	const PILS::Constant *mind;
 };
 
@@ -82,9 +92,12 @@ protected:
 
 public:
 	/* dummy implementations of abstract methods */
-	const StringArray getMenuBarNames(){return StringArray();}
-	const PopupMenu getMenuForIndex(int topLevelMenuIndex, const String &menuName){return PopupMenu();}
-	virtual void menuItemSelected(int menuItemID, int topLevelMenuIndex){}
+    // const StringArray getMenuBarNames(){return StringArray();}
+    StringArray getMenuBarNames() override {return {};}
+
+    // const PopupMenu getMenuForIndex(int topLevelMenuIndex, const String &menuName){return P;}
+    PopupMenu getMenuForIndex(int topLevelMenuIndex, const String &menuName) override {return {};}
+    virtual void menuItemSelected(int menuItemID, int topLevelMenuIndex) override {}
 };
 
 class pils__Component
@@ -144,7 +157,7 @@ class pils__ListBox
 	: public ListBox, public ListBoxModel
 {
 public:
-	pils__ListBox(const String &componentName = String::empty) throw ()
+    pils__ListBox(const String &componentName = {}) throw ()
 		: ListBox(componentName, NULL)
 	{
 		setModel(this);
@@ -153,8 +166,8 @@ public:
 		setModel(NULL);
 	}
 	/* dummy implementations of abstract methods */
-	int getNumRows(){return 0;}
-	void paintListBoxItem(int rowNumber, Graphics &g, int width, int height, bool rowIsSelected){}
+    int getNumRows() override {return 0;}
+    void paintListBoxItem(int rowNumber, Graphics &g, int width, int height, bool rowIsSelected) override {}
 	juce_UseDebuggingNewOperator
 };
 
@@ -162,7 +175,7 @@ class pils__TableListBox
 	: public TableListBox, public TableListBoxModel
 {
 public:
-	pils__TableListBox(const String &componentName = String::empty) throw ()
+    pils__TableListBox(const String &componentName = {}) throw ()
 		: TableListBox(componentName, NULL)
 	{
 		setModel(this);
@@ -172,14 +185,14 @@ public:
 		setModel(NULL);
 	}
 	/* dummy implementations of abstract methods */
-	int getNumRows(){return 0;}
-	void paintRowBackground(Graphics &g, int rowNumber, int width, int height, bool rowIsSelected){}
-	void paintCell(Graphics &g, int rowNumber, int columnId, int width, int height, bool rowIsSelected){}
+    int getNumRows() override {return 0;}
+    void paintRowBackground(Graphics &g, int rowNumber, int width, int height, bool rowIsSelected) override {}
+    void paintCell(Graphics &g, int rowNumber, int columnId, int width, int height, bool rowIsSelected) override {}
  	juce_UseDebuggingNewOperator
 };
 
 class pils__TextEditor
-	: public TextEditor, public TextEditorListener
+    : public TextEditor, public TextEditor::Listener
 {
 public:
 	pils__TextEditor()
@@ -191,10 +204,10 @@ public:
 		this->removeListener(this);
 	}
 protected:
-	void textEditorTextChanged(TextEditor &){}
-	void textEditorReturnKeyPressed(TextEditor &){}
-	void textEditorEscapeKeyPressed(TextEditor &){}
-	void textEditorFocusLost(TextEditor &){}
+    void textEditorTextChanged(TextEditor &) override {}
+    void textEditorReturnKeyPressed(TextEditor &) override {}
+    void textEditorEscapeKeyPressed(TextEditor &) override {}
+    void textEditorFocusLost(TextEditor &) override {}
 };
 
 class pils__TabBarButton
@@ -260,7 +273,7 @@ class pils__Timer
 {
 public:
 	pils__Timer() throw () {}
-	void timerCallback() {}
+    void timerCallback() override {}
 };
 
 class pils__FileBrowserListener
@@ -268,9 +281,9 @@ class pils__FileBrowserListener
 {
 public:
 	pils__FileBrowserListener() throw () {}
-	void selectionChanged() {}
-	void fileClicked(const File &file, const MouseEvent &e) {}
-	void fileDoubleClicked(const File &file) {}
+    void selectionChanged() override {}
+    void fileClicked(const File &file, const MouseEvent &e) override {}
+    void fileDoubleClicked(const File &file) override {}
 };
 
 class pils__BooleanPropertyComponent
@@ -280,19 +293,10 @@ public:
 	pils__BooleanPropertyComponent(const String &propertyName, const String &buttonTextWhenTrue, const String &buttonTextWhenFalse, bool value = false)
 		: BooleanPropertyComponent(propertyName, buttonTextWhenTrue, buttonTextWhenFalse), value(value)
 	{}
-	void setState (const bool newState) {value = newState;}
-	bool getState () const {return value;}
+    void setState (const bool newState) override {value = newState;}
+    bool getState () const override {return value;}
 private:
 	bool value;
-};
-
-class pils__OpenGLComponent
-	: public OpenGLComponent
-{
-public:
-	pils__OpenGLComponent() {}
-	void newOpenGLContextCreated() {}
-	void renderOpenGL() {}
 };
 
 class Convert
@@ -361,11 +365,13 @@ public:
     void scrollToColumn (int newFirstColumnOnScreen);
     void scrollToKeepCaretOnScreen();
 
-    void insertTextAtCaret (const String& textToInsert);
+    void insertTextAtCaret (const String& textToInsert) override;
     void insertTabAtCaret();
-    const Range<int> getHighlightedRegion() const;
-    void setHighlightedRegion (const Range<int>& newRange);
-    const String getTextInRange (const Range<int>& range) const;
+    //    const Range<int> getHighlightedRegion() const override;
+    Range<int> getHighlightedRegion() const override;
+    void setHighlightedRegion (const Range<int>& newRange) override;
+    // const String getTextInRange (const Range<int>& range) const override;
+    String getTextInRange (const Range<int>& range) const override;
     void setTabSize (int numSpacesPerTab, bool insertSpacesInsteadOfTabCharacters);
     int getTabSize() const noexcept                     { return spacesPerTab; }
     bool areSpacesInsertedForTabs() const               { return useSpacesForTabs; }
@@ -382,23 +388,23 @@ public:
     };
     void setScrollbarThickness (int thickness);
     int getScrollbarThickness() const noexcept          { return scrollbarThickness; }
-    void resized();
-    void paint (Graphics& g);
-    bool keyPressed (const KeyPress& key);
-    void mouseDown (const MouseEvent& e);
-    void mouseDrag (const MouseEvent& e);
-    void mouseUp (const MouseEvent& e);
-    void mouseDoubleClick (const MouseEvent& e);
-    void mouseWheelMove (const MouseEvent& e, float wheelIncrementX, float wheelIncrementY);
-    void focusGained (FocusChangeType cause);
-    void focusLost (FocusChangeType cause);
-    void timerCallback();
-    void scrollBarMoved (ScrollBar* scrollBarThatHasMoved, double newRangeStart);
-    void handleAsyncUpdate();
+    void resized() override;
+    void paint (Graphics& g) override;
+    bool keyPressed (const KeyPress& key) override;
+    void mouseDown (const MouseEvent& e) override;
+    void mouseDrag (const MouseEvent& e) override;
+    void mouseUp (const MouseEvent& e) override;
+    void mouseDoubleClick (const MouseEvent& e) override;
+    void mouseWheelMove (const MouseEvent& e, const MouseWheelDetails& wheel) override;
+    void focusGained (FocusChangeType cause) override;
+    void focusLost (FocusChangeType cause) override;
+    void timerCallback() override;
+    void scrollBarMoved (ScrollBar* scrollBarThatHasMoved, double newRangeStart) override;
+    void handleAsyncUpdate() override;
     void codeDocumentChanged (const CodeDocument::Position& affectedTextStart,
                               const CodeDocument::Position& affectedTextEnd);
-    bool isTextInputActive() const;
-    void setTemporaryUnderlining (const Array <Range<int> >&);
+    bool isTextInputActive() const override;
+    void setTemporaryUnderlining (const Array <Range<int> >&) override;
 
 private:
     CodeDocument& document;
@@ -414,7 +420,7 @@ private:
     CodeDocument::Position caretPos;
     CodeDocument::Position selectionStart, selectionEnd;
 
-    ScopedPointer<CaretComponent> caret;
+    std::unique_ptr<CaretComponent> caret;
     ScrollBar verticalScrollBar, horizontalScrollBar;
 
     enum DragType
@@ -498,7 +504,7 @@ class JUCE_API  PilsCodeTokeniser    : public CodeTokeniser
 public:
     //==============================================================================
     PilsCodeTokeniser();
-    ~PilsCodeTokeniser();
+    ~PilsCodeTokeniser() override;
 
     //==============================================================================
     enum TokenType
@@ -514,15 +520,15 @@ public:
     };
 
     //==============================================================================
-    int readNextToken (CodeDocument::Iterator& source);
-    StringArray getTokenTypes();
-    const Colour getDefaultColour (int tokenType);
-
+    int readNextToken (CodeDocument::Iterator& source) override;
+    //StringArray getTokenTypes() override;
+    //const Colour getDefaultColour (int tokenType) override;
+    CodeEditorComponent::ColourScheme getDefaultColourScheme() override;
 private:
     //==============================================================================
     JUCE_LEAK_DETECTOR (PilsCodeTokeniser);
 };
 
 
-END_JUCE_NAMESPACE
+} // END_JUCE_NAMESPACE
 #endif

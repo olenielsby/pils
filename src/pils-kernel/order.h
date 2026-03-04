@@ -22,7 +22,7 @@ namespace PILS
 		class Comparator
 		{
 		public:
-			bool operator()(const Pair &p1, const Pair &p2) const;
+            bool operator()(const Pair &p1, const Pair &p2) const;
 		};
 		class PipesourceSorted
 			: public Pipesource
@@ -31,8 +31,8 @@ namespace PILS
 			PipesourceSorted(Pipe &pipe, Bag &bag)
 				: pipe(pipe), at(bag.begin()), end(bag.end())
 			{}
-			const Step *step_(Runner &run) const;
-			Sink *kick(Runner &run);
+            const Step *step_(Runner &run) const override;
+            Sink *kick(Runner &run) override;
 		private:
 			Pipe &pipe;
 			Bag::iterator at;

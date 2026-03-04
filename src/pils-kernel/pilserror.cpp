@@ -4,7 +4,9 @@ namespace PILS
 {
 	const Step *Sink::error(Runner &run, const Any *thing, const Express *what, const Any *who)
 	{
+        const int debugOutputLevels = 5;
 		Error *error = new (Heap::allocate(sizeof(Error))) Error(thing);
+//        error->writeToDebugOutput(debugOutputLevels);
 		new (run.allocate(sizeof(SinkErrorCall))) SinkErrorCall(error, what, who);
 		run.calling.who = who;
 		run.calling.what = what;

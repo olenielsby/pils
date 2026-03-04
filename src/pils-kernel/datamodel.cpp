@@ -1,6 +1,9 @@
 /* This file is public domain */
 #include "datamodel.h"
 #include <string.h>
+#include <typeinfo>
+#include <cxxabi.h>
+#include <memory>
 
 namespace PILS
 {
@@ -110,6 +113,36 @@ namespace PILS
 	{
 		return NULL;
 	}
+
+    void Any::writeToDebugOutput(int levels) const
+    {
+#ifndef NDEBUG
+        writingToDebugOutput(levels);
+        std::fputc('\n', stderr);
+#endif
+    }
+
+    void Any::writingToDebugOutput(int level) const
+    {
+#ifndef NDEBUG
+        int status = 0;
+        const char* mangled = typeid(*this).name();
+
+        std::unique_ptr<char, void(*)(void*)> demangled(
+            abi::__cxa_demangle(mangled, nullptr, nullptr, &status),
+            std::free);
+
+        if (status == 0 && demangled)
+            std::fprintf(stderr, "<%s>", demangled.get());
+        else
+            std::fprintf(stderr, "<%s>", mangled);
+#endif
+    }
+    void Any::writingToDebugOutputNextLevel(int level) const
+    {
+        if (level--) writingToDebugOutput(level);
+        else std::fputs("...", stderr);
+    }
 
 	const Channel *NodeConstantShort::as_Channel() const
 	{
@@ -758,7 +791,79 @@ namespace PILS
 		return cliche->lookupNonempty(this, 0, &name);
 	}
 
-	const Any *NodeExpressTrailer::getAttribute(const Constant &name) const
+    void NodeExpress::writingToDebugOutput(int level) const
+    {
+#ifndef NDEBUG
+        std::fputc('(', stderr);
+        cliche->head->writingToDebugOutputNextLevel(level);
+        std::fputc(':', stderr);
+
+        for (size_t i = 0; i < cliche->count; ++i)
+        {
+            std::fputs(" .", stderr);
+            cliche->attributes[i]->writingToDebugOutputNextLevel(level);
+            std::fputc(' ', stderr);
+            element[i]->writingToDebugOutputNextLevel(level);
+        }
+        std::fputc(')', stderr);
+#endif
+    }
+
+    void NodeConstant::writingToDebugOutput(int level) const
+    {
+#ifndef NDEBUG
+        std::fputc('[', stderr);
+        cliche->head->writingToDebugOutputNextLevel(level);
+        std::fputc(':', stderr);
+
+        for (size_t i = 0; i < cliche->count; ++i)
+        {
+            std::fputs(" .", stderr);
+            cliche->attributes[i]->writingToDebugOutputNextLevel(level);
+            std::fputc(' ', stderr);
+            element[i]->writingToDebugOutputNextLevel(level);
+        }
+        std::fputc(']', stderr);
+#endif
+    }
+
+    void Cliche::writingToDebugOutput(int level) const
+    {
+#ifndef NDEBUG
+        std::fputc('[', stderr);
+        head->writingToDebugOutputNextLevel(level);
+
+        for (size_t i = 0; i < count; ++i)
+        {
+            std::fputc('|', stderr);
+            attributes[i]->writingToDebugOutputNextLevel(level);
+        }
+        std::fputc(']', stderr);
+#endif
+    }
+
+    void PilsString::writingToDebugOutput(int level) const
+    {
+#ifndef NDEBUG
+        size_t max = 100;
+        std::fputc('"', stderr);
+        for (size_t i = 0; i < count->value && i < max; ++i)
+        {
+            std::fputc(value[i], stderr);
+        }
+        std::fputc('"', stderr);
+        if (count->value > max)
+            std::fputc('+', stderr);
+#endif
+    }
+    void Empty::writingToDebugOutput(int level) const
+    {
+#ifndef NDEBUG
+        std::fputs("[]", stderr);
+#endif
+    }
+
+    const Any *NodeExpressTrailer::getAttribute(const Constant &name) const
 	{
 		if (&name == &Empty::singleton)	return element[0];
 		else return cliche->lookupNonempty(this, 1, &name);
@@ -1687,9 +1792,9 @@ namespace PILS
 					*v++ = (const Constant*)run->second;
 				}
 				const Cliche *cliche = head->clichefy(attributes, count);
-				delete attributes;
+                delete[] attributes;
 				node = cliche->node(values);
-				delete values;
+                delete[] values;
 				cliche->unduplicateReference();
 			}
 		}
@@ -1737,9 +1842,9 @@ namespace PILS
 					*v++ = run->second;
 				}
 				const Cliche *cliche = head->clichefy(attributes, count);
-				delete attributes;
+                delete[] attributes;
 				node = cliche->node(values);
-				delete values;
+                delete[] values;
 				cliche->releaseReference();
 			}
 		}
@@ -1823,7 +1928,7 @@ namespace PILS
 					*a++ = *run;
 				}
 				cliche = head->clichefy(attributes, count);
-				delete attributes;
+                delete[] attributes;
 			}
 		}
 		alive = false;

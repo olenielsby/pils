@@ -1,6 +1,6 @@
 /* This file is public domain */
 #include "jpils-standard-specials.h"
-#include "pilsplug/plughost.h"
+#include "plughost.h"
 namespace PILS
 {
 	const Namespace_Juce *Namespace_Juce::singleton;
@@ -285,4 +285,20 @@ namespace PILS
 	{
 		return recognizer.recognizing(value);
 	}
+
+
+    bool ReallySpecial::specialComparing(const PlugLibraryLookup&) const
+    {
+        return false;
+    }
+
+    bool ReallySpecial::specialComparing(const PlugObjectLookup&) const
+    {
+        return false;
+    }
+
+    void* Plumcake::loadPlugin(const PilsString&) const
+    {
+        return NULL;
+    }
 }

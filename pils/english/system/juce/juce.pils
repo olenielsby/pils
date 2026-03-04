@@ -288,12 +288,15 @@
 { window: title | :who :try who window: say (title) }
 { window: $ title
 | :possibly
-  plumcake j:DocumentWindow (title, #ffc846, 7)
+  plumcake j:DocumentWindow (title, #ffc846, 7 bug {})
+  try {?|"Got DocumentWindow" bug {}}
   j:setBounds [100 200 300 400]
   j:setResizable (1, 0)
   j:setTitleBarTextCentred 0
   j:setWantsKeyboardFocus 0
   j:setVisible 1
+  try {?|"Did setVisible" bug {}}
+  bug {}
   when
   { j:new: ok j:Component
   | :who :ok
@@ -354,7 +357,8 @@
       call (who mind j:action .:need) or (?)
     }
   }
-  .(@ strap) .:need
+  try {?|"Did when" bug {}}
+   .(@ strap) .:need
 }
 ><:[module:. platform juce graphics .timestamp 2011-07-21T00:05:14.412+02 .language juce]><;
 ;centred j:Justification 63;

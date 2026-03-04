@@ -15,18 +15,18 @@ namespace PILS
 		SinkIndex(const CallWho &what, const Integer *index)
 			: what(what), index(index->value), indexInteger(index)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, const PilsString &value);
-		const Step *pass(Runner &run, const ListConstant &value);
-		const Step *pass(Runner &run, const ListExpress &value);
-		const Step *pass(Runner &run, const PilsString *value);
-		const Step *pass(Runner &run, const ListConstant *value);
-		const Step *pass(Runner &run, const ListExpress *value);
-		const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count);
-		const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count);
-		const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count);
-		const Step *pass(Runner &run, SinkTaggedNodeBuilding &nodeBuilding);
-		const Step *pass(Runner &run, const Any *who);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, const PilsString &value) override;
+        const Step *pass(Runner &run, const ListConstant &value) override;
+        const Step *pass(Runner &run, const ListExpress &value) override;
+        const Step *pass(Runner &run, const PilsString *value) override;
+        const Step *pass(Runner &run, const ListConstant *value) override;
+        const Step *pass(Runner &run, const ListExpress *value) override;
+        const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count) override;
+        const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count) override;
+        const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count) override;
+        const Step *pass(Runner &run, SinkTaggedNodeBuilding &nodeBuilding) override;
+        const Step *pass(Runner &run, const Any *who) override;
 	private:
 		const CallWho &what;
 		long index;
@@ -37,9 +37,9 @@ namespace PILS
 		: public Sink
 	{
 	public:
-		const Step *pass(Runner &run, const PilsString &value);
-		const Step *pass(Runner &run, const PilsString *value);
-		const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count);
+        const Step *pass(Runner &run, const PilsString &value) override;
+        const Step *pass(Runner &run, const PilsString *value) override;
+        const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count) override;
 	protected:
 		SinkConcatenating(const CallWho &what)
 			: what(what)
@@ -54,11 +54,11 @@ namespace PILS
 		SinkConcatenatingRange(const CallWho &what, const Any *anchor, const PILS_CHAR *text, size_t count)
 			: SinkConcatenating(what), anchor(anchor), text(text), count(count)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, const Any *value);
-		const Step *pass(Runner &run, SinkTaggedNodeBuilding &nodeBuilding);
-		size_t concatenateCount();
-		const Step *concatenateBuild(Runner &run, PILS_CHAR *string, PILS_CHAR *at);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, const Any *value) override;
+        const Step *pass(Runner &run, SinkTaggedNodeBuilding &nodeBuilding) override;
+        size_t concatenateCount() override;
+        const Step *concatenateBuild(Runner &run, PILS_CHAR *string, PILS_CHAR *at) override;
 	private:
 		const Any *anchor;
 		const PILS_CHAR *text;
@@ -72,11 +72,11 @@ namespace PILS
 		SinkConcatenatingString(const CallWho &what, const PilsString *string)
 			: SinkConcatenating(what), string(string)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, const Any *value);
-		const Step *pass(Runner &run, SinkTaggedNodeBuilding &nodeBuilding);
-		size_t concatenateCount();
-		const Step *concatenateBuild(Runner &run, PILS_CHAR *string, PILS_CHAR *at);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, const Any *value) override;
+        const Step *pass(Runner &run, SinkTaggedNodeBuilding &nodeBuilding) override;
+        size_t concatenateCount() override;
+        const Step *concatenateBuild(Runner &run, PILS_CHAR *string, PILS_CHAR *at) override;
 	private:
 		const PilsString *string;
 	};
@@ -88,7 +88,7 @@ namespace PILS
 		RangeExpress(const BuiltinClicheRange &cliche, const Express *value)
 			: NodeExpressTiny(cliche, value)
 		{}
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	};
 
 	class RangeConstant
@@ -98,7 +98,7 @@ namespace PILS
 		RangeConstant(const HashedConstant *&link, const BuiltinClicheRange &cliche, const Integer *value)
 			: NodeConstantTiny(link, cliche, value)
 		{}
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	};
 
 	class WhoRangeExpress
@@ -108,7 +108,7 @@ namespace PILS
 		WhoRangeExpress(const RangeExpress *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoRangeConstant
@@ -118,7 +118,7 @@ namespace PILS
 		WhoRangeConstant(const RangeConstant *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class SinkRangeOperand
@@ -128,12 +128,12 @@ namespace PILS
 		SinkRangeOperand(const WhoRangeExpress &what)
 			: what(what)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Any *value);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Any *value) override;
 	private:
 		const WhoRangeExpress &what;
 	};
@@ -142,8 +142,8 @@ namespace PILS
 		: public Sink
 	{
 	public:
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, const Any *value);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, const Any *value) override;
 	protected:
 		SinkRange(const CallWho &what, long range)
 			: what(what), range(range)
@@ -160,12 +160,12 @@ namespace PILS
 		SinkPlusRange(const CallWho &what, long range)
 			: SinkRange(what, range)
 		{}
-		const Step *pass(Runner &run, const PilsString *value);
-		const Step *pass(Runner &run, const ListConstant *value);
-		const Step *pass(Runner &run, const ListExpress *value);
-		const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count);
-		const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count);
-		const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count);
+        const Step *pass(Runner &run, const PilsString *value) override;
+        const Step *pass(Runner &run, const ListConstant *value) override;
+        const Step *pass(Runner &run, const ListExpress *value) override;
+        const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count) override;
+        const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count) override;
+        const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count) override;
 	};
 
 	class SinkPlusSlackRange
@@ -176,13 +176,13 @@ namespace PILS
 		SinkPlusSlackRange(const CallWho &what, long range)
 			: SinkRange(what, range)
 		{}
-		const Step *pass(Runner &run, const PilsString *value);
-		const Step *pass(Runner &run, const ListConstant *value);
-		const Step *pass(Runner &run, const ListExpress *value);
-		const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count);
-		const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count);
-		const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count);
-		Pipe *connectPipe(Runner &run);
+        const Step *pass(Runner &run, const PilsString *value) override;
+        const Step *pass(Runner &run, const ListConstant *value) override;
+        const Step *pass(Runner &run, const ListExpress *value) override;
+        const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count) override;
+        const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count) override;
+        const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count) override;
+        Pipe *connectPipe(Runner &run) override;
 	};
 
 	class SinkPlusRangeReverse
@@ -193,12 +193,12 @@ namespace PILS
 		SinkPlusRangeReverse(const CallWho &what, long range)
 			: SinkRange(what, range)
 		{}
-		const Step *pass(Runner &run, const PilsString *value);
-		const Step *pass(Runner &run, const ListConstant *value);
-		const Step *pass(Runner &run, const ListExpress *value);
-		const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count);
-		const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count);
-		const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count);
+        const Step *pass(Runner &run, const PilsString *value) override;
+        const Step *pass(Runner &run, const ListConstant *value) override;
+        const Step *pass(Runner &run, const ListExpress *value) override;
+        const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count) override;
+        const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count) override;
+        const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count) override;
 	};
 
 	class SinkPlusSlackRangeReverse
@@ -209,12 +209,12 @@ namespace PILS
 		SinkPlusSlackRangeReverse(const CallWho &what, long range)
 			: SinkRange(what, range)
 		{}
-		const Step *pass(Runner &run, const PilsString *value);
-		const Step *pass(Runner &run, const ListConstant *value);
-		const Step *pass(Runner &run, const ListExpress *value);
-		const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count);
-		const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count);
-		const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count);
+        const Step *pass(Runner &run, const PilsString *value) override;
+        const Step *pass(Runner &run, const ListConstant *value) override;
+        const Step *pass(Runner &run, const ListExpress *value) override;
+        const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count) override;
+        const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count) override;
+        const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count) override;
 	};
 
 	class SinkMinusRange
@@ -225,12 +225,12 @@ namespace PILS
 		SinkMinusRange(const CallWho &what, long range)
 			: SinkRange(what, range)
 		{}
-		const Step *pass(Runner &run, const PilsString *value);
-		const Step *pass(Runner &run, const ListConstant *value);
-		const Step *pass(Runner &run, const ListExpress *value);
-		const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count);
-		const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count);
-		const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count);
+        const Step *pass(Runner &run, const PilsString *value) override;
+        const Step *pass(Runner &run, const ListConstant *value) override;
+        const Step *pass(Runner &run, const ListExpress *value) override;
+        const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count) override;
+        const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count) override;
+        const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count) override;
 	};
 
 	class SinkMinusSlackRange
@@ -241,13 +241,13 @@ namespace PILS
 		SinkMinusSlackRange(const CallWho &what, long range)
 			: SinkRange(what, range)
 		{}
-		const Step *pass(Runner &run, const PilsString *value);
-		const Step *pass(Runner &run, const ListConstant *value);
-		const Step *pass(Runner &run, const ListExpress *value);
-		const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count);
-		const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count);
-		const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count);
-		Pipe *connectPipe(Runner &run);
+        const Step *pass(Runner &run, const PilsString *value) override;
+        const Step *pass(Runner &run, const ListConstant *value) override;
+        const Step *pass(Runner &run, const ListExpress *value) override;
+        const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count) override;
+        const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count) override;
+        const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count) override;
+        Pipe *connectPipe(Runner &run) override;
 	};
 
 	class SinkMinusRangeReverse
@@ -258,12 +258,12 @@ namespace PILS
 		SinkMinusRangeReverse(const CallWho &what, long range)
 			: SinkRange(what, range)
 		{}
-		const Step *pass(Runner &run, const PilsString *value);
-		const Step *pass(Runner &run, const ListConstant *value);
-		const Step *pass(Runner &run, const ListExpress *value);
-		const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count);
-		const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count);
-		const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count);
+        const Step *pass(Runner &run, const PilsString *value) override;
+        const Step *pass(Runner &run, const ListConstant *value) override;
+        const Step *pass(Runner &run, const ListExpress *value) override;
+        const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count) override;
+        const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count) override;
+        const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count) override;
 	};
 
 	class SinkMinusSlackRangeReverse
@@ -274,12 +274,12 @@ namespace PILS
 		SinkMinusSlackRangeReverse(const CallWho &what, long range)
 			: SinkRange(what, range)
 		{}
-		const Step *pass(Runner &run, const PilsString *value);
-		const Step *pass(Runner &run, const ListConstant *value);
-		const Step *pass(Runner &run, const ListExpress *value);
-		const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count);
-		const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count);
-		const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count);
+        const Step *pass(Runner &run, const PilsString *value) override;
+        const Step *pass(Runner &run, const ListConstant *value) override;
+        const Step *pass(Runner &run, const ListExpress *value) override;
+        const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count) override;
+        const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count) override;
+        const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count) override;
 	};
 
 	/* Slack ranges ++# and --# are pipeable. */
@@ -288,15 +288,15 @@ namespace PILS
 		: public Pipe
 	{
 	public:
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, const Any *value);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, const Any *value) override;
 	protected:
 		PipeSlackRange(const CallWho &what, size_t range)
 			: what(what),range(range)
 		{}
 		const CallWho &what;
 		size_t range;
-        const Step *pipeEnd(Runner &run);
+        const Step *pipeEnd(Runner &run) override;
 	};
 
 	class PipePlusSlackRange
@@ -306,8 +306,8 @@ namespace PILS
 		PipePlusSlackRange(const CallWho &what, size_t range)
 			: PipeSlackRange(what, range)
 		{}
-		const Step *pipeBegin(Runner &run);
-        const Step *pipeItem(Runner &run, const Any *item);
+        const Step *pipeBegin(Runner &run) override;
+        const Step *pipeItem(Runner &run, const Any *item) override;
 	};
 
 	class PipeMinusSlackRange
@@ -317,8 +317,8 @@ namespace PILS
 		PipeMinusSlackRange(const CallWho &what, size_t range)
 			: PipeSlackRange(what, range)
 		{}
-		const Step *pipeBegin(Runner &run);
-        const Step *pipeItem(Runner &run, const Any *item);
+        const Step *pipeBegin(Runner &run) override;
+        const Step *pipeItem(Runner &run, const Any *item) override;
 	};
 
 	class WhoSearchString
@@ -328,7 +328,7 @@ namespace PILS
 		WhoSearchString(const SearchString *call, const Any *who)
 			: CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoPlusRangeSearchString
@@ -338,7 +338,7 @@ namespace PILS
 		WhoPlusRangeSearchString(const SearchString *call, const Any *who)
 			: WhoSearchString(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoPlusRangeReverseSearchString
@@ -348,7 +348,7 @@ namespace PILS
 		WhoPlusRangeReverseSearchString(const SearchString *call, const Any *who)
 			: WhoSearchString(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoMinusRangeSearchString
@@ -358,7 +358,7 @@ namespace PILS
 		WhoMinusRangeSearchString(const SearchString *call, const Any *who)
 			: WhoSearchString(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoMinusRangeReverseSearchString
@@ -368,7 +368,7 @@ namespace PILS
 		WhoMinusRangeReverseSearchString(const SearchString *call, const Any *who)
 			: WhoSearchString(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoSearchListConstant
@@ -378,7 +378,7 @@ namespace PILS
 		WhoSearchListConstant(const SearchListConstant *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoPlusRangeSearchListConstant
@@ -388,7 +388,7 @@ namespace PILS
 		WhoPlusRangeSearchListConstant(const SearchListConstant *call, const Any *who)
 			: WhoSearchListConstant(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoPlusRangeReverseSearchListConstant
@@ -398,7 +398,7 @@ namespace PILS
 		WhoPlusRangeReverseSearchListConstant(const SearchListConstant *call, const Any *who)
 			: WhoSearchListConstant(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoMinusRangeSearchListConstant
@@ -408,7 +408,7 @@ namespace PILS
 		WhoMinusRangeSearchListConstant(const SearchListConstant *call, const Any *who)
 			: WhoSearchListConstant(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoMinusRangeReverseSearchListConstant
@@ -418,7 +418,7 @@ namespace PILS
 		WhoMinusRangeReverseSearchListConstant(const SearchListConstant *call, const Any *who)
 			: WhoSearchListConstant(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoSearchExpress
@@ -428,7 +428,7 @@ namespace PILS
 		WhoSearchExpress(const SearchExpress *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoPlusRangeSearchExpress
@@ -438,7 +438,7 @@ namespace PILS
 		WhoPlusRangeSearchExpress(const SearchExpress *call, const Any *who)
 			: WhoSearchExpress(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoPlusRangeReverseSearchExpress
@@ -448,7 +448,7 @@ namespace PILS
 		WhoPlusRangeReverseSearchExpress(const SearchExpress *call, const Any *who)
 			: WhoSearchExpress(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoMinusRangeSearchExpress
@@ -458,7 +458,7 @@ namespace PILS
 		WhoMinusRangeSearchExpress(const SearchExpress *call, const Any *who)
 			: WhoSearchExpress(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoMinusRangeReverseSearchExpress
@@ -468,7 +468,7 @@ namespace PILS
 		WhoMinusRangeReverseSearchExpress(const SearchExpress *call, const Any *who)
 			: WhoSearchExpress(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class SinkSearch
@@ -489,10 +489,10 @@ namespace PILS
 		SinkSearchString(const CallWho &what, const BuiltinClicheSearchAbstract &cliche, const PilsString *string)
 			: SinkSearch(what, cliche), string(string)
 		{}
-		const Step *pass(Runner &run, const Any *value);
-		const Step *pass(Runner &run, const PilsString *value);
-		const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count);
-		Sink *kick(Runner &run);
+        const Step *pass(Runner &run, const Any *value) override;
+        const Step *pass(Runner &run, const PilsString *value) override;
+        const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count) override;
+        Sink *kick(Runner &run) override;
 	protected:
 		virtual const Step *searched(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count, size_t hit);
 		const PilsString *string;
@@ -506,7 +506,7 @@ namespace PILS
 			: SinkSearchString(what, cliche, string)
 		{}
 	protected:
-		 const Step *searched(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count, size_t hit);
+         const Step *searched(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count, size_t hit) override;
 	};
 
 	class SinkSearchStringPlusRangeReverse
@@ -517,7 +517,7 @@ namespace PILS
 			: SinkSearchString(what, cliche, string)
 		{}
 	protected:
-		const Step *searched(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count, size_t hit);
+        const Step *searched(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count, size_t hit) override;
 	};
 
 	class SinkSearchStringMinusRange
@@ -528,7 +528,7 @@ namespace PILS
 			: SinkSearchString(what, cliche, string)
 		{}
 	protected:
-		const Step *searched(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count, size_t hit);
+        const Step *searched(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count, size_t hit) override;
 	};
 
 	class SinkSearchStringMinusRangeReverse
@@ -539,7 +539,7 @@ namespace PILS
 			: SinkSearchString(what, cliche, string)
 		{}
 	protected:
-		const Step *searched(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count, size_t hit);
+        const Step *searched(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count, size_t hit) override;
 	};
 
 	class SinkSearchListConstant
@@ -549,12 +549,12 @@ namespace PILS
 		SinkSearchListConstant(const CallWho &what, const BuiltinClicheSearchAbstract &cliche, const ListConstant *list)
 			: SinkSearch(what, cliche), list(list)
 		{}
-		const Step *pass(Runner &run, const Any *value);
-		const Step *pass(Runner &run, const ListConstant *value);
-		const Step *pass(Runner &run, const ListExpress *value);
-		const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count);
-		const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count);
-		Sink *kick(Runner &run);
+        const Step *pass(Runner &run, const Any *value) override;
+        const Step *pass(Runner &run, const ListConstant *value) override;
+        const Step *pass(Runner &run, const ListExpress *value) override;
+        const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count) override;
+        const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count) override;
+        Sink *kick(Runner &run) override;
 	protected:
 		virtual const Step *searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit);
 		virtual const Step *searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit);
@@ -569,8 +569,8 @@ namespace PILS
 			: SinkSearchListConstant(what, cliche, list)
 		{}
 	protected:
-		const Step *searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit);
-		const Step *searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit);
+        const Step *searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit) override;
+        const Step *searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit) override;
 	};
 
 	class SinkSearchListConstantPlusRangeReverse
@@ -581,8 +581,8 @@ namespace PILS
 			: SinkSearchListConstant(what, cliche, list)
 		{}
 	protected:
-		const Step *searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit);
-		const Step *searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit);
+        const Step *searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit) override;
+        const Step *searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit) override;
 	};
 
 	class SinkSearchListConstantMinusRange
@@ -593,8 +593,8 @@ namespace PILS
 			: SinkSearchListConstant(what, cliche, list)
 		{}
 	protected:
-		const Step *searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit);
-		const Step *searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit);
+        const Step *searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit) override;
+        const Step *searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit) override;
 	};
 
 	class SinkSearchListConstantMinusRangeReverse
@@ -605,8 +605,8 @@ namespace PILS
 			: SinkSearchListConstant(what, cliche, list)
 		{}
 	protected:
-		const Step *searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit);
-		const Step *searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit);
+        const Step *searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit) override;
+        const Step *searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit) override;
 	};
 
 	class SinkSearchListExpress
@@ -616,12 +616,12 @@ namespace PILS
 		SinkSearchListExpress(const CallWho &what, const BuiltinClicheSearchAbstract &cliche, const ListExpress *list)
 			: SinkSearch(what, cliche), list(list)
 		{}
-		const Step *pass(Runner &run, const Any *value);
-		const Step *pass(Runner &run, const ListConstant *value);
-		const Step *pass(Runner &run, const ListExpress *value);
-		const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count);
-		const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count);
-		Sink *kick(Runner &run);
+        const Step *pass(Runner &run, const Any *value) override;
+        const Step *pass(Runner &run, const ListConstant *value) override;
+        const Step *pass(Runner &run, const ListExpress *value) override;
+        const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count) override;
+        const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count) override;
+        Sink *kick(Runner &run) override;
 	protected:
 		virtual const Step *searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit);
 		virtual const Step *searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit);
@@ -636,8 +636,8 @@ namespace PILS
 			: SinkSearchListExpress(what, cliche, list)
 		{}
 	protected:
-		const Step *searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit);
-		const Step *searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit);
+        const Step *searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit) override;
+        const Step *searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit) override;
 	};
 
 	class SinkSearchListExpressPlusRangeReverse
@@ -648,8 +648,8 @@ namespace PILS
 			: SinkSearchListExpress(what, cliche, list)
 		{}
 	protected:
-		const Step *searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit);
-		const Step *searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit);
+        const Step *searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit) override;
+        const Step *searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit) override;
 	};
 
 	class SinkSearchListExpressMinusRange
@@ -660,8 +660,8 @@ namespace PILS
 			: SinkSearchListExpress(what, cliche, list)
 		{}
 	protected:
-		const Step *searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit);
-		const Step *searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit);
+        const Step *searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit) override;
+        const Step *searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit) override;
 	};
 
 	class SinkSearchListExpressMinusRangeReverse
@@ -672,8 +672,8 @@ namespace PILS
 			: SinkSearchListExpress(what, cliche, list)
 		{}
 	protected:
-		const Step *searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit);
-		const Step *searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit);
+        const Step *searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit) override;
+        const Step *searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit) override;
 	};
 
 	class SinkSearchOperand
@@ -683,12 +683,12 @@ namespace PILS
 		SinkSearchOperand(const CallWho &what)
 			: what(what)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, const Any *value);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, const Any *value) override;
 
-		const Step *pass(Runner &run, const PilsString *value);
-		const Step *pass(Runner &run, const ListConstant *value);
-		const Step *pass(Runner &run, const ListExpress *value);
+        const Step *pass(Runner &run, const PilsString *value) override;
+        const Step *pass(Runner &run, const ListConstant *value) override;
+        const Step *pass(Runner &run, const ListExpress *value) override;
 	protected:
 		const CallWho &what;
 	};
@@ -700,9 +700,9 @@ namespace PILS
 		SinkSearchPlusRangeOperand(const CallWho &what)
 			: SinkSearchOperand(what)
 		{}
-		const Step *pass(Runner &run, const PilsString *value);
-		const Step *pass(Runner &run, const ListConstant *value);
-		const Step *pass(Runner &run, const ListExpress *value);
+        const Step *pass(Runner &run, const PilsString *value) override;
+        const Step *pass(Runner &run, const ListConstant *value) override;
+        const Step *pass(Runner &run, const ListExpress *value) override;
 	};
 
 	class SinkSearchPlusRangeReverseOperand
@@ -712,9 +712,9 @@ namespace PILS
 		SinkSearchPlusRangeReverseOperand(const CallWho &what)
 			: SinkSearchOperand(what)
 		{}
-		const Step *pass(Runner &run, const PilsString *value);
-		const Step *pass(Runner &run, const ListConstant *value);
-		const Step *pass(Runner &run, const ListExpress *value);
+        const Step *pass(Runner &run, const PilsString *value) override;
+        const Step *pass(Runner &run, const ListConstant *value) override;
+        const Step *pass(Runner &run, const ListExpress *value) override;
 	};
 
 	class SinkSearchMinusRangeOperand
@@ -724,9 +724,9 @@ namespace PILS
 		SinkSearchMinusRangeOperand(const CallWho &what)
 			: SinkSearchOperand(what)
 		{}
-		const Step *pass(Runner &run, const PilsString *value);
-		const Step *pass(Runner &run, const ListConstant *value);
-		const Step *pass(Runner &run, const ListExpress *value);
+        const Step *pass(Runner &run, const PilsString *value) override;
+        const Step *pass(Runner &run, const ListConstant *value) override;
+        const Step *pass(Runner &run, const ListExpress *value) override;
 	};
 
 	class SinkSearchMinusRangeReverseOperand
@@ -736,9 +736,9 @@ namespace PILS
 		SinkSearchMinusRangeReverseOperand(const CallWho &what)
 			: SinkSearchOperand(what)
 		{}
-		const Step *pass(Runner &run, const PilsString *value);
-		const Step *pass(Runner &run, const ListConstant *value);
-		const Step *pass(Runner &run, const ListExpress *value);
+        const Step *pass(Runner &run, const PilsString *value) override;
+        const Step *pass(Runner &run, const ListConstant *value) override;
+        const Step *pass(Runner &run, const ListExpress *value) override;
 	};
 
 	class WhoCasing
@@ -748,7 +748,7 @@ namespace PILS
 		WhoCasing(const PropertyCasing *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class SinkCasing
@@ -758,10 +758,10 @@ namespace PILS
 		SinkCasing(const WhoCasing &what)
 			: what(what)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, const Any *who);
-		const Step *pass(Runner &run, const PilsString *value);
-		const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, const Any *who) override;
+        const Step *pass(Runner &run, const PilsString *value) override;
+        const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count) override;
 	private:
 		const WhoCasing &what;
 	};
@@ -773,7 +773,7 @@ namespace PILS
 		WhoPropertyTraverse(const PropertyTraverse *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class SinkPropertyTraverse
@@ -783,8 +783,8 @@ namespace PILS
 		SinkPropertyTraverse(const WhoPropertyTraverse &what)
 			: SinkProperty(what)
 		{}
-		const Step *pass(Runner &run, const ListConstant *value);
-		const Step *pass(Runner &run, const ListExpress *value);
+        const Step *pass(Runner &run, const ListConstant *value) override;
+        const Step *pass(Runner &run, const ListExpress *value) override;
 	};
 
 	class WhoPropertySinglewise
@@ -794,7 +794,7 @@ namespace PILS
 		WhoPropertySinglewise(const PropertySinglewise *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class SinkPropertySinglewise
@@ -804,9 +804,9 @@ namespace PILS
 		SinkPropertySinglewise(const WhoPropertySinglewise &what)
 			: SinkProperty(what)
 		{}
-		const Step *pass(Runner &run, const ListConstant *value);
-		const Step *pass(Runner &run, const ListExpress *value);
-		const Step *pass(Runner &run, const Any *value);
+        const Step *pass(Runner &run, const ListConstant *value) override;
+        const Step *pass(Runner &run, const ListExpress *value) override;
+        const Step *pass(Runner &run, const Any *value) override;
 	};
 
 	class WhoPropertyListwise
@@ -816,7 +816,7 @@ namespace PILS
 		WhoPropertyListwise(const PropertyListwise *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class SinkPropertyListwise
@@ -826,9 +826,9 @@ namespace PILS
 		SinkPropertyListwise(const WhoPropertyListwise &what)
 			: SinkProperty(what)
 		{}
-		const Step *pass(Runner &run, const ListConstant *value);
-		const Step *pass(Runner &run, const ListExpress *value);
-		const Step *pass(Runner &run, const Any *value);
+        const Step *pass(Runner &run, const ListConstant *value) override;
+        const Step *pass(Runner &run, const ListExpress *value) override;
+        const Step *pass(Runner &run, const Any *value) override;
 	};
 
 	class SinkStringOperation
@@ -838,8 +838,8 @@ namespace PILS
 		SinkStringOperation(const WhoUntypedOperation &what, const PilsString *operand)
 			: what(what), operand(operand)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, const Any *value);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, const Any *value) override;
 	protected:
 		const WhoUntypedOperation &what;
 		const PilsString *operand;
@@ -853,7 +853,7 @@ namespace PILS
 		SinkSpliceString(const WhoUntypedOperation &what, const PilsString *operand)
 			: SinkStringOperation(what, operand)
 		{}
-		const Step *pass(Runner &run, const ListConstant *value);
+        const Step *pass(Runner &run, const ListConstant *value) override;
 	};
 
 	class SinkSplitString
@@ -863,7 +863,7 @@ namespace PILS
 		SinkSplitString(const WhoUntypedOperation &what, const PilsString *operand)
 			: SinkStringOperation(what, operand)
 		{}
-		const Step *pass(Runner &run, const PilsString *value);
+        const Step *pass(Runner &run, const PilsString *value) override;
 	};
 
 	class SinkSplitSize
@@ -873,13 +873,13 @@ namespace PILS
 		SinkSplitSize(const WhoUntypedOperation &what, long size)
 			: SinkRange(what, size)
 		{}
-		const Step *pass(Runner &run, const PilsString *value);
-		const Step *pass(Runner &run, const ListConstant *value);
-		const Step *pass(Runner &run, const ListExpress *value);
-		const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count);
-		const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count);
-		const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count);
-		Pipe *connectPipe(Runner &run);
+        const Step *pass(Runner &run, const PilsString *value) override;
+        const Step *pass(Runner &run, const ListConstant *value) override;
+        const Step *pass(Runner &run, const ListExpress *value) override;
+        const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count) override;
+        const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count) override;
+        const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count) override;
+        Pipe *connectPipe(Runner &run) override;
 	};
 
 	class PipesourceSplitEmptySeparator
@@ -889,8 +889,8 @@ namespace PILS
 		PipesourceSplitEmptySeparator(const PilsString *string)
 			: string(string), at(string->value), end(&string->value[string->count->value])
 		{}
-		Sink *kick(Runner &run);
-		const Step *step_(Runner &run) const;
+        Sink *kick(Runner &run) override;
+        const Step *step_(Runner &run) const override;
 	protected:
 		const PilsString *const string;
 		const PILS_CHAR *at;
@@ -904,8 +904,8 @@ namespace PILS
 		PipesourceSplit(const PilsString *string, const PilsString *separator)
 			: PipesourceSplitEmptySeparator(string), separator(separator)
 		{}
-		Sink *kick(Runner &run);
-		const Step *step_(Runner &run) const;
+        Sink *kick(Runner &run) override;
+        const Step *step_(Runner &run) const override;
 	private:
 		const PilsString *separator;
 	};
@@ -917,8 +917,8 @@ namespace PILS
 		PipesourceSplitStringSize(const Any *anchor, const PILS_CHAR *range, size_t count, size_t size)
 			: anchor(anchor), range(range), count(count), size(size)
 		{}
-		Sink *kick(Runner &run);
-		const Step *step_(Runner &run) const;
+        Sink *kick(Runner &run) override;
+        const Step *step_(Runner &run) const override;
 	private:
 		const Any *const anchor;
 		const PILS_CHAR *range;
@@ -935,11 +935,11 @@ namespace PILS
 		{
 			at = (const Any **)(this + 1);
 		}
-		Sink *kick(Runner &run);
-		const Step *pipeItem(Runner &run, const Any *item);
-		const Step *pipeBegin(Runner &run);
-		const Step *pipeEnd(Runner &run);
-		const Step *pass(Runner &run, const Any *thing);
+        Sink *kick(Runner &run) override;
+        const Step *pipeItem(Runner &run, const Any *item) override;
+        const Step *pipeBegin(Runner &run) override;
+        const Step *pipeEnd(Runner &run) override;
+        const Step *pass(Runner &run, const Any *thing) override;
 	private:
 		const Any **begin() {return (const Any **)(this + 1);}
 		const Any **end() {return (const Any **)&pipe;}
@@ -955,9 +955,9 @@ namespace PILS
 		SinkReplaceStringPairs(const WhoUntypedOperation &what, const ListConstant *pairs)
 			: what(what), pairs(pairs)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, const Any *value);
-		const Step *pass(Runner &run, const PilsString *value);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, const Any *value) override;
+        const Step *pass(Runner &run, const PilsString *value) override;
 	private:
 		const WhoUntypedOperation &what;
 	protected:
@@ -975,8 +975,8 @@ namespace PILS
 		{
 		public:
 			CountBag() : count(0) {}
-			void put(const PILS_CHAR c);
-			void put(const PILS_CHAR *c, size_t count);
+            void put(const PILS_CHAR c) override;
+            void put(const PILS_CHAR *c, size_t count) override;
 			size_t count;
 		};
 
@@ -985,8 +985,8 @@ namespace PILS
 		{
 		public:
 			TextBag(PILS_CHAR *text) : text(text) {}
-			void put(const PILS_CHAR c);
-			void put(const PILS_CHAR *c, size_t count);
+            void put(const PILS_CHAR c) override;
+            void put(const PILS_CHAR *c, size_t count) override;
 		private:
 			PILS_CHAR *text;
 		};
@@ -1000,7 +1000,7 @@ namespace PILS
 				  pairs((const PilsString *const *)pairs->element),
 				  endPairs((const PilsString *const *)&pairs->element[pairs->count->value])
 			{}
-			void travel(Bag &bag) const;
+            void travel(Bag &bag) const;
 		private:
 			const PILS_CHAR *text;
 			const PILS_CHAR *endText;
@@ -1016,7 +1016,7 @@ namespace PILS
 		SinkReplaceBeginningStringPairs(const WhoUntypedOperation &what, const ListConstant *pairs)
 			: SinkReplaceStringPairs(what, pairs)
 		{}
-		const Step *pass(Runner &run, const PilsString *value);
+        const Step *pass(Runner &run, const PilsString *value) override;
 	};
 
 	class SinkReplaceEndingStringPairs
@@ -1026,7 +1026,7 @@ namespace PILS
 		SinkReplaceEndingStringPairs(const WhoUntypedOperation &what, const ListConstant *pairs)
 			: SinkReplaceStringPairs(what, pairs)
 		{}
-		const Step *pass(Runner &run, const PilsString *value);
+        const Step *pass(Runner &run, const PilsString *value) override;
 	};
 
 	class SinkOrder
@@ -1036,10 +1036,10 @@ namespace PILS
 		SinkOrder(WhoUntypedOperation &what, const Any *who)
 			: what(what), who(who)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, const ListExpress *list);
-		const Step *pass(Runner &run, const ListConstant *list);
-		const Step *pass(Runner &run, const Any *thing);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, const ListExpress *list) override;
+        const Step *pass(Runner &run, const ListConstant *list) override;
+        const Step *pass(Runner &run, const Any *thing) override;
 	private:
 		WhoUntypedOperation &what;
 		const Any *who;

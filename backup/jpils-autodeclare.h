@@ -243,7 +243,7 @@ namespace PILS
         static JuceClass c__Random;
         static JuceClass c__ReadWriteLock;
         static JuceClass c__RecentlyOpenedFilesList;
-        static JuceClass c__RectangleList_int;
+        static JuceClass c__RectangleList;
         static JuceClass c__RectangleList__Iterator;
         static JuceClass c__RectanglePlacement;
         static JuceReferenceCountedClass c__ReferenceCountedObject;
@@ -1758,7 +1758,7 @@ namespace PILS
         VoidMethod setRadioGroupId;
         VoidMethod setRepeatSpeed;
         VoidMethod setState;
-        VoidMethod setToggleState;
+//        VoidMethod setToggleState;
         VoidMethod setTriggeredOnMouseDown;
         VoidMethod triggerClick;
     };
@@ -1766,7 +1766,7 @@ namespace PILS
     class ButtonPropertyComponent__methods {
         static ButtonPropertyComponent__methods singleton;
         ButtonPropertyComponent__methods();
-        VoidMethod buttonClicked__1;
+//        VoidMethod buttonClicked__1;
         VoidMethod buttonClicked__2;
         StringMethod getButtonText;
     };
@@ -1811,7 +1811,7 @@ namespace PILS
     class CallOutBox__methods {
         static CallOutBox__methods singleton;
         CallOutBox__methods();
-        ConstructorMethod ctor;
+//        ConstructorMethod ctor;
         VoidMethod setArrowSize;
         VoidMethod updatePosition;
     };
@@ -1846,7 +1846,7 @@ namespace PILS
         static ChannelRemappingAudioSource__methods singleton;
         ChannelRemappingAudioSource__methods();
         VoidMethod clearAllMappings;
-        FactoryMethod createXml;
+//        FactoryMethod createXml;
         ConstructorMethod ctor;
         IntMethod getRemappedInputChannel;
         IntMethod getRemappedOutputChannel;
@@ -1888,7 +1888,7 @@ namespace PILS
         static CodeDocument__Iterator__methods singleton;
         CodeDocument__Iterator__methods();
         ConstructorMethod ctor__1;
-        ConstructorMethod ctor__2;
+//        ConstructorMethod ctor__2;
         IntMethod getLine;
         IntMethod getPosition;
         BoolMethod isEOF;
@@ -1911,8 +1911,8 @@ namespace PILS
         BoolMethod _eq_eq;
         BoolMethod _not_eq;
         ConstructorMethod ctor__1;
-        ConstructorMethod ctor__2;
-        ConstructorMethod ctor__3;
+//        ConstructorMethod ctor__2;
+//        ConstructorMethod ctor__3;
         ConstructorMethod ctor__4;
         IntMethod getCharacter;
         IntMethod getIndexInLine;
@@ -1931,7 +1931,7 @@ namespace PILS
         static CodeEditorComponent__methods singleton;
         CodeEditorComponent__methods();
         BoolMethod areSpacesInsertedForTabs;
-        VoidMethod codeDocumentChanged;
+//        VoidMethod codeDocumentChanged;
         BoolMethod copyToClipboard;
         BoolMethod cutToClipboard;
         BoolMethod deleteBackwards;
@@ -1964,8 +1964,8 @@ namespace PILS
         BoolMethod pageUp;
         BoolMethod pasteFromClipboard;
         BoolMethod redo;
-        VoidMethod resetToDefaultColours;
-        VoidMethod scrollBarMoved;
+//        VoidMethod resetToDefaultColours;
+//        VoidMethod scrollBarMoved;
         VoidMethod scrollBy;
         BoolMethod scrollDown;
         VoidMethod scrollToColumn;
@@ -1973,7 +1973,7 @@ namespace PILS
         VoidMethod scrollToLine;
         BoolMethod scrollUp;
         BoolMethod selectAll;
-        VoidMethod setColourForTokenType;
+//        VoidMethod setColourForTokenType;
         VoidMethod setFont;
         VoidMethod setScrollbarThickness;
         VoidMethod setTabSize;
@@ -1983,8 +1983,8 @@ namespace PILS
     class CodeTokeniser__methods {
         static CodeTokeniser__methods singleton;
         CodeTokeniser__methods();
-        PilsColorMethod getDefaultColour;
-        UnimplementedMethod getTokenTypes;
+//        PilsColorMethod getDefaultColour;
+//        UnimplementedMethod getTokenTypes;
     };
 
     class Colour__methods {
@@ -2006,7 +2006,7 @@ namespace PILS
         PilsColorMethod fromHSV;
         PilsColorMethod fromRGB;
         PilsColorMethod fromRGBA;
-        PilsColorMethod fromRGBAFloat;
+//        PilsColorMethod fromRGBAFloat;
         PilsColorMethod fromString;
         Uint32Method getARGB;
         Uint8Method getAlpha;
@@ -2075,7 +2075,7 @@ namespace PILS
         VoidMethod addSectionHeading;
         VoidMethod addSeparator;
         VoidMethod changeItemText;
-        VoidMethod clear;
+//        VoidMethod clear;
         ConstructorMethod ctor;
         IntMethod getItemId;
         StringMethod getItemText;
@@ -2094,9 +2094,9 @@ namespace PILS
         VoidMethod setEditableText;
         VoidMethod setItemEnabled;
         VoidMethod setJustificationType;
-        VoidMethod setSelectedId;
-        VoidMethod setSelectedItemIndex;
-        VoidMethod setText;
+//        VoidMethod setSelectedId;
+//        VoidMethod setSelectedItemIndex;
+//        VoidMethod setText;
         VoidMethod setTextWhenNoChoicesAvailable;
         VoidMethod setTextWhenNothingSelected;
         VoidMethod showEditor;
@@ -2128,7 +2128,7 @@ namespace PILS
         BoolMethod contains;
         VoidMethod copyAllExplicitColoursTo;
         CopyMethod__Image createComponentSnapshot;
-        FactoryMethod createFocusTraverser;
+//        FactoryMethod createFocusTraverser;
         VoidMethod deleteAllChildren;
         VoidMethod enablementChanged;
         VoidMethod exitModalState;
@@ -2138,7 +2138,7 @@ namespace PILS
         VoidMethod focusOfChildComponentChanged;
         FloatMethod getAlpha;
         IntMethod getBottom;
-        UnimplementedMethod getBounds;
+//        UnimplementedMethod getBounds;
         UnimplementedMethod getBoundsInParent;
         ReferenceMethod getChildComponent;
         ReferenceMethod getComponentAt__1;
@@ -2154,7 +2154,7 @@ namespace PILS
         UnimplementedMethod getLocalBounds;
         UnimplementedMethod getLocalPoint;
         ReferenceMethod getLookAndFeel;
-        ReferenceMethod getMarkers;
+//        ReferenceMethod getMarkers;
         BoolMethod getMouseClickGrabsKeyboardFocus;
         CopyMethod__MouseCursor getMouseCursor;
         StringMethod getName;
@@ -2175,7 +2175,7 @@ namespace PILS
         IntMethod getScreenY;
         ReferenceMethod getTopLevelComponent;
         CopyMethod__AffineTransform getTransform;
-        VoidMethod getVisibleArea;
+//        VoidMethod getVisibleArea;
         BoolMethod getWantsKeyboardFocus;
         IntMethod getWidth;
         IntMethod getX;
@@ -2232,15 +2232,15 @@ namespace PILS
         VoidMethod repaint__2;
         VoidMethod repaint__3;
         VoidMethod resized;
-        IntMethod runModalLoop;
+//        IntMethod runModalLoop;
         VoidMethod sendLookAndFeelChange;
         VoidMethod setAlpha;
         VoidMethod setAlwaysOnTop;
         VoidMethod setBoundsInset;
         VoidMethod setBoundsRelative;
-        VoidMethod setBoundsToFit;
-        VoidMethod setBounds__1;
-        VoidMethod setBounds__2;
+//        VoidMethod setBoundsToFit;
+//        VoidMethod setBounds__1;
+//        VoidMethod setBounds__2;
         VoidMethod setBounds__3;
         VoidMethod setBounds__4;
         VoidMethod setBroughtToFrontOnMouseClick;
@@ -2252,7 +2252,7 @@ namespace PILS
         VoidMethod setComponentID;
         VoidMethod setEnabled;
         VoidMethod setExplicitFocusOrder;
-        VoidMethod setFocusContainer;
+//        VoidMethod setFocusContainer;
         VoidMethod setInterceptsMouseClicks;
         VoidMethod setLookAndFeel;
         VoidMethod setMouseClickGrabsKeyboardFocus;
@@ -2291,7 +2291,7 @@ namespace PILS
     class ComponentBoundsConstrainer__methods {
         static ComponentBoundsConstrainer__methods singleton;
         ComponentBoundsConstrainer__methods();
-        VoidMethod applyBoundsToComponent;
+//        VoidMethod applyBoundsToComponent;
         VoidMethod checkComponentBounds;
         ConstructorMethod ctor;
         DoubleMethod getFixedAspectRatio;
@@ -2348,37 +2348,37 @@ namespace PILS
     class ComponentPeer__methods {
         static ComponentPeer__methods singleton;
         ComponentPeer__methods();
-        VoidMethod addMaskedRegion;
-        VoidMethod clearMaskedRegion;
+//        VoidMethod addMaskedRegion;
+//        VoidMethod clearMaskedRegion;
         BoolMethod contains;
-        VoidMethod dismissPendingTextInput;
+//        VoidMethod dismissPendingTextInput;
         ReferenceMethod findCurrentTextInputTarget;
         UnimplementedMethod getAvailableRenderingEngines;
-        ReferenceMethod getComponent;
+//        ReferenceMethod getComponent;
         ReferenceMethod getConstrainer;
         IntMethod getCurrentRenderingEngine;
-        UnimplementedMethod getFrameSize;
+//        UnimplementedMethod getFrameSize;
         ReferenceMethod getLastFocusedSubcomponent;
         UnimplementedMethod getNonFullScreenBounds;
         IntMethod getNumPeers;
         ReferenceMethod getPeer;
-        UnimplementedMethod getScreenPosition;
+//        UnimplementedMethod getScreenPosition;
         IntMethod getStyleFlags;
         Uint32Method getUniqueID;
         UnimplementedMethod globalToLocal__1;
         UnimplementedMethod globalToLocal__2;
         VoidMethod grabFocus;
         VoidMethod handleBroughtToFront;
-        VoidMethod handleFileDragDrop;
-        VoidMethod handleFileDragExit;
-        VoidMethod handleFileDragMove;
+//        VoidMethod handleFileDragDrop;
+//        VoidMethod handleFileDragExit;
+//        VoidMethod handleFileDragMove;
         VoidMethod handleFocusGain;
         VoidMethod handleFocusLoss;
         BoolMethod handleKeyPress;
         BoolMethod handleKeyUpOrDown;
         VoidMethod handleModifierKeysChange;
-        VoidMethod handleMouseEvent;
-        VoidMethod handleMouseWheel;
+//        VoidMethod handleMouseEvent;
+//        VoidMethod handleMouseWheel;
         VoidMethod handleMovedOrResized;
         VoidMethod handlePaint;
         VoidMethod handleScreenSizeChange;
@@ -2393,18 +2393,18 @@ namespace PILS
         VoidMethod repaint;
         VoidMethod setAlpha;
         BoolMethod setAlwaysOnTop;
-        VoidMethod setBounds;
+//        VoidMethod setBounds;
         VoidMethod setConstrainer;
         VoidMethod setCurrentRenderingEngine;
         VoidMethod setFullScreen;
         VoidMethod setIcon;
         VoidMethod setMinimised;
         VoidMethod setNonFullScreenBounds;
-        VoidMethod setPosition;
-        VoidMethod setSize;
+//        VoidMethod setPosition;
+//        VoidMethod setSize;
         VoidMethod setTitle;
         VoidMethod setVisible;
-        VoidMethod textInputRequired;
+//        VoidMethod textInputRequired;
         VoidMethod toBehind;
         VoidMethod toFront;
     };
@@ -2444,14 +2444,14 @@ namespace PILS
     class CustomTypeface__methods {
         static CustomTypeface__methods singleton;
         CustomTypeface__methods();
-        VoidMethod addGlyph;
-        VoidMethod addGlyphsFromOtherTypeface;
-        VoidMethod addKerningPair;
-        VoidMethod clear;
-        ConstructorMethod ctor__1;
-        ConstructorMethod ctor__2;
-        VoidMethod setCharacteristics;
-        BoolMethod writeToStream;
+//        VoidMethod addGlyph;
+//        VoidMethod addGlyphsFromOtherTypeface;
+//        VoidMethod addKerningPair;
+//        VoidMethod clear;
+//        ConstructorMethod ctor__1;
+//        ConstructorMethod ctor__2;
+//        VoidMethod setCharacteristics;
+//        BoolMethod writeToStream;
     };
 
     class DefaultHashFunctions__methods {
@@ -2476,7 +2476,7 @@ namespace PILS
         VoidMethod beginDragAutoRepeat;
         BoolMethod canUseSemiTransparentWindows;
         ReferenceMethod findComponentAt;
-        CopyMethod__RectangleList getAllMonitorDisplayAreas;
+//        CopyMethod__RectangleList getAllMonitorDisplayAreas;
         ReferenceMethod getAnimator;
         ReferenceMethod getComponent;
         IntMethod getCurrentOrientation;
@@ -2484,17 +2484,17 @@ namespace PILS
         ReferenceMethod getDraggingMouseSource;
         ReferenceMethod getInstance;
         ReferenceMethod getKioskModeComponent;
-        UnimplementedMethod getMainMonitorArea;
-        ReferenceMethod getMainMouseSource;
-        UnimplementedMethod getMonitorAreaContaining;
-        IntMethod getMouseButtonClickCounter;
+//        UnimplementedMethod getMainMonitorArea;
+//        ReferenceMethod getMainMouseSource;
+//        UnimplementedMethod getMonitorAreaContaining;
+//        IntMethod getMouseButtonClickCounter;
         ReferenceMethod getMouseSource;
         IntMethod getNumComponents;
         IntMethod getNumDraggingMouseSources;
         IntMethod getNumMouseSources;
         BoolMethod isOrientationEnabled;
         BoolMethod isScreenSaverEnabled;
-        VoidMethod refreshMonitorSizes;
+//        VoidMethod refreshMonitorSizes;
         VoidMethod removeFocusChangeListener;
         VoidMethod removeGlobalMouseListener;
         VoidMethod setDefaultLookAndFeel;
@@ -2508,7 +2508,7 @@ namespace PILS
         static DialogWindow__methods singleton;
         DialogWindow__methods();
         VoidMethod showDialog;
-        IntMethod showModalDialog;
+//        IntMethod showModalDialog;
     };
 
     class DirectoryContentsDisplayComponent__methods {
@@ -2529,7 +2529,7 @@ namespace PILS
         static DirectoryContentsList__methods singleton;
         DirectoryContentsList__methods();
         VoidMethod clear;
-        IntMethod compareElements;
+//        IntMethod compareElements;
         ConstructorMethod ctor;
         ReferenceMethod getDirectory;
         CopyMethod__File getFile;
@@ -2608,11 +2608,11 @@ namespace PILS
     class Drawable__methods {
         static Drawable__methods singleton;
         Drawable__methods();
-        FactoryMethod createCopy;
-        FactoryMethod createFromImageData;
-        FactoryMethod createFromImageDataStream;
-        FactoryMethod createFromImageFile;
-        FactoryMethod createFromSVG;
+//        FactoryMethod createCopy;
+//        FactoryMethod createFromImageData;
+//        FactoryMethod createFromImageDataStream;
+//        FactoryMethod createFromImageFile;
+//        FactoryMethod createFromSVG;
         VoidMethod draw;
         VoidMethod drawAt;
         VoidMethod drawWithin;
@@ -2626,12 +2626,12 @@ namespace PILS
         static DrawableButton__methods singleton;
         DrawableButton__methods();
         ConstructorMethod ctor;
-        PilsColorMethod getBackgroundColour;
+//        PilsColorMethod getBackgroundColour;
         ReferenceMethod getCurrentImage;
         ReferenceMethod getDownImage;
         ReferenceMethod getNormalImage;
         ReferenceMethod getOverImage;
-        VoidMethod setBackgroundColours;
+//        VoidMethod setBackgroundColours;
         VoidMethod setButtonStyle;
         VoidMethod setEdgeIndent;
         VoidMethod setImages;
@@ -2641,8 +2641,8 @@ namespace PILS
         static DrawableComposite__methods singleton;
         DrawableComposite__methods();
         ConstructorMethod ctor;
-        ReferenceMethod getBoundingBox;
-        UnimplementedMethod getContentArea;
+//        ReferenceMethod getBoundingBox;
+//        UnimplementedMethod getContentArea;
         VoidMethod resetBoundingBoxToContentArea;
         VoidMethod resetContentAreaAndBoundingBoxToFitChildren;
     };
@@ -2651,7 +2651,7 @@ namespace PILS
         static DrawableImage__methods singleton;
         DrawableImage__methods();
         ConstructorMethod ctor;
-        ReferenceMethod getBoundingBox;
+//        ReferenceMethod getBoundingBox;
         ReferenceMethod getImage;
         FloatMethod getOpacity;
         PilsColorMethod getOverlayColour;
@@ -2672,8 +2672,8 @@ namespace PILS
         static DrawableRectangle__methods singleton;
         DrawableRectangle__methods();
         ConstructorMethod ctor;
-        ReferenceMethod getCornerSize;
-        ReferenceMethod getRectangle;
+//        ReferenceMethod getCornerSize;
+//        ReferenceMethod getRectangle;
     };
 
     class DrawableShape__methods {
@@ -2688,9 +2688,9 @@ namespace PILS
         static DrawableText__methods singleton;
         DrawableText__methods();
         ConstructorMethod ctor;
-        ReferenceMethod getBoundingBox;
+//        ReferenceMethod getBoundingBox;
         PilsColorMethod getColour;
-        ReferenceMethod getFontSizeControlPoint;
+//        ReferenceMethod getFontSizeControlPoint;
         VoidMethod setColour;
         VoidMethod setFont;
         VoidMethod setJustification;
@@ -2700,14 +2700,14 @@ namespace PILS
     class DropShadowEffect__methods {
         static DropShadowEffect__methods singleton;
         DropShadowEffect__methods();
-        ConstructorMethod ctor;
-        VoidMethod setShadowProperties;
+//        ConstructorMethod ctor;
+//        VoidMethod setShadowProperties;
     };
 
     class DropShadower__methods {
         static DropShadower__methods singleton;
         DropShadower__methods();
-        ConstructorMethod ctor;
+//        ConstructorMethod ctor;
         VoidMethod setOwner;
     };
 
@@ -2751,7 +2751,7 @@ namespace PILS
         UnimplementedMethod _plus;
         UnimplementedMethod _slash;
         UnimplementedMethod adjustedToGiveNewResult;
-        ConstructorMethod ctor__2;
+//        ConstructorMethod ctor__2;
         ConstructorMethod ctor__3;
         ConstructorMethod ctor__4;
         UnimplementedMethod getInput;
@@ -2800,10 +2800,10 @@ namespace PILS
         UnimplementedMethod create;
         UnimplementedMethod createDirectory;
         CopyMethod__File createFileWithoutCheckingPath;
-        FactoryMethod createInputStream;
+//        FactoryMethod createInputStream;
         StringMethod createLegalFileName;
         StringMethod createLegalPathName;
-        FactoryMethod createOutputStream;
+//        FactoryMethod createOutputStream;
         CopyMethod__File createTempFile;
         ConstructorMethod ctor__2;
         ConstructorMethod ctor__3;
@@ -2870,12 +2870,12 @@ namespace PILS
         ReferenceMethod getFile;
         BoolMethod hasChangedSinceSaved;
         BoolMethod loadFrom;
-        BoolMethod loadFromUserSpecifiedFile;
-        IntMethod save;
-        IntMethod saveAs;
-        IntMethod saveAsInteractive;
-        IntMethod saveIfNeededAndUserAgrees;
-        VoidMethod setChangedFlag;
+//        BoolMethod loadFromUserSpecifiedFile;
+//        IntMethod save;
+//        IntMethod saveAs;
+//        IntMethod saveAsInteractive;
+//        IntMethod saveIfNeededAndUserAgrees;
+//        VoidMethod setChangedFlag;
         VoidMethod setFile;
     };
 
@@ -2890,14 +2890,14 @@ namespace PILS
     class FileChooser__methods {
         static FileChooser__methods singleton;
         FileChooser__methods();
-        BoolMethod browseForDirectory;
-        BoolMethod browseForFileToOpen;
-        BoolMethod browseForFileToSave;
-        BoolMethod browseForMultipleFilesOrDirectories;
-        BoolMethod browseForMultipleFilesToOpen;
+//        BoolMethod browseForDirectory;
+//        BoolMethod browseForFileToOpen;
+//        BoolMethod browseForFileToSave;
+//        BoolMethod browseForMultipleFilesOrDirectories;
+//        BoolMethod browseForMultipleFilesToOpen;
         ConstructorMethod ctor;
         CopyMethod__File getResult;
-        UnimplementedMethod getResults;
+//        UnimplementedMethod getResults;
     };
 
     class FileDragAndDropTarget__methods {
@@ -2936,12 +2936,12 @@ namespace PILS
         static FileListComponent__methods singleton;
         FileListComponent__methods();
         ConstructorMethod ctor;
-        VoidMethod deleteKeyPressed;
-        IntMethod getNumRows;
-        VoidMethod paintListBoxItem;
-        ReferenceMethod refreshComponentForRow;
-        VoidMethod returnKeyPressed;
-        VoidMethod selectedRowsChanged;
+//        VoidMethod deleteKeyPressed;
+//        IntMethod getNumRows;
+//        VoidMethod paintListBoxItem;
+//        ReferenceMethod refreshComponentForRow;
+//        VoidMethod returnKeyPressed;
+//        VoidMethod selectedRowsChanged;
     };
 
     class FileLogger__methods {
@@ -2987,7 +2987,7 @@ namespace PILS
     class FileSearchPathListComponent__methods {
         static FileSearchPathListComponent__methods singleton;
         FileSearchPathListComponent__methods();
-        VoidMethod buttonClicked;
+//        VoidMethod buttonClicked;
         ConstructorMethod ctor;
         VoidMethod deleteKeyPressed;
         IntMethod getNumRows;
@@ -3018,7 +3018,7 @@ namespace PILS
         UnimplementedMethod getRecentlyUsedFilenames;
         VoidMethod removeListener;
         VoidMethod setBrowseButtonText;
-        VoidMethod setCurrentFile;
+//        VoidMethod setCurrentFile;
         VoidMethod setDefaultBrowseTarget;
         VoidMethod setFilenameIsEditable;
         VoidMethod setMaxNumberOfRecentFiles;
@@ -3072,9 +3072,9 @@ namespace PILS
         BoolMethod _eq_eq;
         BoolMethod _not_eq;
         UnimplementedMethod boldened;
-        ConstructorMethod ctor__1;
-        ConstructorMethod ctor__3;
-        ConstructorMethod ctor__4;
+//        ConstructorMethod ctor__1;
+//        ConstructorMethod ctor__3;
+//        ConstructorMethod ctor__4;
         UnimplementedMethod findAllTypefaceNames;
         UnimplementedMethod fromString;
         FloatMethod getAscent;
@@ -3083,13 +3083,13 @@ namespace PILS
         StringMethod getDefaultSerifFontName;
         FloatMethod getDescent;
         FloatMethod getExtraKerningFactor;
-        StringMethod getFallbackFontName;
+//        StringMethod getFallbackFontName;
         FloatMethod getHeight;
         FloatMethod getHorizontalScale;
-        IntMethod getStringWidth;
-        FloatMethod getStringWidthFloat;
+//        IntMethod getStringWidth;
+//        FloatMethod getStringWidthFloat;
         IntMethod getStyleFlags;
-        ReferenceMethod getTypeface;
+//        ReferenceMethod getTypeface;
         StringMethod getTypefaceName;
         BoolMethod isBold;
         BoolMethod isItalic;
@@ -3097,7 +3097,7 @@ namespace PILS
         UnimplementedMethod italicised;
         VoidMethod setBold;
         VoidMethod setExtraKerningFactor;
-        VoidMethod setFallbackFontName;
+//        VoidMethod setFallbackFontName;
         VoidMethod setHeight;
         VoidMethod setHeightWithoutChangingWidth;
         VoidMethod setHorizontalScale;
@@ -3124,8 +3124,8 @@ namespace PILS
     class GZIPDecompressorInputStream__methods {
         static GZIPDecompressorInputStream__methods singleton;
         GZIPDecompressorInputStream__methods();
-        ConstructorMethod ctor__1;
-        ConstructorMethod ctor__2;
+//        ConstructorMethod ctor__1;
+//        ConstructorMethod ctor__2;
     };
 
     class GlowEffect__methods {
@@ -3164,10 +3164,10 @@ namespace PILS
         VoidMethod addTransform;
         VoidMethod beginTransparencyLayer;
         BoolMethod clipRegionIntersects;
-        ConstructorMethod ctor__1;
+//        ConstructorMethod ctor__1;
         ConstructorMethod ctor__2;
         VoidMethod drawArrow;
-        VoidMethod drawBevel;
+//        VoidMethod drawBevel;
         VoidMethod drawEllipse;
         VoidMethod drawFittedText;
         VoidMethod drawHorizontalLine;
@@ -3187,13 +3187,13 @@ namespace PILS
         VoidMethod drawRoundedRectangle__2;
         VoidMethod drawSingleLineText;
         VoidMethod drawText;
-        VoidMethod drawTextAsPath;
+//        VoidMethod drawTextAsPath;
         VoidMethod drawVerticalLine;
         VoidMethod endTransparencyLayer;
         VoidMethod excludeClipRegion;
         VoidMethod fillAll__1;
         VoidMethod fillAll__2;
-        VoidMethod fillCheckerBoard;
+//        VoidMethod fillCheckerBoard;
         VoidMethod fillEllipse;
         VoidMethod fillPath;
         VoidMethod fillRect__1;
@@ -3203,7 +3203,7 @@ namespace PILS
         VoidMethod fillRoundedRectangle__2;
         UnimplementedMethod getClipBounds;
         UnimplementedMethod getCurrentFont;
-        ReferenceMethod getInternalContext;
+//        ReferenceMethod getInternalContext;
         BoolMethod isClipEmpty;
         BoolMethod isVectorDevice;
         BoolMethod reduceClipRegion__1;
@@ -3216,13 +3216,13 @@ namespace PILS
         VoidMethod saveState;
         VoidMethod setColour;
         VoidMethod setFillType;
-        VoidMethod setFont__1;
+//        VoidMethod setFont__1;
         VoidMethod setFont__2;
         VoidMethod setGradientFill;
         VoidMethod setImageResamplingQuality;
         VoidMethod setOpacity;
         VoidMethod setOrigin;
-        VoidMethod setPixel;
+//        VoidMethod setPixel;
         VoidMethod setTiledImageFill;
         VoidMethod strokePath;
     };
@@ -3271,10 +3271,10 @@ namespace PILS
         BoolMethod _not_eq;
         VoidMethod clear;
         CopyMethod__Image convertedToFormat;
-        FactoryMethod createLowLevelContext;
+//        FactoryMethod createLowLevelContext;
         VoidMethod createSolidAreaMask;
-        ConstructorMethod ctor__1;
-        ConstructorMethod ctor__2;
+//        ConstructorMethod ctor__1;
+//        ConstructorMethod ctor__2;
         ConstructorMethod ctor__3;
         VoidMethod desaturate;
         VoidMethod duplicateIfShared;
@@ -3285,7 +3285,7 @@ namespace PILS
         PilsColorMethod getPixelAt;
         ReferenceMethod getProperties;
         IntMethod getReferenceCount;
-        UnimplementedMethod getSharedImage;
+//        UnimplementedMethod getSharedImage;
         IntMethod getWidth;
         BoolMethod hasAlphaChannel;
         BoolMethod isARGB;
@@ -3298,7 +3298,7 @@ namespace PILS
         VoidMethod multiplyAlphaAt;
         CopyMethod__Image rescaled;
         VoidMethod setPixelAt;
-        VoidMethod setPixelData;
+//        VoidMethod setPixelData;
     };
 
     class ImageButton__methods {
@@ -3348,7 +3348,7 @@ namespace PILS
     class ImageEffectFilter__methods {
         static ImageEffectFilter__methods singleton;
         ImageEffectFilter__methods();
-        VoidMethod applyEffect;
+//        VoidMethod applyEffect;
     };
 
     class ImageFileFormat__methods {
@@ -3519,10 +3519,10 @@ namespace PILS
         VoidMethod clearAllKeyPresses__1;
         VoidMethod clearAllKeyPresses__2;
         BoolMethod containsMapping;
-        FactoryMethod createXml;
-        ConstructorMethod ctor;
+    //    FactoryMethod createXml;
+    //    ConstructorMethod ctor;
         CommandIDMethod findCommandForKeyPress;
-        ReferenceMethod getCommandManager;
+    //    ReferenceMethod getCommandManager;
         UnimplementedMethod getKeyPressesAssignedToCommand;
         VoidMethod removeKeyPress__1;
         VoidMethod removeKeyPress__2;
@@ -3547,25 +3547,25 @@ namespace PILS
         ConstructorMethod ctor;
         BoolMethod doesLossOfFocusDiscardChanges;
         ReferenceMethod getAttachedComponent;
-        ReferenceMethod getFont;
-        IntMethod getHorizontalBorderSize;
+//        ReferenceMethod getFont;
+//        IntMethod getHorizontalBorderSize;
         CopyMethod__Justification getJustificationType;
         FloatMethod getMinimumHorizontalScale;
         StringMethod getText;
         ReferenceMethod getTextValue;
-        IntMethod getVerticalBorderSize;
+//        IntMethod getVerticalBorderSize;
         VoidMethod hideEditor;
         BoolMethod isAttachedOnLeft;
         BoolMethod isBeingEdited;
         BoolMethod isEditable;
         BoolMethod isEditableOnDoubleClick;
         BoolMethod isEditableOnSingleClick;
-        VoidMethod setBorderSize;
+//        VoidMethod setBorderSize;
         VoidMethod setEditable;
         VoidMethod setFont;
         VoidMethod setJustificationType;
         VoidMethod setMinimumHorizontalScale;
-        VoidMethod setText;
+//        VoidMethod setText;
         VoidMethod showEditor;
     };
 
@@ -3582,10 +3582,10 @@ namespace PILS
         VoidMethod deselectRow;
         VoidMethod flipRowSelection;
         ReferenceMethod getComponentForRowNumber;
-        ReferenceMethod getHorizontalScrollBar;
+//        ReferenceMethod getHorizontalScrollBar;
         IntMethod getInsertionIndexForPosition;
         IntMethod getLastRowSelected;
-        ReferenceMethod getModel;
+//        ReferenceMethod getModel;
         IntMethod getNumRowsOnScreen;
         IntMethod getNumSelectedRows;
         IntMethod getOutlineThickness;
@@ -3596,7 +3596,7 @@ namespace PILS
         IntMethod getSelectedRow;
         UnimplementedMethod getSelectedRows;
         DoubleMethod getVerticalPosition;
-        ReferenceMethod getVerticalScrollBar;
+//        ReferenceMethod getVerticalScrollBar;
         ReferenceMethod getViewport;
         IntMethod getVisibleContentWidth;
         IntMethod getVisibleRowWidth;
@@ -3606,23 +3606,23 @@ namespace PILS
         VoidMethod selectRangeOfRows;
         VoidMethod selectRow;
         VoidMethod selectRowsBasedOnModifierKeys;
-        VoidMethod setHeaderComponent;
+//        VoidMethod setHeaderComponent;
         VoidMethod setMinimumContentWidth;
         VoidMethod setModel;
         VoidMethod setMouseMoveSelectsRows;
         VoidMethod setMultipleSelectionEnabled;
         VoidMethod setOutlineThickness;
         VoidMethod setRowHeight;
-        VoidMethod setSelectedRows;
+//        VoidMethod setSelectedRows;
         VoidMethod setVerticalPosition;
-        VoidMethod startDragAndDrop;
+//        VoidMethod startDragAndDrop;
         VoidMethod updateContent;
     };
 
     class ListBoxModel__methods {
         static ListBoxModel__methods singleton;
         ListBoxModel__methods();
-        VoidMethod backgroundClicked;
+//        VoidMethod backgroundClicked;
         VoidMethod deleteKeyPressed;
         UnimplementedMethod getDragSourceDescription;
         IntMethod getNumRows;
@@ -3639,13 +3639,13 @@ namespace PILS
     class LocalisedStrings__methods {
         static LocalisedStrings__methods singleton;
         LocalisedStrings__methods();
-        ConstructorMethod ctor__1;
-        ConstructorMethod ctor__2;
+//        ConstructorMethod ctor__1;
+//        ConstructorMethod ctor__2;
         ReferenceMethod getCountryCodes;
         ReferenceMethod getCurrentMappings;
         StringMethod getLanguageName;
         VoidMethod setCurrentMappings;
-        VoidMethod setIgnoresCase;
+//        VoidMethod setIgnoresCase;
         StringMethod translate;
         StringMethod translateWithCurrentMappings__1;
         StringMethod translateWithCurrentMappings__2;
@@ -3655,7 +3655,7 @@ namespace PILS
         static Logger__methods singleton;
         Logger__methods();
         VoidMethod outputDebugString;
-        VoidMethod setCurrentLogger;
+//        VoidMethod setCurrentLogger;
         VoidMethod writeToLog;
     };
 
@@ -3667,28 +3667,28 @@ namespace PILS
         FactoryMethod createCaretComponent;
         FactoryMethod createComboBoxTextBox;
         FactoryMethod createDocumentWindowButton;
-        FactoryMethod createDropShadowerForComponent;
+//        FactoryMethod createDropShadowerForComponent;
         FactoryMethod createFileBrowserGoUpButton;
-        VoidMethod createFileChooserHeaderText;
+//        VoidMethod createFileChooserHeaderText;
         FactoryMethod createFilenameComponentBrowseButton;
-        FactoryMethod createSliderButton;
+//        FactoryMethod createSliderButton;
         FactoryMethod createSliderTextBox;
         FactoryMethod createTabBarExtrasButton;
-        VoidMethod createTabButtonShape;
+//        VoidMethod createTabButtonShape;
         FactoryMethod createToolbarMissingItemsButton;
-        ConstructorMethod ctor;
+//        ConstructorMethod ctor;
         VoidMethod drawAlertBox;
-        VoidMethod drawBubble;
+//        VoidMethod drawBubble;
         VoidMethod drawButtonBackground;
         VoidMethod drawButtonText;
-        VoidMethod drawCallOutBoxBackground;
+//        VoidMethod drawCallOutBoxBackground;
         VoidMethod drawComboBox;
         VoidMethod drawCornerResizer;
         VoidMethod drawDocumentWindowTitleBar;
-        VoidMethod drawFileBrowserRow__2;
-        VoidMethod drawGlassLozenge;
-        VoidMethod drawGlassPointer;
-        VoidMethod drawGlassSphere;
+//        VoidMethod drawFileBrowserRow__2;
+//        VoidMethod drawGlassLozenge;
+//        VoidMethod drawGlassPointer;
+//        VoidMethod drawGlassSphere;
         VoidMethod drawGroupComponentOutline;
         VoidMethod drawImageButton;
         VoidMethod drawKeymapChangeButton;
@@ -3700,7 +3700,7 @@ namespace PILS
         VoidMethod drawMenuBarBackground;
         VoidMethod drawMenuBarItem;
         VoidMethod drawPopupMenuBackground;
-        VoidMethod drawPopupMenuItem;
+//        VoidMethod drawPopupMenuItem;
         VoidMethod drawPopupMenuUpDownArrow;
         VoidMethod drawProgressBar;
         VoidMethod drawPropertyComponentBackground;
@@ -3713,18 +3713,18 @@ namespace PILS
         VoidMethod drawScrollbarButton;
         VoidMethod drawSpinningWaitAnimation;
         VoidMethod drawStretchableLayoutResizerBar;
-        VoidMethod drawTabAreaBehindFrontButton;
-        VoidMethod drawTabButton;
-        VoidMethod drawTabButtonText;
+//        VoidMethod drawTabAreaBehindFrontButton;
+//        VoidMethod drawTabButton;
+//        VoidMethod drawTabButtonText;
         VoidMethod drawTableHeaderBackground;
-        VoidMethod drawTableHeaderColumn;
+//        VoidMethod drawTableHeaderColumn;
         VoidMethod drawTextEditorOutline;
         VoidMethod drawTickBox;
         VoidMethod drawToggleButton;
         VoidMethod drawTooltip;
-        VoidMethod drawTreeviewPlusMinusBox;
+//        VoidMethod drawTreeviewPlusMinusBox;
         VoidMethod fillResizableWindowBackground;
-        VoidMethod fillTabButtonShape;
+//        VoidMethod fillTabButtonShape;
         VoidMethod fillTextEditorBackground;
         PilsColorMethod findColour;
         IntMethod getAlertBoxWindowFlags;
@@ -3738,7 +3738,7 @@ namespace PILS
         ReferenceMethod getDefaultLookAndFeel;
         IntMethod getDefaultMenuBarHeight;
         IntMethod getDefaultScrollbarWidth;
-        CopyMethod__Font getFontForTextButton;
+//        CopyMethod__Font getFontForTextButton;
         CopyMethod__Font getMenuBarFont;
         IntMethod getMenuBarItemWidth;
         IntMethod getMenuWindowFlags;
@@ -3748,16 +3748,16 @@ namespace PILS
         UnimplementedMethod getPropertyComponentContentPosition;
         IntMethod getScrollbarButtonSize;
         ReferenceMethod getScrollbarEffect;
-        ReferenceMethod getSliderEffect;
+  //      ReferenceMethod getSliderEffect;
         IntMethod getSliderThumbRadius;
-        IntMethod getTabButtonBestWidth;
+  //      IntMethod getTabButtonBestWidth;
         IntMethod getTabButtonOverlap;
         IntMethod getTabButtonSpaceAroundImage;
         CopyMethod__Path getTickShape;
         BoolMethod isColourSpecified;
         BoolMethod isUsingNativeAlertWindows;
         VoidMethod layoutFilenameComponent;
-        FactoryMethod loadDrawableFromData;
+  //      FactoryMethod loadDrawableFromData;
         VoidMethod paintToolbarBackground;
         VoidMethod paintToolbarButtonBackground;
         VoidMethod paintToolbarButtonLabel;
@@ -3780,18 +3780,18 @@ namespace PILS
         VoidMethod clipToPath;
         BoolMethod clipToRectangle;
         BoolMethod clipToRectangleList;
-        VoidMethod drawGlyph;
-        VoidMethod drawHorizontalLine;
-        VoidMethod drawImage;
+//        VoidMethod drawGlyph;
+//        VoidMethod drawHorizontalLine;
+//        VoidMethod drawImage;
         VoidMethod drawLine;
-        VoidMethod drawVerticalLine;
+//        VoidMethod drawVerticalLine;
         VoidMethod endTransparencyLayer;
         VoidMethod excludeClipRectangle;
         VoidMethod fillPath;
         VoidMethod fillRect;
         UnimplementedMethod getClipBounds;
         UnimplementedMethod getFont;
-        FloatMethod getScaleFactor;
+//        FloatMethod getScaleFactor;
         BoolMethod isClipEmpty;
         BoolMethod isVectorDevice;
         VoidMethod restoreState;
@@ -3800,20 +3800,20 @@ namespace PILS
         VoidMethod setFont;
         VoidMethod setInterpolationQuality;
         VoidMethod setOpacity;
-        VoidMethod setOrigin;
+//        VoidMethod setOrigin;
     };
 
     class LowLevelGraphicsPostScriptRenderer__methods {
         static LowLevelGraphicsPostScriptRenderer__methods singleton;
         LowLevelGraphicsPostScriptRenderer__methods();
-        ConstructorMethod ctor;
+  //      ConstructorMethod ctor;
     };
 
     class LowLevelGraphicsSoftwareRenderer__methods {
         static LowLevelGraphicsSoftwareRenderer__methods singleton;
         LowLevelGraphicsSoftwareRenderer__methods();
-        ConstructorMethod ctor__1;
-        ConstructorMethod ctor__2;
+//        ConstructorMethod ctor__1;
+//        ConstructorMethod ctor__2;
     };
 
     class MACAddress__methods {
@@ -3836,7 +3836,7 @@ namespace PILS
         BoolMethod _not_eq;
         ConstructorMethod ctor__1;
         ConstructorMethod ctor__2;
-        ConstructorMethod ctor__3;
+    //    ConstructorMethod ctor__3;
         ConstructorMethod ctor__4;
         ConstructorMethod ctor__5;
         ConstructorMethod ctor__6;
@@ -3959,17 +3959,17 @@ namespace PILS
     class Message__methods {
         static Message__methods singleton;
         Message__methods();
-        IntMethod intParameter1;
-        IntMethod intParameter2;
-        IntMethod intParameter3;
-        UnimplementedMethod pointerParameter;
+//        IntMethod intParameter1;
+//        IntMethod intParameter2;
+//        IntMethod intParameter3;
+//        UnimplementedMethod pointerParameter;
     };
 
     class MessageListener__methods {
         static MessageListener__methods singleton;
         MessageListener__methods();
         VoidMethod handleMessage;
-        BoolMethod isValidMessageListener;
+//        BoolMethod isValidMessageListener;
         VoidMethod postMessage;
     };
 
@@ -3985,7 +3985,7 @@ namespace PILS
         BoolMethod isThisTheMessageThread;
         VoidMethod registerBroadcastListener;
         VoidMethod runDispatchLoop;
-        BoolMethod runDispatchLoopUntil;
+  //      BoolMethod runDispatchLoopUntil;
         VoidMethod setCurrentThreadAsMessageThread;
         VoidMethod stopDispatchLoop;
     };
@@ -4030,10 +4030,10 @@ namespace PILS
     class MidiInput__methods {
         static MidiInput__methods singleton;
         MidiInput__methods();
-        IntMethod getDefaultDeviceIndex;
-        UnimplementedMethod getDevices;
+//        IntMethod getDefaultDeviceIndex;
+//        UnimplementedMethod getDevices;
         StringMethod getName;
-        FactoryMethod openDevice;
+//        FactoryMethod openDevice;
         VoidMethod setName;
         VoidMethod start;
         VoidMethod stop;
@@ -4061,7 +4061,7 @@ namespace PILS
         IntMethod getOrientation;
         IntMethod getRangeEnd;
         IntMethod getRangeStart;
-        VoidMethod handleAsyncUpdate;
+//        VoidMethod handleAsyncUpdate;
         VoidMethod removeKeyPressForNote;
         VoidMethod setAvailableRange;
         VoidMethod setKeyPressBaseOctave;
@@ -4085,7 +4085,7 @@ namespace PILS
         ConstructorMethod ctor;
         BoolMethod isNoteOn;
         BoolMethod isNoteOnForChannels;
-        VoidMethod noteOff;
+//        VoidMethod noteOff;
         VoidMethod noteOn;
         VoidMethod processNextMidiBuffer;
         VoidMethod processNextMidiEvent;
@@ -4096,7 +4096,7 @@ namespace PILS
     class MidiKeyboardStateListener__methods {
         static MidiKeyboardStateListener__methods singleton;
         MidiKeyboardStateListener__methods();
-        VoidMethod handleNoteOff;
+  //      VoidMethod handleNoteOff;
         VoidMethod handleNoteOn;
     };
 
@@ -4242,9 +4242,9 @@ namespace PILS
         static MidiOutput__methods singleton;
         MidiOutput__methods();
         VoidMethod clearAllPendingMessages;
-        IntMethod getDefaultDeviceIndex;
-        UnimplementedMethod getDevices;
-        FactoryMethod openDevice;
+//        IntMethod getDefaultDeviceIndex;
+//        UnimplementedMethod getDevices;
+//        FactoryMethod openDevice;
         VoidMethod sendBlockOfMessages;
         VoidMethod sendMessageNow;
         VoidMethod startBackgroundThread;
@@ -4257,7 +4257,7 @@ namespace PILS
         VoidMethod addInputSource;
         ConstructorMethod ctor;
         VoidMethod removeAllInputs;
-        VoidMethod removeInputSource;
+//        VoidMethod removeInputSource;
     };
 
     class ModalComponentManager__methods {
@@ -4268,7 +4268,7 @@ namespace PILS
         IntMethod getNumModalComponents;
         BoolMethod isFrontModalComponent;
         BoolMethod isModal;
-        IntMethod runEventLoopForCurrentComponent;
+//        IntMethod runEventLoopForCurrentComponent;
     };
 
     class ModalComponentManager__Callback__methods {
@@ -4319,7 +4319,7 @@ namespace PILS
     class MouseEvent__methods {
         static MouseEvent__methods singleton;
         MouseEvent__methods();
-        ConstructorMethod ctor;
+//        ConstructorMethod ctor;
         ReferenceMethod eventComponent;
         CopyMethod__Time eventTime;
         IntMethod getDistanceFromDragStart;
@@ -4353,20 +4353,20 @@ namespace PILS
         MouseInputSource__methods();
         BoolMethod canDoUnboundedMovement;
         BoolMethod canHover;
-        ConstructorMethod ctor;
+//        ConstructorMethod ctor;
         VoidMethod enableUnboundedMouseMovement;
         VoidMethod forceMouseCursorUpdate;
         ReferenceMethod getComponentUnderMouse;
         CopyMethod__ModifierKeys getCurrentModifiers;
         IntMethod getIndex;
-        UnimplementedMethod getLastMouseDownPosition;
+//        UnimplementedMethod getLastMouseDownPosition;
         TimeMethod getLastMouseDownTime;
         IntMethod getNumberOfMultipleClicks;
-        UnimplementedMethod getScreenPosition;
-        VoidMethod handleEvent;
-        VoidMethod handleWheel;
+//        UnimplementedMethod getScreenPosition;
+//        VoidMethod handleEvent;
+//        VoidMethod handleWheel;
         BoolMethod hasMouseCursor;
-        BoolMethod hasMouseMovedSignificantlySincePressed;
+//        BoolMethod hasMouseMovedSignificantlySincePressed;
         BoolMethod hasMouseWheel;
         VoidMethod hideCursor;
         BoolMethod isDragging;
@@ -4387,7 +4387,7 @@ namespace PILS
         VoidMethod mouseExit;
         VoidMethod mouseMove;
         VoidMethod mouseUp;
-        VoidMethod mouseWheelMove;
+//        VoidMethod mouseWheelMove;
     };
 
     class MultiDocumentPanel__methods {
@@ -4395,8 +4395,8 @@ namespace PILS
         MultiDocumentPanel__methods();
         VoidMethod activeDocumentChanged;
         BoolMethod addDocument;
-        BoolMethod closeAllDocuments;
-        BoolMethod closeDocument;
+//        BoolMethod closeAllDocuments;
+//        BoolMethod closeDocument;
         VoidMethod componentNameChanged;
         FactoryMethod createNewDocumentWindow;
         ReferenceMethod getActiveDocument;
@@ -4409,7 +4409,7 @@ namespace PILS
         VoidMethod setBackgroundColour;
         VoidMethod setLayoutMode;
         VoidMethod setMaximumNumDocuments;
-        BoolMethod tryToCloseDocument;
+//        BoolMethod tryToCloseDocument;
         VoidMethod useFullscreenWhenOneDocument;
     };
 
@@ -4432,7 +4432,7 @@ namespace PILS
     class NamedPipe__methods {
         static NamedPipe__methods singleton;
         NamedPipe__methods();
-        VoidMethod cancelPendingReads;
+//        VoidMethod cancelPendingReads;
         VoidMethod close;
         BoolMethod createNewPipe;
         ConstructorMethod ctor;
@@ -4465,7 +4465,7 @@ namespace PILS
     class NativeMessageBox__methods {
         static NativeMessageBox__methods singleton;
         NativeMessageBox__methods();
-        VoidMethod showMessageBox;
+//        VoidMethod showMessageBox;
         VoidMethod showMessageBoxAsync;
         BoolMethod showOkCancelBox;
         IntMethod showYesNoCancelBox;
@@ -4487,7 +4487,7 @@ namespace PILS
     class OldSchoolLookAndFeel__methods {
         static OldSchoolLookAndFeel__methods singleton;
         OldSchoolLookAndFeel__methods();
-        ConstructorMethod ctor;
+//        ConstructorMethod ctor;
     };
 
     class OpenGL__methods {
@@ -4628,54 +4628,54 @@ namespace PILS
     class OpenGLComponent__methods {
         static OpenGLComponent__methods singleton;
         OpenGLComponent__methods();
-        VoidMethod deleteContext;
-        CopyMethod__OpenGLPixelFormat getPixelFormat;
-        ReferenceMethod getShareContext;
-        BoolMethod isActiveContext;
-        BoolMethod isUsingDedicatedThread;
-        BoolMethod makeCurrentContextActive;
-        VoidMethod makeCurrentContextInactive;
-        VoidMethod newOpenGLContextCreated;
-        VoidMethod releaseOpenGLContext;
-        BoolMethod renderAndSwapBuffers;
-        VoidMethod renderOpenGL;
-        VoidMethod setPixelFormat;
-        VoidMethod shareWith;
-        VoidMethod swapBuffers;
+        // VoidMethod deleteContext;
+        // CopyMethod__OpenGLPixelFormat getPixelFormat;
+        // ReferenceMethod getShareContext;
+        // BoolMethod isActiveContext;
+        // BoolMethod isUsingDedicatedThread;
+        // BoolMethod makeCurrentContextActive;
+        // VoidMethod makeCurrentContextInactive;
+        // VoidMethod newOpenGLContextCreated;
+        // VoidMethod releaseOpenGLContext;
+        // BoolMethod renderAndSwapBuffers;
+        // VoidMethod renderOpenGL;
+        // VoidMethod setPixelFormat;
+        // VoidMethod shareWith;
+        // VoidMethod swapBuffers;
     };
 
     class OpenGLContext__methods {
         static OpenGLContext__methods singleton;
         OpenGLContext__methods();
-        VoidMethod deleteContext;
-        ReferenceMethod getCurrentContext;
-        CopyMethod__OpenGLPixelFormat getPixelFormat;
-        IntMethod getSwapInterval;
-        BoolMethod isActive;
-        BoolMethod makeActive;
-        BoolMethod makeInactive;
-        VoidMethod repaint;
-        BoolMethod setSwapInterval;
-        VoidMethod swapBuffers;
-        VoidMethod updateWindowPosition;
+        // VoidMethod deleteContext;
+        // ReferenceMethod getCurrentContext;
+        // CopyMethod__OpenGLPixelFormat getPixelFormat;
+        // IntMethod getSwapInterval;
+        // BoolMethod isActive;
+        // BoolMethod makeActive;
+        // BoolMethod makeInactive;
+        // VoidMethod repaint;
+        // BoolMethod setSwapInterval;
+        // VoidMethod swapBuffers;
+        // VoidMethod updateWindowPosition;
     };
 
     class OpenGLPixelFormat__methods {
         static OpenGLPixelFormat__methods singleton;
         OpenGLPixelFormat__methods();
-        BoolMethod _eq_eq;
-        IntMethod accumulationBufferAlphaBits;
-        IntMethod accumulationBufferBlueBits;
-        IntMethod accumulationBufferGreenBits;
-        IntMethod accumulationBufferRedBits;
-        IntMethod alphaBits;
-        IntMethod blueBits;
-        ConstructorMethod ctor;
-        IntMethod depthBufferBits;
-        Uint8Method fullSceneAntiAliasingNumSamples;
-        IntMethod greenBits;
-        IntMethod redBits;
-        IntMethod stencilBufferBits;
+        // BoolMethod _eq_eq;
+        // IntMethod accumulationBufferAlphaBits;
+        // IntMethod accumulationBufferBlueBits;
+        // IntMethod accumulationBufferGreenBits;
+        // IntMethod accumulationBufferRedBits;
+        // IntMethod alphaBits;
+        // IntMethod blueBits;
+        // ConstructorMethod ctor;
+        // IntMethod depthBufferBits;
+        // Uint8Method fullSceneAntiAliasingNumSamples;
+        // IntMethod greenBits;
+        // IntMethod redBits;
+        // IntMethod stencilBufferBits;
     };
 
     class OutputStream__methods {
@@ -4703,18 +4703,18 @@ namespace PILS
         VoidMethod writeShort;
         VoidMethod writeShortBigEndian;
         VoidMethod writeString;
-        VoidMethod writeText;
+//        VoidMethod writeText;
     };
 
     class PDFWriter__methods {
         static PDFWriter__methods singleton;
         PDFWriter__methods();
-        VoidMethod clipToImageAlpha;
-        VoidMethod drawHorizontalLine;
-        VoidMethod drawImage;
-        VoidMethod drawLine;
-        VoidMethod drawVerticalLine;
-        VoidMethod fillRect;
+        // VoidMethod clipToImageAlpha;
+        // VoidMethod drawHorizontalLine;
+        // VoidMethod drawImage;
+        // VoidMethod drawLine;
+        // VoidMethod drawVerticalLine;
+        // VoidMethod fillRect;
     };
 
     class PNGImageFormat__methods {
@@ -4730,7 +4730,7 @@ namespace PILS
         BoolMethod _not_eq;
         VoidMethod addArc;
         VoidMethod addArrow;
-        VoidMethod addBubble;
+//        VoidMethod addBubble;
         VoidMethod addCentredArc;
         VoidMethod addEllipse;
         VoidMethod addLineSegment;
@@ -4819,7 +4819,7 @@ namespace PILS
     class PilsCodeTokeniser__methods {
         static PilsCodeTokeniser__methods singleton;
         PilsCodeTokeniser__methods();
-        ConstructorMethod ctor;
+//        ConstructorMethod ctor;
     };
 
     class PixelARGB__methods {
@@ -4828,17 +4828,17 @@ namespace PILS
         VoidMethod blend__1;
         VoidMethod blend__2;
         VoidMethod blend__3;
-        ConstructorMethod ctor__1;
+//        ConstructorMethod ctor__1;
         ConstructorMethod ctor__2;
         VoidMethod desaturate;
-        Uint32Method getAG;
-        Uint32Method getARGB;
+//        Uint32Method getAG;
+//        Uint32Method getARGB;
         Uint8Method getAlpha;
         Uint8Method getBlue;
         Uint8Method getGreen;
-        Uint32Method getRB;
+//        Uint32Method getRB;
         Uint8Method getRed;
-        Uint32Method getUnpremultipliedARGB;
+//        Uint32Method getUnpremultipliedARGB;
         VoidMethod multiplyAlpha__1;
         VoidMethod multiplyAlpha__2;
         VoidMethod premultiply;
@@ -4850,17 +4850,17 @@ namespace PILS
     class PixelAlpha__methods {
         static PixelAlpha__methods singleton;
         PixelAlpha__methods();
-        ConstructorMethod ctor__1;
+//        ConstructorMethod ctor__1;
         ConstructorMethod ctor__2;
         VoidMethod desaturate;
-        Uint32Method getAG;
-        Uint32Method getARGB;
+//        Uint32Method getAG;
+//        Uint32Method getARGB;
         Uint8Method getAlpha;
         Uint8Method getBlue;
         Uint8Method getGreen;
-        Uint32Method getRB;
+//        Uint32Method getRB;
         Uint8Method getRed;
-        Uint32Method getUnpremultipliedARGB;
+//        Uint32Method getUnpremultipliedARGB;
         VoidMethod multiplyAlpha__1;
         VoidMethod multiplyAlpha__2;
         VoidMethod premultiply;
@@ -4875,17 +4875,17 @@ namespace PILS
         VoidMethod blend__1;
         VoidMethod blend__2;
         VoidMethod blend__3;
-        ConstructorMethod ctor__1;
+//        ConstructorMethod ctor__1;
         ConstructorMethod ctor__2;
         VoidMethod desaturate;
-        Uint32Method getAG;
-        Uint32Method getARGB;
+//        Uint32Method getAG;
+//        Uint32Method getARGB;
         Uint8Method getAlpha;
         Uint8Method getBlue;
         Uint8Method getGreen;
-        Uint32Method getRB;
+//        Uint32Method getRB;
         Uint8Method getRed;
-        Uint32Method getUnpremultipliedARGB;
+//        Uint32Method getUnpremultipliedARGB;
         VoidMethod multiplyAlpha;
         VoidMethod premultiply;
         VoidMethod setARGB;
@@ -4896,18 +4896,18 @@ namespace PILS
     class PlatformUtilities__methods {
         static PlatformUtilities__methods singleton;
         PlatformUtilities__methods();
-        VoidMethod beep;
+        // VoidMethod beep;
         // VoidMethod deleteRegistryKey;
         // VoidMethod deleteRegistryValue;
-        VoidMethod fpuReset;
-        VoidMethod freeDynamicLibrary;
+        // VoidMethod fpuReset;
+        // VoidMethod freeDynamicLibrary;
         // StringMethod getCurrentCommandLineParams;
         // UnimplementedMethod getCurrentModuleInstanceHandle;
-        UnimplementedMethod getProcedureEntryPoint;
+        // UnimplementedMethod getProcedureEntryPoint;
         // StringMethod getRegistryValue;
         // BoolMethod launchEmailWithAttachments;
-        UnimplementedMethod loadDynamicLibrary;
-        BoolMethod openDocument;
+        // UnimplementedMethod loadDynamicLibrary;
+        // BoolMethod openDocument;
         // VoidMethod registerFileAssociation;
         // BoolMethod registryValueExists;
         // VoidMethod setCurrentModuleInstanceHandle;
@@ -4919,7 +4919,7 @@ namespace PILS
         PluginDescription__methods();
         StringMethod category;
         StringMethod createIdentifierString;
-        FactoryMethod createXml;
+//        FactoryMethod createXml;
         ConstructorMethod ctor;
         StringMethod descriptiveName;
         StringMethod fileOrIdentifier;
@@ -4932,7 +4932,7 @@ namespace PILS
         IntMethod numInputChannels;
         IntMethod numOutputChannels;
         StringMethod pluginFormatName;
-        IntMethod uid;
+//        IntMethod uid;
         StringMethod version;
     };
 
@@ -4941,8 +4941,8 @@ namespace PILS
         PopupMenu__methods();
         VoidMethod addColouredItem;
         VoidMethod addCommandItem;
-        VoidMethod addCustomItem__1;
-        VoidMethod addCustomItem__2;
+//        VoidMethod addCustomItem__1;
+//        VoidMethod addCustomItem__2;
         VoidMethod addItem;
         VoidMethod addSectionHeader;
         VoidMethod addSeparator;
@@ -4954,10 +4954,10 @@ namespace PILS
         BoolMethod dismissAllActiveMenus;
         IntMethod getNumItems;
         VoidMethod setLookAndFeel;
-        IntMethod show;
-        IntMethod showAt__1;
-        IntMethod showAt__2;
-        IntMethod showMenu;
+//        IntMethod show;
+//        IntMethod showAt__1;
+//        IntMethod showAt__2;
+//        IntMethod showMenu;
         VoidMethod showMenuAsync;
     };
 
@@ -4973,19 +4973,19 @@ namespace PILS
     class PopupMenu__MenuItemIterator__methods {
         static PopupMenu__MenuItemIterator__methods singleton;
         PopupMenu__MenuItemIterator__methods();
-        ReferenceMethod commandManager;
+//        ReferenceMethod commandManager;
         ConstructorMethod ctor;
-        ReferenceMethod customColour;
-        CopyMethod__Image customImage;
-        BoolMethod isCustomComponent;
-        BoolMethod isEnabled;
-        BoolMethod isSectionHeader;
-        BoolMethod isSeparator;
-        BoolMethod isTicked;
-        IntMethod itemId;
-        StringMethod itemName;
+//        ReferenceMethod customColour;
+//        CopyMethod__Image customImage;
+//        BoolMethod isCustomComponent;
+//        BoolMethod isEnabled;
+//        BoolMethod isSectionHeader;
+//        BoolMethod isSeparator;
+//        BoolMethod isTicked;
+//        IntMethod itemId;
+//        StringMethod itemName;
         BoolMethod next;
-        ReferenceMethod subMenu;
+//        ReferenceMethod subMenu;
     };
 
     class PopupMenu__Options__methods {
@@ -5034,7 +5034,7 @@ namespace PILS
         PreferencesPanel__methods();
         VoidMethod addSettingsPage__1;
         VoidMethod addSettingsPage__2;
-        VoidMethod buttonClicked;
+//        VoidMethod buttonClicked;
         FactoryMethod createComponentForPage;
         IntMethod getButtonSize;
         VoidMethod setButtonSize;
@@ -5051,10 +5051,10 @@ namespace PILS
     class PrintingContext__methods {
         static PrintingContext__methods singleton;
         PrintingContext__methods();
-        ReferenceMethod beginPage;
-        VoidMethod beginPrinting;
-        VoidMethod endPage;
-        VoidMethod endPrinting;
+        // ReferenceMethod beginPage;
+        // VoidMethod beginPrinting;
+        // VoidMethod endPage;
+        // VoidMethod endPrinting;
     };
 
     class Process__methods {
@@ -5120,7 +5120,7 @@ namespace PILS
         VoidMethod clear;
         ConstructorMethod ctor;
         StringMethod getMessageWhenEmpty;
-        ReferenceMethod getOpennessState;
+//        ReferenceMethod getOpennessState;
         UnimplementedMethod getSectionNames;
         BoolMethod isSectionOpen;
         VoidMethod refreshAll;
@@ -5136,7 +5136,7 @@ namespace PILS
         VoidMethod addAllPropertiesFrom;
         VoidMethod clear;
         BoolMethod containsKey;
-        FactoryMethod createXml;
+//        FactoryMethod createXml;
         ConstructorMethod ctor;
         ReferenceMethod getAllProperties;
         BoolMethod getBoolValue;
@@ -5145,7 +5145,7 @@ namespace PILS
         IntMethod getIntValue;
         ReferenceMethod getLock;
         StringMethod getValue;
-        ReferenceMethod getXmlValue;
+//        ReferenceMethod getXmlValue;
         VoidMethod removeValue;
         VoidMethod restoreFromXml;
         VoidMethod setFallbackPropertySet;
@@ -5156,8 +5156,8 @@ namespace PILS
     class RSAKey__methods {
         static RSAKey__methods singleton;
         RSAKey__methods();
-        BoolMethod _eq_eq;
-        BoolMethod _not_eq;
+//        BoolMethod _eq_eq;
+//        BoolMethod _not_eq;
         BoolMethod applyToValue;
         ConstructorMethod ctor__1;
         ConstructorMethod ctor__2;
@@ -5215,38 +5215,38 @@ namespace PILS
     class RectangleList__methods {
         static RectangleList__methods singleton;
         RectangleList__methods();
-        VoidMethod addWithoutMerging;
-        VoidMethod add__1;
-        VoidMethod add__2;
-        VoidMethod add__3;
-        VoidMethod clear;
-        BoolMethod clipTo__1;
-        BoolMethod clipTo__2;
-        VoidMethod consolidate;
-        BoolMethod containsPoint;
-        BoolMethod containsRectangle;
-        ConstructorMethod ctor__1;
-        ConstructorMethod ctor__2;
-        UnimplementedMethod getBounds;
-        BoolMethod getIntersectionWith;
-        IntMethod getNumRectangles;
-        UnimplementedMethod getRectangle;
-        BoolMethod intersects;
-        BoolMethod intersectsRectangle;
-        BoolMethod isEmpty;
-        VoidMethod offsetAll;
-        BoolMethod subtract__1;
-        VoidMethod subtract__2;
-        VoidMethod swapWith;
-        UnimplementedMethod toPath;
+        // VoidMethod addWithoutMerging;
+        // VoidMethod add__1;
+        // VoidMethod add__2;
+        // VoidMethod add__3;
+        // VoidMethod clear;
+        // BoolMethod clipTo__1;
+        // BoolMethod clipTo__2;
+        // VoidMethod consolidate;
+        // BoolMethod containsPoint;
+        // BoolMethod containsRectangle;
+        // ConstructorMethod ctor__1;
+        // ConstructorMethod ctor__2;
+        // UnimplementedMethod getBounds;
+        // BoolMethod getIntersectionWith;
+        // IntMethod getNumRectangles;
+        // UnimplementedMethod getRectangle;
+        // BoolMethod intersects;
+        // BoolMethod intersectsRectangle;
+        // BoolMethod isEmpty;
+        // VoidMethod offsetAll;
+        // BoolMethod subtract__1;
+        // VoidMethod subtract__2;
+        // VoidMethod swapWith;
+        // UnimplementedMethod toPath;
     };
 
     class RectangleList__Iterator__methods {
         static RectangleList__Iterator__methods singleton;
         RectangleList__Iterator__methods();
-        ConstructorMethod ctor;
-        UnimplementedMethod getRectangle;
-        BoolMethod next;
+        // ConstructorMethod ctor;
+        // UnimplementedMethod getRectangle;
+        // BoolMethod next;
     };
 
     class RectanglePlacement__methods {
@@ -5355,10 +5355,10 @@ namespace PILS
     class RelativeTime__methods {
         static RelativeTime__methods singleton;
         RelativeTime__methods();
-        ReferenceMethod _minus_eq__1;
-        ReferenceMethod _minus_eq__2;
-        ReferenceMethod _plus_eq__1;
-        ReferenceMethod _plus_eq__2;
+        // ReferenceMethod _minus_eq__1;
+        // ReferenceMethod _minus_eq__2;
+        // ReferenceMethod _plus_eq__1;
+        // ReferenceMethod _plus_eq__2;
         ConstructorMethod ctor;
         CopyMethod__RelativeTime days;
         StringMethod getDescription;
@@ -5468,7 +5468,7 @@ namespace PILS
         static ScrollBar__methods singleton;
         ScrollBar__methods();
         BoolMethod autoHides;
-        ConstructorMethod ctor;
+//        ConstructorMethod ctor;
         UnimplementedMethod getCurrentRange;
         DoubleMethod getCurrentRangeSize;
         DoubleMethod getCurrentRangeStart;
@@ -5482,7 +5482,7 @@ namespace PILS
         VoidMethod scrollToTop;
         VoidMethod setAutoHide;
         VoidMethod setButtonRepeatSpeed;
-        VoidMethod setButtonVisibility;
+  //      VoidMethod setButtonVisibility;
         VoidMethod setCurrentRangeStart;
         VoidMethod setCurrentRange__1;
         VoidMethod setCurrentRange__2;
@@ -5558,11 +5558,11 @@ namespace PILS
         VoidMethod setChangeNotificationOnlyOnRelease;
         VoidMethod setDoubleClickReturnValue;
         VoidMethod setIncDecButtonsMode;
-        VoidMethod setMaxValue;
-        VoidMethod setMinAndMaxValues;
-        VoidMethod setMinValue;
+        // VoidMethod setMaxValue;
+        // VoidMethod setMinAndMaxValues;
+        // VoidMethod setMinValue;
         VoidMethod setMouseDragSensitivity;
-        VoidMethod setPopupDisplayEnabled;
+//        VoidMethod setPopupDisplayEnabled;
         VoidMethod setPopupMenuEnabled;
         VoidMethod setRange;
         VoidMethod setRotaryParameters;
@@ -5574,11 +5574,11 @@ namespace PILS
         VoidMethod setTextBoxIsEditable;
         VoidMethod setTextBoxStyle;
         VoidMethod setTextValueSuffix;
-        VoidMethod setValue;
+//        VoidMethod setValue;
         VoidMethod setVelocityBasedMode;
         VoidMethod setVelocityModeParameters;
         VoidMethod showTextBox;
-        DoubleMethod snapValue;
+//        DoubleMethod snapValue;
         VoidMethod startedDragging;
         VoidMethod stoppedDragging;
         VoidMethod updateText;
@@ -5592,7 +5592,7 @@ namespace PILS
         ConstructorMethod ctor__1;
         DoubleMethod getValue;
         VoidMethod setValue;
-        VoidMethod sliderValueChanged;
+//        VoidMethod sliderValueChanged;
     };
 
     class Slider__Listener__methods {
@@ -5615,9 +5615,9 @@ namespace PILS
     class SplashScreen__methods {
         static SplashScreen__methods singleton;
         SplashScreen__methods();
-        ConstructorMethod ctor;
-        VoidMethod show__1;
-        VoidMethod show__2;
+        // ConstructorMethod ctor;
+        // VoidMethod show__1;
+        // VoidMethod show__2;
     };
 
     class StreamingSocket__methods {
@@ -5714,7 +5714,7 @@ namespace PILS
         StringMethod item_;
         VoidMethod minimiseStorageOverheads;
         VoidMethod remove__1;
-        VoidMethod remove__2;
+//        VoidMethod remove__2;
         VoidMethod set;
         VoidMethod setIgnoresCase;
         IntMethod size;
@@ -5724,8 +5724,8 @@ namespace PILS
         static StringPool__methods singleton;
         StringPool__methods();
         ConstructorMethod ctor;
-        UnimplementedMethod item_;
-        IntMethod size;
+//        UnimplementedMethod item_;
+//        IntMethod size;
     };
 
     class SubregionStream__methods {
@@ -5752,7 +5752,7 @@ namespace PILS
         static SystemStats__methods singleton;
         SystemStats__methods();
         StringMethod getComputerName;
-        IntMethod getCpuSpeedInMegaherz;
+//        IntMethod getCpuSpeedInMegaherz;
         StringMethod getCpuVendor;
         StringMethod getFullUserName;
         StringMethod getJUCEVersion;
@@ -5879,13 +5879,13 @@ namespace PILS
         TableListBox__methods();
         VoidMethod autoSizeAllColumns;
         VoidMethod autoSizeColumn;
-        VoidMethod backgroundClicked;
+//        VoidMethod backgroundClicked;
         VoidMethod deleteKeyPressed;
         ReferenceMethod getCellComponent;
         UnimplementedMethod getCellPosition;
         ReferenceMethod getHeader;
         IntMethod getHeaderHeight;
-        ReferenceMethod getModel;
+//        ReferenceMethod getModel;
         IntMethod getNumRows;
         BoolMethod isAutoSizeMenuOptionShown;
         VoidMethod listWasScrolled;
@@ -5895,7 +5895,7 @@ namespace PILS
         VoidMethod scrollToEnsureColumnIsOnscreen;
         VoidMethod selectedRowsChanged;
         VoidMethod setAutoSizeMenuOptionShown;
-        VoidMethod setHeader;
+//        VoidMethod setHeader;
         VoidMethod setHeaderHeight;
         VoidMethod setModel;
         VoidMethod tableColumnDraggingChanged;
@@ -5907,7 +5907,7 @@ namespace PILS
     class TableListBoxModel__methods {
         static TableListBoxModel__methods singleton;
         TableListBoxModel__methods();
-        VoidMethod backgroundClicked;
+//        VoidMethod backgroundClicked;
         VoidMethod cellClicked;
         VoidMethod cellDoubleClicked;
         VoidMethod deleteKeyPressed;
@@ -5940,7 +5940,7 @@ namespace PILS
         TextButton__methods();
         VoidMethod changeWidthToFitText;
         ConstructorMethod ctor;
-        CopyMethod__Font getFont;
+//        CopyMethod__Font getFont;
     };
 
     class TextEditor__methods {
@@ -6004,7 +6004,7 @@ namespace PILS
         VoidMethod setPopupMenuEnabled;
         VoidMethod setReadOnly;
         VoidMethod setReturnKeyStartsNewLine;
-        VoidMethod setScrollBarButtonVisibility;
+//        VoidMethod setScrollBarButtonVisibility;
         VoidMethod setScrollBarThickness;
         VoidMethod setScrollToShowCursor;
         VoidMethod setScrollbarsShown;
@@ -6038,19 +6038,19 @@ namespace PILS
     class TextLayout__methods {
         static TextLayout__methods singleton;
         TextLayout__methods();
-        VoidMethod appendText;
-        VoidMethod clear;
-        ConstructorMethod ctor__1;
+//        VoidMethod appendText;
+//        VoidMethod clear;
+//        ConstructorMethod ctor__1;
         ConstructorMethod ctor__2;
-        VoidMethod draw;
-        VoidMethod drawWithin;
+//        VoidMethod draw;
+//        VoidMethod drawWithin;
         IntMethod getHeight;
-        IntMethod getLineWidth;
+//        IntMethod getLineWidth;
         IntMethod getNumLines;
         IntMethod getWidth;
-        BoolMethod isEmpty;
-        VoidMethod layout;
-        VoidMethod setText;
+//        BoolMethod isEmpty;
+//        VoidMethod layout;
+//        VoidMethod setText;
     };
 
     class TextPropertyComponent__methods {
@@ -6066,7 +6066,7 @@ namespace PILS
         static Thread__methods singleton;
         Thread__methods();
         ReferenceMethod getCurrentThread;
-        IntMethod getNumRunningThreads;
+//        IntMethod getNumRunningThreads;
         StringMethod getThreadName;
         BoolMethod isThreadRunning;
         VoidMethod notify;
@@ -6074,13 +6074,13 @@ namespace PILS
         VoidMethod setAffinityMask;
         VoidMethod setCurrentThreadAffinityMask;
         VoidMethod setCurrentThreadName;
-        BoolMethod setCurrentThreadPriority;
-        BoolMethod setPriority;
+//        BoolMethod setCurrentThreadPriority;
+//        BoolMethod setPriority;
         VoidMethod signalThreadShouldExit;
         VoidMethod sleep;
-        VoidMethod startThread__1;
+//        VoidMethod startThread__1;
         VoidMethod startThread__2;
-        VoidMethod stopAllThreads;
+//        VoidMethod stopAllThreads;
         VoidMethod stopThread;
         BoolMethod threadShouldExit;
         BoolMethod wait;
@@ -6092,7 +6092,7 @@ namespace PILS
         static ThreadWithProgressWindow__methods singleton;
         ThreadWithProgressWindow__methods();
         ReferenceMethod getAlertWindow;
-        BoolMethod runThread;
+//        BoolMethod runThread;
         VoidMethod setProgress;
         VoidMethod setStatusMessage;
     };
@@ -6183,7 +6183,7 @@ namespace PILS
         Toolbar__methods();
         VoidMethod addDefaultItems;
         VoidMethod addItem;
-        VoidMethod buttonClicked;
+//        VoidMethod buttonClicked;
         VoidMethod clear;
         FactoryMethod createItem;
         ConstructorMethod ctor;
@@ -6207,7 +6207,7 @@ namespace PILS
     class ToolbarButton__methods {
         static ToolbarButton__methods singleton;
         ToolbarButton__methods();
-        ConstructorMethod ctor;
+//        ConstructorMethod ctor;
     };
 
     class ToolbarItemComponent__methods {
@@ -6234,7 +6234,7 @@ namespace PILS
     class ToolbarItemPalette__methods {
         static ToolbarItemPalette__methods singleton;
         ToolbarItemPalette__methods();
-        ConstructorMethod ctor;
+//        ConstructorMethod ctor;
     };
 
     class TooltipClient__methods {
@@ -6270,7 +6270,7 @@ namespace PILS
         ReferenceMethod getItemOnRow;
         IntMethod getNumRowsInTree;
         IntMethod getNumSelectedItems;
-        ReferenceMethod getOpennessState;
+//        ReferenceMethod getOpennessState;
         ReferenceMethod getRootItem;
         ReferenceMethod getSelectedItem;
         ReferenceMethod getViewport;
@@ -6293,7 +6293,7 @@ namespace PILS
         BoolMethod areAllParentsOpen;
         BoolMethod canBeSelected;
         VoidMethod clearSubItems;
-        FactoryMethod createItemComponent;
+//        FactoryMethod createItemComponent;
         VoidMethod filesDropped;
         UnimplementedMethod getDragSourceDescription;
         IntMethod getIndexInParent;
@@ -6302,7 +6302,7 @@ namespace PILS
         UnimplementedMethod getItemPosition;
         IntMethod getItemWidth;
         IntMethod getNumSubItems;
-        ReferenceMethod getOpennessState;
+//        ReferenceMethod getOpennessState;
         ReferenceMethod getOwnerView;
         ReferenceMethod getParentItem;
         IntMethod getRowNumberInTree;
@@ -6321,7 +6321,7 @@ namespace PILS
         VoidMethod itemSelectionChanged;
         BoolMethod mightContainSubItems;
         VoidMethod paintItem;
-        VoidMethod paintOpenCloseButton;
+//        VoidMethod paintOpenCloseButton;
         VoidMethod removeSubItem;
         VoidMethod repaintItem;
         VoidMethod restoreOpennessState;
@@ -6341,14 +6341,14 @@ namespace PILS
     class Typeface__methods {
         static Typeface__methods singleton;
         Typeface__methods();
-        FloatMethod getAscent;
-        FloatMethod getDescent;
-        ReferenceMethod getEdgeTableForGlyph;
+//        FloatMethod getAscent;
+//        FloatMethod getDescent;
+//        ReferenceMethod getEdgeTableForGlyph;
         StringMethod getName;
-        BoolMethod getOutlineForGlyph;
-        FloatMethod getStringWidth;
-        BoolMethod isHinted;
-        BoolMethod isSuitableForFont;
+//        BoolMethod getOutlineForGlyph;
+//        FloatMethod getStringWidth;
+//        BoolMethod isHinted;
+//        BoolMethod isSuitableForFont;
         VoidMethod setTypefaceCacheSize;
     };
 
@@ -6359,9 +6359,9 @@ namespace PILS
         ConstructorMethod ctor__1;
         ConstructorMethod ctor__2;
         StringMethod getDomain;
-        ReferenceMethod getFilesToUpload;
-        ReferenceMethod getMimeTypesOfUploadFiles;
-        ReferenceMethod getParameters;
+//        ReferenceMethod getFilesToUpload;
+//        ReferenceMethod getMimeTypesOfUploadFiles;
+//        ReferenceMethod getParameters;
         StringMethod getPostData;
         StringMethod getScheme;
         StringMethod getSubPath;
@@ -6371,7 +6371,7 @@ namespace PILS
         BoolMethod launchInDefaultBrowser;
         BoolMethod readEntireBinaryStream;
         StringMethod readEntireTextStream;
-        FactoryMethod readEntireXmlStream;
+//        FactoryMethod readEntireXmlStream;
         StringMethod removeEscapeChars;
         StringMethod toString;
         CopyMethod__URL withFileToUpload;
@@ -6454,11 +6454,11 @@ namespace PILS
         BoolMethod autoScroll;
         VoidMethod componentMovedOrResized;
         ConstructorMethod ctor;
-        ReferenceMethod getHorizontalScrollBar;
+//        ReferenceMethod getHorizontalScrollBar;
         IntMethod getMaximumVisibleHeight;
         IntMethod getMaximumVisibleWidth;
         IntMethod getScrollBarThickness;
-        ReferenceMethod getVerticalScrollBar;
+//        ReferenceMethod getVerticalScrollBar;
         IntMethod getViewHeight;
         UnimplementedMethod getViewPosition;
         IntMethod getViewPositionX;
@@ -6468,7 +6468,7 @@ namespace PILS
         BoolMethod isHorizontalScrollBarShown;
         BoolMethod isVerticalScrollBarShown;
         VoidMethod scrollBarMoved;
-        VoidMethod setScrollBarButtonVisibility;
+//        VoidMethod setScrollBarButtonVisibility;
         VoidMethod setScrollBarThickness;
         VoidMethod setScrollBarsShown;
         VoidMethod setSingleStepSizes;
@@ -6476,7 +6476,7 @@ namespace PILS
         VoidMethod setViewPosition__1;
         VoidMethod setViewPosition__2;
         VoidMethod setViewedComponent;
-        BoolMethod useMouseWheelMoveIfNeeded;
+//        BoolMethod useMouseWheelMoveIfNeeded;
         VoidMethod visibleAreaChanged;
     };
 
@@ -6500,7 +6500,7 @@ namespace PILS
     class WebBrowserComponent__methods {
         static WebBrowserComponent__methods singleton;
         WebBrowserComponent__methods();
-        ConstructorMethod ctor;
+//        ConstructorMethod ctor;
         VoidMethod goBack;
         VoidMethod goForward;
         VoidMethod goToURL;
@@ -6520,10 +6520,10 @@ namespace PILS
         XmlDocument__methods();
         ConstructorMethod ctor__1;
         ConstructorMethod ctor__2;
-        ReferenceMethod getDocumentElement;
+  //      ReferenceMethod getDocumentElement;
         StringMethod getLastParseError;
-        ReferenceMethod parse__1;
-        ReferenceMethod parse__2;
+  //      ReferenceMethod parse__1;
+  //      ReferenceMethod parse__2;
         VoidMethod setEmptyTextElementsIgnored;
         VoidMethod setInputSource;
     };
@@ -6535,7 +6535,7 @@ namespace PILS
         VoidMethod addTextElement;
         BoolMethod compareAttribute;
         BoolMethod containsChildElement;
-        StringMethod createDocument;
+//        StringMethod createDocument;
         FactoryMethod createNewChildElement;
         FactoryMethod createTextElement;
         ConstructorMethod ctor__2;
@@ -6574,8 +6574,8 @@ namespace PILS
         VoidMethod setAttribute__2;
         VoidMethod setAttribute__3;
         VoidMethod setText;
-        BoolMethod writeToFile;
-        VoidMethod writeToStream;
+//        BoolMethod writeToFile;
+//        VoidMethod writeToStream;
     };
 
     class ZipFile__methods {
@@ -6598,7 +6598,7 @@ namespace PILS
         ZipFile__Builder__methods();
         VoidMethod addFile;
         ConstructorMethod ctor;
-        BoolMethod writeToStream;
+//        BoolMethod writeToStream;
     };
 
     class ZipFile__ZipEntry__methods {
@@ -6674,7 +6674,7 @@ namespace PILS
         pils__CodeEditorComponent__methods();
         VoidMethod codeDocumentChanged;
         VoidMethod codeDocumentEditorTextChanged;
-        ConstructorMethod ctor;
+  //      ConstructorMethod ctor;
         IntMethod getHighlightedRegionEnd;
         IntMethod getHighlightedRegionStart;
     };
@@ -6705,7 +6705,7 @@ namespace PILS
     class pils__FileBrowserListener__methods {
         static pils__FileBrowserListener__methods singleton;
         pils__FileBrowserListener__methods();
-        ConstructorMethod ctor;
+//        ConstructorMethod ctor;
     };
 
     class pils__GroupComponent__methods {
@@ -6740,7 +6740,7 @@ namespace PILS
     class pils__OpenGLComponent__methods {
         static pils__OpenGLComponent__methods singleton;
         pils__OpenGLComponent__methods();
-        ConstructorMethod ctor;
+//        ConstructorMethod ctor;
     };
 
     class pils__TabBarButton__methods {

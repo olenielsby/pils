@@ -13,7 +13,7 @@ namespace PILS
 		virtual void write(const PILS_CHAR *cc, size_t count) = 0;
 		virtual void write(const PILS_CHAR *cc) = 0;
 		virtual void write(const PILS_CHAR c) = 0;
-		virtual bool overflow() const;
+        virtual bool overflow() const;
 		virtual void writeSpaceOrBreak() = 0;
 		virtual void optionalSpace() {};
 		virtual void optionalSpaceOrBreak() {};
@@ -54,11 +54,11 @@ namespace PILS
 		WritingString(Runner &run, const Language *language, const Any *thing)
 			: Writing(run, language, thing)
 		{}
-		void write(const PILS_CHAR c);
-		void write(const PILS_CHAR *cc);
-		void write(const PILS_CHAR *cc, size_t count);
-		void writeSpaceOrBreak();
-		virtual const PilsString *getString() const;
+        void write(const PILS_CHAR c) override;
+        void write(const PILS_CHAR *cc) override;
+        void write(const PILS_CHAR *cc, size_t count) override;
+        void writeSpaceOrBreak() override;
+        virtual const PilsString *getString() const;
 	protected:
 		std::string buffer;
 	};
@@ -70,11 +70,11 @@ namespace PILS
 		WritingProbe(Runner &run, const Language *language, const Any *thing, size_t limit)
 			: Writing(run, language, thing), limit(limit), count(0)
 		{}
-		void write(const PILS_CHAR c);
-		void write(const PILS_CHAR *cc);
-		void write(const PILS_CHAR *cc, size_t count);
-		void writeSpaceOrBreak();
-		bool overflow() const;
+        void write(const PILS_CHAR c) override;
+        void write(const PILS_CHAR *cc) override;
+        void write(const PILS_CHAR *cc, size_t count) override;
+        void writeSpaceOrBreak() override;
+        bool overflow() const override;
 		virtual size_t getCount() const {return count;}
 	protected:
 		size_t limit;
@@ -104,11 +104,11 @@ namespace PILS
 		WritingIndentString(Runner &run, const Language *language, const Any *thing)
 			: WritingString(run, language, thing)
 		{}
-		void writeSpaceOrBreak();
-		void done();
-		int indenting(size_t at, size_t level);
-		void optionalSpace();
-		void optionalSpaceOrBreak();
+        void writeSpaceOrBreak() override;
+        void done() override;
+        int indenting(size_t at, size_t level) override;
+        void optionalSpace() override;
+        void optionalSpaceOrBreak() override;
 	};
 
 	class WritingIndentProbe
@@ -118,11 +118,11 @@ namespace PILS
 		WritingIndentProbe(Runner &run, const Language *language, const Any *thing, size_t limit)
 			: WritingProbe(run, language, thing, limit)
 		{}
-		void writeSpaceOrBreak();
-		void done();
-		int indenting(size_t at, size_t level);
-		void optionalSpace();
-		void optionalSpaceOrBreak();
+        void writeSpaceOrBreak() override;
+        void done() override;
+        int indenting(size_t at, size_t level) override;
+        void optionalSpace() override;
+        void optionalSpaceOrBreak() override;
 	};
 }
 #endif

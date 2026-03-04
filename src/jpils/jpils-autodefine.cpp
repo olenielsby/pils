@@ -1,7 +1,9 @@
 /* This file is public domain */
 
-#include <src/juce_WithoutMacros.h>
-#include "juce_PDFWriter.h"
+// #include <src/juce_WithoutMacros.h>
+// #include "juce_PDFWriter.h"
+#include <juce_graphics/juce_graphics.h>
+
 #include "jpils-binding-base.h"
 #include "jpils-supplement.h"
 #include "jpils-opengl.h"

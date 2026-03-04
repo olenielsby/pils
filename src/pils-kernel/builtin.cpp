@@ -140,7 +140,7 @@ namespace PILS
 
 	bool NameValue::isNameValuePair(const Constant *&name, const Any *&value) const
 	{
-		if (name = element[1]->as_Constant())
+        if ((name = element[1]->as_Constant()))
 		{
 			value = element[0];
 			return true;
@@ -157,4 +157,9 @@ namespace PILS
 	{
 		return NULL;
 	}
-}
+
+    void PredefinedName::writingToDebugOutput(int level) const
+    {
+        std::fputs(this->attributes[0]->as_String()->value, stderr);
+    }
+    }

@@ -2862,10 +2862,11 @@ namespace PILS
 	const Any *BuiltinClicheWhen::specialOperation(Runner &run, const ReallySpecial &reallySpecial, const Any &argument) const
 	{
 		const Special *special = reinterpret_cast<const Special *>(&reallySpecial);
-		if (special->isMultipleReferenced())
-		{
-			return NULL;
-		}
+        // this check is disabled because juce 8 ownership needs the hack of incrementing the reference counter
+        // if (special->isMultipleReferenced())
+        // {
+        // 	return NULL;
+        // }
 		special->addReference();
 		if (&argument != &Empty::singleton)
 		{

@@ -8,35 +8,35 @@ namespace PILS
 		: public Sink
 	{
 	public:
-		Pipe *connectPipe(Runner &run);
+        Pipe *connectPipe(Runner &run) override;
 		virtual const Step *pipeItem(Runner &run, const Any *item) = 0;
 		virtual	const Step *pipeBegin(Runner &run) = 0;
 		virtual const Step *pipeEnd(Runner &run) = 0;
 		virtual Pipe *splicing();
 		virtual Sink *shortcut(Runner &run);
-		const Step *pass(Runner &run, const ListConstant &value);
-		const Step *pass(Runner &run, const ListExpress &value);
-		const Step *pass(Runner &run, const ListConstant *value);
-		const Step *pass(Runner &run, const ListExpress *value);
-		const Step *pass(Runner &run, const Special *value);
-		const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count);
-		const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count);
+        const Step *pass(Runner &run, const ListConstant &value) override;
+        const Step *pass(Runner &run, const ListExpress &value) override;
+        const Step *pass(Runner &run, const ListConstant *value) override;
+        const Step *pass(Runner &run, const ListExpress *value) override;
+        const Step *pass(Runner &run, const Special *value) override;
+        const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count) override;
+        const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count) override;
 	};
 
 	class PipeToNowhere
 		: public Pipe
 	{
 	public:
-		const Step *pass(Runner &run, const Any *thing);
-		Sink *kick(Runner &run);
-		const Step *pipeItem(Runner &run, const Any *thing);
-		const Step *pipeBegin(Runner &run);
-		const Step *pipeEnd(Runner &run);
-		Sink *shortcut(Runner &run);
-		const Step *called(Runner &run, const Empty &call);
-		const Step *error(Runner &run, const Any *error, const Express *what, const Any *who);
-		const Step *miss(Runner &run);
-		void refer(Runner &run, const Express &what);
+        const Step *pass(Runner &run, const Any *thing) override;
+        Sink *kick(Runner &run) override;
+        const Step *pipeItem(Runner &run, const Any *thing) override;
+        const Step *pipeBegin(Runner &run) override;
+        const Step *pipeEnd(Runner &run) override;
+        Sink *shortcut(Runner &run) override;
+        const Step *called(Runner &run, const Empty &call) override;
+        const Step *error(Runner &run, const Any *error, const Express *what, const Any *who) override;
+        const Step *miss(Runner &run) override;
+        void refer(Runner &run, const Express &what) override;
 	};
 
 	class PipeHoldTail
@@ -46,15 +46,15 @@ namespace PILS
 		PipeHoldTail(const Any *thing, const Any *whence)
 			: thing(thing), whence(whence)
 		{}
-		const Step *pass(Runner &run, const Any *value);
-		Sink *kick(Runner &run);
-		const Step *tailStep(Runner &run, const Any *thing, const Any *where_);
-		const Step *tailStep(Runner &run, const Any *thing);
-		bool needsResult();
-		const Step *pipeItem(Runner &run, const Any *item);
-		const Step *pipeBegin(Runner &run);
-		const Step *pipeEnd(Runner &run);
-		Sink *pushWhere(Runner &run, const Any *where);
+        const Step *pass(Runner &run, const Any *value) override;
+        Sink *kick(Runner &run) override;
+        const Step *tailStep(Runner &run, const Any *thing, const Any *where_) override;
+        const Step *tailStep(Runner &run, const Any *thing) override;
+        bool needsResult() override;
+        const Step *pipeItem(Runner &run, const Any *item) override;
+        const Step *pipeBegin(Runner &run) override;
+        const Step *pipeEnd(Runner &run) override;
+        Sink *pushWhere(Runner &run, const Any *where) override;
 		const Any *thing;
 		const Any *whence;
 	};
@@ -66,15 +66,15 @@ namespace PILS
 		PipeWhereabout(const Any *where_)
 			: where_(where_)
 		{}
-		const Step *pass(Runner &run, const Any *value);
-		Sink *kick(Runner &run);
-		const Step *tailStep(Runner &run, const Any *thing, const Any *where_);
-		const Step *tailStep(Runner &run, const Any *thing);
-		bool needsResult();
-		const Step *pipeItem(Runner &run, const Any *item);
-		const Step *pipeBegin(Runner &run);
-		const Step *pipeEnd(Runner &run);
-		Sink *pushWhere(Runner &run, const Any *where);
+        const Step *pass(Runner &run, const Any *value) override;
+        Sink *kick(Runner &run) override;
+        const Step *tailStep(Runner &run, const Any *thing, const Any *where_) override;
+        const Step *tailStep(Runner &run, const Any *thing) override;
+        bool needsResult() override;
+        const Step *pipeItem(Runner &run, const Any *item) override;
+        const Step *pipeBegin(Runner &run) override;
+        const Step *pipeEnd(Runner &run) override;
+        Sink *pushWhere(Runner &run, const Any *where) override;
 		const Any *where_;
 	};
 
@@ -82,11 +82,11 @@ namespace PILS
 		: public PipeToNowhere
 	{
 	public:
-		Sink *kick(Runner &run);
-		const Step *pipeItem(Runner &run, const Any *thing);
-		const Step *pipeEnd(Runner &run);
-		const Step *miss(Runner &run);
-		void refer(Runner &run, const Express &what);
+        Sink *kick(Runner &run) override;
+        const Step *pipeItem(Runner &run, const Any *thing) override;
+        const Step *pipeEnd(Runner &run) override;
+        const Step *miss(Runner &run) override;
+        void refer(Runner &run, const Express &what) override;
 	private:
 		std::vector<const Any*> elements;
 	};
@@ -95,7 +95,7 @@ namespace PILS
 		: public Sink
 	{
 	public:
-		const Step *pass(Runner &run, const Any *thing); //dummy
+        const Step *pass(Runner &run, const Any *thing) override; //dummy
 	};
 
 	class PipeHold
@@ -105,11 +105,11 @@ namespace PILS
 		PipeHold(const Any *hold)
 			: hold(hold)
 		{}
-		const Step *pass(Runner &run, const Any *thing);
-		Sink *kick(Runner &run);
-		const Step *pipeBegin(Runner &run);
-		const Step *pipeItem(Runner &run, const Any *thing);
-		const Step *pipeEnd(Runner &run);
+        const Step *pass(Runner &run, const Any *thing) override;
+        Sink *kick(Runner &run) override;
+        const Step *pipeBegin(Runner &run) override;
+        const Step *pipeItem(Runner &run, const Any *thing) override;
+        const Step *pipeEnd(Runner &run) override;
 		const Any *hold;
 	};
 
@@ -120,8 +120,8 @@ namespace PILS
 		PipesourceListRange(const Any *const *source, size_t count)
 			: source(source), end(source + count)
 		{}
-		const Step *step_(Runner &run) const;
-		Sink *kick(Runner &run);
+        const Step *step_(Runner &run) const override;
+        Sink *kick(Runner &run) override;
 	protected:
 		PipesourceListRange(const Any *const *source, const Any *const *end)
 			: source(source), end(end)
@@ -137,7 +137,7 @@ namespace PILS
 		PipesourceListRangeReverse(const Any *const *source, size_t count)
 			: PipesourceListRange(source + count, source)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class PipesourceListRangeEval
@@ -147,7 +147,7 @@ namespace PILS
 		PipesourceListRangeEval(const Any *const *source, size_t count)
 			: PipesourceListRange(source, count)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class Piping
@@ -157,8 +157,8 @@ namespace PILS
 		Piping(Pipe &pipe)
 			: pipe(pipe)
 		{}
-		const Step *pass(Runner &run, const Any *thing);
-		Sink *kick(Runner &run);
+        const Step *pass(Runner &run, const Any *thing) override;
+        Sink *kick(Runner &run) override;
 	protected:
 		Pipe &pipe;
 	};
@@ -170,11 +170,11 @@ namespace PILS
 		PipeEach(const WhoUntypedOperation &what, const Any *filter)
 			: what(what), filter(filter)
 		{}
-		const Step *pass(Runner &run, const Any *thing);
-		Sink *kick(Runner &run);
-		const Step *pipeItem(Runner &run, const Any *thing);
-		const Step *pipeBegin(Runner &run);
-		const Step *pipeEnd(Runner &run);
+        const Step *pass(Runner &run, const Any *thing) override;
+        Sink *kick(Runner &run) override;
+        const Step *pipeItem(Runner &run, const Any *thing) override;
+        const Step *pipeBegin(Runner &run) override;
+        const Step *pipeEnd(Runner &run) override;
 	protected:
 		const WhoUntypedOperation &what;
 		const Any *filter;
@@ -187,9 +187,9 @@ namespace PILS
 		PipeFind(const WhoUntypedOperation &what, const Any *filter)
 			: PipeEach(what, filter)
 		{}
-		const Step *pipeItem(Runner &run, const Any *thing);
-		const Step *pipeBegin(Runner &run);
-		const Step *pipeEnd(Runner &run);
+        const Step *pipeItem(Runner &run, const Any *thing) override;
+        const Step *pipeBegin(Runner &run) override;
+        const Step *pipeEnd(Runner &run) override;
 	};
 
 	class PipeEvery
@@ -199,7 +199,7 @@ namespace PILS
 		PipeEvery(const WhoUntypedOperation &what, const Any *filter)
 			: PipeEach(what, filter)
 		{}
-		const Step *pipeItem(Runner &run, const Any *thing);
+        const Step *pipeItem(Runner &run, const Any *thing) override;
 	};
 
 	class PipeWhile
@@ -209,7 +209,7 @@ namespace PILS
 		PipeWhile(const WhoUntypedOperation &what, const Any *filter)
 			: PipeEach(what, filter)
 		{}
-		const Step *pipeItem(Runner &run, const Any *thing);
+        const Step *pipeItem(Runner &run, const Any *thing) override;
 	};
 
 	class PipeExcept
@@ -219,7 +219,7 @@ namespace PILS
 		PipeExcept(const WhoUntypedOperation &what, const Any *filter)
 			: PipeEach(what, filter)
 		{}
-		const Step *pipeItem(Runner &run, const Any *thing);
+        const Step *pipeItem(Runner &run, const Any *thing) override;
 	};
 
 	class PipeFold
@@ -229,11 +229,11 @@ namespace PILS
 		PipeFold(const WhoUntypedOperation &what, const Any *fold)
 			: what(what), fold(fold), value(NULL)
 		{}
-		const Step *pass(Runner &run, const Any *thing);
-		Sink *kick(Runner &run);
-		const Step *pipeItem(Runner &run, const Any *thing);
-		const Step *pipeBegin(Runner &run);
-		const Step *pipeEnd(Runner &run);
+        const Step *pass(Runner &run, const Any *thing) override;
+        Sink *kick(Runner &run) override;
+        const Step *pipeItem(Runner &run, const Any *thing) override;
+        const Step *pipeBegin(Runner &run) override;
+        const Step *pipeEnd(Runner &run) override;
 	protected:
 		const WhoUntypedOperation &what;
 		const Any *fold;
@@ -248,11 +248,11 @@ namespace PILS
 		PipingEvery(Pipe &pipe, const Any *item)
 			: Piping(pipe), item(item)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, const Any *thing);
-		const Step *tailStep(Runner &run, const Any *thing, const Any *where_);
-		const Step *error(Runner &run, const Any *error, const Express *what, const Any *who);
-		const Step *miss(Runner &run);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, const Any *thing) override;
+        const Step *tailStep(Runner &run, const Any *thing, const Any *where_) override;
+        const Step *error(Runner &run, const Any *error, const Express *what, const Any *who) override;
+        const Step *miss(Runner &run) override;
 	private:
 		const Any *item;
 	};
@@ -264,11 +264,11 @@ namespace PILS
 		PipeSplicingEvery(Pipe &splicing)
 			: splicing(splicing)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, const Any *thing);
-		const Step *pipeItem(Runner &run, const Any *thing);
-		const Step *pipeBegin(Runner &run);
-		const Step *pipeEnd(Runner &run);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, const Any *thing) override;
+        const Step *pipeItem(Runner &run, const Any *thing) override;
+        const Step *pipeBegin(Runner &run) override;
+        const Step *pipeEnd(Runner &run) override;
 	private:
 		Pipe &splicing;
 	};
@@ -280,9 +280,9 @@ namespace PILS
 		PipingExcept(Pipe &pipe, const Any *item)
 			: pipe(pipe), item(item)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, long dummy);
-		const Step *miss(Runner &run);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, long dummy) override;
+        const Step *miss(Runner &run) override;
 	private:
 		Pipe &pipe;
 		const Any *item;
@@ -295,15 +295,15 @@ namespace PILS
 		PipingEach(Pipe &pipe, const Any *item)
 			: PipingEvery(pipe, item)
 		{}
-		const Step *called(Runner &run, const Constant &call);
-		const Step *called(Runner &run, const Integer &call);
-		const Step *called(Runner &run, const ListConstant &call);
-		const Step *called(Runner &run, const NodeConstant &call);
-		const Step *called(Runner &run, const Empty &call);
-		const Step *called(Runner &run, const ListExpress &call);
-		const Step *called(Runner &run, const NodeExpress &call);
-		const Step *called(Runner &run, const Any &call, const Any *assignValue);
-		const Step *miss(Runner &run);
+        const Step *called(Runner &run, const Constant &call) override;
+        const Step *called(Runner &run, const Integer &call) override;
+        const Step *called(Runner &run, const ListConstant &call) override;
+        const Step *called(Runner &run, const NodeConstant &call) override;
+        const Step *called(Runner &run, const Empty &call) override;
+        const Step *called(Runner &run, const ListExpress &call) override;
+        const Step *called(Runner &run, const NodeExpress &call) override;
+        const Step *called(Runner &run, const Any &call, const Any *assignValue) override;
+        const Step *miss(Runner &run) override;
 	};
 
 	class PipingWhile
@@ -313,15 +313,15 @@ namespace PILS
 		PipingWhile(Pipe &pipe, const Any *item)
 			: PipingEvery(pipe, item)
 		{}
-		const Step *called(Runner &run, const Constant &call);
-		const Step *called(Runner &run, const Integer &call);
-		const Step *called(Runner &run, const ListConstant &call);
-		const Step *called(Runner &run, const NodeConstant &call);
-		const Step *called(Runner &run, const Empty &call);
-		const Step *called(Runner &run, const ListExpress &call);
-		const Step *called(Runner &run, const NodeExpress &call);
-		const Step *called(Runner &run, const Any &call, const Any *assignValue);
-		const Step *miss(Runner &run);
+        const Step *called(Runner &run, const Constant &call) override;
+        const Step *called(Runner &run, const Integer &call) override;
+        const Step *called(Runner &run, const ListConstant &call) override;
+        const Step *called(Runner &run, const NodeConstant &call) override;
+        const Step *called(Runner &run, const Empty &call) override;
+        const Step *called(Runner &run, const ListExpress &call) override;
+        const Step *called(Runner &run, const NodeExpress &call) override;
+        const Step *called(Runner &run, const Any &call, const Any *assignValue) override;
+        const Step *miss(Runner &run) override;
 	};
 
 	class PipingEveryTail
@@ -331,11 +331,11 @@ namespace PILS
 		PipingEveryTail(Pipe &pipe, const Any *thing, const Any *whence)
 			: Piping(pipe), thing(thing), whence(whence)
 		{}
-		const Step *pass(Runner &run, const Any *value);
-		Sink *kick(Runner &run);
-		const Step *tailStep(Runner &run, const Any *thing, const Any *where_);
-		const Step *tailStep(Runner &run, const Any *thing);
-		Pipe *connectPipe(Runner &run);
+        const Step *pass(Runner &run, const Any *value) override;
+        Sink *kick(Runner &run) override;
+        const Step *tailStep(Runner &run, const Any *thing, const Any *where_) override;
+        const Step *tailStep(Runner &run, const Any *thing) override;
+        Pipe *connectPipe(Runner &run) override;
 	private:
 		const Any *thing;
 		const Any *whence;
@@ -348,8 +348,8 @@ namespace PILS
 		PipingFind(Pipe &pipe, const Any *item)
 			: PipingEach(pipe, item)
 		{}
-		const Step *pass(Runner &run, const Any *thing);
-		const Step *tailStep(Runner &run, const Any *thing, const Any *where_);
+        const Step *pass(Runner &run, const Any *thing) override;
+        const Step *tailStep(Runner &run, const Any *thing, const Any *where_) override;
 	};
 
 	class PipingFold
@@ -359,10 +359,10 @@ namespace PILS
 		PipingFold(PipeFold &pipe)
 			: Piping(pipe)
 		{}
-		const Step *pass(Runner &run, const Any *value);
-		const Step *error(Runner &run, const Any *error, const Express *what, const Any *who);
-		const Step *called(Runner &run, const Any &call, const Any *assignValue);
-		const Step *miss(Runner &run);
+        const Step *pass(Runner &run, const Any *value) override;
+        const Step *error(Runner &run, const Any *error, const Express *what, const Any *who) override;
+        const Step *called(Runner &run, const Any &call, const Any *assignValue) override;
+        const Step *miss(Runner &run) override;
 	};
 
 	class WhoCount
@@ -372,16 +372,16 @@ namespace PILS
 		WhoCount(const TypecheckPropertyCount *call, const Any *who)
 			: CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class PipeProperty
 		: public Pipe
 	{
 	public:
-		const Step *pass(Runner &run, SinkTaggedNodeBuilding &nodeBuilding);
-		const Step *pass(Runner &run, const Any *value);
-		const Step *pipeBegin(Runner &run);
+        const Step *pass(Runner &run, SinkTaggedNodeBuilding &nodeBuilding) override;
+        const Step *pass(Runner &run, const Any *value) override;
+        const Step *pipeBegin(Runner &run) override;
 	protected:
 		PipeProperty(const CallWho &what)
 			: what(what)
@@ -396,18 +396,18 @@ namespace PILS
 		PipeCount(const WhoCount &what)
 			: PipeProperty(what), count(0)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, const PilsString &value);
-		const Step *pass(Runner &run, const PilsString *value);
-		const Step *pass(Runner &run, const ListConstant &value);
-		const Step *pass(Runner &run, const ListExpress &value);
-		const Step *pass(Runner &run, const ListConstant *value);
-		const Step *pass(Runner &run, const ListExpress *value);
-		const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count);
-		const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count);
-		const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count);
-		const Step *pipeItem(Runner &run, const Any *thing);
-		const Step *pipeEnd(Runner &run);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, const PilsString &value) override;
+        const Step *pass(Runner &run, const PilsString *value) override;
+        const Step *pass(Runner &run, const ListConstant &value) override;
+        const Step *pass(Runner &run, const ListExpress &value) override;
+        const Step *pass(Runner &run, const ListConstant *value) override;
+        const Step *pass(Runner &run, const ListExpress *value) override;
+        const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count) override;
+        const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count) override;
+        const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count) override;
+        const Step *pipeItem(Runner &run, const Any *thing) override;
+        const Step *pipeEnd(Runner &run) override;
 	private:
 		size_t count;
 	};
@@ -419,7 +419,7 @@ namespace PILS
 		WhoCharacterEncoding(const PropertyCharacterEncoding *call, const Any *who)
 			: CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class PipeCharacterEncoder
@@ -429,12 +429,12 @@ namespace PILS
 		PipeCharacterEncoder(const WhoCharacterEncoding &whatever)
 			: PipeProperty(whatever), state(0)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, const PilsString *value);
-		const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count);
-		const Step *pipeItem(Runner &run, const Any *thing);
-		const Step *pipeEnd(Runner &run);
-		bool convert(const Integer &character);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, const PilsString *value) override;
+        const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count) override;
+        const Step *pipeItem(Runner &run, const Any *thing) override;
+        const Step *pipeEnd(Runner &run) override;
+        bool convert(const Integer &character) override;
 	private:
 		std::string string;
 		int state;
@@ -449,8 +449,8 @@ namespace PILS
 		{
 			state = ((PropertyCharacterEncoding *)what.callAttribute())->initialState(this->at, end);
 		}
-		Sink *kick(Runner &run);
-		const Step *step_(Runner &run) const;
+        Sink *kick(Runner &run) override;
+        const Step *step_(Runner &run) const override;
 		const Step *step_(Runner &run);
 	private:
 		const CallWho &what;
@@ -467,7 +467,7 @@ namespace PILS
 		WhoPropertyIncrementRange(const PropertyIncrementRange *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class SinkPropertyIncrementRange
@@ -477,12 +477,12 @@ namespace PILS
 		SinkPropertyIncrementRange(const WhoPropertyIncrementRange &what)
 			: what(what)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, const Any *who);
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Integer *value);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, const Any *who) override;
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
 	private:
 		const WhoPropertyIncrementRange &what;
 	};
@@ -494,7 +494,7 @@ namespace PILS
 		WhoPropertyDecrementRange(const PropertyDecrementRange *call, const Any *who)
 			: WhoPropertyIncrementRange(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class SinkPropertyDecrementRange
@@ -504,7 +504,7 @@ namespace PILS
 		SinkPropertyDecrementRange(const WhoPropertyIncrementRange &what)
 			: SinkPropertyIncrementRange(what)
 		{}
-		const Step *pass(Runner &run, long value);
+        const Step *pass(Runner &run, long value) override;
 	};
 
 	class PipesourceIntegerStep
@@ -514,8 +514,8 @@ namespace PILS
 		PipesourceIntegerStep(long next, long count, long delta)
 			: next(next), count(count), delta(delta)
 		{}
-		const Step *step_(Runner &run) const;
-		Sink *kick(Runner &run);
+        const Step *step_(Runner &run) const override;
+        Sink *kick(Runner &run) override;
 	private:
 		long next;
 		long count;
@@ -529,7 +529,7 @@ namespace PILS
 		UpDownInteger(const HashedConstant *&link, const BuiltinClicheOperationUpDown &cliche, const Integer *value)
 			: NodeConstantTiny(link, cliche, value)
 		{}
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	};
 
 	class WhoUpInteger
@@ -539,7 +539,7 @@ namespace PILS
 		WhoUpInteger(const UpDownInteger *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoDownInteger
@@ -549,7 +549,7 @@ namespace PILS
 		WhoDownInteger(const UpDownInteger *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoUpExpress
@@ -559,7 +559,7 @@ namespace PILS
 		WhoUpExpress(const NodeExpressShort *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoDownExpress
@@ -569,7 +569,7 @@ namespace PILS
 		WhoDownExpress(const NodeExpressShort *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class SinkUpOperand
@@ -579,12 +579,12 @@ namespace PILS
 		SinkUpOperand(const CallWho &what)
 			: what(what)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, const Any *operand);
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Integer *value);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, const Any *operand) override;
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
 		const CallWho &what;
 	};
 
@@ -595,10 +595,10 @@ namespace PILS
 		SinkDownOperand(const CallWho &what)
 			: SinkUpOperand(what)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Integer *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
 	};
 
 	class SinkUp
@@ -608,12 +608,12 @@ namespace PILS
 		SinkUp(const CallWho &what, long end)
 			: what(what), end(end)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, const Any *operand);
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Integer *value);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, const Any *operand) override;
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
 	private:
 		const CallWho &what;
 	protected:
@@ -627,10 +627,10 @@ namespace PILS
 		SinkDown(const CallWho &what, long end)
 			: SinkUp(what, end)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Integer *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
 	};
 
 	class WhoReverse
@@ -640,7 +640,7 @@ namespace PILS
 		WhoReverse(const PropertyReverse *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class SinkReverse
@@ -650,16 +650,16 @@ namespace PILS
 		SinkReverse(const CallWho &what)
 			: what(what)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, const Any *who);
-		const Step *pass(Runner &run, const ListConstant *value);
-		const Step *pass(Runner &run, const ListExpress *value);
-		const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count);
-		const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count);
-		const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, const Any *who) override;
+        const Step *pass(Runner &run, const ListConstant *value) override;
+        const Step *pass(Runner &run, const ListExpress *value) override;
+        const Step *pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count) override;
+        const Step *pass(Runner &run, const Any *anchor, const Any *const *range, size_t count) override;
+        const Step *pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count) override;
 	private:
 		const CallWho &what;
-		const Step *pass(Runner &run, const PilsString *value);
+        const Step *pass(Runner &run, const PilsString *value) override;
 	};
 
 	class WhoPropertySplice
@@ -669,7 +669,7 @@ namespace PILS
 		WhoPropertySplice(const PropertySplice *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class PipeSplice
@@ -679,12 +679,12 @@ namespace PILS
 		PipeSplice(const CallWho &what)
 			: what(what)
 		{}
-		const Step *pass(Runner &run, const Any *thing);
-		Sink *kick(Runner &run);
-		const Step *pipeItem(Runner &run, const Any *thing);
-		const Step *pipeBegin(Runner &run);
-		const Step *pipeEnd(Runner &run);
-		Pipe *splicing();
+        const Step *pass(Runner &run, const Any *thing) override;
+        Sink *kick(Runner &run) override;
+        const Step *pipeItem(Runner &run, const Any *thing) override;
+        const Step *pipeBegin(Runner &run) override;
+        const Step *pipeEnd(Runner &run) override;
+        Pipe *splicing() override;
 	private:
 		const CallWho &what;
 	};
@@ -696,11 +696,11 @@ namespace PILS
 		PipingSplice(Pipe &pipe, const Any *anchor)
 			: pipe(pipe), anchor(anchor)
 		{}
-		const Step *pass(Runner &run, const Any *thing);
-		Sink *kick(Runner &run);
-		const Step *pipeItem(Runner &run, const Any *thing);
-		const Step *pipeBegin(Runner &run);
-		const Step *pipeEnd(Runner &run);
+        const Step *pass(Runner &run, const Any *thing) override;
+        Sink *kick(Runner &run) override;
+        const Step *pipeItem(Runner &run, const Any *thing) override;
+        const Step *pipeBegin(Runner &run) override;
+        const Step *pipeEnd(Runner &run) override;
 	private:
 		Pipe &pipe;
 		const Any *anchor;
@@ -713,11 +713,11 @@ namespace PILS
 		PipeListSeparator(const CallWho &what, const Any *separator)
 			: what(what), separator(separator), insertSeparator(false)
 		{}
-		const Step *pass(Runner &run, const Any *thing);
-		Sink *kick(Runner &run);
-		const Step *pipeItem(Runner &run, const Any *thing);
-		const Step *pipeBegin(Runner &run);
-		const Step *pipeEnd(Runner &run);
+        const Step *pass(Runner &run, const Any *thing) override;
+        Sink *kick(Runner &run) override;
+        const Step *pipeItem(Runner &run, const Any *thing) override;
+        const Step *pipeBegin(Runner &run) override;
+        const Step *pipeEnd(Runner &run) override;
 		Pipe &next() {return this[1];}
 	private:
 		const CallWho &what;
@@ -732,8 +732,8 @@ namespace PILS
 		PipesourceInsert(Pipe &pipe, const Any *item)
 			: pipe(pipe), item(item)
 		{}
-		Sink *kick(Runner &run);
-		const Step *step_(Runner &run) const;
+        Sink *kick(Runner &run) override;
+        const Step *step_(Runner &run) const override;
 	private:
 		Pipe &pipe;
 		const Any *item;
@@ -746,16 +746,16 @@ namespace PILS
 		PipeCounting(const WhoUntypedOperation &what, const Any *filter)
 			: PipeEach(what, filter), count(0)
 		{}
-		const Step *pipeItem(Runner &run, const Any *thing);
+        const Step *pipeItem(Runner &run, const Any *thing) override;
 		/*size-dependent methods*/
-		const Step *pass(Runner &run, const Any *thing);
-		Sink *kick(Runner &run);
-		const Step *pipeBegin(Runner &run);
+        const Step *pass(Runner &run, const Any *thing) override;
+        Sink *kick(Runner &run) override;
+        const Step *pipeBegin(Runner &run) override;
 		/*enumerate node legs*/
-		const Step *pass(Runner &run, const NodeConstantShort *node);
-		const Step *pass(Runner &run, const NodeConstantLong *node);
-		const Step *pass(Runner &run, const NodeExpressShort *node);
-		const Step *pass(Runner &run, const NodeExpressLong *node);
+        const Step *pass(Runner &run, const NodeConstantShort *node) override;
+        const Step *pass(Runner &run, const NodeConstantLong *node) override;
+        const Step *pass(Runner &run, const NodeExpressShort *node) override;
+        const Step *pass(Runner &run, const NodeExpressLong *node) override;
 	private:
 		double count;
 	};
@@ -767,8 +767,8 @@ namespace PILS
 		PipeFirst(const WhoUntypedOperation &what, const Any *filter)
 			: PipeEach(what, filter)
 		{}
-		const Step *pipeItem(Runner &run, const Any *thing);
-		const Step *pipeBegin(Runner &run);
+        const Step *pipeItem(Runner &run, const Any *thing) override;
+        const Step *pipeBegin(Runner &run) override;
 	private:
 		friend class PipesourceFirst;
 		const Step *pipeMyItem(Runner &run);
@@ -781,8 +781,8 @@ namespace PILS
 		PipesourceFirst(PipeFirst &pipeFirst)
 			: pipeFirst(pipeFirst)
 		{}
-		const Step *step_(Runner &run) const;
-		Sink *kick(Runner &run);
+        const Step *step_(Runner &run) const override;
+        Sink *kick(Runner &run) override;
 	private:
 		PipeFirst &pipeFirst;
 	};
@@ -794,9 +794,9 @@ namespace PILS
 		PipeMinMax(const WhoUntypedOperation &what, const Any *filter)
 			: PipeFind(what, filter), key(NULL), value(NULL)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pipeItem(Runner &run, const Any *thing);
-		const Step *pipeEnd(Runner &run);
+        Sink *kick(Runner &run) override;
+        const Step *pipeItem(Runner &run, const Any *thing) override;
+        const Step *pipeEnd(Runner &run) override;
 	protected:
 		friend class PipingMinMax;
 		virtual bool better(const Constant *key) = 0;
@@ -812,7 +812,7 @@ namespace PILS
 			: PipeMinMax(what, filter)
 		{}
 	protected:
-		virtual bool better(const Constant *key);
+        virtual bool better(const Constant *key) override;
 	};
 
 	class PipeMax
@@ -823,7 +823,7 @@ namespace PILS
 			: PipeMinMax(what, filter)
 		{}
 	protected:
-		virtual bool better(const Constant *key);
+        virtual bool better(const Constant *key) override;
 	};
 
 	class PipingMinMax
@@ -833,10 +833,10 @@ namespace PILS
 		PipingMinMax(PipeMinMax &pipe, const Any *item)
 			: pipe(pipe), item(item)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, const Constant *value);
-		const Step *pass(Runner &run, const Any *value);
-		const Step *miss(Runner &run);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, const Constant *value) override;
+        const Step *pass(Runner &run, const Any *value) override;
+        const Step *miss(Runner &run) override;
 	private:
 		PipeMinMax &pipe;
 		const Any *const item;
@@ -849,9 +849,9 @@ namespace PILS
 		PipeSum(const WhoUntypedOperation &what, const Any *filter)
 			: PipeFind(what, filter), sum(0)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pipeItem(Runner &run, const Any *thing);
-		const Step *pipeEnd(Runner &run);
+        Sink *kick(Runner &run) override;
+        const Step *pipeItem(Runner &run, const Any *thing) override;
+        const Step *pipeEnd(Runner &run) override;
 	private:
 		friend class PipingSum;
 		double sum;
@@ -864,15 +864,15 @@ namespace PILS
 		PipingSum(PipeSum &pipe, const Any *item)
 			: pipe(pipe), item(item)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Any *value);
-		const Step *miss(Runner &run);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Any *value) override;
+        const Step *miss(Runner &run) override;
 	private:
 		PipeSum &pipe;
 		const Any *const item;
@@ -884,14 +884,14 @@ namespace PILS
 		AggregateCallWho(const PredefinedAggregateFunctionName *call, const Any *who)
 			: CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class PipeAggregate : public Pipe
 	{
 	public:
-		const Step *pass(Runner &run, const Any *value);
-		const Step *pipeBegin(Runner &run);
+        const Step *pass(Runner &run, const Any *value) override;
+        const Step *pipeBegin(Runner &run) override;
 	protected:
 		PipeAggregate(const AggregateCallWho &what)
 			: what(what)
@@ -905,9 +905,9 @@ namespace PILS
 		PipeAggregateSum(const AggregateCallWho &what)
 			: PipeAggregate(what), sum(0)
 		{}
-		const Step *pipeItem(Runner &run, const Any *item);
-		const Step *pipeEnd(Runner &run);
-		Sink *kick(Runner &run);
+        const Step *pipeItem(Runner &run, const Any *item) override;
+        const Step *pipeEnd(Runner &run) override;
+        Sink *kick(Runner &run) override;
 	private:
 		double sum;
 	};
@@ -915,8 +915,8 @@ namespace PILS
 	class PipeAggregateMinMax : public PipeAggregate
 	{
 	public:
-		const Step *pipeEnd(Runner &run);
-		Sink *kick(Runner &run);
+        const Step *pipeEnd(Runner &run) override;
+        Sink *kick(Runner &run) override;
 	protected:
 		PipeAggregateMinMax(const AggregateCallWho &what)
 			: PipeAggregate(what), item(NULL)
@@ -930,7 +930,7 @@ namespace PILS
 		PipeAggregateMin(const AggregateCallWho &what)
 			: PipeAggregateMinMax(what)
 		{}
-		const Step *pipeItem(Runner &run, const Any *item);
+        const Step *pipeItem(Runner &run, const Any *item) override;
 	};
 
 	class PipeAggregateMax : public PipeAggregateMinMax
@@ -939,7 +939,7 @@ namespace PILS
 		PipeAggregateMax(const AggregateCallWho &what)
 			: PipeAggregateMinMax(what)
 		{}
-		const Step *pipeItem(Runner &run, const Any *item);
+        const Step *pipeItem(Runner &run, const Any *item) override;
 	};
 }
 #endif

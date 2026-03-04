@@ -2253,10 +2253,10 @@ namespace PILS
 				element[i] = *cursor[i]++;
 			list[j] = ListConstant::get(element, elementSize, true);
 		}
-		delete cursor;
-		delete element;
+        delete[] cursor;
+        delete[] element;
 		const ListConstant *result = ListConstant::get(list, listSize);
-		delete list;
+        delete[] list;
 		value->releaseReference();
 		return (run.sink = this + 1)->pass(run, result);
 	}
@@ -2294,10 +2294,10 @@ namespace PILS
 				list[j] = new (Heap::allocate(sizeof(ListExpress) + (elementSize - 1) * sizeof(Any*))) ListExpress(element, elementSize);
 			else list[j] = ListConstant::get((const Constant *const *)element, elementSize);
 		}
-		delete cursor;
-		delete element;
+        delete[] cursor;
+        delete[] element;
 		const ListExpress *result = new (Heap::allocate(sizeof(ListExpress) + (listSize - 1) * sizeof(Any*))) ListExpress(list, listSize);
-		delete list;
+        delete[] list;
 		return (run.sink = this + 1)->pass(run, result);
 	}
 
@@ -2364,7 +2364,7 @@ namespace PILS
 			for (size_t j = 0; j < count; j++) *splicing++ = element->value[j];
 		}
 		const PilsString *result = PilsString::get(spliceText, spliceCount);
-		delete spliceText;
+        delete[] spliceText;
 		list->releaseReference();
 		operand->releaseReference();
 		return (run.sink = this + 1)->pass(run, result);
@@ -2695,7 +2695,7 @@ namespace PILS
 		value->releaseReference();
 		pairs->releaseReference();
 		const PilsString *result = PilsString::get(text, countBag.count);
-		delete text;
+        delete[] text;
 		return (run.sink = this + 1)->pass(run, result);
 	}
 
@@ -2717,7 +2717,7 @@ namespace PILS
 					for (size_t j = 0; j < (size_t)second.count->value; j++) *c++ = second.value[j];
 					for (; i < (size_t)original->count->value; i++) *c++ = original->value[i];
 					result = PilsString::get(text, c - text);
-					delete text;
+                    delete[] text;
 					break;
 				}
 			}
@@ -2745,7 +2745,7 @@ namespace PILS
 					for (size_t j = 0; j < (size_t)original->count->value - i; j++) *c++ = original->value[j];
 					for (i = 0; i < (size_t)second.count->value; i++) *c++ = second.value[i];
 					result = PilsString::get(text, c - text);
-					delete text;
+                    delete[] text;
 					break;
 				}
 			}
@@ -2862,7 +2862,7 @@ namespace PILS
 			}
 		}
 		const PilsString *result = PilsString::get((const PILS_CHAR*)buffer, bcount);
-		delete buffer;
+        delete[] buffer;
 		return result;
 	}
 	const PilsString *PilsString::get(const wchar_t *text)

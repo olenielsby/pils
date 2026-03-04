@@ -12,12 +12,12 @@ namespace PILS
 		FileName(const HashedConstant *&link, const PilsString *name, bool isFolder)
 			:  ReallySpecial(link), file(new juce::File (juce::String::fromUTF8 (name->value, name->count->value - isFolder))), name(name)
 		{}
-		const Any *specialCalling(Runner &run, const Constant &name) const;
-		const Any *specialCalling(Runner &run, const Constant &name, const Any &arg) const;
-		bool specialComparing(const FileNameLookup &lookup) const;
-		bool converting(JuceSpecialConverter &converter) const;
-		void write(Writing & writing) const;
-		size_t unlinkAndGetSize();
+        const Any *specialCalling(Runner &run, const Constant &name) const override;
+        const Any *specialCalling(Runner &run, const Constant &name, const Any &arg) const override;
+        bool specialComparing(const FileNameLookup &lookup) const override;
+        bool converting(JuceSpecialConverter &converter) const override;
+        void write(Writing & writing) const override;
+        size_t unlinkAndGetSize() override;
 	private:
 		friend class FileNameConverter;
 		const PilsString *name;
@@ -31,10 +31,10 @@ namespace PILS
 		FileNameLookup(const PilsString &name)
 			: name(name), isFolder(name.value[name.count->value-1] == '/')
 		{}
-		const ReallySpecial *newSpecial(const HashedConstant *&link);
-		bool compare(const ReallySpecial &special) const;
-		void unduplicate();
-		size_t hash() const;
+        const ReallySpecial *newSpecial(const HashedConstant *&link) override;
+        bool compare(const ReallySpecial &special) const override;
+        void unduplicate() override;
+        size_t hash() const override;
 		const PilsString &name;
 		const bool isFolder;
 	};
@@ -47,7 +47,7 @@ namespace PILS
 			: name(NULL)
 		{}
 		const PilsString *name;
-		bool converting(const FileName &argument);
+        bool converting(const FileName &argument) override;
 	};
 
 	class PipesourceUnzip
@@ -55,9 +55,9 @@ namespace PILS
 	{
 	public:
 		PipesourceUnzip(const juce::File &file);
-		const Step *pass(Runner &run, const Any *thing);
-		const Step *step_(Runner &run) const;
-		Sink *kick(Runner &run);
+        const Step *pass(Runner &run, const Any *thing) override;
+        const Step *step_(Runner &run) const override;
+        Sink *kick(Runner &run) override;
 	private:
 		juce::ZipFile zipFile;
 		int at, count;

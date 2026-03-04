@@ -27,8 +27,8 @@ namespace pilsplug {
 	class Plug
 	{
 	public:
-		virtual interface::Object *root() const;
-		virtual void delete_(::pilsplug::interface::Object *object) const;
+        virtual interface::Object *root() const;
+        virtual void delete_(::pilsplug::interface::Object *object) const;
 	};
 
 	struct BlobReference
@@ -43,8 +43,8 @@ namespace pilsplug {
 		{
 		public:
 			virtual ~VirtualBaseObject() {}
-			void acquire() const;
-			void release() const;
+            void acquire() const;
+            void release() const;
 		protected:
 			VirtualBaseObject() : count(1) {}
 		private:
@@ -66,9 +66,9 @@ namespace pilsplug {
 	class PilsplugHost
 	{
 	public:
-		virtual void increment(const interface::VirtualBaseObject &object) const;
-		virtual int decrement(const interface::VirtualBaseObject &object) const;
-		virtual void *service(const char *name) const;
+        virtual void increment(const interface::VirtualBaseObject &object) const;
+        virtual int decrement(const interface::VirtualBaseObject &object) const;
+        virtual void *service(const char *name) const;
 	};
 }
 #endif

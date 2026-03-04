@@ -38,8 +38,7 @@ namespace PILS
 	}
 
 	void *Runner::allocate(size_t size)
-	{
-		char *aim = (char*)sink - size;
+	{		char *aim = (char*)sink - size;
 		if (aim < stackLimit)
 			throw L"Stack overflow";
 		sink = (Sink*)(void*)aim;

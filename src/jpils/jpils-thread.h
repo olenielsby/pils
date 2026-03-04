@@ -2,7 +2,7 @@
 #ifndef _PLUMMING_JPILS_THREAD_H_
 #define _PLUMMING_JPILS_THREAD_H_
 #include "jpils-binding-base.h"
-#include "pils-kernel/pilsthread.h"
+#include "pilsthread.h"
 
 namespace PILS
 {
@@ -15,9 +15,9 @@ namespace PILS
 	{
 	public:
 		const juce::Thread::ThreadID threadID;
-		bool specialCompare(const ReallySpecial *special) const;
-		bool specialComparing(const ThreadLookup &lookup) const;
-		const Constant *as_Thread() const;
+        bool specialCompare(const ReallySpecial *special) const;
+        bool specialComparing(const ThreadLookup &lookup) const override;
+        const Constant *as_Thread() const override;
 		virtual void runLevelTouchDown()
 		{
 			threadStrapSticker.clear();
@@ -49,7 +49,7 @@ namespace PILS
 		static void postThreadDestructionMessage(juce::Thread *deadThread);
 		int runLevels;
 	private:
-		void write(Writing &writing) const;
+        void write(Writing &writing) const override;
 	};
 
 	class PendableThread
@@ -57,7 +57,7 @@ namespace PILS
 	{
 	public:
 		void doPending();
-		virtual void runLevelTouchDown();
+        void runLevelTouchDown() override;
 	protected:
 		PendableThread(const HashedConstant *&link, juce::Thread::ThreadID threadID)
 			:  PilsThread(link, threadID), pending(NULL)
@@ -71,11 +71,11 @@ namespace PILS
 		: public PendableThread
 	{
 	public:
-		size_t unlinkAndGetSize();
+        size_t unlinkAndGetSize() override;
 		static MainThread *singleton;
-		virtual void runLevelTouchDown();
+         void runLevelTouchDown() override;
 	private:
-		const Step *thread(const Any &what);
+        const Step *thread(const Any &what) override;
 		friend class ThreadLookup;
 		MainThread(const HashedConstant *&link, juce::Thread::ThreadID threadID)
 			: PendableThread(link, threadID)
@@ -89,9 +89,9 @@ namespace PILS
 		WorkerThread(const HashedConstant *&link, juce::Thread::ThreadID threadID)
 			: PilsThread(link, threadID)
 		{}
-		size_t unlinkAndGetSize();
-		const Step *callingKnot(const Any &who, const Any &call);
-		const Step *callingKnot(const Any &who, const Any &call, const Any *assignValue);
+        size_t unlinkAndGetSize() override;
+        const Step *callingKnot(const Any &who, const Any &call) override;
+        const Step *callingKnot(const Any &who, const Any &call, const Any *assignValue) override;
 		static void* knotCallback(void*);
 	};
 
@@ -104,10 +104,10 @@ namespace PILS
 		{}
 		const juce::Thread::ThreadID threadID;
 		virtual ~ThreadLookup() {}
-		bool compare(const ReallySpecial &special) const;
-		const ReallySpecial *newSpecial(const HashedConstant *&link);
-		size_t hash() const;
-		void unduplicate();
+        bool compare(const ReallySpecial &special) const override;
+        const ReallySpecial *newSpecial(const HashedConstant *&link) override;
+        size_t hash() const override;
+        void unduplicate() override;
 	};
 
 	class Pending

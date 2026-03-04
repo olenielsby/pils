@@ -16,7 +16,7 @@ namespace PILS
 	class PredefinedName
 		: public ClicheShort
 	{
-	protected:
+    protected:
 		friend class Builtin;
 		PredefinedName(const PILS_CHAR *name)
 			: ClicheShort(Namespace::standard, PilsString::get(name))
@@ -27,16 +27,18 @@ namespace PILS
 		PredefinedName(const HashedConstant *&link, const PilsString *namespace_, const PilsString *name)
 			: ClicheShort(link, namespace_, name)
 		{}
-	};
+    public:
+        void writingToDebugOutput(int level) const override;
+    };
 
 	class PredefinedNameCall
 		: public PredefinedName
 	{
 	public:
-		const ClicheShort *newCliche(const HashedConstant *&link, const Constant *a) const;
-		const ClicheLong *newCliche(const HashedConstant *&link, const Constant *const *a, size_t c) const;
-		virtual const CallWho *callWho(const NodeConstant *call, const Any *who) const;
-		virtual const CallWho *callWho(const NodeExpress *call, const Any *who) const;
+        const ClicheShort *newCliche(const HashedConstant *&link, const Constant *a) const override;
+        const ClicheLong *newCliche(const HashedConstant *&link, const Constant *const *a, size_t c) const override;
+        virtual const CallWho *callWho(const NodeConstant *call, const Any *who) const;
+        virtual const CallWho *callWho(const NodeExpress *call, const Any *who) const;
 	protected:
 		friend class Builtin;
 		PredefinedNameCall(const PILS_CHAR *name)
@@ -48,8 +50,8 @@ namespace PILS
 		: public PredefinedNameCall
 	{
 	public:
-		const CallWho *callWho(const NodeConstant *call, const Any *who) const;
-		const CallWho *callWho(const NodeExpress *call, const Any *who) const;
+        const CallWho *callWho(const NodeConstant *call, const Any *who) const override;
+        const CallWho *callWho(const NodeExpress *call, const Any *who) const override;
 	private:
 		friend class Builtin;
 		PredefinedNameTry(const PILS_CHAR *name)
@@ -61,7 +63,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	private:
 		friend class Builtin;
 		PropertyMinus(const PILS_CHAR *name)
@@ -73,7 +75,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	protected:
 		friend class Builtin;
 		PropertyIncrementRange(const PILS_CHAR *name)
@@ -85,7 +87,7 @@ namespace PILS
 		: public PropertyIncrementRange
 	{
 	public:
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	private:
 		friend class Builtin;
 		PropertyDecrementRange(const PILS_CHAR *name)
@@ -97,7 +99,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	private:
 		friend class Builtin;
 		PropertyReverse(const PILS_CHAR *name)
@@ -109,7 +111,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 		virtual const PilsString *transform(const PILS_CHAR* source, size_t count, const std::locale &locale) const = 0;
 	protected:
 		PropertyCasing(const PILS_CHAR *name)
@@ -121,7 +123,7 @@ namespace PILS
 		: public PropertyCasing
 	{
 	private:
-		const PilsString *transform(const PILS_CHAR* source, size_t count, const std::locale &locale) const;
+        const PilsString *transform(const PILS_CHAR* source, size_t count, const std::locale &locale) const override;
 		friend class Builtin;
 		PropertyCasingUpper(const PILS_CHAR *name)
 			: PropertyCasing(name)
@@ -132,7 +134,7 @@ namespace PILS
 		: public PropertyCasing
 	{
 	private:
-		const PilsString *transform(const PILS_CHAR* source, size_t count, const std::locale &locale) const;
+        const PilsString *transform(const PILS_CHAR* source, size_t count, const std::locale &locale) const override;
 		friend class Builtin;
 		PropertyCasingLower(const PILS_CHAR *name)
 			: PropertyCasing(name)
@@ -143,7 +145,7 @@ namespace PILS
 		: public PropertyCasing
 	{
 	public:
-		const PilsString *transform(const PILS_CHAR* source, size_t count, const std::locale &locale) const;
+        const PilsString *transform(const PILS_CHAR* source, size_t count, const std::locale &locale) const override;
 	private:
 		friend class Builtin;
 		PropertyCasingTitle(const PILS_CHAR *name)
@@ -155,7 +157,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	private:
 		friend class Builtin;
 		PropertyTraverse(const PILS_CHAR *name)
@@ -167,7 +169,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	private:
 		friend class Builtin;
 		PropertySplice(const PILS_CHAR *name)
@@ -179,7 +181,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	private:
 		friend class Builtin;
 		PropertySinglewise(const PILS_CHAR *name)
@@ -191,7 +193,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	private:
 		friend class Builtin;
 		PropertyListwise(const PILS_CHAR *name)
@@ -203,7 +205,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	private:
 		friend class Builtin;
 		PropertyDistinct(const PILS_CHAR *name)
@@ -215,7 +217,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	private:
 		friend class Builtin;
 		PropertyHexadecimal(const PILS_CHAR *name)
@@ -227,7 +229,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	private:
 		friend class Builtin;
 		PropertyCounts(const PILS_CHAR *name)
@@ -239,7 +241,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		void compileTypecheck(Compiling &compiling, const CallWho &what) const;
+        void compileTypecheck(Compiling &compiling, const CallWho &what) const override;
 	private:
 		friend class Builtin;
 		TypecheckPlus(const PILS_CHAR *name)
@@ -251,7 +253,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		void compileTypecheck(Compiling &compiling, const CallWho &what) const;
+        void compileTypecheck(Compiling &compiling, const CallWho &what) const override;
 	private:
 		friend class Builtin;
 		TypecheckInteger(const PILS_CHAR *name)
@@ -263,7 +265,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		void compileTypecheck(Compiling &compiling, const CallWho &what) const;
+        void compileTypecheck(Compiling &compiling, const CallWho &what) const override;
 	private:
 		friend class Builtin;
 		TypecheckNumber(const PILS_CHAR *name)
@@ -275,7 +277,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		void compileTypecheck(Compiling &compiling, const CallWho &what) const;
+        void compileTypecheck(Compiling &compiling, const CallWho &what) const override;
 	private:
 		friend class Builtin;
 		TypecheckIdentifier(const PILS_CHAR *name)
@@ -287,7 +289,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		void compileTypecheck(Compiling &compiling, const CallWho &what) const;
+        void compileTypecheck(Compiling &compiling, const CallWho &what) const override;
 	private:
 		friend class Builtin;
 		TypecheckTimestamp(const PILS_CHAR *name)
@@ -299,7 +301,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		void compileTypecheck(Compiling &compiling, const CallWho &what) const;
+        void compileTypecheck(Compiling &compiling, const CallWho &what) const override;
 	private:
 		friend class Builtin;
 		TypecheckDuration(const PILS_CHAR *name)
@@ -311,7 +313,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		void compileTypecheck(Compiling &compiling, const CallWho &what) const;
+        void compileTypecheck(Compiling &compiling, const CallWho &what) const override;
 	private:
 		friend class Builtin;
 		TypecheckPilsDate(const PILS_CHAR *name)
@@ -323,7 +325,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		void compileTypecheck(Compiling &compiling, const CallWho &what) const;
+        void compileTypecheck(Compiling &compiling, const CallWho &what) const override;
 	protected:
 		friend class Builtin;
 		TypecheckCliche(const PILS_CHAR *name)
@@ -335,7 +337,7 @@ namespace PILS
 		: public TypecheckCliche
 	{
 	public:
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	private:
 		friend class Builtin;
 		TypecheckPropertyCliche(const PILS_CHAR *name)
@@ -347,7 +349,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		void compileTypecheck(Compiling &compiling, const CallWho &what) const;
+        void compileTypecheck(Compiling &compiling, const CallWho &what) const override;
 	private:
 		friend class Builtin;
 		TypecheckString(const PILS_CHAR *name)
@@ -359,7 +361,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		void compileTypecheck(Compiling &compiling, const CallWho &what) const;
+        void compileTypecheck(Compiling &compiling, const CallWho &what) const override;
 	private:
 		friend class Builtin;
 		TypecheckPlusString(const PILS_CHAR *name)
@@ -371,7 +373,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		void compileTypecheck(Compiling &compiling, const CallWho &what) const;
+        void compileTypecheck(Compiling &compiling, const CallWho &what) const override;
 	private:
 		friend class Builtin;
 		TypecheckPlusPlusString(const PILS_CHAR *name)
@@ -383,7 +385,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		void compileTypecheck(Compiling &compiling, const CallWho &what) const;
+        void compileTypecheck(Compiling &compiling, const CallWho &what) const override;
 	private:
 		friend class Builtin;
 		TypecheckList(const PILS_CHAR *name)
@@ -395,7 +397,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		void compileTypecheck(Compiling &compiling, const CallWho &what) const;
+        void compileTypecheck(Compiling &compiling, const CallWho &what) const override;
 	private:
 		friend class Builtin;
 		TypecheckPlusList(const PILS_CHAR *name)
@@ -407,7 +409,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		void compileTypecheck(Compiling &compiling, const CallWho &what) const;
+        void compileTypecheck(Compiling &compiling, const CallWho &what) const override;
 	private:
 		friend class Builtin;
 		TypecheckPlusPlusList(const PILS_CHAR *name)
@@ -419,7 +421,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		void compileTypecheck(Compiling &compiling, const CallWho &what) const;
+        void compileTypecheck(Compiling &compiling, const CallWho &what) const override;
 	private:
 		friend class Builtin;
 		TypecheckNode(const PILS_CHAR *name)
@@ -431,7 +433,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		void compileTypecheck(Compiling &compiling, const CallWho &what) const;
+        void compileTypecheck(Compiling &compiling, const CallWho &what) const override;
 	private:
 		friend class Builtin;
 		TypecheckConstant(const PILS_CHAR *name)
@@ -443,7 +445,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		void compileTypecheck(Compiling &compiling, const CallWho &what) const;
+        void compileTypecheck(Compiling &compiling, const CallWho &what) const override;
 	private:
 		friend class Builtin;
 		TypecheckListen(const PILS_CHAR *name)
@@ -455,7 +457,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		void compileTypecheck(Compiling &compiling, const CallWho &what) const;
+        void compileTypecheck(Compiling &compiling, const CallWho &what) const override;
 	private:
 		friend class Builtin;
 		TypecheckColor(const PILS_CHAR *name)
@@ -467,7 +469,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	private:
 		friend class Builtin;
 		PropertyHead(const PILS_CHAR *name)
@@ -479,8 +481,8 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		void compileTypecheck(Compiling &compiling, const CallWho &what) const;
-		const CallWho *callWho(const Any *who) const;
+        void compileTypecheck(Compiling &compiling, const CallWho &what) const override;
+        const CallWho *callWho(const Any *who) const override;
 	private:
 		friend class Builtin;
 		TypecheckPropertyLegs(const PILS_CHAR *name)
@@ -492,10 +494,10 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		const Any *specialCall(Runner &run, const ReallySpecial &special) const;
-		const Any *specialCall(Runner &run, const ReallySpecial &special, const Any &assignValue) const;
-		virtual const Any *get(Runner &run) const;
-		virtual const Any *set(const Any &assignvalue) const;
+        const Any *specialCall(Runner &run, const ReallySpecial &special) const override;
+        const Any *specialCall(Runner &run, const ReallySpecial &special, const Any &assignValue) const override;
+        virtual const Any *get(Runner &run) const;
+        virtual const Any *set(const Any &assignvalue) const;
 	protected:
 		SystemProperty(const PILS_CHAR *name)
 			: PredefinedName(name)
@@ -513,8 +515,8 @@ namespace PILS
 		: public SystemProperty
 	{
 	public:
-		void compileTypecheck(Compiling &compiling, const CallWho &what) const;
-		const Any *get(Runner &run) const;
+        void compileTypecheck(Compiling &compiling, const CallWho &what) const override;
+        const Any *get(Runner &run) const override;
 	private:
 		friend class Builtin;
 		TypecheckLanguage(const PILS_CHAR *name)
@@ -526,7 +528,7 @@ namespace PILS
 		: public SystemProperty
 	{
 	public:
-		const Any *get(Runner &run) const;
+        const Any *get(Runner &run) const override;
 	private:
 		friend class Builtin;
 		SystemPropertyNew(const PILS_CHAR *name)
@@ -538,7 +540,7 @@ namespace PILS
 		: public SystemProperty
 	{
 	public:
-		const Any *get(Runner &run) const;
+        const Any *get(Runner &run) const override;
 	private:
 		friend class Builtin;
 		SystemPropertyNow(const PILS_CHAR *name)
@@ -550,7 +552,7 @@ namespace PILS
 		: public SystemProperty
 	{
 	public:
-		const Any *get(Runner &run) const;
+        const Any *get(Runner &run) const override;
 	private:
 		friend class Builtin;
 		SystemPropertyTimestamp(const PILS_CHAR *name)
@@ -562,7 +564,7 @@ namespace PILS
 		: public SystemProperty
 	{
 	public:
-		const Any *get(Runner &run) const;
+        const Any *get(Runner &run) const override;
 	private:
 		friend class Builtin;
 		SystemPropertyThread(const PILS_CHAR *name)
@@ -574,7 +576,7 @@ namespace PILS
 		: public SystemProperty
 	{
 	public:
-		const Any *get(Runner &run) const;
+        const Any *get(Runner &run) const override;
 	private:
 		friend class Builtin;
 		SystemPropertyPlumcake(const PILS_CHAR *name)
@@ -586,7 +588,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	private:
 		friend class Builtin;
 		OperatorEval(const PILS_CHAR *name)
@@ -600,7 +602,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 		virtual void pushAggregatePipe(Runner &run, const AggregateCallWho &what) const = 0;
 	protected:
 		PredefinedAggregateFunctionName(const PILS_CHAR *name)
@@ -612,7 +614,7 @@ namespace PILS
 		: public PredefinedAggregateFunctionName
 	{
 	public:
-		void pushAggregatePipe(Runner &run, const AggregateCallWho &what) const;
+        void pushAggregatePipe(Runner &run, const AggregateCallWho &what) const override;
 	private:
 		friend class Builtin;
 		PredefinedNameSum(const PILS_CHAR *name)
@@ -624,7 +626,7 @@ namespace PILS
 		: public PredefinedAggregateFunctionName
 	{
 	public:
-		void pushAggregatePipe(Runner &run, const AggregateCallWho &what) const;
+        void pushAggregatePipe(Runner &run, const AggregateCallWho &what) const override;
 	private:
 		friend class Builtin;
 		PredefinedNameMin(const PILS_CHAR *name)
@@ -635,7 +637,7 @@ namespace PILS
 		: public PredefinedAggregateFunctionName
 	{
 	public:
-		void pushAggregatePipe(Runner &run, const AggregateCallWho &what) const;
+        void pushAggregatePipe(Runner &run, const AggregateCallWho &what) const override;
 	private:
 		friend class Builtin;
 		PredefinedNameMax(const PILS_CHAR *name)
@@ -667,22 +669,22 @@ namespace PILS
 		SearchName(const PILS_CHAR *name)
 			: SearchNameAbstract(name)
 		{}
-		const CallWho *whoSearch(const SearchString *value, const Any *who) const;
-		const CallWho *whoSearch(const SearchListConstant *value, const Any *who) const;
-		const CallWho *whoSearch(const SearchExpress *value, const Any *who) const;
+        const CallWho *whoSearch(const SearchString *value, const Any *who) const override;
+        const CallWho *whoSearch(const SearchListConstant *value, const Any *who) const override;
+        const CallWho *whoSearch(const SearchExpress *value, const Any *who) const override;
 	};
 
 	class TypecheckPropertyCount
 		: public SearchName
 	{
 	public:
-		void compileTypecheck(Compiling &compiling, const CallWho &what) const;
+        void compileTypecheck(Compiling &compiling, const CallWho &what) const override;
 	private:
 		friend class Builtin;
 		TypecheckPropertyCount(const PILS_CHAR *name)
 			: SearchName(name)
 		{}
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	};
 
 	class PlusRangeSearchName
@@ -692,9 +694,9 @@ namespace PILS
 		PlusRangeSearchName(const PILS_CHAR *name)
 			: SearchNameAbstract(name)
 		{}
-		const CallWho *whoSearch(const SearchString *value, const Any *who) const;
-		const CallWho *whoSearch(const SearchListConstant *value, const Any *who) const;
-		const CallWho *whoSearch(const SearchExpress *value, const Any *who) const;
+        const CallWho *whoSearch(const SearchString *value, const Any *who) const override;
+        const CallWho *whoSearch(const SearchListConstant *value, const Any *who) const override;
+        const CallWho *whoSearch(const SearchExpress *value, const Any *who) const override;
 	};
 
 	class PlusRangeReverseSearchName
@@ -704,9 +706,9 @@ namespace PILS
 		PlusRangeReverseSearchName(const PILS_CHAR *name)
 			: SearchNameAbstract(name)
 		{}
-		const CallWho *whoSearch(const SearchString *value, const Any *who) const;
-		const CallWho *whoSearch(const SearchListConstant *value, const Any *who) const;
-		const CallWho *whoSearch(const SearchExpress *value, const Any *who) const;
+        const CallWho *whoSearch(const SearchString *value, const Any *who) const override;
+        const CallWho *whoSearch(const SearchListConstant *value, const Any *who) const override;
+        const CallWho *whoSearch(const SearchExpress *value, const Any *who) const override;
 	};
 
 	class MinusRangeSearchName
@@ -716,9 +718,9 @@ namespace PILS
 		MinusRangeSearchName(const PILS_CHAR *name)
 			: SearchNameAbstract(name)
 		{}
-		const CallWho *whoSearch(const SearchString *value, const Any *who) const;
-		const CallWho *whoSearch(const SearchListConstant *value, const Any *who) const;
-		const CallWho *whoSearch(const SearchExpress *value, const Any *who) const;
+        const CallWho *whoSearch(const SearchString *value, const Any *who) const override;
+        const CallWho *whoSearch(const SearchListConstant *value, const Any *who) const override;
+        const CallWho *whoSearch(const SearchExpress *value, const Any *who) const override;
 	};
 
 	class MinusRangeReverseSearchName
@@ -728,22 +730,22 @@ namespace PILS
 		MinusRangeReverseSearchName(const PILS_CHAR *name)
 			: SearchNameAbstract(name)
 		{}
-		const CallWho *whoSearch(const SearchString *value, const Any *who) const;
-		const CallWho *whoSearch(const SearchListConstant *value, const Any *who) const;
-		const CallWho *whoSearch(const SearchExpress *value, const Any *who) const;
+        const CallWho *whoSearch(const SearchString *value, const Any *who) const override;
+        const CallWho *whoSearch(const SearchListConstant *value, const Any *who) const override;
+        const CallWho *whoSearch(const SearchExpress *value, const Any *who) const override;
 	};
 
 	class PredefinedNameOk
 		: public PredefinedName
 	{
 	public:
-		const Step *calling(Runner &run, const Constant &call) const;
-		const Step *calling(Runner &run, const Integer &call) const;
-		const Step *calling(Runner &run, const ListConstant &call) const;
-		const Step *calling(Runner &run, const NodeConstant &call) const;
-		const Step *calling(Runner &run, const Empty &call) const;
-		const Step *calling(Runner &run, const ListExpress &call) const;
-		const Step *calling(Runner &run, const NodeExpress &call) const;
+        const Step *calling(Runner &run, const Constant &call) const override;
+        const Step *calling(Runner &run, const Integer &call) const override;
+        const Step *calling(Runner &run, const ListConstant &call) const override;
+        const Step *calling(Runner &run, const NodeConstant &call) const override;
+        const Step *calling(Runner &run, const Empty &call) const override;
+        const Step *calling(Runner &run, const ListExpress &call) const override;
+        const Step *calling(Runner &run, const NodeExpress &call) const override;
 	private:
 		friend class Builtin;
 		PredefinedNameOk(const PILS_CHAR *name)
@@ -755,7 +757,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		const ClicheLong *newCliche(const HashedConstant *&link, const Constant *const *a, size_t c) const;
+        const ClicheLong *newCliche(const HashedConstant *&link, const Constant *const *a, size_t c) const override;
 	private:
 		friend class Builtin;
 		PredefinedNameSplit(const PILS_CHAR *name)
@@ -767,7 +769,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 		virtual int initialState(const char* &at, const char* end) const = 0;
 		virtual long get(const char* &at, const char* end, int &state) const = 0;
 		virtual bool put(std::string &string, long code, int &state) const = 0;
@@ -781,9 +783,9 @@ namespace PILS
 		: public PropertyCharacterEncoding
 	{
 	public:
-		int initialState(const char* &at, const char* end) const;
-		long get(const char* &at, const char* end, int &state) const;
-		bool put(std::string &string, long code, int &state) const;
+        int initialState(const char* &at, const char* end) const override;
+        long get(const char* &at, const char* end, int &state) const override;
+        bool put(std::string &string, long code, int &state) const override;
 	private:
 		friend class Builtin;
 		PropertyBytes(const PILS_CHAR *name)
@@ -794,9 +796,9 @@ namespace PILS
 	class PropertyUtf_8
 		: public PropertyCharacterEncoding
 	{
-		int initialState(const char* &at, const char* end) const;
-		long get(const char* &at, const char* end, int &state) const;
-		bool put(std::string &string, long code, int &state) const;
+        int initialState(const char* &at, const char* end) const override;
+        long get(const char* &at, const char* end, int &state) const override;
+        bool put(std::string &string, long code, int &state) const override;
 	private:
 		friend class Builtin;
 		PropertyUtf_8(const PILS_CHAR *name)
@@ -807,11 +809,11 @@ namespace PILS
 	class PropertyUtf_16
 		: public PropertyCharacterEncoding
 	{
-		int initialState(const char* &at, const char* end) const;
-		long get(const char* &at, const char* end, int &state) const;
-		bool put(std::string &string, long code, int &state) const;
-		virtual long get16bit(const char* &at, const char* end, int &state) const;
-		virtual void put16bit(std::string &string, long code, int &state) const;
+        int initialState(const char* &at, const char* end) const override;
+        long get(const char* &at, const char* end, int &state) const override;
+        bool put(std::string &string, long code, int &state) const override;
+        virtual long get16bit(const char* &at, const char* end, int &state) const;
+        virtual void put16bit(std::string &string, long code, int &state) const;
 	protected:
 		friend class Builtin;
 		PropertyUtf_16(const PILS_CHAR *name)
@@ -822,9 +824,9 @@ namespace PILS
 	class PropertyUtf_16le
 		: public PropertyUtf_16
 	{
-		int initialState(const char* &at, const char* end) const;
-		long get16bit(const char* &at, const char* end, int &state) const;
-		void put16bit(std::string &string, long code, int &state) const;
+        int initialState(const char* &at, const char* end) const override;
+        long get16bit(const char* &at, const char* end, int &state) const override;
+        void put16bit(std::string &string, long code, int &state) const override;
 	private:
 		friend class Builtin;
 		PropertyUtf_16le(const PILS_CHAR *name)
@@ -835,9 +837,9 @@ namespace PILS
 	class PropertyUtf_16be
 		: public PropertyUtf_16
 	{
-		int initialState(const char* &at, const char* end) const;
-		long get16bit(const char* &at, const char* end, int &state) const;
-		void put16bit(std::string &string, long code, int &state) const;
+        int initialState(const char* &at, const char* end) const override;
+        long get16bit(const char* &at, const char* end, int &state) const override;
+        void put16bit(std::string &string, long code, int &state) const override;
 	private:
 		friend class Builtin;
 		PropertyUtf_16be(const PILS_CHAR *name)
@@ -861,7 +863,7 @@ namespace PILS
 		: public BuilderName
 	{
 	public:
-		const Step *building(Runner &run, const Any &step_, const Constant &head) const;
+        const Step *building(Runner &run, const Any &step_, const Constant &head) const override;
 	private:
 		friend class Builtin;
 		BuilderNameList(const PILS_CHAR *name)
@@ -873,7 +875,7 @@ namespace PILS
 		: public BuilderName
 	{
 	public:
-		const Step *building(Runner &run, const Any &step_, const Constant &head) const;
+        const Step *building(Runner &run, const Any &step_, const Constant &head) const override;
 	private:
 		friend class Builtin;
 		BuilderNameExit(const PILS_CHAR *name)
@@ -885,7 +887,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		const CallWho* callWho(const Any *who) const;
+        const CallWho* callWho(const Any *who) const override;
 		double (*function)(double);
 	private:
 		friend class Builtin;
@@ -897,7 +899,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	private:
 		friend class Builtin;
 		PropertyLocalTime(const PILS_CHAR *name)
@@ -909,7 +911,7 @@ namespace PILS
 		: public PredefinedName
 	{
 	public:
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	private:
 		friend class Builtin;
 		PropertyGreenwichMeanTime(const PILS_CHAR *name)
@@ -1127,7 +1129,7 @@ namespace PILS
 		const PredefinedName channel;
 		const PredefinedName strap;
 		const SystemPropertyPlumcake plumcake;
-		const PredefinedName bug;
+        const PredefinedName buglog;
 		const SystemPropertyThread thread;
 		const PredefinedName knot;
 		const PredefinedName later;
@@ -1145,7 +1147,7 @@ namespace PILS
 	{
 	public:
 		static const BuiltinClicheLanguage singleton;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const override;
 	private:
 		BuiltinClicheLanguage()
 			: BuiltinClicheTiny(&Builtin::name.language)
@@ -1180,19 +1182,19 @@ namespace PILS
 	{
 	public:
 		static const BuiltinClicheEval singleton;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const;
-		const NodeExpressShort *node(const Express *element) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const override;
+        const NodeExpressShort *node(const Express *element) const override;
 	private:
 		BuiltinClicheEval()
 			: BuiltinClicheTiny(&Builtin::name.operatorEval)
@@ -1203,8 +1205,8 @@ namespace PILS
 		: public BuiltinPokerClicheShort
 	{
 	public:
-		const Any *node(const Constant *element) const;
-		const NodeExpressShort *node(const Express *element) const;
+        const Any *node(const Constant *element) const override;
+        const NodeExpressShort *node(const Express *element) const override;
 		static const BuiltinClicheCall singleton;
 	private:
 		BuiltinClicheCall()
@@ -1216,7 +1218,7 @@ namespace PILS
 		: public BuiltinPokerClicheLong
 	{
 	public:
-		const Any *node(const Any *const *element) const;
+        const Any *node(const Any *const *element) const override;
 		static const BuiltinClicheCallWho singleton;
 	private:
 		BuiltinClicheCallWho()
@@ -1230,7 +1232,7 @@ namespace PILS
 	{
 	public:
 		static const BuiltinClicheRule singleton;
-		const Any *node(const Any *const *element) const;
+        const Any *node(const Any *const *element) const override;
 	private:
 		BuiltinClicheRule()
 			: EmptyClicheLong(&Empty::singleton, &Builtin::name.match, &Builtin::name.action)
@@ -1243,7 +1245,7 @@ namespace PILS
 	{
 	public:
 		static const BuiltinClicheNameValue singleton;
-		const Any *node(const Any *const *element) const;
+        const Any *node(const Any *const *element) const override;
 	private:
 		BuiltinClicheNameValue()
 			: BuiltinPokerClicheTrailer(&Empty::singleton, &Builtin::name.name_)
@@ -1256,7 +1258,7 @@ namespace PILS
 	{
 	public:
 		static const BuiltinClicheTag singleton;
-		const Any *node(const Any *const *element) const;
+        const Any *node(const Any *const *element) const override;
 	private:
 		BuiltinClicheTag()
 			: BuiltinPokerClicheTrailer(&Empty::singleton, &Builtin::name.tag)
@@ -1269,7 +1271,7 @@ namespace PILS
 	{
 	public:
 		static const BuiltinClicheRuleset singleton;
-		const NodeExpressShort *node(const Express *element) const;
+        const NodeExpressShort *node(const Express *element) const override;
 	private:
 		BuiltinClicheRuleset()
 			: BuiltinPokerClicheShort(&Builtin::name.ruleset)
@@ -1281,8 +1283,8 @@ namespace PILS
 	{
 	public:
 		static const BuiltinClicheQuote singleton;
-		const NodeExpressShort *node(const Express *element) const;
-		const Any *node(const Constant *element) const;
+        const NodeExpressShort *node(const Express *element) const override;
+        const Any *node(const Constant *element) const override;
 	private:
 		BuiltinClicheQuote()
 			: BuiltinPokerClicheShort(&Builtin::name.quote)
@@ -1294,7 +1296,7 @@ namespace PILS
 	{
 	public:
 		static const BuiltinClicheClosure singleton;
-		const Any *node(const Any *const *element) const;
+        const Any *node(const Any *const *element) const override;
 	private:
 		BuiltinClicheClosure()
 			: BuiltinPokerClicheLong(&Builtin::name.where_, &Builtin::name.ruleset)
@@ -1306,7 +1308,7 @@ namespace PILS
 		: public BuiltinPokerClicheTrailer
 	{
 	public:
-		const Any *node(const Any *const *element) const;
+        const Any *node(const Any *const *element) const override;
 	private:
 		static const BuiltinClicheComment singleton;
 		BuiltinClicheComment()
@@ -1320,7 +1322,7 @@ namespace PILS
 	{
 	public:
 		static const BuiltinClicheUse singleton;
-		const Any *node(const Any *const *element) const;
+        const Any *node(const Any *const *element) const override;
 	private:
 		BuiltinClicheUse()
 			: BuiltinPokerClicheTrailer(&Empty::singleton, &Builtin::name.use)
@@ -1333,7 +1335,7 @@ namespace PILS
 	{
 	public:
 		static const BuiltinClicheUsing singleton;
-		const Any *node(const Any *const *element) const;
+        const Any *node(const Any *const *element) const override;
 	private:
 		BuiltinClicheUsing()
 			: BuiltinPokerClicheTrailer(&Empty::singleton, &Builtin::name.using_)
@@ -1346,7 +1348,7 @@ namespace PILS
 	{
 	public:
 		static const BuiltinClicheThrough singleton;
-		const Any *node(const Any *const *element) const;
+        const Any *node(const Any *const *element) const override;
 	private:
 		BuiltinClicheThrough()
 			: BuiltinPokerClicheTrailer(&Empty::singleton, &Builtin::name.through)
@@ -1359,7 +1361,7 @@ namespace PILS
 	{
 	public:
 		static const BuiltinClicheAround singleton;
-		const Any *node(const Any *const *element) const;
+        const Any *node(const Any *const *element) const override;
 	private:
 		BuiltinClicheAround()
 			: BuiltinPokerClicheTrailer(&Empty::singleton, &Builtin::name.through)
@@ -1372,19 +1374,19 @@ namespace PILS
 	{
 	public:
 		static const BuiltinClicheUseline singleton;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const;
-		const NodeExpressShort *node(const Express *element) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const override;
+        const NodeExpressShort *node(const Express *element) const override;
 	private:
 		BuiltinClicheUseline()
 			: BuiltinClicheTiny(&Builtin::name.useline)
@@ -1396,20 +1398,20 @@ namespace PILS
 	{
 	public:
 		static const BuiltinClicheConcatenate singleton;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const;
-		const NodeExpressShort *node(const Express *element) const;
-		void compileTinyTypecheck(Compiling &compiling, const CallWho &pattern, const Any &element) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const override;
+        const NodeExpressShort *node(const Express *element) const override;
+        void compileTinyTypecheck(Compiling &compiling, const CallWho &pattern, const Any &element) const override;
 	private:
 		BuiltinClicheConcatenate()
 			: BuiltinClicheTiny(&Builtin::name.ampersand)
@@ -1420,7 +1422,7 @@ namespace PILS
 		: public BuiltinClicheTiny
 	{
 	public:
-		void compileTinyTypecheck(Compiling &compiling, const CallWho &pattern, const Any &element) const;
+        void compileTinyTypecheck(Compiling &compiling, const CallWho &pattern, const Any &element) const override;
 	private:
 		static const BuiltinClicheFileName singleton;
 		BuiltinClicheFileName()
@@ -1432,7 +1434,7 @@ namespace PILS
 		: public BuiltinClicheTiny
 	{
 	public:
-		void compileTinyTypecheck(Compiling &compiling, const CallWho &pattern, const Any &element) const;
+        void compileTinyTypecheck(Compiling &compiling, const CallWho &pattern, const Any &element) const override;
 	private:
 		static const BuiltinClicheFolderName singleton;
 		BuiltinClicheFolderName()
@@ -1444,8 +1446,8 @@ namespace PILS
 		: public BuiltinClicheTiny
 	{
 	public:
-		void compileTinyTypecheck(Compiling &compiling, const CallWho &pattern, const Any &element) const;
-		const Any* specialOperation(Runner &run, const ReallySpecial &special, const Any &argument) const;
+        void compileTinyTypecheck(Compiling &compiling, const CallWho &pattern, const Any &element) const override;
+        const Any* specialOperation(Runner &run, const ReallySpecial &special, const Any &argument) const override;
 	private:
 		static const BuiltinClicheWhen singleton;
 		BuiltinClicheWhen()
@@ -1462,8 +1464,8 @@ namespace PILS
 			: public BuiltinPokerClicheShort
 		{
 		public:
-			const Any *node(const Constant *element) const;
-			const NodeExpressShort *node(const Express *element) const;
+            const Any *node(const Constant *element) const override;
+            const NodeExpressShort *node(const Express *element) const override;
 			ImplicitCode code;
 		private:
 			friend class ImplicitParameter;
@@ -1476,8 +1478,8 @@ namespace PILS
 			: public BuiltinPokerClicheTrailer
 		{
 		public:
-			const Any *node(const Any *const *element) const;
-			const Any *node(const Constant *const *element) const;
+            const Any *node(const Any *const *element) const override;
+            const Any *node(const Constant *const *element) const override;
 		private:
 			const Constant *dummy;
 			friend class ImplicitParameter;
@@ -1504,19 +1506,19 @@ namespace PILS
 		: public BuiltinClicheTiny
 	{
 	public:
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const;
-		const NodeExpressShort *node(const Express *element) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const override;
+        const NodeExpressShort *node(const Express *element) const override;
 	private:
 		BuiltinClicheWhoTag()
 			: BuiltinClicheTiny(&Builtin::name.who)
@@ -1528,8 +1530,8 @@ namespace PILS
 		: public BuiltinClicheTrailer
 	{
 	public:
-		const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const;
-		const Any *node(const Any *const *elements) const;
+        const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const override;
+        const Any *node(const Any *const *elements) const override;
 	private:
 		BuiltinClicheWhoTagTrailer()
 			: BuiltinClicheTrailer(&Builtin::name.who, &Empty::singleton, &Builtin::name.who)
@@ -1554,14 +1556,14 @@ namespace PILS
 		: public BuiltinClicheTiny
 	{
 	public:
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const;
-		const CallWho *whoOperation(const NodeExpressShort *operation, const Any *who) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const override;
+        const CallWho *whoOperation(const NodeExpressShort *operation, const Any *who) const override;
 		static const BuiltinClicheOperationPlus singleton;
-		const Any* specialOperation(Runner &run, const ReallySpecial &special, const Any &argument) const;
+        const Any* specialOperation(Runner &run, const ReallySpecial &special, const Any &argument) const override;
 	private:
 		BuiltinClicheOperationPlus()
 			: BuiltinClicheTiny(&Builtin::name.plus)
@@ -1572,14 +1574,14 @@ namespace PILS
 		: public BuiltinClicheTiny
 	{
 	public:
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const;
-		const CallWho *whoOperation(const NodeExpressShort *operation, const Any *who) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const override;
+        const CallWho *whoOperation(const NodeExpressShort *operation, const Any *who) const override;
 		static const BuiltinClicheOperationMinus singleton;
-		const Any* specialOperation(Runner &run, const ReallySpecial &special, const Any &argument) const;
+        const Any* specialOperation(Runner &run, const ReallySpecial &special, const Any &argument) const override;
 	private:
 		BuiltinClicheOperationMinus()
 			: BuiltinClicheTiny(&Builtin::name.minus)
@@ -1590,11 +1592,11 @@ namespace PILS
 		: public BuiltinClicheTiny
 	{
 	public:
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const;
-		const CallWho *whoOperation(const NodeExpressShort *operation, const Any *who) const;
-		void compileTinyTypecheck(Compiling &compiling, const CallWho &pattern, const Any &element) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const override;
+        const CallWho *whoOperation(const NodeExpressShort *operation, const Any *who) const override;
+        void compileTinyTypecheck(Compiling &compiling, const CallWho &pattern, const Any &element) const override;
 		static const BuiltinClicheOperationTimes singleton;
 	private:
 		BuiltinClicheOperationTimes()
@@ -1606,10 +1608,10 @@ namespace PILS
 		: public BuiltinClicheTiny
 	{
 	public:
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const;
-		const CallWho *whoOperation(const NodeExpressShort *operation, const Any *who) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const override;
+        const CallWho *whoOperation(const NodeExpressShort *operation, const Any *who) const override;
 		static const BuiltinClicheOperationDivide singleton;
 	private:
 		BuiltinClicheOperationDivide()
@@ -1621,10 +1623,10 @@ namespace PILS
 		: public BuiltinClicheTiny
 	{
 	public:
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const;
-		const CallWho *whoOperation(const NodeExpressShort *operation, const Any *who) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const override;
+        const CallWho *whoOperation(const NodeExpressShort *operation, const Any *who) const override;
 		static const BuiltinClicheOperationIntegerDivide singleton;
 	private:
 		BuiltinClicheOperationIntegerDivide()
@@ -1636,9 +1638,9 @@ namespace PILS
 		: public BuiltinClicheTiny
 	{
 	public:
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const;
-		const CallWho *whoOperation(const NodeExpressShort *operation, const Any *who) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const override;
+        const CallWho *whoOperation(const NodeExpressShort *operation, const Any *who) const override;
 		static const BuiltinClicheOperationModulo singleton;
 	private:
 		BuiltinClicheOperationModulo()
@@ -1650,19 +1652,19 @@ namespace PILS
 		: public BuiltinClicheTiny
 	{
 	public:
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const;
-		const CallWho *whoOperation(const NodeExpressShort *operation, const Any *who) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const override;
+        const CallWho *whoOperation(const NodeExpressShort *operation, const Any *who) const override;
 		static const BuiltinClicheOperationEqual singleton;
 	private:
 		BuiltinClicheOperationEqual()
@@ -1674,20 +1676,20 @@ namespace PILS
 		: public BuiltinClicheTiny
 	{
 	public:
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const;
-		const CallWho *whoOperation(const NodeExpressShort *operation, const Any *who) const;
-		void compileTinyTypecheck(Compiling &compiling, const CallWho &pattern, const Any &element) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const override;
+        const CallWho *whoOperation(const NodeExpressShort *operation, const Any *who) const override;
+        void compileTinyTypecheck(Compiling &compiling, const CallWho &pattern, const Any &element) const override;
 		static const BuiltinClicheOperationNotEqual singleton;
 	private:
 		BuiltinClicheOperationNotEqual()
@@ -1701,7 +1703,7 @@ namespace PILS
 	public:
 		virtual const BuiltinClicheCompare &opposite() const = 0;
 		virtual bool compare(double a, double b) const = 0;
-		void compileTinyTypecheck(Compiling &compiling, const CallWho &pattern, const Any &element) const;
+        void compileTinyTypecheck(Compiling &compiling, const CallWho &pattern, const Any &element) const override;
 	protected:
 		BuiltinClicheCompare(const PredefinedName *name)
 			: BuiltinClicheTiny(name)
@@ -1712,13 +1714,13 @@ namespace PILS
 		: public BuiltinClicheCompare
 	{
 	public:
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const;
-		const CallWho *whoOperation(const NodeExpressShort *operation, const Any *who) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const override;
+        const CallWho *whoOperation(const NodeExpressShort *operation, const Any *who) const override;
 		static const BuiltinClicheOperationLess singleton;
-		const BuiltinClicheCompare &opposite() const;
-		bool compare(double a, double b) const;
+        const BuiltinClicheCompare &opposite() const override;
+        bool compare(double a, double b) const override;
 	private:
 		BuiltinClicheOperationLess()
 			: BuiltinClicheCompare(&Builtin::name.less)
@@ -1729,13 +1731,13 @@ namespace PILS
 		: public BuiltinClicheCompare
 	{
 	public:
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const;
-		const CallWho *whoOperation(const NodeExpressShort *operation, const Any *who) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const override;
+        const CallWho *whoOperation(const NodeExpressShort *operation, const Any *who) const override;
 		static const BuiltinClicheOperationLessEqual singleton;
-		const BuiltinClicheCompare &opposite() const;
-		bool compare(double a, double b) const;
+        const BuiltinClicheCompare &opposite() const override;
+        bool compare(double a, double b) const override;
 	private:
 		BuiltinClicheOperationLessEqual()
 			: BuiltinClicheCompare(&Builtin::name.lessEqual)
@@ -1746,13 +1748,13 @@ namespace PILS
 		: public BuiltinClicheCompare
 	{
 	public:
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const;
-		const CallWho *whoOperation(const NodeExpressShort *operation, const Any *who) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const override;
+        const CallWho *whoOperation(const NodeExpressShort *operation, const Any *who) const override;
 		static const BuiltinClicheOperationGreater singleton;
-		const BuiltinClicheCompare &opposite() const;
-		bool compare(double a, double b) const;
+        const BuiltinClicheCompare &opposite() const override;
+        bool compare(double a, double b) const override;
 	private:
 		BuiltinClicheOperationGreater()
 			: BuiltinClicheCompare(&Builtin::name.greater)
@@ -1763,13 +1765,13 @@ namespace PILS
 		: public BuiltinClicheCompare
 	{
 	public:
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const;
-		const CallWho *whoOperation(const NodeExpressShort *operation, const Any *who) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const override;
+        const CallWho *whoOperation(const NodeExpressShort *operation, const Any *who) const override;
 		static const BuiltinClicheOperationGreaterEqual singleton;
-		const BuiltinClicheCompare &opposite() const;
-		bool compare(double a, double b) const;
+        const BuiltinClicheCompare &opposite() const override;
+        bool compare(double a, double b) const override;
 	private:
 		BuiltinClicheOperationGreaterEqual()
 			: BuiltinClicheCompare(&Builtin::name.greaterEqual)
@@ -1780,8 +1782,8 @@ namespace PILS
 		: public BuiltinClicheTiny
 	{
 	public:
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const CallWho *whoOperation(const NodeExpressShort *operation, const Any *who) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const CallWho *whoOperation(const NodeExpressShort *operation, const Any *who) const override;
 		bool downwards;
 	private:
 		static const BuiltinClicheOperationUpDown up;
@@ -1795,7 +1797,7 @@ namespace PILS
 		: public BuiltinClicheTiny
 	{
 	public:
-		void compileTinyTypecheck(Compiling &compiling, const CallWho &pattern, const Any &element) const;
+        void compileTinyTypecheck(Compiling &compiling, const CallWho &pattern, const Any &element) const override;
 	private:
 		static const BuiltinClicheTinyDollar singleton;
 		BuiltinClicheTinyDollar()
@@ -1807,8 +1809,8 @@ namespace PILS
 		: public BuiltinPokerClicheShort
 	{
 	public:
-		const Any *node(const Constant *element) const;
-		const NodeExpressShort *node(const Express *element) const;
+        const Any *node(const Constant *element) const override;
+        const NodeExpressShort *node(const Express *element) const override;
 		static const BuiltinClicheAssign singleton;
 	private:
 		BuiltinClicheAssign()
@@ -1820,7 +1822,7 @@ namespace PILS
 		: public BuiltinPokerClicheTrailer
 	{
 	public:
-		const Any *node(const Any *const *element) const;
+        const Any *node(const Any *const *element) const override;
 	private:
 		BuiltinClicheAssignContinue()
 			: BuiltinPokerClicheTrailer(&Empty::singleton, &Builtin::name.equal)
@@ -1833,8 +1835,8 @@ namespace PILS
 		: public BuiltinPokerClicheShort
 	{
 	public:
-		const Any *node(const Constant *element) const;
-		const NodeExpressShort *node(const Express *element) const;
+        const Any *node(const Constant *element) const override;
+        const NodeExpressShort *node(const Express *element) const override;
 	private:
 		BuiltinClicheOk()
 			: BuiltinPokerClicheShort(&Builtin::name.ok)
@@ -1846,8 +1848,8 @@ namespace PILS
 		: public BuiltinPokerClicheTrailer
 	{
 	public:
-		const Any *node(const Constant *const *element) const;
-		const Any *node(const Any *const *element) const;
+        const Any *node(const Constant *const *element) const override;
+        const Any *node(const Any *const *element) const override;
 		static const BuiltinClicheOkTrailer singleton;
 	private:
 		BuiltinClicheOkTrailer()
@@ -1860,8 +1862,8 @@ namespace PILS
 		: public BuiltinPokerClicheShort
 	{
 	public:
-		const Any *node(const Constant *element) const;
-		const NodeExpressShort *node(const Express *element) const;
+        const Any *node(const Constant *element) const override;
+        const NodeExpressShort *node(const Express *element) const override;
 		static const BuiltinClicheError singleton;
 	private:
 		BuiltinClicheError()
@@ -1873,8 +1875,8 @@ namespace PILS
 		: public BuiltinPokerClicheTrailer
 	{
 	public:
-		const Any *node(const Constant *const *element) const;
-		const Any *node(const Any *const *element) const;
+        const Any *node(const Constant *const *element) const override;
+        const Any *node(const Any *const *element) const override;
 		static const BuiltinClicheErrorTrailer singleton;
 	private:
 		BuiltinClicheErrorTrailer()
@@ -1887,8 +1889,8 @@ namespace PILS
 		: public BuiltinPokerClicheShort
 	{
 	public:
-		const Any *node(const Constant *element) const;
-		const NodeExpressShort *node(const Express *element) const;
+        const Any *node(const Constant *element) const override;
+        const NodeExpressShort *node(const Express *element) const override;
 	private:
 		BuiltinClicheTry()
 			: BuiltinPokerClicheShort(&Builtin::name.try_)
@@ -1900,8 +1902,8 @@ namespace PILS
 		: public BuiltinPokerClicheTrailer
 	{
 	public:
-		const Any *node(const Constant *const *element) const;
-		const Any *node(const Any *const *element) const;
+        const Any *node(const Constant *const *element) const override;
+        const Any *node(const Any *const *element) const override;
 	private:
 		BuiltinClicheTryTrailer()
 			: BuiltinPokerClicheTrailer(&Empty::singleton, &Builtin::name.try_)
@@ -1914,8 +1916,8 @@ namespace PILS
 		: public BuiltinPokerClicheShort
 	{
 	public:
-		const Any *node(const Constant *element) const;
-		const NodeExpressShort *node(const Express *element) const;
+        const Any *node(const Constant *element) const override;
+        const NodeExpressShort *node(const Express *element) const override;
 	private:
 		BuiltinClichePossibly()
 			: BuiltinPokerClicheShort(&Builtin::name.possibly)
@@ -1927,8 +1929,8 @@ namespace PILS
 		: public BuiltinPokerClicheTrailer
 	{
 	public:
-		const Any *node(const Constant *const *element) const;
-		const Any *node(const Any *const *element) const;
+        const Any *node(const Constant *const *element) const override;
+        const Any *node(const Any *const *element) const override;
 	private:
 		BuiltinClichePossiblyTrailer()
 			: BuiltinPokerClicheTrailer(&Empty::singleton, &Builtin::name.possibly)
@@ -1941,8 +1943,8 @@ namespace PILS
 		: public BuiltinPokerClicheShort
 	{
 	public:
-		const Any *node(const Constant *element) const;
-		const NodeExpressShort *node(const Express *element) const;
+        const Any *node(const Constant *element) const override;
+        const NodeExpressShort *node(const Express *element) const override;
 	private:
 		BuiltinClicheNeed()
 			: BuiltinPokerClicheShort(&Builtin::name.need)
@@ -1954,8 +1956,8 @@ namespace PILS
 		: public BuiltinPokerClicheTrailer
 	{
 	public:
-		const Any *node(const Constant *const *element) const;
-		const Any *node(const Any *const *element) const;
+        const Any *node(const Constant *const *element) const override;
+        const Any *node(const Any *const *element) const override;
 	private:
 		BuiltinClicheNeedTrailer()
 			: BuiltinPokerClicheTrailer(&Empty::singleton, &Builtin::name.need)
@@ -1968,7 +1970,7 @@ namespace PILS
 		: public BuiltinPokerClicheTrailer
 	{
 	public:
-		const Any *node(const Any *const *element) const;
+        const Any *node(const Any *const *element) const override;
 	private:
 		BuiltinClicheIf()
 			: BuiltinPokerClicheTrailer(&Empty::singleton, &Builtin::name.if_)
@@ -1981,7 +1983,7 @@ namespace PILS
 		: public BuiltinPokerClicheTrailer
 	{
 	public:
-		const Any *node(const Any *const *element) const;
+        const Any *node(const Any *const *element) const override;
 	private:
 		BuiltinClicheIfElse()
 			: BuiltinPokerClicheTrailer(&Empty::singleton, &Builtin::name.if_, &Builtin::name.else_)
@@ -1994,19 +1996,19 @@ namespace PILS
 		: public BuiltinClicheTiny
 	{
 	public:
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const;
-		const NodeExpressShort *node(const Express *element) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const override;
+        const NodeExpressShort *node(const Express *element) const override;
 	private:
 		BuiltinClicheOr()
 			: BuiltinClicheTiny(&Builtin::name.or_)
@@ -2018,19 +2020,19 @@ namespace PILS
 		: public BuiltinClicheTiny
 	{
 	public:
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const;
-		const NodeExpressShort *node(const Express *element) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const override;
+        const NodeExpressShort *node(const Express *element) const override;
 	private:
 		BuiltinClicheAnd()
 			: BuiltinClicheTiny(&Builtin::name.and_)
@@ -2042,20 +2044,20 @@ namespace PILS
 		: public BuiltinClicheTiny
 	{
 	public:
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const;
-		const NodeExpressShort *node(const Express *element) const;
-		void compileTinyTypecheck(Compiling &compiling, const CallWho &pattern, const Any &element) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const override;
+        const NodeExpressShort *node(const Express *element) const override;
+        void compileTinyTypecheck(Compiling &compiling, const CallWho &pattern, const Any &element) const override;
 	private:
 		BuiltinClicheAnyway()
 			: BuiltinClicheTiny(&Builtin::name.anyway)
@@ -2067,19 +2069,19 @@ namespace PILS
 		: public BuiltinClicheTiny
 	{
 	public:
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const;
-		const NodeExpressShort *node(const Express *element) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const override;
+        const NodeExpressShort *node(const Express *element) const override;
 	private:
 		BuiltinClicheNot()
 			: BuiltinClicheTiny(&Builtin::name.not_)
@@ -2094,10 +2096,10 @@ namespace PILS
 		Call(const Any *call)
 			: PokerShort(BuiltinClicheCall::singleton, call)
 		{}
-		const Any* callAttribute() const;
-		bool write(Writing &writing, WriteState state, long level, const Constant *dot) const;
-		const Step *step_(Runner &run) const;
-		const Step *assign(Runner &run, const Any *assignValue, const WhoAssign &what) const;
+        const Any* callAttribute() const;
+        bool write(Writing &writing, WriteState state, long level, const Constant *dot) const override;
+        const Step *step_(Runner &run) const override;
+        const Step *assign(Runner &run, const Any *assignValue, const WhoAssign &what) const override;
 	};
 
 	class Slot
@@ -2107,14 +2109,14 @@ namespace PILS
 		Slot(const Constant *name)
 			: Call(name)
 		{}
-		bool write(Writing &writing, WriteState state, long level, const Constant *dot) const;
-		const Step *step_(Runner &run) const;
-		const Slot* as_Slot() const;
-		void compilePattern(Compiling &compiling) const;
-		void compilePattern(Compiling &compiling, size_t offset) const;
-		bool compileBuild(CompilingBuild &compiling) const;
-		const void *compilePatternIndex() const;
-		const Step *assign(Runner &run, const Any *assignValue, const WhoAssign &what) const;
+        bool write(Writing &writing, WriteState state, long level, const Constant *dot) const override;
+        const Step *step_(Runner &run) const override;
+        const Slot* as_Slot() const override;
+        void compilePattern(Compiling &compiling) const override;
+        void compilePattern(Compiling &compiling, size_t offset) const override;
+        bool compileBuild(CompilingBuild &compiling) const override;
+        const void *compilePatternIndex() const override;
+        const Step *assign(Runner &run, const Any *assignValue, const WhoAssign &what) const override;
 	};
 
 	class EmptySlot
@@ -2124,11 +2126,11 @@ namespace PILS
 		EmptySlot()
 			: Slot(&Empty::singleton)
 		{}
-		bool write(Writing &writing, WriteState state, long level, const Constant *dot) const;
-		const Step *step_(Runner &run) const;
-		void compilePattern(Compiling &compiling) const;
-		void compilePattern(Compiling &compiling, size_t offset) const;
-		bool compileBuild(CompilingBuild &compiling) const;
+        bool write(Writing &writing, WriteState state, long level, const Constant *dot) const override;
+        const Step *step_(Runner &run) const override;
+        void compilePattern(Compiling &compiling) const override;
+        void compilePattern(Compiling &compiling, size_t offset) const override;
+        bool compileBuild(CompilingBuild &compiling) const override;
 	};
 
 	class CallWho
@@ -2138,13 +2140,13 @@ namespace PILS
 		CallWho(const Any *call, const Any *who)
 			: PokerLong(BuiltinClicheCallWho::singleton, call, who)
 		{}
-		const Any* callAttribute() const;
-		const Any* whoAttribute() const;
-		bool write(Writing &writing, WriteState state, long level, const Constant *dot) const;
-		const Step *step_(Runner &run) const;
-		void compilePattern(Compiling &compiling) const;
-		const void *compilePatternIndex() const;
-		const Step *assign(Runner &run, const Any *assignValue, const WhoAssign &what) const;
+        const Any* callAttribute() const;
+        const Any* whoAttribute() const;
+        bool write(Writing &writing, WriteState state, long level, const Constant *dot) const override;
+        const Step *step_(Runner &run) const override;
+        void compilePattern(Compiling &compiling) const override;
+        const void *compilePatternIndex() const override;
+        const Step *assign(Runner &run, const Any *assignValue, const WhoAssign &what) const override;
 	private:
 		const Any* dummy[1];
 	};
@@ -2167,7 +2169,7 @@ namespace PILS
 		WhoAssignShort(const PokerShort *call, const Any *who)
 			: WhoAssign(call, who)
 		{}
-		void compileRulePattern(Compiling &compiling, const Rule &rule) const;
+        void compileRulePattern(Compiling &compiling, const Rule &rule) const override;
 	};
 
 	class WhoAssignContinue
@@ -2189,9 +2191,9 @@ namespace PILS
 		Rule(const Any *match, const Any *action)
 			: NodeExpressLong(BuiltinClicheRule::singleton, match, action)
 		{}
-		const Any *match() const;
-		const Any *action() const;
-		const Rule* as_Rule() const;
+        const Any *match() const;
+        const Any *action() const;
+        const Rule* as_Rule() const override;
 	private:
 		const Any* dummy;
 	};
@@ -2206,7 +2208,7 @@ namespace PILS
 //		NameValue(const Any *value, const Any *name)
 //			: NodeExpressTrailer(BuiltinClicheNameValue::singleton, value, name)
 //		{}
-		bool isNameValuePair(const Constant *&name, const Any *&value) const;
+        bool isNameValuePair(const Constant *&name, const Any *&value) const override;
 	private:
 		const Any* dummy;
 	};
@@ -2218,7 +2220,7 @@ namespace PILS
 		WhoExpressOperation(const NodeExpressShort *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 		virtual const Step *pass(Runner &run, long value);
 		virtual const Step *pass(Runner &run, double value);
 		virtual const Step *pass(Runner &run, const Integer &value);
@@ -2252,18 +2254,18 @@ namespace PILS
 		: public BuiltinClicheTiny
 	{
 	public:
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const override;
 		static const BuiltinClicheChannel singleton;
 	private:
 		BuiltinClicheChannel()
@@ -2276,13 +2278,13 @@ namespace PILS
 		: public Constant
 	{
 	private:
-		const Step *step_(Runner &run) const;
-		bool write(Writing &writing, WriteState state, long level, const Constant *dot) const;
-		const Step *passUncounted(Runner &run) const;
-		const Step *passCounted(Runner &run) const;
-		const NodeConstantShort *newSpecializeNode(const HashedConstant *&link, const ClicheShort &cliche) const;
-		const QuickCalling *matching(Runner &run, void** stack, const QuickMatch &match) const;
-		bool convert(Converter &converter) const;
+        const Step *step_(Runner &run) const override;
+        bool write(Writing &writing, WriteState state, long level, const Constant *dot) const override;
+        const Step *passUncounted(Runner &run) const override;
+        const Step *passCounted(Runner &run) const override;
+        const NodeConstantShort *newSpecializeNode(const HashedConstant *&link, const ClicheShort &cliche) const override;
+        const QuickCalling *matching(Runner &run, void** stack, const QuickMatch &match) const override;
+        bool convert(Converter &converter) const override;
 		friend class Channel;
 		Listener(const Channel *channel, const Any *ear);
 		const Channel *const channel;
@@ -2291,7 +2293,7 @@ namespace PILS
 		Listener *next;
 	private:
 		Listener **previous;
-		size_t unlinkAndGetSize();
+        size_t unlinkAndGetSize() override;
 	};
 
 	class Channel
@@ -2301,19 +2303,19 @@ namespace PILS
 		Channel(const HashedConstant *&link, const BuiltinClicheChannel &cliche, const Constant *value)
 			: NodeConstantTiny(link, cliche, value), listening(NULL)
 		{}
-		const Channel *as_Channel() const;
-		const Listener *listen(const Any *ear) const;
+        const Channel *as_Channel() const override;
+        const Listener *listen(const Any *ear) const;
 	private:
 		friend class Listener;
-		const Step *calling(Runner &run, const Constant &call) const;
-		const Step *calling(Runner &run, const Integer &call) const;
-		const Step *calling(Runner &run, const ListConstant &call) const;
-		const Step *calling(Runner &run, const NodeConstant &call) const;
-		const Step *calling(Runner &run, const Empty &call) const;
-		const Step *calling(Runner &run, const ListExpress &call) const;
-		const Step *calling(Runner &run, const NodeExpress &call) const;
-		const Step *calling(Runner &run, const Any &call, const Any *assignValue) const;
-		size_t unlinkAndGetSize();
+        const Step *calling(Runner &run, const Constant &call) const override;
+        const Step *calling(Runner &run, const Integer &call) const override;
+        const Step *calling(Runner &run, const ListConstant &call) const override;
+        const Step *calling(Runner &run, const NodeConstant &call) const override;
+        const Step *calling(Runner &run, const Empty &call) const override;
+        const Step *calling(Runner &run, const ListExpress &call) const override;
+        const Step *calling(Runner &run, const NodeExpress &call) const override;
+        const Step *calling(Runner &run, const Any &call, const Any *assignValue) const override;
+        size_t unlinkAndGetSize() override;
 		mutable Listener *listening;
 	};
 
@@ -2321,18 +2323,18 @@ namespace PILS
 		: public BuiltinClicheTiny
 	{
 	public:
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const override;
 	private:
 		BuiltinClicheStrap()
 			: BuiltinClicheTiny(&Builtin::name.strap)
@@ -2348,20 +2350,20 @@ namespace PILS
 	public:
 		using BuiltinClicheTiny::node;
 		virtual const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const = 0;
-		virtual const Step *gotOperand(Runner &run, const WhoAssign &what, const Any *value, const Any *assignValue) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const;
-		const NodeExpressShort *node(const Express *element) const;
+        virtual const Step *gotOperand(Runner &run, const WhoAssign &what, const Any *value, const Any *assignValue) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const override;
+        const NodeExpressShort *node(const Express *element) const override;
 	protected:
 		BuiltinClicheUntypedOperation(const HashedConstant *name)
 			: BuiltinClicheTiny(name)
@@ -2375,7 +2377,7 @@ namespace PILS
 		UntypedOperationConstant(const HashedConstant *&link, const BuiltinClicheUntypedOperation &cliche, const Constant *value)
 			: NodeConstantTiny(link, cliche, value)
 		{}
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	};
 
 	class UntypedOperationExpress
@@ -2385,7 +2387,7 @@ namespace PILS
 		UntypedOperationExpress(const BuiltinClicheUntypedOperation &cliche, const Express *value)
 			: NodeExpressTiny(cliche, value)
 		{}
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	};
 
 	class WhoUntypedOperation
@@ -2404,8 +2406,8 @@ namespace PILS
 		WhoUntypedOperationConstant(const UntypedOperationConstant *call, const Any *who)
 			: WhoUntypedOperation(call, who)
 		{}
-		const Step *step_(Runner &run) const;
-		const Step *assign(Runner &run, const Any *assignValue, const WhoAssign &what) const;
+        const Step *step_(Runner &run) const override;
+        const Step *assign(Runner &run, const Any *assignValue, const WhoAssign &what) const override;
 	};
 
 	class WhoUntypedOperationExpress
@@ -2415,15 +2417,15 @@ namespace PILS
 		WhoUntypedOperationExpress(const UntypedOperationExpress *call, const Any *who)
 			: WhoUntypedOperation(call, who)
 		{}
-		const Step *step_(Runner &run) const;
-		const Step *assign(Runner &run, const Any *assignValue, const WhoAssign &what) const;
+        const Step *step_(Runner &run) const override;
+        const Step *assign(Runner &run, const Any *assignValue, const WhoAssign &what) const override;
 	};
 
 	class BuiltinClicheMakeCliche
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheMakeCliche()
 			: BuiltinClicheUntypedOperation(&Builtin::name.cliche)
@@ -2435,8 +2437,8 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
-		void compileTinyTypecheck(Compiling &compiling, const CallWho &pattern, const Any &element) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
+        void compileTinyTypecheck(Compiling &compiling, const CallWho &pattern, const Any &element) const override;
 	private:
 		BuiltinClicheMakeName()
 			: BuiltinClicheUntypedOperation(&Builtin::name.doubleSlash)
@@ -2448,7 +2450,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheCombine()
 			: BuiltinClicheUntypedOperation(&Builtin::name.combine)
@@ -2461,7 +2463,7 @@ namespace PILS
 	{
 	public:
 		static const BuiltinClicheCombined singleton;
-		const Any *node(const Any *const *element) const;
+        const Any *node(const Any *const *element) const override;
 	private:
 		BuiltinClicheCombined()
 			: BuiltinPokerClicheTrailer(&Empty::singleton, &Builtin::name.combine)
@@ -2473,7 +2475,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheRecall()
 			: BuiltinClicheUntypedOperation(&Builtin::name.recall)
@@ -2485,8 +2487,8 @@ namespace PILS
 		: public BuiltinPokerClicheShort
 	{
 	public:
-		const Any *node(const Constant *element) const;
-		const NodeExpressShort *node(const Express *element) const;
+        const Any *node(const Constant *element) const override;
+        const NodeExpressShort *node(const Express *element) const override;
 		static const BuiltinClicheRecalling singleton;
 	private:
 		BuiltinClicheRecalling()
@@ -2498,7 +2500,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheListen()
 			: BuiltinClicheUntypedOperation(&Builtin::name.listen)
@@ -2510,22 +2512,22 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
-		const Step *gotOperand(Runner &run, const WhoAssign &what, const Any *value, const Any *assignValue) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const;
-		const NodeExpressShort *node(const Express *element) const;
-		void compileTinyTypecheck(Compiling &compiling, const CallWho &pattern, const Any &element) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
+        const Step *gotOperand(Runner &run, const WhoAssign &what, const Any *value, const Any *assignValue) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const override;
+        const NodeExpressShort *node(const Express *element) const override;
+        void compileTinyTypecheck(Compiling &compiling, const CallWho &pattern, const Any &element) const override;
 	private:
 		BuiltinClicheCalling()
 			: BuiltinClicheUntypedOperation(&Builtin::name.call)
@@ -2537,19 +2539,19 @@ namespace PILS
 		: public BuiltinClicheTiny
 	{
 	public:
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const;
-		const NodeExpressShort *node(const Express *element) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const override;
+        const NodeExpressShort *node(const Express *element) const override;
 		static const BuiltinClicheCallingOk singleton;
 	private:
 		BuiltinClicheCallingOk()
@@ -2561,7 +2563,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheEach()
 			: BuiltinClicheUntypedOperation(&Builtin::name.each)
@@ -2573,7 +2575,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheEvery()
 			: BuiltinClicheUntypedOperation(&Builtin::name.every)
@@ -2585,7 +2587,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheWhile()
 			: BuiltinClicheUntypedOperation(&Builtin::name.while_)
@@ -2597,7 +2599,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheExcept()
 			: BuiltinClicheUntypedOperation(&Builtin::name.except)
@@ -2609,7 +2611,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheFind()
 			: BuiltinClicheUntypedOperation(&Builtin::name.find)
@@ -2621,7 +2623,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheFold()
 			: BuiltinClicheUntypedOperation(&Builtin::name.fold)
@@ -2633,7 +2635,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheFirst()
 			: BuiltinClicheUntypedOperation(&Builtin::name.first)
@@ -2645,7 +2647,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheMin()
 			: BuiltinClicheUntypedOperation(&Builtin::name.min_)
@@ -2657,7 +2659,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheMax()
 			: BuiltinClicheUntypedOperation(&Builtin::name.max_)
@@ -2669,7 +2671,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheSum()
 			: BuiltinClicheUntypedOperation(&Builtin::name.sum_)
@@ -2681,7 +2683,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheRepeat()
 			: BuiltinClicheUntypedOperation(&Builtin::name.repeat)
@@ -2693,7 +2695,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheAgain()
 			: BuiltinClicheUntypedOperation(&Builtin::name.again)
@@ -2705,8 +2707,8 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
-		void compileTinyTypecheck(Compiling &compiling, const CallWho &pattern, const Any &element) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
+        void compileTinyTypecheck(Compiling &compiling, const CallWho &pattern, const Any &element) const override;
 	private:
 		BuiltinClicheTrial()
 			: BuiltinClicheUntypedOperation(&Builtin::name.try_)
@@ -2718,7 +2720,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheTransform()
 			: BuiltinClicheUntypedOperation(&Builtin::name.transformOperator)
@@ -2730,7 +2732,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheBut()
 			: BuiltinClicheUntypedOperation(&Builtin::name.but)
@@ -2742,7 +2744,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheThroughOperation()
 			: BuiltinClicheUntypedOperation(&Builtin::name.through)
@@ -2754,7 +2756,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheAroundOperation()
 			: BuiltinClicheUntypedOperation(&Builtin::name.around)
@@ -2766,7 +2768,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheHeadset()
 			: BuiltinClicheUntypedOperation(&Builtin::name.head)
@@ -2778,7 +2780,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheLegs()
 			: BuiltinClicheUntypedOperation(&Builtin::name.legs)
@@ -2790,7 +2792,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheMerge()
 			: BuiltinClicheUntypedOperation(&Builtin::name.merge)
@@ -2802,7 +2804,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheBind()
 			: BuiltinClicheUntypedOperation(&Builtin::name.bind)
@@ -2814,7 +2816,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheWithout()
 			: BuiltinClicheUntypedOperation(&Builtin::name.without)
@@ -2827,7 +2829,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheSplit()
 			: BuiltinClicheUntypedOperation(&Builtin::name.split)
@@ -2839,7 +2841,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheSplice()
 			: BuiltinClicheUntypedOperation(&Builtin::name.splice)
@@ -2852,7 +2854,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheOrder()
 			: BuiltinClicheUntypedOperation(&Builtin::name.order)
@@ -2865,10 +2867,10 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	protected:
 		virtual void pushReplaceSink(Runner &run, const WhoUntypedOperation &what, const ListConstant *value) const = 0;
-		virtual bool invalidSearchstringLength(size_t length) const;
+        virtual bool invalidSearchstringLength(size_t length) const;
 		BuiltinClicheReplaceBase(const HashedConstant *name)
 			: BuiltinClicheUntypedOperation(name)
 		{}
@@ -2878,8 +2880,8 @@ namespace PILS
 		: public BuiltinClicheReplaceBase
 	{
 	private:
-		void pushReplaceSink(Runner &run, const WhoUntypedOperation &what, const ListConstant *value) const;
-		bool invalidSearchstringLength(size_t length) const;
+        void pushReplaceSink(Runner &run, const WhoUntypedOperation &what, const ListConstant *value) const override;
+        bool invalidSearchstringLength(size_t length) const override;
 		BuiltinClicheReplace()
 			: BuiltinClicheReplaceBase(&Builtin::name.replace)
 		{}
@@ -2890,7 +2892,7 @@ namespace PILS
 		: public BuiltinClicheReplaceBase
 	{
 	private:
-		void pushReplaceSink(Runner &run, const WhoUntypedOperation &what, const ListConstant *value) const;
+        void pushReplaceSink(Runner &run, const WhoUntypedOperation &what, const ListConstant *value) const override;
 		BuiltinClicheReplaceBeginning()
 			: BuiltinClicheReplaceBase(&Builtin::name.replaceBeginning)
 		{}
@@ -2901,7 +2903,7 @@ namespace PILS
 		: public BuiltinClicheReplaceBase
 	{
 	public:
-		void pushReplaceSink(Runner &run, const WhoUntypedOperation &what, const ListConstant *value) const;
+        void pushReplaceSink(Runner &run, const WhoUntypedOperation &what, const ListConstant *value) const override;
 		BuiltinClicheReplaceEnding()
 			: BuiltinClicheReplaceBase(&Builtin::name.replaceEnding)
 		{}
@@ -2912,8 +2914,8 @@ namespace PILS
 		: public BuiltinClicheTiny
 	{
 	public:
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const NodeExpressShort *node(const Express *element) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const NodeExpressShort *node(const Express *element) const override;
 		virtual void rangeSink(Runner &run, long range, const CallWho &what) const = 0;
 	protected:
 		BuiltinClicheRange(const HashedConstant *name)
@@ -2925,7 +2927,7 @@ namespace PILS
 		: public BuiltinClicheRange
 	{
 	public:
-		void rangeSink(Runner &run, long range, const CallWho &what) const;
+        void rangeSink(Runner &run, long range, const CallWho &what) const override;
 	private:
 		static const BuiltinClichePlusRange singleton;
 		BuiltinClichePlusRange()
@@ -2937,7 +2939,7 @@ namespace PILS
 		: public BuiltinClicheRange
 	{
 	public:
-		void rangeSink(Runner &run, long range, const CallWho &what) const;
+        void rangeSink(Runner &run, long range, const CallWho &what) const override;
 	private:
 		static const BuiltinClichePlusSlackRange singleton;
 		BuiltinClichePlusSlackRange()
@@ -2949,7 +2951,7 @@ namespace PILS
 		: public BuiltinClicheRange
 	{
 	public:
-		void rangeSink(Runner &run, long range, const CallWho &what) const;
+        void rangeSink(Runner &run, long range, const CallWho &what) const override;
 	private:
 		static const BuiltinClichePlusRangeReverse singleton;
 		BuiltinClichePlusRangeReverse()
@@ -2961,7 +2963,7 @@ namespace PILS
 		: public BuiltinClicheRange
 	{
 	public:
-		void rangeSink(Runner &run, long range, const CallWho &what) const;
+        void rangeSink(Runner &run, long range, const CallWho &what) const override;
 	private:
 		static const BuiltinClichePlusSlackRangeReverse singleton;
 		BuiltinClichePlusSlackRangeReverse()
@@ -2973,7 +2975,7 @@ namespace PILS
 		: public BuiltinClicheRange
 	{
 	public:
-		void rangeSink(Runner &run, long range, const CallWho &what) const;
+        void rangeSink(Runner &run, long range, const CallWho &what) const override;
 	private:
 		static const BuiltinClicheMinusRange singleton;
 		BuiltinClicheMinusRange()
@@ -2985,7 +2987,7 @@ namespace PILS
 		: public BuiltinClicheRange
 	{
 	public:
-		void rangeSink(Runner &run, long range, const CallWho &what) const;
+        void rangeSink(Runner &run, long range, const CallWho &what) const override;
 	private:
 		static const BuiltinClicheMinusSlackRange singleton;
 		BuiltinClicheMinusSlackRange()
@@ -2997,7 +2999,7 @@ namespace PILS
 		: public BuiltinClicheRange
 	{
 	public:
-		void rangeSink(Runner &run, long range, const CallWho &what) const;
+        void rangeSink(Runner &run, long range, const CallWho &what) const override;
 	private:
 		static const BuiltinClicheMinusRangeReverse singleton;
 		BuiltinClicheMinusRangeReverse()
@@ -3009,7 +3011,7 @@ namespace PILS
 		: public BuiltinClicheRange
 	{
 	public:
-		void rangeSink(Runner &run, long range, const CallWho &what) const;
+        void rangeSink(Runner &run, long range, const CallWho &what) const override;
 	private:
 		static const BuiltinClicheMinusSlackRangeReverse singleton;
 		BuiltinClicheMinusSlackRangeReverse()
@@ -3021,8 +3023,8 @@ namespace PILS
 		: public BuiltinPokerClicheShort
 	{
 	public:
-		const Any *node(const Constant *element) const;
-		const NodeExpressShort *node(const Express *element) const;
+        const Any *node(const Constant *element) const override;
+        const NodeExpressShort *node(const Express *element) const override;
 	private:
 		BuiltinClicheBuilderShort(const BuilderName *name)
 			: BuiltinPokerClicheShort(name)
@@ -3037,8 +3039,8 @@ namespace PILS
 		: public BuiltinPokerClicheTrailer
 	{
 	public:
-		const Any *node(const Any *const *element) const;
-		const Any *node(const Constant *const *element) const;
+        const Any *node(const Any *const *element) const override;
+        const Any *node(const Constant *const *element) const override;
 	private:
 		BuiltinClicheBuilderTrailer(const BuilderName *name)
 			: BuiltinPokerClicheTrailer(&Empty::singleton, name)
@@ -3054,7 +3056,7 @@ namespace PILS
 		: public BuiltinPokerClicheTrailer
 	{
 	public:
-		const Any *node(const Any *const *element) const;
+        const Any *node(const Any *const *element) const override;
 		static const BuiltinClicheBuilding singleton;
 	private:
 		BuiltinClicheBuilding()
@@ -3067,7 +3069,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 		static const BuiltinClicheGroups singleton;
 	private:
 		BuiltinClicheGroups()
@@ -3079,7 +3081,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 		static const BuiltinClicheFirsts singleton;
 	private:
 		BuiltinClicheFirsts()
@@ -3091,7 +3093,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 		static const BuiltinClicheSingles singleton;
 	private:
 		BuiltinClicheSingles()
@@ -3103,7 +3105,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 		static const BuiltinClicheLasts singleton;
 	private:
 		BuiltinClicheLasts()
@@ -3115,7 +3117,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 		static const BuiltinClicheFolds singleton;
 	private:
 		BuiltinClicheFolds()
@@ -3127,7 +3129,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 		static const BuiltinClicheDistinct singleton;
 	private:
 		BuiltinClicheDistinct()
@@ -3139,9 +3141,9 @@ namespace PILS
 		: public BuiltinClicheTiny
 	{
 	public:
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const;
-		const NodeExpressShort *node(const Express *element) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const override;
+        const NodeExpressShort *node(const Express *element) const override;
 		virtual size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const = 0;
 		virtual size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const = 0;
 	protected:
@@ -3157,8 +3159,8 @@ namespace PILS
 		BuiltinClicheSearchCount(const SearchNameAbstract *head)
 			: BuiltinClicheSearchAbstract(head)
 		{}
-		size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const;
-		size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const;
+        size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const override;
+        size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const override;
 	private:
 		static const BuiltinClicheSearchCount plain;
 	};
@@ -3170,8 +3172,8 @@ namespace PILS
 		BuiltinClicheSearchContains(const SearchNameAbstract *head)
 			: BuiltinClicheSearchAbstract(head)
 		{}
-		size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const;
-		size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const;
+        size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const override;
+        size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const override;
 		static const BuiltinClicheSearchContains plain;
 		static const BuiltinClicheSearchContains plusRange;
 		static const BuiltinClicheSearchContains minusRange;
@@ -3184,8 +3186,8 @@ namespace PILS
 		BuiltinClicheSearchContainsReverse(const SearchNameAbstract *head)
 			: BuiltinClicheSearchAbstract(head)
 		{}
-		size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const;
-		size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const;
+        size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const override;
+        size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const override;
 	private:
 		static const BuiltinClicheSearchContainsReverse plain;
 		static const BuiltinClicheSearchContainsReverse plusRange;
@@ -3199,8 +3201,8 @@ namespace PILS
 		BuiltinClicheSearchTill(const SearchNameAbstract *head)
 			: BuiltinClicheSearchAbstract(head)
 		{}
-		size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const;
-		size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const;
+        size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const override;
+        size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const override;
 		static const BuiltinClicheSearchTill plain;
 		static const BuiltinClicheSearchTill plusRange;
 		static const BuiltinClicheSearchTill minusRange;
@@ -3213,8 +3215,8 @@ namespace PILS
 		BuiltinClicheSearchTillReverse(const SearchNameAbstract *head)
 			: BuiltinClicheSearchAbstract(head)
 		{}
-		size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const;
-		size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const;
+        size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const override;
+        size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const override;
 	private:
 		static const BuiltinClicheSearchTillReverse plain;
 		static const BuiltinClicheSearchTillReverse plusRange;
@@ -3228,8 +3230,8 @@ namespace PILS
 		BuiltinClicheSearchSpread(const SearchNameAbstract *head)
 			: BuiltinClicheSearchAbstract(head)
 		{}
-		size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const;
-		size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const;
+        size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const override;
+        size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const override;
 	private:
 		static const BuiltinClicheSearchSpread plain;
 		static const BuiltinClicheSearchSpread plusRange;
@@ -3243,8 +3245,8 @@ namespace PILS
 		BuiltinClicheSearchSpreadReverse(const SearchNameAbstract *head)
 			: BuiltinClicheSearchAbstract(head)
 		{}
-		size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const;
-		size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const;
+        size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const override;
+        size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const override;
 	private:
 		static const BuiltinClicheSearchSpreadReverse plain;
 		static const BuiltinClicheSearchSpreadReverse plusRange;
@@ -3258,8 +3260,8 @@ namespace PILS
 		BuiltinClicheSearchPrefix(const SearchNameAbstract *head)
 			: BuiltinClicheSearchAbstract(head)
 		{}
-		size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const;
-		size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const;
+        size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const override;
+        size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const override;
 	private:
 		static const BuiltinClicheSearchPrefix plain;
 		static const BuiltinClicheSearchPrefix plusRange;
@@ -3273,8 +3275,8 @@ namespace PILS
 		BuiltinClicheSearchPrefixReverse(const SearchNameAbstract *head)
 			: BuiltinClicheSearchAbstract(head)
 		{}
-		size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const;
-		size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const;
+        size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const override;
+        size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const override;
 	private:
 		static const BuiltinClicheSearchPrefixReverse plain;
 		static const BuiltinClicheSearchPrefixReverse plusRange;
@@ -3288,8 +3290,8 @@ namespace PILS
 		BuiltinClicheSearchRhyme(const SearchNameAbstract *head)
 			: BuiltinClicheSearchAbstract(head)
 		{}
-		size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const;
-		size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const;
+        size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const override;
+        size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const override;
 	private:
 		static const BuiltinClicheSearchRhyme plain;
 		static const BuiltinClicheSearchRhyme plusRange;
@@ -3303,8 +3305,8 @@ namespace PILS
 		BuiltinClicheSearchRhymeReverse(const SearchNameAbstract *head)
 			: BuiltinClicheSearchAbstract(head)
 		{}
-		size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const;
-		size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const;
+        size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const override;
+        size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const override;
 	private:
 		static const BuiltinClicheSearchRhymeReverse plain;
 		static const BuiltinClicheSearchRhymeReverse plusRange;
@@ -3318,8 +3320,8 @@ namespace PILS
 		BuiltinClicheSearchUnrhyme(const SearchNameAbstract *head)
 			: BuiltinClicheSearchAbstract(head)
 		{}
-		size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const;
-		size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const;
+        size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const override;
+        size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const override;
 	private:
 		static const BuiltinClicheSearchUnrhyme plain;
 		static const BuiltinClicheSearchUnrhyme plusRange;
@@ -3333,8 +3335,8 @@ namespace PILS
 		BuiltinClicheSearchUnrhymeReverse(const SearchNameAbstract *head)
 			: BuiltinClicheSearchAbstract(head)
 		{}
-		size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const;
-		size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const;
+        size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const override;
+        size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const override;
 	private:
 		static const BuiltinClicheSearchUnrhymeReverse plain;
 		static const BuiltinClicheSearchUnrhymeReverse plusRange;
@@ -3348,8 +3350,8 @@ namespace PILS
 		BuiltinClicheSearchPlus(const SearchNameAbstract *head)
 			: BuiltinClicheSearchAbstract(head)
 		{}
-		size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const;
-		size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const;
+        size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const override;
+        size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const override;
 	private:
 		static const BuiltinClicheSearchPlus plain;
 		static const BuiltinClicheSearchPlus plusRange;
@@ -3363,8 +3365,8 @@ namespace PILS
 		BuiltinClicheSearchPlusReverse(const SearchNameAbstract *head)
 			: BuiltinClicheSearchAbstract(head)
 		{}
-		size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const;
-		size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const;
+        size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const override;
+        size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const override;
 	private:
 		static const BuiltinClicheSearchPlusReverse plain;
 		static const BuiltinClicheSearchPlusReverse plusRange;
@@ -3378,8 +3380,8 @@ namespace PILS
 		BuiltinClicheSearchMinus(const SearchNameAbstract *head)
 			: BuiltinClicheSearchAbstract(head)
 		{}
-		size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const;
-		size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const;
+        size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const override;
+        size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const override;
 	private:
 		static const BuiltinClicheSearchMinus plain;
 		static const BuiltinClicheSearchMinus plusRange;
@@ -3393,8 +3395,8 @@ namespace PILS
 		BuiltinClicheSearchMinusReverse(const SearchNameAbstract *head)
 			: BuiltinClicheSearchAbstract(head)
 		{}
-		size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const;
-		size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const;
+        size_t search(const PILS_CHAR *s1, size_t c1, const PILS_CHAR *s2, size_t c2) const override;
+        size_t search(const Any *const *s1, size_t c1, const Any *const *s2, size_t c2) const override;
 	private:
 		static const BuiltinClicheSearchMinusReverse plain;
 		static const BuiltinClicheSearchMinusReverse plusRange;
@@ -3408,8 +3410,8 @@ namespace PILS
 		SearchString(const HashedConstant *&link, const BuiltinClicheSearchAbstract &cliche, const PilsString *value)
 			: NodeConstantTiny(link, cliche, value)
 		{}
-		const CallWho *callWho(const Any *who) const;
-		void compileTypecheck(Compiling &compiling, const CallWho &pattern) const;
+        const CallWho *callWho(const Any *who) const override;
+        void compileTypecheck(Compiling &compiling, const CallWho &pattern) const override;
 	};
 
 	class SearchListConstant
@@ -3419,15 +3421,15 @@ namespace PILS
 		SearchListConstant(const HashedConstant *&link, const BuiltinClicheSearchAbstract &cliche, const ListConstant *value)
 			: NodeConstantTiny(link, cliche, value)
 		{}
-		const CallWho *callWho(const Any *who) const;
-		void compileTypecheck(Compiling &compiling, const CallWho &pattern) const;
+        const CallWho *callWho(const Any *who) const override;
+        void compileTypecheck(Compiling &compiling, const CallWho &pattern) const override;
 	};
 
 	class SearchExpress
 		: public NodeExpressTiny
 	{
 	public:
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 		SearchExpress(const BuiltinClicheSearchAbstract &cliche, const Express *value)
 			: NodeExpressTiny(cliche, value)
 		{}
@@ -3437,7 +3439,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheRound()
 			: BuiltinClicheUntypedOperation(&Builtin::name.round_)
@@ -3449,7 +3451,7 @@ namespace PILS
 		: public BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheTruncate()
 			: BuiltinClicheUntypedOperation(&Builtin::name.truncate_)
@@ -3478,10 +3480,10 @@ namespace PILS
 		: BuiltinClicheUntypedOperation
 	{
 	public:
-		const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const;
+        const Step *gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const override;
 	private:
 		BuiltinClicheBug()
-			: BuiltinClicheUntypedOperation(&Builtin::name.bug)
+            : BuiltinClicheUntypedOperation(&Builtin::name.buglog)
 		{}
 		static const BuiltinClicheBug singleton;
 	};
@@ -3493,8 +3495,8 @@ namespace PILS
 		: public BuiltinPokerClicheShort
 	{
 	private:
-		const Any *node(const Constant *element) const;
-		const NodeExpressShort *node(const Express *element) const;
+        const Any *node(const Constant *element) const override;
+        const NodeExpressShort *node(const Express *element) const override;
 		static const BuiltinClicheThread singleton;
 		BuiltinClicheThread()
 			: BuiltinPokerClicheShort(&Builtin::name.thread)
@@ -3505,19 +3507,19 @@ namespace PILS
 		: public BuiltinClicheTiny
 	{
 	public:
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const;
-		const NodeExpressShort *node(const Express *element) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Integer *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Float *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsColor *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsDate *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Timestamp *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Duration *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Cliche *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Listener *value) const override;
+        const NodeExpressShort *node(const Express *element) const override;
 	private:
 		BuiltinClicheKnot()
 			: BuiltinClicheTiny(&Builtin::name.knot)
@@ -3529,8 +3531,8 @@ namespace PILS
 		: public BuiltinPokerClicheShort
 	{
 	private:
-		const Any *node(const Constant *element) const;
-		const NodeExpressShort *node(const Express *element) const;
+        const Any *node(const Constant *element) const override;
+        const NodeExpressShort *node(const Express *element) const override;
 		static const BuiltinClicheLater singleton;
 		BuiltinClicheLater()
 			: BuiltinPokerClicheShort(&Builtin::name.later)

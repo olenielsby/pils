@@ -31,9 +31,9 @@ namespace PILS
 			: object(object), types(types), type(type), plug(plug), handle(handle)
 		{}
 		~PlugObject();
-		const Any *specialCalling(Runner &run, const Constant &name, const Any &arg) const;
-		const Any *specialCalling(Runner &run, const Number &call) const;
-		const Any *specialCalling(Runner &run, const PilsString &call) const;
+        const Any *specialCalling(Runner &run, const Constant &name, const Any &arg) const;
+        const Any *specialCalling(Runner &run, const Number &call) const;
+        const Any *specialCalling(Runner &run, const PilsString &call) const;
 
 		pilsplug::interface::Object *const object;
 		const NodeConstant *const types;
@@ -41,7 +41,7 @@ namespace PILS
 		pilsplug::Plug &plug;
 		const Special *const handle;
 	private:
-		const Any *dispatch(Runner &run, int methodIndex, const Constant *returnTypeSpecifier, const Constant *parametersSpecifier, const Any *argument) const;
+        const Any *dispatch(Runner &run, int methodIndex, const Constant *returnTypeSpecifier, const Constant *parametersSpecifier, const Any *argument) const;
 	};
 
 	class PlugObjectLookup : public SpecialLookup
@@ -50,10 +50,10 @@ namespace PILS
 		PlugObjectLookup(pilsplug::interface::Object *object, const NodeConstant &types, size_t type, pilsplug::Plug &plug, const Special &handle)
 			: object(object), types(types), type(type), plug(plug), handle(handle)
 		{}
-		const ReallySpecial *newSpecial(const HashedConstant *&link);
-		void unduplicate();
-		bool compare(const ReallySpecial &other) const;
-		size_t hash() const;
+        const ReallySpecial *newSpecial(const HashedConstant *&link) override;
+        void unduplicate() override;
+        bool compare(const ReallySpecial &other) const override;
+        size_t hash() const override;
 	private:
 		friend class PlugObjectSpecial;
 		pilsplug::interface::Object *const object;
@@ -77,10 +77,10 @@ namespace PILS
 	{
 	public:
 		PlugLibraryLookup(void *handle) : handle(handle) {}
-		const ReallySpecial *newSpecial(const HashedConstant *&link);
-		void unduplicate();
-		bool compare(const ReallySpecial &other) const;
-		size_t hash() const;
+        const ReallySpecial *newSpecial(const HashedConstant *&link) override;
+        void unduplicate() override;
+        bool compare(const ReallySpecial &other) const override;
+        size_t hash() const override;
 		void *handle;
 	};
 
@@ -89,7 +89,7 @@ namespace PILS
 	class PlugCompilable
 	{
 	public:
-		virtual bool compile(PlugCompiling &state) const;
+        virtual bool compile(PlugCompiling &state) const;
 		static const PlugCompilable *cast(const Any *thing);
 	};
 
@@ -101,8 +101,8 @@ namespace PILS
 			: ClicheShort(namespace_, PilsString::get(name))
 		{}
 	public:
-		bool recognize(Recognizer &recognizer) const;
-		bool compile(PlugCompiling &state) const;
+        bool recognize(Recognizer &recognizer) const override;
+        bool compile(PlugCompiling &state) const override;
 	private:
 		static const PilsString *const namespace_;
 	};
@@ -119,7 +119,7 @@ namespace PILS
 	class PlugTypeCliche : public ClicheTiny
 	{
 	public:
-		const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const override;
 	private:
 		PlugTypeCliche() : ClicheTiny(&PlugNamePlug::singleton) {}
 		static const PlugTypeCliche singleton;
@@ -128,7 +128,7 @@ namespace PILS
 	class PlugCliche : public ClicheTrailer
 	{
 	public:
-		const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const;
+        const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const override;
 	private:
 		PlugCliche() : ClicheTrailer(&PlugNamePlug::singleton, &Empty::singleton, &PlugNamePlug::singleton) {}
 		static const PlugCliche singleton;
@@ -138,7 +138,7 @@ namespace PILS
 	class PlugNameInt : public PlugName
 	{
 	public:
-		bool compile(PlugCompiling &state) const;
+        bool compile(PlugCompiling &state) const override;
 	private:
 		PlugNameInt(const PILS_CHAR *name) : PlugName(name) {}
 		static const PlugNameInt singleton;
@@ -147,7 +147,7 @@ namespace PILS
 	class PlugNameDouble : public PlugName
 	{
 	public:
-		bool compile(PlugCompiling &state) const;
+        bool compile(PlugCompiling &state) const override;
 	private:
 		PlugNameDouble(const PILS_CHAR *name) : PlugName(name) {}
 		static const PlugNameDouble singleton;
@@ -156,7 +156,7 @@ namespace PILS
 	class PlugNameVoid : public PlugName
 	{
 	public:
-		bool compile(PlugCompiling &state) const;
+        bool compile(PlugCompiling &state) const override;
 	private:
 		PlugNameVoid(const PILS_CHAR *name) : PlugName(name) {}
 		static const PlugNameVoid singleton;
@@ -165,7 +165,7 @@ namespace PILS
 	class PlugNameString : public PlugName
 	{
 	public:
-		bool compile(PlugCompiling &state) const;
+        bool compile(PlugCompiling &state) const override;
 	private:
 		PlugNameString(const PILS_CHAR *name) : PlugName(name) {}
 		static const PlugNameString singleton;
@@ -174,7 +174,7 @@ namespace PILS
 	class PlugNameBlob : public PlugName
 	{
 	public:
-		bool compile(PlugCompiling &state) const;
+        bool compile(PlugCompiling &state) const override;
 	private:
 		PlugNameBlob(const PILS_CHAR *name) : PlugName(name) {}
 		static const PlugNameBlob singleton;

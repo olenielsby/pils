@@ -36,8 +36,8 @@ namespace PILS
 		QuickBeginRule(const Cliche &cliche)
 			: variableCount(cliche.count - 1)
 		{}
-		const QuickCalling *quickCalling(Runner &run, const Any &call, const void *key) const;
-		const QuickCalling *quickCalling(Runner &run, const Any &call, const Any &assignValue, const void *key) const;
+        const QuickCalling *quickCalling(Runner &run, const Any &call, const void *key) const override;
+        const QuickCalling *quickCalling(Runner &run, const Any &call, const Any &assignValue, const void *key) const override;
 	private:
 		size_t variableCount;
 	};
@@ -71,22 +71,22 @@ namespace PILS
 		QuickFail(const QuickCalling::Link *&fail)
 			: fail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Integer &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Float &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Duration &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Special &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Listener &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Integer &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Float &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Duration &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Special &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Listener &value) const override;
 	protected:
 		const QuickCalling::Link fail;
 	};
@@ -98,7 +98,7 @@ namespace PILS
 		QuickTestPlus(const QuickCalling::Link *&fail)
 			: QuickFail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Integer &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Integer &value) const override;
 	};
 
 	class QuickTestCount
@@ -108,7 +108,7 @@ namespace PILS
 		QuickTestCount(const QuickCalling::Link *&fail)
 			: QuickFail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Integer &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Integer &value) const override;
 	};
 
 	class QuickTestInteger
@@ -118,7 +118,7 @@ namespace PILS
 		QuickTestInteger(const QuickCalling::Link *&fail)
 			: QuickFail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Integer &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Integer &value) const override;
 	};
 
 	class QuickTestNumber
@@ -128,8 +128,8 @@ namespace PILS
 		QuickTestNumber(const QuickCalling::Link *&fail)
 			: QuickFail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Integer &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Float &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Integer &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Float &value) const override;
 	};
 
 	class QuickTestString
@@ -139,7 +139,7 @@ namespace PILS
 		QuickTestString(const QuickCalling::Link *&fail)
 			: QuickFail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const override;
 	};
 
 	class QuickTestTimestamp
@@ -149,7 +149,7 @@ namespace PILS
 		QuickTestTimestamp(const QuickCalling::Link *&fail)
 			: QuickFail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const override;
 	};
 
 	class QuickTestPilsColor
@@ -159,7 +159,7 @@ namespace PILS
 		QuickTestPilsColor(const QuickCalling::Link *&fail)
 			: QuickFail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const override;
 	};
 
 	class QuickTestPilsDate
@@ -169,7 +169,7 @@ namespace PILS
 		QuickTestPilsDate(const QuickCalling::Link *&fail)
 			: QuickFail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const override;
 	};
 
 	class QuickTestDuration
@@ -179,7 +179,7 @@ namespace PILS
 		QuickTestDuration(const QuickCalling::Link *&fail)
 			: QuickFail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Duration &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Duration &value) const override;
 	};
 
 	class QuickTestPlusString
@@ -189,7 +189,7 @@ namespace PILS
 		QuickTestPlusString(const QuickCalling::Link *&fail)
 			: QuickFail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const override;
 	};
 
 	class QuickTestPlusPlusString
@@ -199,7 +199,7 @@ namespace PILS
 		QuickTestPlusPlusString(const QuickCalling::Link *&fail)
 			: QuickFail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const override;
 	};
 
 	class QuickTestList
@@ -209,8 +209,8 @@ namespace PILS
 		QuickTestList(const QuickCalling::Link *&fail)
 			: QuickFail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const override;
 	};
 
 	class QuickTestPlusList
@@ -220,8 +220,8 @@ namespace PILS
 		QuickTestPlusList(const QuickCalling::Link *&fail)
 			: QuickFail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const override;
 	};
 
 	class QuickTestPlusPlusList
@@ -231,8 +231,8 @@ namespace PILS
 		QuickTestPlusPlusList(const QuickCalling::Link *&fail)
 			: QuickFail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const override;
 	};
 
 	class QuickTestCliche
@@ -242,7 +242,7 @@ namespace PILS
 		QuickTestCliche(const QuickCalling::Link *&fail)
 			: QuickFail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const override;
 	};
 
 	class QuickTestNode
@@ -252,10 +252,10 @@ namespace PILS
 		QuickTestNode(const QuickCalling::Link *&fail)
 			: QuickFail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const override;
 	};
 
 	class QuickTestLegs
@@ -265,8 +265,8 @@ namespace PILS
 		QuickTestLegs(const QuickCalling::Link *&fail)
 			: QuickTestNode(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const override;
 	};
 
 	class QuickTestConstant
@@ -276,19 +276,19 @@ namespace PILS
 		QuickTestConstant(const QuickCalling::Link *&fail)
 			: QuickFail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Integer &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Float &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Duration &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Special &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Listener &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Integer &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Float &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Duration &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Special &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Listener &value) const override;
 	};
 
 	class QuickTestLanguage
@@ -298,7 +298,7 @@ namespace PILS
 		QuickTestLanguage(const QuickCalling::Link *&fail)
 			: QuickFail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const override;
 	};
 
 	class QuickTestListener
@@ -308,7 +308,7 @@ namespace PILS
 		QuickTestListener(const QuickCalling::Link *&fail)
 			: QuickFail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Listener &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Listener &value) const override;
 	};
 
 	class QuickTestSpecialTypecheck
@@ -318,8 +318,8 @@ namespace PILS
 		QuickTestSpecialTypecheck(const QuickCalling::Link *&fail, Converter &check_)
 			: QuickFail(fail), check_(check_)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Special &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Special &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const override;
 	private:
 		Converter &check_;
 	};
@@ -331,22 +331,22 @@ namespace PILS
 		QuickTestRecognizerTypecheck(const QuickCalling::Link *&fail, Recognizer &check_)
 			: QuickFail(fail), check_(check_)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Integer &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Float &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Duration &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Special &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Listener &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Integer &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Float &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Duration &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Special &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Listener &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const override;
 	private:
 		Recognizer &check_;
 	};
@@ -358,7 +358,7 @@ namespace PILS
 		QuickTestSearchString(const QuickCalling::Link *&fail, const SearchString &search)
 			: QuickFail(fail), search(search)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const override;
 	private:
 		const SearchString &search;
 	};
@@ -370,8 +370,8 @@ namespace PILS
 		QuickTestSearchListConstant(const QuickCalling::Link *&fail, const SearchListConstant &search)
 			: QuickFail(fail), search(search)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const override;
 	private:
 		const SearchListConstant &search;
 	};
@@ -383,22 +383,22 @@ namespace PILS
 		QuickFetch(size_t offset)
 			: offset(offset)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Integer &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Float &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Duration &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Special &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Listener &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Integer &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Float &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Duration &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Special &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Listener &value) const override;
 	private:
 		size_t offset;
 	};
@@ -408,22 +408,22 @@ namespace PILS
 	{
 	public:
 		QuickPop(){}
-		const QuickCalling *match(Runner &run, void **stack, const Integer &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Float &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Duration &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Special &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Listener &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Integer &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Float &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Duration &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Special &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Listener &value) const override;
 	};
 
 	class QuickFetchNodeHead
@@ -433,10 +433,10 @@ namespace PILS
 		QuickFetchNodeHead(const QuickCalling::Link *&fail)
 			: QuickFail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const override;
 	};
 
 	class QuickFetchNodeAttribute
@@ -446,10 +446,10 @@ namespace PILS
 		QuickFetchNodeAttribute(const QuickCalling::Link *&fail, const Constant &name)
 			: QuickFail(fail), name(name)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const override;
 	private:
 		const Constant &name;
 	};
@@ -461,7 +461,7 @@ namespace PILS
 		QuickFetchClicheShortAttribute(const QuickCalling::Link *&fail)
 			: QuickFail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const override;
 	};
 
 	class QuickFetchClicheName
@@ -471,7 +471,7 @@ namespace PILS
 		QuickFetchClicheName(const QuickCalling::Link *&fail)
 			: QuickFail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const override;
 	};
 
 	class QuickFetchStringCount
@@ -481,7 +481,7 @@ namespace PILS
 		QuickFetchStringCount(const QuickCalling::Link *&fail)
 			: QuickFail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const override;
 	};
 
 	class QuickFetchListCount
@@ -491,8 +491,8 @@ namespace PILS
 		QuickFetchListCount(const QuickCalling::Link *&fail)
 			: QuickFail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const override;
 	};
 
 	class QuickFetchSpecialAttribute
@@ -502,7 +502,7 @@ namespace PILS
 		QuickFetchSpecialAttribute(const QuickCalling::Link *&fail)
 			: QuickFail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Special &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Special &value) const override;
 		virtual const Any *specialAttribute(const Special &value) const = 0;
 	};
 
@@ -513,7 +513,7 @@ namespace PILS
 		QuickFetchFileName(const QuickCalling::Link *&fail)
 			: QuickFetchSpecialAttribute(fail)
 		{}
-		const Any *specialAttribute(const Special &value) const;
+        const Any *specialAttribute(const Special &value) const override;
 	};
 
 	class QuickFetchFolderName
@@ -523,7 +523,7 @@ namespace PILS
 		QuickFetchFolderName(const QuickCalling::Link *&fail)
 			: QuickFetchSpecialAttribute(fail)
 		{}
-		const Any *specialAttribute(const Special &value) const;
+        const Any *specialAttribute(const Special &value) const override;
 	};
 
 	class QuickFetchWhen
@@ -533,7 +533,7 @@ namespace PILS
 		QuickFetchWhen(const QuickCalling::Link *&fail)
 			: QuickFetchSpecialAttribute(fail)
 		{}
-		const Any *specialAttribute(const Special &value) const;
+        const Any *specialAttribute(const Special &value) const override;
 	};
 
 	class QuickFetchListElement
@@ -543,8 +543,8 @@ namespace PILS
 		QuickFetchListElement(const QuickCalling::Link *&fail, const Integer &index)
 			: QuickFail(fail), index(index.value - 1)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const override;
 	private:
 		const size_t index;
 	};
@@ -556,8 +556,8 @@ namespace PILS
 		QuickFetchListElementReverse(const QuickCalling::Link *&fail, const Integer &index)
 			: QuickFail(fail), index(-index.value)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const override;
 	private:
 		const size_t index;
 	};
@@ -569,10 +569,10 @@ namespace PILS
 		QuickVerifyNodeAttributes(const QuickCalling::Link *&fail, const Cliche &cliche)
 			: QuickFail(fail), cliche(cliche)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const override;
 	private:
 		const Cliche &cliche;
 	};
@@ -584,11 +584,11 @@ namespace PILS
 		QuickVerifyDefaultCliche(const QuickCalling::Link *&fail, const Cliche &cliche)
 			: QuickFail(fail), cliche(cliche)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const override;
 	private:
 		const Cliche &cliche;
 	};
@@ -600,11 +600,11 @@ namespace PILS
 		QuickFetchNodeAttributeDefault(const QuickCalling::Link *&fail, const Constant &name, const Any &defaultValue)
 			: QuickFail(fail), name(name), defaultValue(defaultValue)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const override;
 	private:
 		const Constant &name;
 		const Any &defaultValue;
@@ -617,7 +617,7 @@ namespace PILS
 		QuickClicheShortFetchHeadFetchAttribute(const QuickCalling::Link *&fail)
 			: QuickFail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const override;
 	private:
 	};
 
@@ -641,19 +641,19 @@ namespace PILS
 		QuickFetchThroughCall(const QuickCalling::Link *&fail, const NodeConstant &through)
 			: QuickFetchThrough(fail, through)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Integer &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Float &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Duration &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Special &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Listener &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Integer &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Float &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Duration &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Special &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Listener &value) const override;
 	};
 
 	class QuickFetchThroughTry
@@ -663,22 +663,22 @@ namespace PILS
 		QuickFetchThroughTry(const QuickCalling::Link *&fail, const NodeConstant &through)
 			: QuickFetchThrough(fail, through)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Integer &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Float &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Duration &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Special &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Listener &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Integer &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Float &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Duration &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Special &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Listener &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const override;
 	};
 
 	class QuickMatchListCountOrNodeCliche
@@ -688,12 +688,12 @@ namespace PILS
 		QuickMatchListCountOrNodeCliche(const QuickCalling::Link *&fail, const Constant &key)
 			: QuickFail(fail), key(key)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const override;
 	private:
 		const Constant &key;
 	};
@@ -705,8 +705,8 @@ namespace PILS
 		QuickFetchSpecialType(const QuickCalling::Link *&fail)
 			: QuickFail(fail)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Special &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Special &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const override;
 	};
 
 	class QuickIndex
@@ -715,8 +715,8 @@ namespace PILS
 	public:
 		const void *const *begin;
 		const void *const *end;
-		const QuickCalling *quickCalling(Runner &run, const Any &call, const void *key) const;
-		const QuickCalling *quickCalling(Runner &run, const Any &call, const Any &assignValue, const void *key) const;
+        const QuickCalling *quickCalling(Runner &run, const Any &call, const void *key) const override;
+        const QuickCalling *quickCalling(Runner &run, const Any &call, const Any &assignValue, const void *key) const override;
 	};
 
 	class QuickStore
@@ -726,22 +726,22 @@ namespace PILS
 		QuickStore(size_t slotOffset)
 			: slotOffset(slotOffset)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Integer &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Float &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Duration &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Special &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Listener &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Integer &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Float &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Duration &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Special &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Listener &value) const override;
 	private:
 		size_t slotOffset;
 	};
@@ -753,22 +753,22 @@ namespace PILS
 		QuickIdentical(const QuickCalling::Link *&fail, size_t slotOffset)
 			: QuickFail(fail), slotOffset(slotOffset)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Integer &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Float &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Duration &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Special &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Listener &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Integer &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Float &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Duration &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Special &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Listener &value) const override;
 	private:
 		size_t slotOffset;
 	};
@@ -780,23 +780,23 @@ namespace PILS
 		QuickMatchLiteral(const QuickCalling::Link *&failChain, const Any &thing)
 			: failChain(failChain), thing(thing)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Integer &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Float &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Duration &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Special &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Listener &value) const;
-	protected:
+        const QuickCalling *match(Runner &run, void **stack, const Integer &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Float &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Duration &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Special &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Listener &value) const override;
+    protected:
 		const QuickCalling::Link failChain;
 		const Any &thing;
 	};
@@ -809,22 +809,22 @@ namespace PILS
 			: QuickMatchLiteral(failChain, thing)
 
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Integer &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Float &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Duration &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Special &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Listener &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Integer &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Float &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Duration &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Special &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Listener &value) const override;
 	};
 
 	class QuickCompareDouble
@@ -834,8 +834,8 @@ namespace PILS
 		QuickCompareDouble(const QuickCalling::Link *&failChain, const BuiltinClicheCompare &compare, double value)
 			: QuickFail(failChain), compare(compare), value(value)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Integer &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Float &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Integer &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Float &value) const override;
 	private:
 		const BuiltinClicheCompare &compare;
 		double value;
@@ -848,22 +848,22 @@ namespace PILS
 		QuickOffsetStore(size_t offset, size_t slotOffset)
 			: offset(offset), slotOffset(slotOffset)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Integer &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Float &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Duration &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Special &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Listener &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Integer &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Float &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Duration &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Special &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Listener &value) const override;
 	private:
 		size_t offset;
 		size_t slotOffset;
@@ -876,23 +876,23 @@ namespace PILS
 		QuickOffsetIdentical(const QuickCalling::Link *&fail, size_t offset, size_t slotOffset)
 			: QuickFail(fail), offset(offset), slotOffset(slotOffset)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Integer &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Float &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Duration &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Special &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Listener &value) const;
-	private:
+        const QuickCalling *match(Runner &run, void **stack, const Integer &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Float &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Duration &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Special &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Listener &value) const override;
+    private:
 		size_t offset;
 		size_t slotOffset;
 	};
@@ -901,45 +901,45 @@ namespace PILS
 		: QuickMatch
 	{
 	public:
-		const QuickCalling *match(Runner &run, void **stack, const Integer &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Float &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Duration &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Special &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Listener &value) const;
-		virtual void action(Runner &run) const = 0;
+        const QuickCalling *match(Runner &run, void **stack, const Integer &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Float &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Duration &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Special &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Listener &value) const override;
+        virtual void action(Runner &run) const = 0;
 	};
 
 	class QuickBuild
 		: QuickMatch
 	{
 	public:
-		const QuickCalling *match(Runner &run, void **stack, const Integer &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Float &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Duration &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Special &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Listener &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Integer &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Float &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Duration &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Special &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Listener &value) const override;
 		virtual const QuickCalling *build(Runner &run, void **stack) const = 0;
 	};
 
@@ -948,7 +948,7 @@ namespace PILS
 	{
 	public:
 		QuickBuildFetch(size_t offset) : offset(offset) {}
-		const QuickCalling *build(Runner &run, void **stack) const;
+        const QuickCalling *build(Runner &run, void **stack) const override;
 	private:
 		size_t offset;
 	};
@@ -958,7 +958,7 @@ namespace PILS
 	{
 	public:
 		QuickBuildQuote(const Any &value) : value(value) {}
-		const QuickCalling *build(Runner &run, void **stack) const;
+        const QuickCalling *build(Runner &run, void **stack) const override;
 	private:
 		const Any &value;
 	};
@@ -968,7 +968,7 @@ namespace PILS
 	{
 	public:
 		QuickBuildList(size_t count) : count(count) {}
-		const QuickCalling *build(Runner &run, void **stack) const;
+        const QuickCalling *build(Runner &run, void **stack) const override;
 	private:
 		size_t count;
 	};
@@ -978,7 +978,7 @@ namespace PILS
 	{
 	public:
 		QuickBuildNodeShort(const ClicheShort &cliche) : cliche(cliche) {}
-		const QuickCalling *build(Runner &run, void **stack) const;
+        const QuickCalling *build(Runner &run, void **stack) const override;
 	private:
 		const ClicheShort &cliche;
 	};
@@ -988,7 +988,7 @@ namespace PILS
 	{
 	public:
 		QuickBuildNodeLong(const ClicheLong &cliche) : cliche(cliche) {}
-		const QuickCalling *build(Runner &run, void **stack) const;
+        const QuickCalling *build(Runner &run, void **stack) const override;
 	private:
 		const ClicheLong &cliche;
 	};
@@ -997,22 +997,22 @@ namespace PILS
 		: public QuickMatch
 	{
 	public:
-		const QuickCalling *match(Runner &run, void **stack, const Integer &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Float &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Duration &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Special &value) const;
-		const QuickCalling *match(Runner &run, void **stack, const Listener &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Integer &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Float &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsColor &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsDate &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Timestamp &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Duration &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const PilsString &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Cliche &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListConstant &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeConstantShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const ListExpress &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressLong &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const NodeExpressShort &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Special &value) const override;
+        const QuickCalling *match(Runner &run, void **stack, const Listener &value) const override;
 	protected:
 		QuickImplicit(size_t slotOffset)
 			: slotOffset(slotOffset)
@@ -1029,7 +1029,7 @@ namespace PILS
 			: QuickImplicit(slotOffset)
 		{}
 	protected:
-		const Any &fetch(Runner &run) const;
+        const Any &fetch(Runner &run) const override;
 	};
 
 	class QuickImplicitWhere
@@ -1040,7 +1040,7 @@ namespace PILS
 			: QuickImplicit(slotOffset)
 		{}
 	protected:
-		const Any &fetch(Runner &run) const;
+        const Any &fetch(Runner &run) const override;
 	};
 
 	class QuickImplicitWhat
@@ -1051,7 +1051,7 @@ namespace PILS
 			: QuickImplicit(slotOffset)
 		{}
 	protected:
-		const Any &fetch(Runner &run) const;
+        const Any &fetch(Runner &run) const override;
 	};
 
 	class QuickImplicitSelf
@@ -1062,7 +1062,7 @@ namespace PILS
 			: QuickImplicit(slotOffset)
 		{}
 	protected:
-		const Any &fetch(Runner &run) const;
+        const Any &fetch(Runner &run) const override;
 	};
 
 	class QuickActionAny
@@ -1072,7 +1072,7 @@ namespace PILS
 		QuickActionAny(const Cliche &cliche, const Any &thing, const QuickCalling::Link *&fail)
 			: cliche(cliche), thing(thing), fail(fail)
 		{}
-		void action(Runner &run) const;
+        void action(Runner &run) const override;
 		const Cliche &cliche;
 		const Any &thing;
 		const QuickCalling::Link fail;
@@ -1085,7 +1085,7 @@ namespace PILS
 		QuickActionOk(const Cliche &cliche, const Any &thing)
 			: cliche(cliche), thing(thing)
 		{}
-		void action(Runner &run) const;
+        void action(Runner &run) const override;
 		const Cliche &cliche;
 		const Any &thing;
 	};
@@ -1097,7 +1097,7 @@ namespace PILS
 		QuickActionOkArgument(const size_t offset)
 			: offset(offset)
 		{}
-		void action(Runner &run) const;
+        void action(Runner &run) const override;
 	private:
 		const size_t offset;
 	};
@@ -1109,7 +1109,7 @@ namespace PILS
 		QuickActionOkConstant(const Constant &constant)
 			: constant(constant)
 		{}
-		void action(Runner &run) const;
+        void action(Runner &run) const override;
 	private:
 		const Constant &constant;
 	};
@@ -1118,29 +1118,29 @@ namespace PILS
 		: QuickBuild
 	{
 	public:
-		const QuickCalling *build(Runner &run, void **stack) const;
+        const QuickCalling *build(Runner &run, void **stack) const override;
 	};
 
 	class SinkCompiled
 		: public Sink
 	{
 	public:
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, const Any *thing);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, const Any *thing) override;
 	};
 
 	class SinkCompiledStep
 		: public SinkCompiled
 	{
 	public:
-		const Step *called(Runner &run, const Constant &call);
-		const Step *called(Runner &run, const Integer &call);
-		const Step *called(Runner &run, const ListConstant &call);
-		const Step *called(Runner &run, const NodeConstant &call);
-		const Step *called(Runner &run, const Empty &call);
-		const Step *called(Runner &run, const ListExpress &call);
-		const Step *called(Runner &run, const NodeExpress &call);
-		const Step *called(Runner &run, const Any &call, const Any *assignValue);
+        const Step *called(Runner &run, const Constant &call) override;
+        const Step *called(Runner &run, const Integer &call) override;
+        const Step *called(Runner &run, const ListConstant &call) override;
+        const Step *called(Runner &run, const NodeConstant &call) override;
+        const Step *called(Runner &run, const Empty &call) override;
+        const Step *called(Runner &run, const ListExpress &call) override;
+        const Step *called(Runner &run, const NodeExpress &call) override;
+        const Step *called(Runner &run, const Any &call, const Any *assignValue) override;
 	};
 
 	class SinkCompiledOkValue
@@ -1150,7 +1150,7 @@ namespace PILS
 		SinkCompiledOkValue(const Any *value)
 			: value(value)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	private:
 		const Any *value;
 	};
@@ -1162,14 +1162,14 @@ namespace PILS
 		SinkCompiledOk(const Any *thing, const Any *whereabout)
 			: thing(thing), whereabout(whereabout)
 		{}
-		const Step *called(Runner &run, const Constant &call);
-		const Step *called(Runner &run, const Integer &call);
-		const Step *called(Runner &run, const ListConstant &call);
-		const Step *called(Runner &run, const NodeConstant &call);
-		const Step *called(Runner &run, const Empty &call);
-		const Step *called(Runner &run, const ListExpress &call);
-		const Step *called(Runner &run, const NodeExpress &call);
-		const Step *called(Runner &run, const Any &call, const Any *assignValue);
+        const Step *called(Runner &run, const Constant &call) override;
+        const Step *called(Runner &run, const Integer &call) override;
+        const Step *called(Runner &run, const ListConstant &call) override;
+        const Step *called(Runner &run, const NodeConstant &call) override;
+        const Step *called(Runner &run, const Empty &call) override;
+        const Step *called(Runner &run, const ListExpress &call) override;
+        const Step *called(Runner &run, const NodeExpress &call) override;
+        const Step *called(Runner &run, const Any &call, const Any *assignValue) override;
 	private:
 		const Any *thing;
 		const Any *whereabout;
@@ -1182,15 +1182,15 @@ namespace PILS
 		SinkCompiledAny(const QuickActionAny &action, const NodeExpress *where_)
 			: action(action), where_(where_)
 		{}
-		const Step *called(Runner &run, const Constant &call);
-		const Step *called(Runner &run, const Integer &call);
-		const Step *called(Runner &run, const ListConstant &call);
-		const Step *called(Runner &run, const NodeConstant &call);
-		const Step *called(Runner &run, const Empty &call);
-		const Step *called(Runner &run, const ListExpress &call);
-		const Step *called(Runner &run, const NodeExpress &call);
-		const Step *called(Runner &run, const Any &call, const Any *assignValue);
-		Sink *kick(Runner &run);
+        const Step *called(Runner &run, const Constant &call) override;
+        const Step *called(Runner &run, const Integer &call) override;
+        const Step *called(Runner &run, const ListConstant &call) override;
+        const Step *called(Runner &run, const NodeConstant &call) override;
+        const Step *called(Runner &run, const Empty &call) override;
+        const Step *called(Runner &run, const ListExpress &call) override;
+        const Step *called(Runner &run, const NodeExpress &call) override;
+        const Step *called(Runner &run, const Any &call, const Any *assignValue) override;
+        Sink *kick(Runner &run) override;
 		const QuickActionAny &action;
 		const NodeExpress *where_;
 	};
@@ -1202,7 +1202,7 @@ namespace PILS
 		QuickMatchQueryInterface(const QuickCalling::Link *&fail, const InterfaceDesignator &designator)
 			: QuickFail(fail), designator(designator)
 		{}
-		const QuickCalling *match(Runner &run, void **stack, const Special &value) const;
+        const QuickCalling *match(Runner &run, void **stack, const Special &value) const override;
 	private:
 		const InterfaceDesignator &designator;
 	};

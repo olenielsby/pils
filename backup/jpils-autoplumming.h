@@ -39,8 +39,7 @@ namespace PILS
         static void d__CodeTokeniser(void *x) {delete (juce::CodeTokeniser *)x;}
         static void d__Colour(void *x) {delete (juce::Colour *)x;}
         static void d__ColourGradient(void *x) {delete (juce::ColourGradient *)x;}
-        static void d__Colours(void *x) {//delete (juce::Colours *)x;
-        }
+        static void d__Colours(void *x) {/*delete (juce::Colours *)x;*/}
         static void d__ComboBox__Listener(void *x) {delete (juce::ComboBox::Listener *)x;}
         static void d__ComponentBoundsConstrainer(void *x) {delete (juce::ComponentBoundsConstrainer *)x;}
         static void d__ComponentDragger(void *x) {delete (juce::ComponentDragger *)x;}
@@ -124,10 +123,8 @@ namespace PILS
         static void d__NativeMessageBox(void *x) {delete (juce::NativeMessageBox *)x;}
         static void d__NewLine(void *x) {delete (juce::NewLine *)x;}
         static void d__OpenGL(void *x) {delete (juce::OpenGL *)x;}
-        static void d__OpenGLContext(void *x) {// delete (juce::OpenGLContext *)x;
-        }
-        static void d__OpenGLPixelFormat(void *x) {// delete (juce::OpenGLPixelFormat *)x;
-        }
+//        static void d__OpenGLContext(void *x) {delete (juce::OpenGLContext *)x;}
+//        static void d__OpenGLPixelFormat(void *x) {delete (juce::OpenGLPixelFormat *)x;}
         static void d__OutputStream(void *x) {delete (juce::OutputStream *)x;}
         static void d__Path(void *x) {delete (juce::Path *)x;}
         static void d__PathStrokeType(void *x) {delete (juce::PathStrokeType *)x;}
@@ -136,8 +133,7 @@ namespace PILS
         static void d__PixelARGB(void *x) {delete (juce::PixelARGB *)x;}
         static void d__PixelAlpha(void *x) {delete (juce::PixelAlpha *)x;}
         static void d__PixelRGB(void *x) {delete (juce::PixelRGB *)x;}
-        static void d__PlatformUtilities(void *x) {//delete (juce::PlatformUtilities *)x;
-        }
+//        static void d__PlatformUtilities(void *x) {delete (juce::PlatformUtilities *)x;}
         static void d__PluginDescription(void *x) {delete (juce::PluginDescription *)x;}
         static void d__PopupMenu(void *x) {delete (juce::PopupMenu *)x;}
         static void d__PopupMenu__MenuItemIterator(void *x) {delete (juce::PopupMenu::MenuItemIterator *)x;}
@@ -151,10 +147,8 @@ namespace PILS
         static void d__Random(void *x) {delete (juce::Random *)x;}
         static void d__ReadWriteLock(void *x) {delete (juce::ReadWriteLock *)x;}
         static void d__RecentlyOpenedFilesList(void *x) {delete (juce::RecentlyOpenedFilesList *)x;}
-        static void d__RectangleList(void *x) {//delete (juce::RectangleList *)x;
-        }
-        static void d__RectangleList__Iterator(void *x) {//delete (juce::RectangleList::Iterator *)x;
-        }
+//        static void d__RectangleList(void *x) {delete (juce::RectangleList *)x;}
+//        static void d__RectangleList__Iterator(void *x) {delete (juce::RectangleList::Iterator *)x;}
         static void d__RectanglePlacement(void *x) {delete (juce::RectanglePlacement *)x;}
         static void d__ReferenceCountedObject(void *x) {((ReferenceCountedObject *)x)->decReferenceCount();}
         static void d__RelativeCoordinate(void *x) {delete (juce::RelativeCoordinate *)x;}
@@ -410,8 +404,8 @@ namespace PILS
     JuceClass JuceClasses::c__OldSchoolLookAndFeel("OldSchoolLookAndFeel", 1, JuceClass::lineages+237, delete_::d__LookAndFeel, 0, NULL);
     JuceClass JuceClasses::c__OpenGL(Namespace_Juce::opengl_singleton->get("OpenGL"), 0, JuceClass::lineages+95, delete_::d__OpenGL, 0, NULL);
     JuceComponentClass JuceClasses::c__OpenGLComponent("OpenGLComponent", 2, JuceClass::lineages+509, delete_::d__MouseListener, 0, NULL);
-    JuceClass JuceClasses::c__OpenGLContext("OpenGLContext", 0, JuceClass::lineages+96, delete_::d__OpenGLContext, 0, NULL);
-    JuceClass JuceClasses::c__OpenGLPixelFormat("OpenGLPixelFormat", 0, JuceClass::lineages+97, delete_::d__OpenGLPixelFormat, 0, NULL);
+//    JuceClass JuceClasses::c__OpenGLContext("OpenGLContext", 0, JuceClass::lineages+96, delete_::d__OpenGLContext, 0, NULL);
+//    JuceClass JuceClasses::c__OpenGLPixelFormat("OpenGLPixelFormat", 0, JuceClass::lineages+97, delete_::d__OpenGLPixelFormat, 0, NULL);
     JuceClass JuceClasses::c__OutputStream("OutputStream", 0, JuceClass::lineages+247, delete_::d__OutputStream, 0, NULL);
     JuceClass JuceClasses::c__PDFWriter("PDFWriter", 2, JuceClass::lineages+283, delete_::d__LowLevelGraphicsContext, 0, NULL);
     JuceClass JuceClasses::c__PNGImageFormat("PNGImageFormat", 1, JuceClass::lineages+221, delete_::d__ImageFileFormat, 0, NULL);
@@ -423,7 +417,7 @@ namespace PILS
     JuceClass JuceClasses::c__PixelARGB("PixelARGB", 0, JuceClass::lineages+102, delete_::d__PixelARGB, 0, NULL);
     JuceClass JuceClasses::c__PixelAlpha("PixelAlpha", 0, JuceClass::lineages+103, delete_::d__PixelAlpha, 0, NULL);
     JuceClass JuceClasses::c__PixelRGB("PixelRGB", 0, JuceClass::lineages+104, delete_::d__PixelRGB, 0, NULL);
-    JuceClass JuceClasses::c__PlatformUtilities("PlatformUtilities", 0, JuceClass::lineages+105, delete_::d__PlatformUtilities, 0, NULL);
+//    JuceClass JuceClasses::c__PlatformUtilities("PlatformUtilities", 0, JuceClass::lineages+105, delete_::d__PlatformUtilities, 0, NULL);
     JuceClass JuceClasses::c__PluginDescription("PluginDescription", 0, JuceClass::lineages+106, delete_::d__PluginDescription, 0, NULL);
     JuceClass JuceClasses::c__PopupMenu("PopupMenu", 0, JuceClass::lineages+107, delete_::d__PopupMenu, 0, NULL);
     JuceComponentClass JuceClasses::c__PopupMenu__CustomComponent("PopupMenu.CustomComponent", 2, JuceClass::lineages+298, delete_::d__MouseListener, 0, NULL);
@@ -445,8 +439,8 @@ namespace PILS
     JuceClass JuceClasses::c__Random("Random", 0, JuceClass::lineages+115, delete_::d__Random, 0, NULL);
     JuceClass JuceClasses::c__ReadWriteLock("ReadWriteLock", 0, JuceClass::lineages+116, delete_::d__ReadWriteLock, 0, NULL);
     JuceClass JuceClasses::c__RecentlyOpenedFilesList("RecentlyOpenedFilesList", 0, JuceClass::lineages+117, delete_::d__RecentlyOpenedFilesList, 0, NULL);
-    JuceClass JuceClasses::c__RectangleList_int("RectangleList", 0, JuceClass::lineages+118, delete_::d__RectangleList, 0, NULL);
-    JuceClass JuceClasses::c__RectangleList__Iterator("RectangleList.Iterator", 0, JuceClass::lineages+119, delete_::d__RectangleList__Iterator, 0, NULL);
+//    JuceClass JuceClasses::c__RectangleList("RectangleList", 0, JuceClass::lineages+118, delete_::d__RectangleList, 0, NULL);
+//    JuceClass JuceClasses::c__RectangleList__Iterator("RectangleList.Iterator", 0, JuceClass::lineages+119, delete_::d__RectangleList__Iterator, 0, NULL);
     JuceClass JuceClasses::c__RectanglePlacement("RectanglePlacement", 0, JuceClass::lineages+120, delete_::d__RectanglePlacement, 0, NULL);
     JuceReferenceCountedClass JuceClasses::c__ReferenceCountedObject("ReferenceCountedObject", 0, JuceClass::lineages+253, delete_::d__ReferenceCountedObject, 0, NULL);
     JuceClass JuceClasses::c__RelativeCoordinate("RelativeCoordinate", 0, JuceClass::lineages+121, delete_::d__RelativeCoordinate, 0, NULL);
@@ -733,7 +727,7 @@ namespace PILS
         &JuceClasses::c__Random,
         &JuceClasses::c__ReadWriteLock,
         &JuceClasses::c__RecentlyOpenedFilesList,
-        &JuceClasses::c__RectangleList_int,
+        &JuceClasses::c__RectangleList,
         &JuceClasses::c__RectangleList__Iterator,
         &JuceClasses::c__RectanglePlacement /*120*/,
         &JuceClasses::c__RelativeCoordinate,

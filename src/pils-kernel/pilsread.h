@@ -33,7 +33,7 @@ namespace PILS
 		: public Kickable
 	{
 	public:
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 		virtual const Step *done(Runner &run, const Any *item) = 0;
 		virtual void tracing(const Any *item, const unsigned char *from) = 0;
 		const unsigned char *at;
@@ -192,7 +192,7 @@ namespace PILS
 			: at(at)
 		{}
 	private:
-		const Step *step_(Runner &run) const; //dummy
+        const Step *step_(Runner &run) const override; //dummy
 	};
 
 	class ParseStart

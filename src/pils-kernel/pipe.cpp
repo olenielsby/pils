@@ -1301,7 +1301,7 @@ namespace PILS
 		PILS_CHAR *buffer = new PILS_CHAR[count];
 		for (size_t i = 0; i < count; i++) buffer[i] = range[count - i - 1];
 		const PilsString *result = PilsString::get(buffer, count);
-		delete buffer;
+        delete[] buffer;
 		anchor->releaseReference();
 		return (run.sink = this + 1)->pass(run, result);
 	}

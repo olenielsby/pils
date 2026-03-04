@@ -31,8 +31,7 @@ here may not be pinned.
   filename call (@@ [pils system program]) .:need -> [call: instance]
 }
 { :error .who .module
-| :where :what :try @@ [pils run error]
-  ((error:. .who .what .where .module) bug {})
+| :where :what :try @@ [pils run error] error:. .who .what .where .module
 }
 { : object find (filter) | :try [items] call (object) .:need find (filter) }
 { : object each (filter) | :try [items] call (object) .:need each (filter) }

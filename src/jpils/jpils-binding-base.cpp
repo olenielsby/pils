@@ -1,9 +1,9 @@
 /* This file is public domain */
-#include <src/juce_WithoutMacros.h>
+//#include <src/juce_WithoutMacros.h>
 #include "jpils-binding-base.h"
 #include "jpils-thread.h"
 #include "jpils-graph.h"
-#include "pils-kernel/pilsatomic.h"
+#include "pilsatomic.h"
 
 namespace PILS
 {
@@ -198,6 +198,7 @@ namespace PILS
 	JuceComponent::JuceComponent(const HashedConstant *&link, TypedPtr &typedPtr, CallbackHelperBase *helper)
 		: JuceObject(link, typedPtr, helper), desktop(false)
 	{
+        addReference(); // sikr mod sletning
 		addReference();
 	}
 
@@ -243,7 +244,7 @@ namespace PILS
 			PendingDelete(juce::Component *gone_) : Pending(*MainThread::singleton), gone_(gone_) {}
 			~PendingDelete()
 			{
-				delete gone_;
+                delete gone_;
 			}
 		private:
 			juce::Component *gone_;
@@ -504,14 +505,14 @@ namespace PILS
 	{
 		return false;
 	}
-	bool ArgumentSource::fill(BitArray &slot)
-	{
-		return false;
-	}
-	bool ArgumentSource::fill(const BitArray &slot)
-	{
-		return false;
-	}
+    // bool ArgumentSource::fill(BitArray &slot)
+    // {
+    // 	return false;
+    // }
+    // bool ArgumentSource::fill(const BitArray &slot)
+    // {
+    // 	return false;
+    // }
 	bool ArgumentSource::fill(char *&slot)
 	{
 		return false;
@@ -609,10 +610,10 @@ namespace PILS
 		return false;
 	}
 
-	bool ArgumentSource::fill(Image::SharedImage *&slot)
-	{
-		return false;
-	}
+    // bool ArgumentSource::fill(Image::SharedImage *&slot)
+    // {
+    // 	return false;
+    // }
 
 	bool ArgumentSource::fill(ModalComponentManager::Callback *&slot)
 	{
@@ -689,12 +690,12 @@ namespace PILS
 	class ColorRecognizer : public Recognizer
 	{
 	public:
-		virtual bool recognizing(const PilsColor &color)
+        bool recognizing(const PilsColor &color) override
 		{
 			value = (const juce::Colour *)&color.value;
 			return true;
 		}
-		virtual bool recognizing(const juce::Colour &thing)
+        bool recognizing(const juce::Colour &thing) override
 		{
 			value = &thing;
 			return true;
@@ -728,7 +729,7 @@ namespace PILS
 			class instance : public Recognizer
 			{
 			public:
-				bool recognizing(const juce::Path &path)
+                bool recognizing(const juce::Path &path) override
 				{
 					this->path = &path;
 					return true;
@@ -830,22 +831,28 @@ namespace PILS
 		else return false;
 	}
 
-	bool ArgumentSource::fill(juce::var::identifier &slot)
-	{
-		juce::String value;
-		if (fill(value))
-		{
-			slot = juce::var::identifier(value);
-			return true;
-		}
-		else return false;
-	}
+    // bool ArgumentSource::fill(juce::var::Identifier &slot)
+    // {
+    // 	juce::String value;
+    // 	if (fill(value))
+    // 	{
+    // 		slot = juce::var::Identifier(value);
+    // 		return true;
+    // 	}
+    // 	else return false;
+    // }
 
 	bool ArgumentSource::fill(juce::var &slot)
 	{
 		// todo: convert various arg types to var
 		return false;
 	}
+
+    bool ArgumentSource::fill(juce::BigInteger &slot)
+    {
+        // todo: recognize and copy BigInteger
+        return false;
+    }
 
 	bool ArgumentSource::fillClass(void *&slot, const JuceClass &class_, bool nullable)
 	{
@@ -860,6 +867,16 @@ namespace PILS
 		}
 		return false;
 	}
+    //ChatGPTG genereret
+    bool ArgumentSource::fill(juce_wchar &slot)
+    {
+        int temp;
+        if (!fill(temp))
+            return false;
+
+        slot = static_cast<juce_wchar>(temp);
+        return true;
+    }
 
 	bool JuceClassConverter::convert(const Cliche &className)
 	{

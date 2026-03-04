@@ -12,7 +12,7 @@ namespace PILS
 		WhoPropertyMinus(const PropertyMinus *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class SinkPropertyMinus
@@ -22,14 +22,14 @@ namespace PILS
 		SinkPropertyMinus(const WhoPropertyMinus &what)
 			: SinkProperty(what)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
-		const Step *pass(Runner &run, const Duration *value);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class WhoFloatProperty
@@ -39,9 +39,9 @@ namespace PILS
 		WhoFloatProperty(const FloatProperty *call, const Any *who)
 			:  CallWho(call, who), function(call->function)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 		double (*function)(double);
-		size_t unlinkAndGetSize();
+        size_t unlinkAndGetSize() override;
 	};
 
 	class SinkFloatProperty
@@ -51,12 +51,12 @@ namespace PILS
 		SinkFloatProperty(const WhoFloatProperty &what)
 			: SinkProperty(what)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class OperationPlusInteger
@@ -66,7 +66,7 @@ namespace PILS
 		OperationPlusInteger(const HashedConstant *&link, const Integer *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationPlus::singleton, value)
 		{}
-		const CallWho* callWho(const Any *who) const;
+        const CallWho* callWho(const Any *who) const override;
 	};
 
 	class OperationPlusFloat
@@ -76,7 +76,7 @@ namespace PILS
 		OperationPlusFloat(const HashedConstant *&link, const Float *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationPlus::singleton, value)
 		{}
-		const CallWho* callWho(const Any *who) const;
+        const CallWho* callWho(const Any *who) const override;
 	};
 
 	class OperationPlusTimestamp
@@ -86,7 +86,7 @@ namespace PILS
 		OperationPlusTimestamp(const HashedConstant *&link, const Timestamp *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationPlus::singleton, value)
 		{}
-		const CallWho* callWho(const Any *who) const;
+        const CallWho* callWho(const Any *who) const override;
 	};
 
 	class OperationPlusDuration
@@ -96,7 +96,7 @@ namespace PILS
 		OperationPlusDuration(const HashedConstant *&link, const Duration *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationPlus::singleton, value)
 		{}
-		const CallWho* callWho(const Any *who) const;
+        const CallWho* callWho(const Any *who) const override;
 	};
 
 	class OperationPlusPilsDate
@@ -106,7 +106,7 @@ namespace PILS
 		OperationPlusPilsDate(const HashedConstant *&link, const PilsDate *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationPlus::singleton, value)
 		{}
-		const CallWho* callWho(const Any *who) const;
+        const CallWho* callWho(const Any *who) const override;
 	};
 
 	class WhoPlusInteger
@@ -116,7 +116,7 @@ namespace PILS
 		WhoPlusInteger(const OperationPlusInteger *value, const Any *who)
 			: CallWho(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoPlusFloat
@@ -126,7 +126,7 @@ namespace PILS
 		WhoPlusFloat(const OperationPlusFloat *value, const Any *who)
 			: CallWho(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoPlusTimestamp
@@ -136,7 +136,7 @@ namespace PILS
 		WhoPlusTimestamp(const OperationPlusTimestamp *value, const Any *who)
 			: CallWho(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoPlusDuration
@@ -146,7 +146,7 @@ namespace PILS
 		WhoPlusDuration(const OperationPlusDuration *value, const Any *who)
 			: CallWho(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoPlusPilsDate
@@ -156,7 +156,7 @@ namespace PILS
 		WhoPlusPilsDate(const OperationPlusPilsDate *value, const Any *who)
 			: CallWho(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoExpressPlus
@@ -166,15 +166,15 @@ namespace PILS
 		WhoExpressPlus(const NodeExpressShort *call, const Any *who)
 			: WhoExpressOperation(call, who)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
-		const Step *pass(Runner &run, const PilsDate *value);
-		const Step *pass(Runner &run, const Timestamp *value);
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
+        const Step *pass(Runner &run, const PilsDate *value) override;
+        const Step *pass(Runner &run, const Timestamp *value) override;
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class SinkWhoPlusRawInteger
@@ -184,12 +184,12 @@ namespace PILS
 		SinkWhoPlusRawInteger(const WhoExpressOperation &what, long operand)
 			: SinkWhoOperationRawInteger(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class SinkWhoPlusRawFloat
@@ -199,12 +199,12 @@ namespace PILS
 		SinkWhoPlusRawFloat(const WhoExpressOperation &what, double operand)
 			: SinkWhoOperationRawFloat(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class SinkWhoPlusUncountedInteger
@@ -214,12 +214,12 @@ namespace PILS
 		SinkWhoPlusUncountedInteger(const CallWho &what, const Integer &operand)
 			: SinkWhoOperationUncounted(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class SinkWhoPlusUncountedFloat
@@ -228,13 +228,13 @@ namespace PILS
 	public:
 		SinkWhoPlusUncountedFloat(const CallWho &what, const Float &operand)
 			: SinkWhoOperationUncounted(what, operand)
-		{}
-	const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        {}
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class SinkWhoPlusUncountedTimestamp
@@ -244,7 +244,7 @@ namespace PILS
 		SinkWhoPlusUncountedTimestamp(const CallWho &what, const Timestamp &operand)
 			: SinkWhoOperationUncounted(what, operand)
 		{}
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class SinkWhoPlusUncountedDuration
@@ -254,9 +254,9 @@ namespace PILS
 		SinkWhoPlusUncountedDuration(const CallWho &what, const Duration &operand)
 			: SinkWhoOperationUncounted(what, operand)
 		{}
-		const Step *pass(Runner &run, const Timestamp *value);
-		const Step *pass(Runner &run, const PilsDate *value);
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, const Timestamp *value) override;
+        const Step *pass(Runner &run, const PilsDate *value) override;
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class SinkWhoPlusUncountedPilsDate
@@ -266,7 +266,7 @@ namespace PILS
 		SinkWhoPlusUncountedPilsDate(const CallWho &what, const PilsDate &operand)
 			: SinkWhoOperationUncounted(what, operand)
 		{}
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class SinkWhoPlusInteger
@@ -276,12 +276,12 @@ namespace PILS
 		SinkWhoPlusInteger(WhoExpressOperation &what, const Integer *operand)
 			: SinkWhoOperationAny(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class SinkWhoPlusFloat
@@ -291,12 +291,12 @@ namespace PILS
 		SinkWhoPlusFloat(WhoExpressOperation &what, const Float *operand)
 			: SinkWhoOperationAny(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class SinkWhoPlusTimestamp
@@ -306,7 +306,7 @@ namespace PILS
 		SinkWhoPlusTimestamp(WhoExpressOperation &what, const Timestamp *operand)
 			: SinkWhoOperationAny(what, operand)
 		{}
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class SinkWhoPlusDuration
@@ -316,9 +316,9 @@ namespace PILS
 		SinkWhoPlusDuration(WhoExpressOperation &what, const Duration *operand)
 			: SinkWhoOperationAny(what, operand)
 		{}
-		const Step *pass(Runner &run, const Timestamp *value);
-		const Step *pass(Runner &run, const PilsDate *value);
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, const Timestamp *value) override;
+        const Step *pass(Runner &run, const PilsDate *value) override;
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class SinkWhoPlusPilsDate
@@ -328,7 +328,7 @@ namespace PILS
 		SinkWhoPlusPilsDate(WhoExpressOperation &what, const PilsDate *operand)
 			: SinkWhoOperationAny(what, operand)
 		{}
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class OperationMinusInteger
@@ -338,7 +338,7 @@ namespace PILS
 		OperationMinusInteger(const HashedConstant *&link, const Integer *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationMinus::singleton, value)
 		{}
-		const CallWho* callWho(const Any *who) const;
+        const CallWho* callWho(const Any *who) const override;
 	};
 
 	class OperationMinusFloat
@@ -348,7 +348,7 @@ namespace PILS
 		OperationMinusFloat(const HashedConstant *&link, const Float *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationMinus::singleton, value)
 		{}
-		const CallWho* callWho(const Any *who) const;
+        const CallWho* callWho(const Any *who) const override;
 	};
 
 	class OperationMinusTimestamp
@@ -358,7 +358,7 @@ namespace PILS
 		OperationMinusTimestamp(const HashedConstant *&link, const Timestamp *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationMinus::singleton, value)
 		{}
-		const CallWho* callWho(const Any *who) const;
+        const CallWho* callWho(const Any *who) const override;
 	};
 
 	class OperationMinusDuration
@@ -368,7 +368,7 @@ namespace PILS
 		OperationMinusDuration(const HashedConstant *&link, const Duration *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationMinus::singleton, value)
 		{}
-		const CallWho* callWho(const Any *who) const;
+        const CallWho* callWho(const Any *who) const override;
 	};
 
 	class OperationMinusPilsDate
@@ -378,7 +378,7 @@ namespace PILS
 		OperationMinusPilsDate(const HashedConstant *&link, const PilsDate *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationMinus::singleton, value)
 		{}
-		const CallWho* callWho(const Any *who) const;
+        const CallWho* callWho(const Any *who) const override;
 	};
 
 	class WhoMinusInteger
@@ -388,7 +388,7 @@ namespace PILS
 		WhoMinusInteger(const OperationMinusInteger *value, const Any *who)
 			:  CallWho(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoMinusFloat
@@ -398,7 +398,7 @@ namespace PILS
 		WhoMinusFloat(const OperationMinusFloat *value, const Any *who)
 			:  CallWho(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoMinusTimestamp
@@ -408,7 +408,7 @@ namespace PILS
 		WhoMinusTimestamp(const OperationMinusTimestamp *value, const Any *who)
 			: CallWho(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoMinusDuration
@@ -418,7 +418,7 @@ namespace PILS
 		WhoMinusDuration(const OperationMinusDuration *value, const Any *who)
 			: CallWho(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoMinusPilsDate
@@ -428,7 +428,7 @@ namespace PILS
 		WhoMinusPilsDate(const OperationMinusPilsDate *value, const Any *who)
 			: CallWho(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoExpressMinus
@@ -438,15 +438,15 @@ namespace PILS
 		WhoExpressMinus(const NodeExpressShort *call, const Any *who)
 			: WhoExpressOperation(call, who)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
-		const Step *pass(Runner &run, const PilsDate *value);
-		const Step *pass(Runner &run, const Timestamp *value);
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
+        const Step *pass(Runner &run, const PilsDate *value) override;
+        const Step *pass(Runner &run, const Timestamp *value) override;
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class SinkWhoMinusRawInteger
@@ -456,12 +456,12 @@ namespace PILS
 		SinkWhoMinusRawInteger(const WhoExpressOperation &what, long operand)
 			: SinkWhoOperationRawInteger(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class SinkWhoMinusRawFloat
@@ -471,12 +471,12 @@ namespace PILS
 		SinkWhoMinusRawFloat(const WhoExpressOperation &what, double operand)
 			: SinkWhoOperationRawFloat(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class SinkWhoMinusUncountedInteger
@@ -486,12 +486,12 @@ namespace PILS
 		SinkWhoMinusUncountedInteger(const CallWho &what, const Integer &operand)
 			: SinkWhoOperationUncounted(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class SinkWhoMinusUncountedFloat
@@ -501,12 +501,12 @@ namespace PILS
 		SinkWhoMinusUncountedFloat(const CallWho &what, const Float &operand)
 			: SinkWhoOperationUncounted(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class SinkWhoMinusUncountedTimestamp
@@ -516,7 +516,7 @@ namespace PILS
 		SinkWhoMinusUncountedTimestamp(const CallWho &what, const Timestamp &operand)
 			: SinkWhoOperationUncounted(what, operand)
 		{}
-		const Step *pass(Runner &run, const Timestamp *value);
+        const Step *pass(Runner &run, const Timestamp *value) override;
 	};
 
 	class SinkWhoMinusUncountedDuration
@@ -526,9 +526,9 @@ namespace PILS
 		SinkWhoMinusUncountedDuration(const CallWho &what, const Duration &operand)
 			: SinkWhoOperationUncounted(what, operand)
 		{}
-		const Step *pass(Runner &run, const Timestamp *value);
-		const Step *pass(Runner &run, const PilsDate *value);
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, const Timestamp *value) override;
+        const Step *pass(Runner &run, const PilsDate *value) override;
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class SinkWhoMinusUncountedPilsDate
@@ -538,7 +538,7 @@ namespace PILS
 		SinkWhoMinusUncountedPilsDate(const CallWho &what, const PilsDate &operand)
 			: SinkWhoOperationUncounted(what, operand)
 		{}
-		const Step *pass(Runner &run, const PilsDate *value);
+        const Step *pass(Runner &run, const PilsDate *value) override;
 	};
 
 	class SinkWhoMinusInteger
@@ -548,12 +548,12 @@ namespace PILS
 		SinkWhoMinusInteger(const WhoExpressOperation &what, const Integer *operand)
 			: SinkWhoOperationAny(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class SinkWhoMinusFloat
@@ -563,12 +563,12 @@ namespace PILS
 		SinkWhoMinusFloat(const WhoExpressOperation &what, const Float *operand)
 			: SinkWhoOperationAny(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class SinkWhoMinusTimestamp
@@ -578,7 +578,7 @@ namespace PILS
 		SinkWhoMinusTimestamp(const WhoExpressOperation &what, const Timestamp *operand)
 			: SinkWhoOperationAny(what, operand)
 		{}
-		const Step *pass(Runner &run, const Timestamp *value);
+        const Step *pass(Runner &run, const Timestamp *value) override;
 	};
 
 	class SinkWhoMinusDuration
@@ -588,9 +588,9 @@ namespace PILS
 		SinkWhoMinusDuration(const WhoExpressOperation &what, const Duration *operand)
 			: SinkWhoOperationAny(what, operand)
 		{}
-		const Step *pass(Runner &run, const Timestamp *value);
-		const Step *pass(Runner &run, const PilsDate *value);
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, const Timestamp *value) override;
+        const Step *pass(Runner &run, const PilsDate *value) override;
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class SinkWhoMinusPilsDate
@@ -600,7 +600,7 @@ namespace PILS
 		SinkWhoMinusPilsDate(const WhoExpressOperation &what, const PilsDate *operand)
 			: SinkWhoOperationAny(what, operand)
 		{}
-		const Step *pass(Runner &run, const PilsDate *value);
+        const Step *pass(Runner &run, const PilsDate *value) override;
 	};
 
 	class OperationTimesInteger
@@ -610,7 +610,7 @@ namespace PILS
 		OperationTimesInteger(const HashedConstant *&link, const Integer *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationTimes::singleton, value)
 		{}
-		const CallWho* callWho(const Any *who) const;
+        const CallWho* callWho(const Any *who) const override;
 	};
 
 	class OperationTimesFloat
@@ -620,7 +620,7 @@ namespace PILS
 		OperationTimesFloat(const HashedConstant *&link, const Float *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationTimes::singleton, value)
 		{}
-		const CallWho* callWho(const Any *who) const;
+        const CallWho* callWho(const Any *who) const override;
 	};
 
 	class OperationTimesDuration
@@ -630,7 +630,7 @@ namespace PILS
 		OperationTimesDuration(const HashedConstant *&link, const Duration *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationTimes::singleton, value)
 		{}
-		const CallWho* callWho(const Any *who) const;
+        const CallWho* callWho(const Any *who) const override;
 	};
 
 	class WhoTimesInteger
@@ -640,7 +640,7 @@ namespace PILS
 		WhoTimesInteger(const OperationTimesInteger *value, const Any *who)
 			:  CallWho(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoTimesFloat
@@ -650,7 +650,7 @@ namespace PILS
 		WhoTimesFloat(const OperationTimesFloat *value, const Any *who)
 			:  CallWho(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoTimesDuration
@@ -660,7 +660,7 @@ namespace PILS
 		WhoTimesDuration(const OperationTimesDuration *value, const Any *who)
 			: CallWho(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoExpressTimes
@@ -670,13 +670,13 @@ namespace PILS
 		WhoExpressTimes(const NodeExpressShort *call, const Any *who)
 			: WhoExpressOperation(call, who)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class SinkWhoTimesRawInteger
@@ -686,13 +686,13 @@ namespace PILS
 		SinkWhoTimesRawInteger(const WhoExpressOperation &what, long operand)
 			: SinkWhoOperationRawInteger(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class SinkWhoTimesRawFloat
@@ -702,13 +702,13 @@ namespace PILS
 		SinkWhoTimesRawFloat(const WhoExpressOperation &what, double operand)
 			: SinkWhoOperationRawFloat(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class SinkWhoTimesUncountedInteger
@@ -718,13 +718,13 @@ namespace PILS
 		SinkWhoTimesUncountedInteger(const CallWho &what, const Integer &operand)
 			: SinkWhoOperationUncounted(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class SinkWhoTimesUncountedFloat
@@ -734,13 +734,13 @@ namespace PILS
 		SinkWhoTimesUncountedFloat(const CallWho &what, const Float &operand)
 			: SinkWhoOperationUncounted(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class SinkWhoTimesUncountedDuration
@@ -750,12 +750,12 @@ namespace PILS
 		SinkWhoTimesUncountedDuration(const CallWho &what, const Duration &operand)
 			: SinkWhoOperationUncounted(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class SinkWhoTimesInteger
@@ -765,13 +765,13 @@ namespace PILS
 		SinkWhoTimesInteger(const WhoExpressOperation &what, const Integer *operand)
 			: SinkWhoOperationAny(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class SinkWhoTimesFloat
@@ -781,13 +781,13 @@ namespace PILS
 		SinkWhoTimesFloat(const WhoExpressOperation &what, const Float *operand)
 			: SinkWhoOperationAny(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class SinkWhoTimesDuration
@@ -797,12 +797,12 @@ namespace PILS
 		SinkWhoTimesDuration(const WhoExpressOperation &what, const Duration *operand)
 			: SinkWhoOperationAny(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class OperationDivideInteger
@@ -812,7 +812,7 @@ namespace PILS
 		OperationDivideInteger(const HashedConstant *&link, const Integer *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationDivide::singleton, value)
 		{}
-		const CallWho* callWho(const Any *who) const;
+        const CallWho* callWho(const Any *who) const override;
 	};
 
 	class OperationDivideFloat
@@ -822,7 +822,7 @@ namespace PILS
 		OperationDivideFloat(const HashedConstant *&link, const Float *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationDivide::singleton, value)
 		{}
-		const CallWho* callWho(const Any *who) const;
+        const CallWho* callWho(const Any *who) const override;
 	};
 
 	class OperationDivideDuration
@@ -832,7 +832,7 @@ namespace PILS
 		OperationDivideDuration(const HashedConstant *&link, const Duration *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationDivide::singleton, value)
 		{}
-		const CallWho* callWho(const Any *who) const;
+        const CallWho* callWho(const Any *who) const override;
 	};
 
 	class WhoDivideInteger
@@ -842,7 +842,7 @@ namespace PILS
 		WhoDivideInteger(const OperationDivideInteger *value, const Any *who)
 			:  CallWho(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoDivideFloat
@@ -852,7 +852,7 @@ namespace PILS
 		WhoDivideFloat(const OperationDivideFloat *value, const Any *who)
 			:  CallWho(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoDivideDuration
@@ -862,7 +862,7 @@ namespace PILS
 		WhoDivideDuration(const OperationDivideDuration *value, const Any *who)
 			: CallWho(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoExpressDivide
@@ -872,13 +872,13 @@ namespace PILS
 		WhoExpressDivide(const NodeExpressShort *call, const Any *who)
 			: WhoExpressOperation(call, who)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class SinkWhoDivideRawInteger
@@ -888,13 +888,13 @@ namespace PILS
 		SinkWhoDivideRawInteger(const WhoExpressOperation &what, long operand)
 			: SinkWhoOperationRawInteger(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class SinkWhoDivideRawFloat
@@ -904,13 +904,13 @@ namespace PILS
 		SinkWhoDivideRawFloat(const WhoExpressOperation &what, double operand)
 			: SinkWhoOperationRawFloat(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class SinkWhoDivideUncountedInteger
@@ -920,13 +920,13 @@ namespace PILS
 		SinkWhoDivideUncountedInteger(const CallWho &what, const Integer &operand)
 			: SinkWhoOperationUncounted(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class SinkWhoDivideUncountedFloat
@@ -936,13 +936,13 @@ namespace PILS
 		SinkWhoDivideUncountedFloat(const CallWho &what, const Float &operand)
 			: SinkWhoOperationUncounted(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class SinkWhoDivideUncountedDuration
@@ -952,7 +952,7 @@ namespace PILS
 		SinkWhoDivideUncountedDuration(const CallWho &what, const Duration &operand)
 			: SinkWhoOperationUncounted(what, operand)
 		{}
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class SinkWhoDivideInteger
@@ -962,13 +962,13 @@ namespace PILS
 		SinkWhoDivideInteger(const WhoExpressOperation &what, const Integer *operand)
 			: SinkWhoOperationAny(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class SinkWhoDivideFloat
@@ -978,13 +978,13 @@ namespace PILS
 		SinkWhoDivideFloat(const WhoExpressOperation &what, const Float *operand)
 			: SinkWhoOperationAny(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class SinkWhoDivideDuration
@@ -994,7 +994,7 @@ namespace PILS
 		SinkWhoDivideDuration(const WhoExpressOperation &what, const Duration *operand)
 			: SinkWhoOperationAny(what, operand)
 		{}
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class OperationIntegerDivideInteger
@@ -1004,7 +1004,7 @@ namespace PILS
 		OperationIntegerDivideInteger(const HashedConstant *&link, const Integer *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationIntegerDivide::singleton, value)
 		{}
-		const CallWho* callWho(const Any *who) const;
+        const CallWho* callWho(const Any *who) const override;
 	};
 
 	class OperationIntegerDivideFloat
@@ -1014,7 +1014,7 @@ namespace PILS
 		OperationIntegerDivideFloat(const HashedConstant *&link, const Float *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationIntegerDivide::singleton, value)
 		{}
-		const CallWho* callWho(const Any *who) const;
+        const CallWho* callWho(const Any *who) const override;
 	};
 
 	class OperationIntegerDivideDuration
@@ -1024,7 +1024,7 @@ namespace PILS
 		OperationIntegerDivideDuration(const HashedConstant *&link, const Duration *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationIntegerDivide::singleton, value)
 		{}
-		const CallWho* callWho(const Any *who) const;
+        const CallWho* callWho(const Any *who) const override;
 	};
 
 	class WhoIntegerDivideInteger
@@ -1034,7 +1034,7 @@ namespace PILS
 		WhoIntegerDivideInteger(const OperationIntegerDivideInteger *value, const Any *who)
 			:  CallWho(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoIntegerDivideFloat
@@ -1044,7 +1044,7 @@ namespace PILS
 		WhoIntegerDivideFloat(const OperationIntegerDivideFloat *value, const Any *who)
 			:  CallWho(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoIntegerDivideDuration
@@ -1054,7 +1054,7 @@ namespace PILS
 		WhoIntegerDivideDuration(const OperationIntegerDivideDuration *value, const Any *who)
 			: CallWho(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoExpressIntegerDivide
@@ -1064,13 +1064,13 @@ namespace PILS
 		WhoExpressIntegerDivide(const NodeExpressShort *call, const Any *who)
 			: WhoExpressOperation(call, who)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class SinkWhoIntegerDivideRawInteger
@@ -1080,12 +1080,12 @@ namespace PILS
 		SinkWhoIntegerDivideRawInteger(const WhoExpressOperation &what, long operand)
 			: SinkWhoOperationRawInteger(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class SinkWhoIntegerDivideRawFloat
@@ -1095,12 +1095,12 @@ namespace PILS
 		SinkWhoIntegerDivideRawFloat(const WhoExpressOperation &what, double operand)
 			: SinkWhoOperationRawFloat(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class SinkWhoIntegerDivideUncountedInteger
@@ -1110,12 +1110,12 @@ namespace PILS
 		SinkWhoIntegerDivideUncountedInteger(const CallWho &what, const Integer &operand)
 			: SinkWhoOperationUncounted(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class SinkWhoIntegerDivideUncountedFloat
@@ -1125,12 +1125,12 @@ namespace PILS
 		SinkWhoIntegerDivideUncountedFloat(const CallWho &what, const Float &operand)
 			: SinkWhoOperationUncounted(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class SinkWhoIntegerDivideUncountedDuration
@@ -1140,7 +1140,7 @@ namespace PILS
 		SinkWhoIntegerDivideUncountedDuration(const CallWho &what, const Duration &operand)
 			: SinkWhoOperationUncounted(what, operand)
 		{}
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class SinkWhoIntegerDivideInteger
@@ -1150,12 +1150,12 @@ namespace PILS
 		SinkWhoIntegerDivideInteger(const WhoExpressOperation &what, const Integer *operand)
 			: SinkWhoOperationAny(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class SinkWhoIntegerDivideFloat
@@ -1165,12 +1165,12 @@ namespace PILS
 		SinkWhoIntegerDivideFloat(const WhoExpressOperation &what, const Float *operand)
 			: SinkWhoOperationAny(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class SinkWhoIntegerDivideDuration
@@ -1180,7 +1180,7 @@ namespace PILS
 		SinkWhoIntegerDivideDuration(const WhoExpressOperation &what, const Duration *operand)
 			: SinkWhoOperationAny(what, operand)
 		{}
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class OperationModuloInteger
@@ -1190,7 +1190,7 @@ namespace PILS
 		OperationModuloInteger(const HashedConstant *&link, const Integer *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationModulo::singleton, value)
 		{}
-		const CallWho* callWho(const Any *who) const;
+        const CallWho* callWho(const Any *who) const override;
 	};
 
 	class OperationModuloFloat
@@ -1200,7 +1200,7 @@ namespace PILS
 		OperationModuloFloat(const HashedConstant *&link, const Float *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationModulo::singleton, value)
 		{}
-		const CallWho* callWho(const Any *who) const;
+        const CallWho* callWho(const Any *who) const override;
 	};
 
 	class WhoModuloInteger
@@ -1210,7 +1210,7 @@ namespace PILS
 		WhoModuloInteger(const OperationModuloInteger *value, const Any *who)
 			:  CallWho(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoModuloFloat
@@ -1220,7 +1220,7 @@ namespace PILS
 		WhoModuloFloat(const OperationModuloFloat *value, const Any *who)
 			:  CallWho(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoExpressModulo
@@ -1230,12 +1230,12 @@ namespace PILS
 		WhoExpressModulo(const NodeExpressShort *call, const Any *who)
 			: WhoExpressOperation(call, who)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class SinkWhoModuloRawInteger
@@ -1245,12 +1245,12 @@ namespace PILS
 		SinkWhoModuloRawInteger(const WhoExpressOperation &what, long operand)
 			: SinkWhoOperationRawInteger(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class SinkWhoModuloRawFloat
@@ -1260,12 +1260,12 @@ namespace PILS
 		SinkWhoModuloRawFloat(const WhoExpressOperation &what, double operand)
 			: SinkWhoOperationRawFloat(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class SinkWhoModuloUncountedInteger
@@ -1275,12 +1275,12 @@ namespace PILS
 		SinkWhoModuloUncountedInteger(const CallWho &what, const Integer &operand)
 			: SinkWhoOperationUncounted(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class SinkWhoModuloUncountedFloat
@@ -1290,12 +1290,12 @@ namespace PILS
 		SinkWhoModuloUncountedFloat(const CallWho &what, const Float &operand)
 			: SinkWhoOperationUncounted(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class SinkWhoModuloInteger
@@ -1305,12 +1305,12 @@ namespace PILS
 		SinkWhoModuloInteger(const WhoExpressOperation &what, const Integer *operand)
 			: SinkWhoOperationAny(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class SinkWhoModuloFloat
@@ -1320,18 +1320,18 @@ namespace PILS
 		SinkWhoModuloFloat(const WhoExpressOperation &what, const Float *operand)
 			: SinkWhoOperationAny(what, operand)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
 	};
 
 	class SinkTimescale
 		: public SinkProperty
 	{
-		SinkTimescale *as_SinkTimescale() const;
+        SinkTimescale *as_SinkTimescale() const;
 	protected:
         SinkTimescale(const CallWho &what)
             : SinkProperty(what)
@@ -1345,7 +1345,7 @@ namespace PILS
 		WhoPropertyHexadecimal(const PropertyHexadecimal *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class SinkPropertyHexadecimal
@@ -1355,7 +1355,7 @@ namespace PILS
 		SinkPropertyHexadecimal(const WhoPropertyHexadecimal &what)
 			: SinkProperty(what)
 		{}
-		const Step *pass(Runner &run, const Integer *value);
+        const Step *pass(Runner &run, const Integer *value) override;
 	};
 
 	class SinkRound
@@ -1366,11 +1366,11 @@ namespace PILS
 		SinkRound(const WhoUntypedOperation &what, const Constant *operand)
 			: SinkUntypedConstantOperation(what, operand)
 		{}
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
-		const Step *pass(Runner &run, const Timestamp *value);
-		const Step *pass(Runner &run, const PilsDate *value);
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
+        const Step *pass(Runner &run, const Timestamp *value) override;
+        const Step *pass(Runner &run, const PilsDate *value) override;
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 	class SinkTruncate
@@ -1381,11 +1381,11 @@ namespace PILS
 		SinkTruncate(const WhoUntypedOperation &what, const Constant *operand)
 			: SinkUntypedConstantOperation(what, operand)
 		{}
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
-		const Step *pass(Runner &run, const Timestamp *value);
-		const Step *pass(Runner &run, const PilsDate *value);
-		const Step *pass(Runner &run, const Duration *value);
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
+        const Step *pass(Runner &run, const Timestamp *value) override;
+        const Step *pass(Runner &run, const PilsDate *value) override;
+        const Step *pass(Runner &run, const Duration *value) override;
 	};
 
 
@@ -1396,7 +1396,7 @@ namespace PILS
 		WhoPropertyLocalTime(const PropertyLocalTime *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class SinkPropertyLocalTime
@@ -1406,8 +1406,8 @@ namespace PILS
 		SinkPropertyLocalTime(const WhoPropertyLocalTime &what)
 			: SinkProperty(what)
 		{}
-		const Step *pass(Runner &run, const Timestamp *value);
-		const Step *pass(Runner &run, const PilsDate *value);
+        const Step *pass(Runner &run, const Timestamp *value) override;
+        const Step *pass(Runner &run, const PilsDate *value) override;
 	};
 
 	class WhoPropertyGreenwichMeanTime
@@ -1417,7 +1417,7 @@ namespace PILS
 		WhoPropertyGreenwichMeanTime(const PropertyGreenwichMeanTime *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class SinkPropertyGreenwichMeanTime
@@ -1427,8 +1427,8 @@ namespace PILS
 		SinkPropertyGreenwichMeanTime(const WhoPropertyGreenwichMeanTime &what)
 			: SinkProperty(what)
 		{}
-		const Step *pass(Runner &run, const Timestamp *value);
-		const Step *pass(Runner &run, const PilsDate *value);
+        const Step *pass(Runner &run, const Timestamp *value) override;
+        const Step *pass(Runner &run, const PilsDate *value) override;
 	};
 }
 #endif

@@ -376,7 +376,7 @@ namespace PILS
 			a->releaseReference();
 			b->releaseReference();
 			b = name->clichefy(names, count);
-			delete names;
+            delete[] names;
 		}
 		return (run.sink = this + 1)->pass(run, b);
 	}
@@ -767,7 +767,7 @@ namespace PILS
 			}
 			const Cliche *newCliche = cliche->count > 2 ? (const Cliche*)cliche->head->clichefy(attributeBuffer, cliche->count - 1) : cliche->head->clichefy(*attributeBuffer);
 			cliche->head->addReference();
-			delete attributeBuffer;
+            delete[] attributeBuffer;
 			operand->unduplicateReference();
 			cliche->releaseReference();
 			return (run.sink = this + 1)->pass(run, newCliche);
@@ -807,8 +807,8 @@ namespace PILS
 			node->cliche->head->addReference();
 			const Any *result = newCliche->node(valueBuffer);
 			newCliche->unduplicateReference();
-			delete valueBuffer;
-			delete attributeBuffer;
+            delete[] valueBuffer;
+            delete[] attributeBuffer;
 			operand->unduplicateReference();
 			node->releaseReference();
 			run.sink = this + 1;
@@ -849,8 +849,8 @@ namespace PILS
 			node->cliche->head->addReference();
 			const Any *result = newCliche->node(valueBuffer);
 			newCliche->unduplicateReference();
-			delete valueBuffer;
-			delete attributeBuffer;
+            delete[] valueBuffer;
+            delete[] attributeBuffer;
 			operand->unduplicateReference();
 			node->releaseReference();
 			run.sink = this + 1;

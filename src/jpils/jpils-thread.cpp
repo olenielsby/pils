@@ -79,7 +79,7 @@ namespace PILS
 		private:
 			const Any *what;
 			const Any *where_;
-			void run()
+            void run() override
 			{
 				PilsThread *thread = (PilsThread*)ThreadLookup(juce::Thread::getCurrentThreadId()).lookup();
 				thread->where_ = where_;
@@ -102,7 +102,7 @@ namespace PILS
 		SinkKnotCall(WorkerThread &thread, const Any *whence)
 			: thread(thread), whence(whence)
 		{}
-		Sink *kick(Runner &run)
+        Sink *kick(Runner &run) override
 		{
 			run.where_ = whence;
 			return this + 1;
@@ -116,48 +116,48 @@ namespace PILS
 		WorkerThread &thread;
 		const Any *whence;
 	private:
-		const Step *pass(Runner &run, const Any *result)
+        const Step *pass(Runner &run, const Any *result) override
 		{
 			new (thread.allocate(sizeof(KnotStepResult))) KnotStepResult(result);
 			return backToWork(run);
 		}
 
-		const Step *called(Runner &run, const Constant &call)
+        const Step *called(Runner &run, const Constant &call) override
 		{
 			new (thread.allocate(sizeof(KnotStepCalled))) KnotStepCalled(call);
 			return backToWork(run);
 		}
-		const Step *called(Runner &run, const Integer &call)
+        const Step *called(Runner &run, const Integer &call) override
 		{
 			new (thread.allocate(sizeof(KnotStepCalled))) KnotStepCalled(call);
 			return backToWork(run);
 		}
-		const Step *called(Runner &run, const ListConstant &call)
+        const Step *called(Runner &run, const ListConstant &call) override
 		{
 			new (thread.allocate(sizeof(KnotStepCalled))) KnotStepCalled(call);
 			return backToWork(run);
 		}
-		const Step *called(Runner &run, const NodeConstant &call)
+        const Step *called(Runner &run, const NodeConstant &call) override
 		{
 			new (thread.allocate(sizeof(KnotStepCalled))) KnotStepCalled(call);
 			return backToWork(run);
 		}
-		const Step *called(Runner &run, const Empty &call)
+        const Step *called(Runner &run, const Empty &call) override
 		{
 			new (thread.allocate(sizeof(KnotStepCalled))) KnotStepCalled(call);
 			return backToWork(run);
 		}
-		const Step *called(Runner &run, const ListExpress &call)
+        const Step *called(Runner &run, const ListExpress &call) override
 		{
 			new (thread.allocate(sizeof(KnotStepCalled))) KnotStepCalled(call);
 			return backToWork(run);
 		}
-		const Step *called(Runner &run, const NodeExpress &call)
+        const Step *called(Runner &run, const NodeExpress &call) override
 		{
 			new (thread.allocate(sizeof(KnotStepCalled))) KnotStepCalled(call);
 			return backToWork(run);
 		}
-		const Step *called(Runner &run, const Any &call, const Any *assignValue)
+        const Step *called(Runner &run, const Any &call, const Any *assignValue) override
 		{
 			new (thread.allocate(sizeof(KnotStepAssignCalled))) KnotStepAssignCalled(call, assignValue);
 			return backToWork(run);
@@ -202,7 +202,7 @@ namespace PILS
 			WorkerThread &thread;
 			const Any &who;
 			const Any &call;
-			const Step *step_(Runner &run) const
+            const Step *step_(Runner &run) const override
 			{
 				new (run.allocate(sizeof(SinkKnotCall))) SinkKnotCall(thread, run.where_);
 				run.where_ = thread.where_;
@@ -227,7 +227,7 @@ namespace PILS
 			const Any &who;
 			const Any &call;
 			const Any *assignValue;
-			const Step *step_(Runner &run) const
+            const Step *step_(Runner &run) const override
 			{
 				new (run.allocate(sizeof(SinkKnotCall))) SinkKnotCall(thread, run.where_);
 				run.where_ = thread.where_;

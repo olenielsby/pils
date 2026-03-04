@@ -12,7 +12,7 @@ namespace PILS
 		ClicheSplitter(const HashedConstant *&link, const Constant *h, const Constant *const *a, size_t c)
 			: ClicheTrailer(link, h, a, c)
 		{}
-		const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const;
+        const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const override;
 	};
 
 	class Splitter
@@ -22,7 +22,7 @@ namespace PILS
 		Splitter(const HashedConstant *&link, const ClicheSplitter &cliche, const Constant *const *element)
 			: NodeConstantTrailer(link, cliche, element)
 		{}
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	};
 
 	class WhoSplitter
@@ -32,7 +32,7 @@ namespace PILS
 		WhoSplitter(const Splitter *call, const Any *who)
 			: CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class SinkWhoSplitter
@@ -54,7 +54,7 @@ namespace PILS
 			: splitter(splitter), anchor(anchor), at(at), end(end), last(&Builtin::name.dollar)
 		{}
 		Sink *kick(Runner &run);
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 		const Splitter *splitter;
 	private:
 		const Any *const anchor;

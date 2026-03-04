@@ -1040,7 +1040,7 @@ small (.png)><:[module:. pils editor detective match .timestamp 2011-07-21T00:36
       file (path . "system/new." [pils-configuration:pils-filetype])
       text .:need
     .relevance :if name = [pils-configuration:language] lower; 2
-    .else name = "english"
+    .else name bug {} call {"english"|:ok 1} {?|:ok 0} bug {}    !! = "english" !!
   }
   order [call: choice]
 }

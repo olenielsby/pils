@@ -10,7 +10,7 @@ namespace PILS
 		OperationEqualConstant(const HashedConstant *&link, const Constant *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationEqual::singleton, value)
 		{}
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	};
 
 	class OperationEqualInteger
@@ -20,7 +20,7 @@ namespace PILS
 		OperationEqualInteger(const HashedConstant *&link, const Integer *value)
 			: OperationEqualConstant(link, value)
 		{}
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	};
 
 	class OperationEqualFloat
@@ -30,7 +30,7 @@ namespace PILS
 		OperationEqualFloat(const HashedConstant *&link, const Float *value)
 			: OperationEqualConstant(link, value)
 		{}
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	};
 
 	class OperationEqualString
@@ -40,7 +40,7 @@ namespace PILS
 		OperationEqualString(const HashedConstant *&link, const PilsString *value)
 			: OperationEqualConstant(link, value)
 		{}
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	};
 
 	class WhoEqualConstant
@@ -50,8 +50,8 @@ namespace PILS
 		WhoEqualConstant(const OperationEqualConstant *value, const Any *who)
 			:  CallWho(value, who)
 		{}
-		const Step *step_(Runner &run) const;
-		void compilePattern(Compiling &compiling) const;
+        const Step *step_(Runner &run) const override;
+        void compilePattern(Compiling &compiling) const override;
 	};
 
 	class WhoEqualInteger
@@ -61,7 +61,7 @@ namespace PILS
 		WhoEqualInteger(const OperationEqualInteger *value, const Any *who)
 			:  WhoEqualConstant(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoEqualFloat
@@ -71,7 +71,7 @@ namespace PILS
 		WhoEqualFloat(const OperationEqualFloat *value, const Any *who)
 			:  WhoEqualConstant(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoEqualString
@@ -81,7 +81,7 @@ namespace PILS
 		WhoEqualString(const OperationEqualString *value, const Any *who)
 			:  WhoEqualConstant(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoExpressEqual
@@ -91,8 +91,8 @@ namespace PILS
 		WhoExpressEqual(const NodeExpressShort *call, const Any *who)
 			: WhoExpressOperation(call, who)
 		{}
-		const Step *step_(Runner &run) const;
-		void compilePattern(Compiling &compiling) const;
+        const Step *step_(Runner &run) const override;
+        void compilePattern(Compiling &compiling) const override;
 	};
 
 	class SinkEqualOperand
@@ -438,7 +438,7 @@ namespace PILS
 		OperationNotEqualConstant(const HashedConstant *&link, const Constant *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationNotEqual::singleton, value)
 		{}
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	};
 
 	class OperationNotEqualInteger
@@ -448,7 +448,7 @@ namespace PILS
 		OperationNotEqualInteger(const HashedConstant *&link, const Integer *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationNotEqual::singleton, value)
 		{}
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	};
 
 	class OperationNotEqualFloat
@@ -458,7 +458,7 @@ namespace PILS
 		OperationNotEqualFloat(const HashedConstant *&link, const Float *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationNotEqual::singleton, value)
 		{}
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	};
 
 	class OperationNotEqualString
@@ -468,7 +468,7 @@ namespace PILS
 		OperationNotEqualString(const HashedConstant *&link, const PilsString *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationNotEqual::singleton, value)
 		{}
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	};
 
 	class WhoNotEqualConstant
@@ -478,7 +478,7 @@ namespace PILS
 		WhoNotEqualConstant(const OperationNotEqualConstant *value, const Any *who)
 			:  CallWho(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoNotEqualInteger
@@ -488,7 +488,7 @@ namespace PILS
 		WhoNotEqualInteger(const OperationNotEqualInteger *value, const Any *who)
 			:  CallWho(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoNotEqualFloat
@@ -498,7 +498,7 @@ namespace PILS
 		WhoNotEqualFloat(const OperationNotEqualFloat *value, const Any *who)
 			:  CallWho(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoNotEqualString
@@ -508,7 +508,7 @@ namespace PILS
 		WhoNotEqualString(const OperationNotEqualString *value, const Any *who)
 			:  CallWho(value, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoExpressNotEqual
@@ -518,7 +518,7 @@ namespace PILS
 		WhoExpressNotEqual(const NodeExpressShort *call, const Any *who)
 			: WhoExpressOperation(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class SinkNotEqualOperand
@@ -820,7 +820,7 @@ namespace PILS
 		OperationLessInteger(const HashedConstant *&link, const Integer *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationLess::singleton, value)
 		{}
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	};
 
 	class OperationLessFloat
@@ -830,7 +830,7 @@ namespace PILS
 		OperationLessFloat(const HashedConstant *&link, const Float *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationLess::singleton, value)
 		{}
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	};
 
 	class OperationLessString
@@ -840,7 +840,7 @@ namespace PILS
 		OperationLessString(const HashedConstant *&link, const PilsString *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationLess::singleton, value)
 		{}
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	};
 
 	class OperationLessEqualInteger
@@ -850,7 +850,7 @@ namespace PILS
 		OperationLessEqualInteger(const HashedConstant *&link, const Integer *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationLessEqual::singleton, value)
 		{}
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	};
 
 	class OperationLessEqualFloat
@@ -860,7 +860,7 @@ namespace PILS
 		OperationLessEqualFloat(const HashedConstant *&link, const Float *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationLessEqual::singleton, value)
 		{}
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	};
 
 	class OperationLessEqualString
@@ -870,7 +870,7 @@ namespace PILS
 		OperationLessEqualString(const HashedConstant *&link, const PilsString *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationLessEqual::singleton, value)
 		{}
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	};
 
 	class OperationGreaterInteger
@@ -880,7 +880,7 @@ namespace PILS
 		OperationGreaterInteger(const HashedConstant *&link, const Integer *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationGreater::singleton, value)
 		{}
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	};
 
 	class OperationGreaterFloat
@@ -890,7 +890,7 @@ namespace PILS
 		OperationGreaterFloat(const HashedConstant *&link, const Float *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationGreater::singleton, value)
 		{}
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	};
 
 	class OperationGreaterString
@@ -900,7 +900,7 @@ namespace PILS
 		OperationGreaterString(const HashedConstant *&link, const PilsString *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationGreater::singleton, value)
 		{}
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	};
 
 	class OperationGreaterEqualInteger
@@ -910,7 +910,7 @@ namespace PILS
 		OperationGreaterEqualInteger(const HashedConstant *&link, const Integer *value)
 			: NodeConstantTiny(link, BuiltinClicheOperationGreaterEqual::singleton, value)
 		{}
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	};
 
 	class OperationGreaterEqualFloat
@@ -920,7 +920,7 @@ namespace PILS
 		OperationGreaterEqualFloat(const HashedConstant *&link, const Float *value)
 			: NodeConstantTiny(link,  BuiltinClicheOperationGreaterEqual::singleton, value)
 		{}
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	};
 
 	class OperationGreaterEqualString
@@ -930,7 +930,7 @@ namespace PILS
 		OperationGreaterEqualString(const HashedConstant *&link, const PilsString *value)
 			: NodeConstantTiny(link,  BuiltinClicheOperationGreaterEqual::singleton, value)
 		{}
-		const CallWho *callWho(const Any *who) const;
+        const CallWho *callWho(const Any *who) const override;
 	};
 
 	class WhoLessInteger
@@ -940,7 +940,7 @@ namespace PILS
 		WhoLessInteger(const OperationLessInteger *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoLessFloat
@@ -950,7 +950,7 @@ namespace PILS
 		WhoLessFloat(const OperationLessFloat *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoLessString
@@ -960,7 +960,7 @@ namespace PILS
 		WhoLessString(const OperationLessString *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoLessExpress
@@ -970,7 +970,7 @@ namespace PILS
 		WhoLessExpress(const NodeExpressTiny *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoLessEqualInteger
@@ -980,7 +980,7 @@ namespace PILS
 		WhoLessEqualInteger(const OperationLessEqualInteger *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoLessEqualFloat
@@ -990,7 +990,7 @@ namespace PILS
 		WhoLessEqualFloat(const OperationLessEqualFloat *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoLessEqualString
@@ -1000,7 +1000,7 @@ namespace PILS
 		WhoLessEqualString(const OperationLessEqualString *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoLessEqualExpress
@@ -1010,7 +1010,7 @@ namespace PILS
 		WhoLessEqualExpress(const NodeExpressTiny *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoGreaterInteger
@@ -1020,7 +1020,7 @@ namespace PILS
 		WhoGreaterInteger(const OperationGreaterInteger *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoGreaterFloat
@@ -1030,7 +1030,7 @@ namespace PILS
 		WhoGreaterFloat(const OperationGreaterFloat *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoGreaterString
@@ -1040,7 +1040,7 @@ namespace PILS
 		WhoGreaterString(const OperationGreaterString *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoGreaterExpress
@@ -1050,7 +1050,7 @@ namespace PILS
 		WhoGreaterExpress(const NodeExpressTiny *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoGreaterEqualInteger
@@ -1060,7 +1060,7 @@ namespace PILS
 		WhoGreaterEqualInteger(const OperationGreaterEqualInteger *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoGreaterEqualFloat
@@ -1070,7 +1070,7 @@ namespace PILS
 		WhoGreaterEqualFloat(const OperationGreaterEqualFloat *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoGreaterEqualString
@@ -1080,7 +1080,7 @@ namespace PILS
 		WhoGreaterEqualString(const OperationGreaterEqualString *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class WhoGreaterEqualExpress
@@ -1090,7 +1090,7 @@ namespace PILS
 		WhoGreaterEqualExpress(const NodeExpressTiny *call, const Any *who)
 			:  CallWho(call, who)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class SinkCompare

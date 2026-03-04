@@ -15,9 +15,9 @@ namespace PILS
 			: ReallySpecial(link), PlugLibrary(handle)
 		{}
 		size_t unlinkAndGetSize();
-		void write(Writing &writing) const;
-		const Special *as_Special() const;
-		bool specialComparing(const PlugLibraryLookup &lookup) const;
+        void write(Writing &writing) const override;
+        const Special *as_Special() const;
+        bool specialComparing(const PlugLibraryLookup &lookup) const override;
 	};
 
 	class PlugObjectSpecial
@@ -29,9 +29,9 @@ namespace PILS
 			: ReallySpecial(link), PlugObject(object, types, type, plug, handle)
 		{}
 		size_t unlinkAndGetSize();
-		void write(Writing &writing) const;
-		const Special *as_Special() const;
-		bool specialComparing(const PlugObjectLookup &lookup) const;
+        void write(Writing &writing) const override;
+        const Special *as_Special() const override;
+        bool specialComparing(const PlugObjectLookup &lookup) const override;
 		const Any *specialCalling(Runner &run, const Constant &name, const Any &arg) const
 		{
 			return PlugObject::specialCalling(run, name, arg);

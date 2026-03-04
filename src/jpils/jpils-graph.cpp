@@ -1,7 +1,7 @@
 /* This file is public domain */
-#include "pils-kernel/pipe.h"
-#include "pils-kernel/statement.h"
-#include "pilsplug/plughost.h"
+#include "pipe.h"
+#include "statement.h"
+//#include "pilsplug/plughost.h"
 #include "jpils-thread.h"
 #include "jpils-binding-base.h"
 #include "jpils-graph.h"
@@ -10,7 +10,7 @@ namespace PILS
 {
 	class ListRecognizer : public Recognizer
 	{
-		virtual bool recognizing(const Any *const *elements, size_t count)
+        bool recognizing(const Any *const *elements, size_t count) override
 		{
 			for(size_t i = 0; i < count; i++)
 			{
@@ -27,11 +27,11 @@ namespace PILS
 		Drawing(juce::Graphics &graphics)
 			: graphics(graphics), transform(&juce::AffineTransform::identity)
 		{}
-		virtual bool recognizing(const PilsGraph &drawable)
+        bool recognizing(const PilsGraph &drawable) override
 		{
 			return drawable.draw(*this);
 		}
-		virtual bool recognizing(const juce::Colour &color)
+        bool recognizing(const juce::Colour &color) override
 		{
 			graphics.fillAll(color);
 			return true;
@@ -44,11 +44,11 @@ namespace PILS
 	{
 	public:
 		StrokeWalk() : transform(&juce::AffineTransform::identity) {}
-		virtual bool recognizing(const PilsGraph &drawable)
+        bool recognizing(const PilsGraph &drawable) override
 		{
 			return drawable.strokeWalk(*this);
 		}
-		virtual bool recognizing(const juce::Colour &color)
+        bool recognizing(const juce::Colour &color) override
 		{
 			return true;
 		}
@@ -59,17 +59,17 @@ namespace PILS
 	class BrushMaker : public Recognizer
 	{
 	public:
-		bool recognizing(const juce::Colour &color)
+        bool recognizing(const juce::Colour &color) override
 		{
 			fillType.setColour(color);
 			return true;
 		}
-		bool recognizing(const PilsColor &color)
+        bool recognizing(const PilsColor &color) override
 		{
 			fillType.setColour(juce::Colour(color.value));
 			return true;
 		}
-		bool recognizing(const juce::ColourGradient &gradient)
+        bool recognizing(const juce::ColourGradient &gradient) override
 		{
 			fillType.setGradient(gradient);
 			return true;
@@ -89,7 +89,7 @@ namespace PILS
 		class PilsDrawableRecognizer : public Recognizer
 		{
 		public:
-			bool recognizing(const PilsGraph &drawable)
+            bool recognizing(const PilsGraph &drawable) override
 			{
 				value = &drawable;
 				return true;
@@ -104,7 +104,7 @@ namespace PILS
 	class Bounding : public Box, public ListRecognizer
 	{
 	public:
-		virtual bool recognizing(const PilsGraph &drawable)
+        bool recognizing(const PilsGraph &drawable) override
 		{
 			const Box &box = drawable.box;
 			if (!box.isEmpty())
@@ -482,7 +482,7 @@ bad:
 	size_t FontName::unlinkAndGetSize()
 	{
 		ClicheShort::unlinkAndGetSize();
-		font.~font();
+        font.~Font();
 		return sizeof(FontName);
 	}
 
@@ -511,7 +511,7 @@ bad:
 	{
 		class fontRecognizer : public Recognizer
 		{
-			bool recognizing(const PilsFont &thing)
+            bool recognizing(const PilsFont &thing) override
 			{
 				font = &thing.font;
 				return true;
@@ -669,19 +669,19 @@ bad:
 				{
 				public:
 					const juce::Colour *color;
-					bool recognizing(const juce::Colour &thing)
+                    bool recognizing(const juce::Colour &thing) override
 					{
 						color = &thing;
 						return true;
 					}
-					bool recognizing(const PilsColor &thing)
+                    bool recognizing(const PilsColor &thing) override
 					{
 						color = (const juce::Colour *)&thing.value;
 						return true;
 					}
 				} color;
 				double at;
-				virtual bool recognizing(const Any *const *elements, size_t count)
+                virtual bool recognizing(const Any *const *elements, size_t count) override
 				{
 					return
 						count == 2
@@ -723,8 +723,8 @@ bad:
 		const juce::Image image = juce::ImageFileFormat::loadFrom(value->value, value->count->value);
 		if (image.isValid())
 			return new (Heap::allocate(sizeof(ImageNode))) ImageNode(link, *this, value, image, true);
-		else if (const juce::Drawable *drawable = juce::Drawable::createFromImageData(value->value, value->count->value))
-			return new (Heap::allocate(sizeof(JuceDrawableNode))) JuceDrawableNode(link, *this, value, drawable, true);
+        // else if (const juce::Drawable *drawable = juce::Drawable::createFromImageData(value->value, value->count->value))
+        // 	return new (Heap::allocate(sizeof(JuceDrawableNode))) JuceDrawableNode(link, *this, value, drawable, true);
 		else return BuiltinClicheTiny::newNode(link, value);
 	}
 
@@ -741,12 +741,12 @@ bad:
 			const HashedConstant *&link;
 			const BuiltinClicheImage &cliche;
 			const Special *value;
-			bool recognizing(const juce::Image &image)
+            bool recognizing(const juce::Image &image) override
 			{
 				result = new (Heap::allocate(sizeof(ImageNode))) ImageNode(link, cliche, value, image, false);
 				return true;
 			}
-			bool recognizing(const juce::Drawable &drawable)
+            bool recognizing(const juce::Drawable &drawable) override
 			{
 				result = new (Heap::allocate(sizeof(JuceDrawableNode))) JuceDrawableNode(link, cliche, value, &drawable, false);
 				return true;
@@ -842,7 +842,16 @@ bad:
 		if (transform.mat00 == 1 && transform.mat01 == 0 && transform.mat10 == 0 && transform.mat11 == 1)
 			drawing.graphics.drawSingleLineText(text, (int)(transform.mat02), (int)(transform.mat12));
 		else
-			drawing.graphics.drawTextAsPath(text, transform);
+            // drawing.graphics.drawTextAsPath(text, transform);
+        {
+            juce::GlyphArrangement glyphs;
+            glyphs.addLineOfText(font, text, 0.0f, 0.0f);
+
+            juce::Path path;
+            glyphs.createPath(path);
+
+            drawing.graphics.fillPath(path, transform);
+        }
 		return true;
 	}
 

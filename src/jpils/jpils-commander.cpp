@@ -1,7 +1,7 @@
 /* This file is public domain */
-#include "pils-kernel/pipe.h"
-#include "pils-kernel/statement.h"
-#include "pilsplug/plughost.h"
+#include "pipe.h"
+#include "statement.h"
+//#include "pilsplug/plughost.h"
 #include "jpils-thread.h"
 #include "jpils-binding-base.h"
 #include "jpils-commander.h"
@@ -24,7 +24,7 @@ namespace PILS
 				string = old.substring(0,1).toUpperCase();
 				string+=old.substring(1);
 			}
-			if (::juce::File::separatorString[0] == '\\')	string = string.replaceCharacter('\\', '/');
+            if (::juce::File::getSeparatorChar() == '\\')	string = string.replaceCharacter('\\', '/');
 			if (file.isDirectory())	string += '/';
 			aim(PilsString::get(name));
 			NodeBuilder<const Constant>::set(pils(string));

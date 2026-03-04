@@ -5,6 +5,8 @@
 #include "jpils-thread.h"
 #undef Point
 
+using namespace juce;
+
 typedef ::juce::Image::PixelFormat PixelFormat;
 
 namespace PILS
@@ -55,9 +57,9 @@ namespace PILS
 	public:
 		JuceStaticClass(const char *namestring);
 		JuceStaticClass(const JuceName *name);
-		const JuceName &getName() const {return name;}
-		void* cast(const TypedPtr &ptr) const;
-		void release(void *ptr) const;
+        const JuceName &getName() const  override {return name;}
+        void* cast(const TypedPtr &ptr) const override;
+        void release(void *ptr) const override;
 	private:
 		friend class JuceClass;
 		const JuceName &name;
@@ -68,7 +70,7 @@ namespace PILS
 	{
 	public:
 		JuceDummyClass() : JuceStaticClass("") {}
-		void* cast(const TypedPtr &ptr) const;
+        void* cast(const TypedPtr &ptr) const override;
 		static const JuceDummyClass singleton;
 	};
 
@@ -87,9 +89,9 @@ namespace PILS
 		{
 			(Converter *&)(getName().typecheck) = this;
 		}
-		const JuceName &getName() const {return staticClass.name;}
-		void release(void *ptr) const;
-		void* cast(const TypedPtr &ptr) const;
+        const JuceName &getName() const  override {return staticClass.name;}
+        void release(void *ptr) const override;
+        void* cast(const TypedPtr &ptr) const override;
 		virtual const JuceReference *wrap(void *object, CallbackHelperBase *helper) const;
 		virtual const Constant *ownedReference(void *object) const;
 		JuceStaticClass staticClass;
@@ -104,8 +106,8 @@ namespace PILS
 			const size_t offset;
 		};
 		static const Mixin mixins[];
-		const Constant *reference(const void *) const;
-		bool converting(const JuceReference &argument); // for typechecking
+        const Constant *reference(const void *) const;
+        bool converting(const JuceReference &argument) override; // for typechecking
 	private:
 		void (* const releaseThunk)(void *);
 		const int mixinCount;
@@ -119,8 +121,8 @@ namespace PILS
 		JuceReferenceCountedClass(const char *name, int level, const JuceClass *const *lineage, void (* releaseThunk)(void *), int mixinCount, const JuceClass::Mixin *mixinOf)
 			: JuceClass(name, level, lineage, releaseThunk, mixinCount, mixinOf)
 		{}
-		const JuceReference *newSpecial(const HashedConstant *&link, TypedPtr &object, const JuceReference *owner) const;
-		const JuceReference *wrap(void *object, CallbackHelperBase *helper) const;
+        const JuceReference *newSpecial(const HashedConstant *&link, TypedPtr &object, const JuceReference *owner) const override;
+        const JuceReference *wrap(void *object, CallbackHelperBase *helper) const override;
 	};
 
 	class JuceComponentClass
@@ -130,8 +132,8 @@ namespace PILS
 		JuceComponentClass(const char *name, int level, const JuceClass *const *lineage, void (* releaseThunk)(void *), int mixinCount, const JuceClass::Mixin *mixinOf)
 			: JuceClass(name, level, lineage, releaseThunk, mixinCount, mixinOf)
 		{}
-		const JuceReference *wrap(void *object, CallbackHelperBase *helper) const;
-		const Constant *ownedReference(void *object) const;
+        const JuceReference *wrap(void *object, CallbackHelperBase *helper) const override;
+        const Constant *ownedReference(void *object) const override;
 	};
 
 	class JuceImageClass
@@ -141,7 +143,7 @@ namespace PILS
 		JuceImageClass(const char *name, int level, const JuceClass *const *lineage, void (* releaseThunk)(void *), int mixinCount, const JuceClass::Mixin *mixinOf)
 			: JuceClass(name, level, lineage, releaseThunk, mixinCount, mixinOf)
 		{}
-		bool recognizing(const void *instance, Recognizer &recognizer) const;
+        bool recognizing(const void *instance, Recognizer &recognizer) const override;
 	};
 
 	class JuceDrawableClass
@@ -151,7 +153,7 @@ namespace PILS
 		JuceDrawableClass(const char *name, int level, const JuceClass *const *lineage, void (* releaseThunk)(void *), int mixinCount, const JuceClass::Mixin *mixinOf)
 			: JuceClass(name, level, lineage, releaseThunk, mixinCount, mixinOf)
 		{}
-		bool recognizing(const void *instance, Recognizer &recognizer) const;
+        bool recognizing(const void *instance, Recognizer &recognizer) const override;
 	};
 
 	class JuceColourClass
@@ -161,7 +163,7 @@ namespace PILS
 		JuceColourClass(const char *name, int level, const JuceClass *const *lineage, void (* releaseThunk)(void *), int mixinCount, const JuceClass::Mixin *mixinOf)
 			: JuceClass(name, level, lineage, releaseThunk, mixinCount, mixinOf)
 		{}
-		bool recognizing(const void *instance, Recognizer &recognizer) const;
+        bool recognizing(const void *instance, Recognizer &recognizer) const override;
 	};
 
 	class JuceReference
@@ -179,17 +181,17 @@ namespace PILS
 		JuceReference(TypedPtr &typedPtr)
 			: TypedPtr(typedPtr), owner(NULL)
 		{}
-		const Any *specialCalling(Runner &run, const JuceName &method, const Any &arg) const;
-		const Any *specialCalling(Runner &run, const JuceName &method) const;
-		bool specialComparing(const JuceLookup &lookup) const;
-		bool converting(JuceSpecialConverter &converter) const;
-		bool recognize(Recognizer &recognizer) const;
-		juce::Graphics *as_Graphics() const;
+        const Any *specialCalling(Runner &run, const JuceName &method, const Any &arg) const override;
+        const Any *specialCalling(Runner &run, const JuceName &method) const override;
+        bool specialComparing(const JuceLookup &lookup) const override;
+        bool converting(JuceSpecialConverter &converter) const override;
+        bool recognize(Recognizer &recognizer) const override;
+        juce::Graphics *as_Graphics() const override;
 		friend class CallbackHelper;
 		friend class CallbackHelperBase;
 	private:
-		size_t unlinkAndGetSize();
-		void write(Writing &writing) const;
+        size_t unlinkAndGetSize() override;
+        void write(Writing &writing) const override;
 	};
 
 	class JuceOwnedReference
@@ -200,8 +202,8 @@ namespace PILS
 			: JuceReference(link, typedPtr, NULL)
 		{}
 	private:
-		size_t unlinkAndGetSize();
-		void write(Writing &writing) const;
+        size_t unlinkAndGetSize() override;
+        void write(Writing &writing) const override;
 	};
 
 	class JuceObject
@@ -209,13 +211,13 @@ namespace PILS
 	{
 	public:
 		JuceObject(const HashedConstant *&link, TypedPtr &typedPtr, CallbackHelperBase *helper);
-		virtual void alert();
+        void alert() override;
 		virtual void deleted();
 	protected:
 		CallbackHelperBase *const helper;
 	private:
-		size_t unlinkAndGetSize();
-		void write(Writing &writing) const;
+        size_t unlinkAndGetSize() override;
+        void write(Writing &writing) const override;
 	};
 
 	class JuceComponent
@@ -223,15 +225,15 @@ namespace PILS
 	{
 	public:
 		JuceComponent(const HashedConstant *&link, TypedPtr &typedPtr, CallbackHelperBase *helper);
-		void alert();
-		void deleted();
-		const Any *mindError() const;
-		const Step *calling(Runner &run, const Constant &call) const;
-		const Any *specialCalling(Runner &run, const Strap &call) const;
-		bool isMultipleReferenced() const;
+        void alert() override;
+        void deleted() override;
+        const Any *mindError() const override;
+        const Step *calling(Runner &run, const Constant &call) const override;
+        const Any *specialCalling(Runner &run, const Strap &call) const override;
+        bool isMultipleReferenced() const override;
 		static volatile long desktopComponentCount;
 	private:
-		size_t unlinkAndGetSize();
+        size_t unlinkAndGetSize() override;
 		mutable Strap::Sticker strapSticker;
 		bool desktop;
 	};
@@ -244,10 +246,10 @@ namespace PILS
 		JuceLookup(TypedPtr &object)
 			: object(object), owner(NULL)
 		{}
-		const ReallySpecial *newSpecial(const HashedConstant *&link);
-		bool compare(const ReallySpecial &special) const;
-		void unduplicate();
-		size_t hash() const;
+        const ReallySpecial *newSpecial(const HashedConstant *&link) override;
+        bool compare(const ReallySpecial &special) const override;
+        void unduplicate() override;
+        size_t hash() const override;
 		TypedPtr &object;
 		mutable const JuceReference *owner;
 	};
@@ -257,8 +259,8 @@ namespace PILS
 	{
 	public:
 		JuceClassConverter(const JuceClass &toClass, bool nullable) : toClass(toClass), nullable(nullable) {}
-		bool converting(const JuceReference &argument);
-		bool convert(const Cliche &value);
+        bool converting(const JuceReference &argument) override;
+        bool convert(const Cliche &value) override;
 		void *value;
 	private:
 		const JuceClass &toClass;
@@ -343,18 +345,18 @@ namespace PILS
 		bool fill(Range<int> &slot);
 		bool fill(Range<double> &slot);
 		bool fill(var &slot);
-		bool fill(var::identifier &slot);
-		bool fill(juce::Image::SharedImage *&slot);
+        bool fill(Identifier &slot);
+        bool fill(juce::Image *&slot);
 		bool fill(StringPairArray &slot);
 		bool fill(StringArray &slot);
 		bool fill(const StringArray &slot);
-		bool fill(BitArray &slot);
-		bool fill(const BitArray &slot);
+        bool fill(BigInteger &slot);
+        bool fill(const BigInteger &slot);
 		bool fill(char *&slot);
 		bool fill(char &slot);
 		bool fill(signed char &slot);
 		bool fill(const char *&slot);
-		bool fill(const void *&slot);
+        bool fill(const void *&slot);
 		bool fill(juce_wchar *&slot);
 		bool fill(const juce_wchar *&slot);
 		bool fill(const tm *&slot);
@@ -365,7 +367,7 @@ namespace PILS
 		bool fill(const DirectoryContentsList::FileInfo *&slot);
 		bool fill(const File &slot);
 		bool fill(const juce::uint8 *&slot);
-		bool fill(void *&slot);
+        bool fill(void *&slot);
 		bool fill(const SparseSet<int> &slot);
 		bool fill(MessageCallbackFunction *&slot);
 		bool fill(Array <PropertyComponent *> &slot);
@@ -385,6 +387,9 @@ namespace PILS
 		bool fill(const RelativeCoordinate &dummy);
 		bool fill(const RelativeRectangle &dummy);
 		bool fill(juce::BorderSize<int>&slot);
+
+        bool fill(juce_wchar &slot);
+
 		template <typename T> bool fill(ArrayArgument<T *>&slot, int &count, const JuceClass &class_)
 		{
 			const Any *argument = getArgument();
@@ -478,7 +483,7 @@ namespace PILS
 		UnimplementedMethod(const JuceClassBase &class_, const char *name, ArgumentsThunk argumentsThunk, Thunk thunk)
 			: Method(class_, name, argumentsThunk, thunk)
 		{}
-		const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const;
+        const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const override;
 	};
 
 	class VoidMethod
@@ -491,7 +496,7 @@ namespace PILS
 		VoidMethod(const JuceClassBase &class_, const JuceName *name, ArgumentsThunk argumentsThunk, Thunk thunk)
 			: Method(class_, name, argumentsThunk, thunk)
 		{}
-		const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const;
+        const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const override;
 	};
 
 	class PilsReferenceMethod
@@ -501,7 +506,7 @@ namespace PILS
 		PilsReferenceMethod(const JuceClassBase &class_, const char *name, ArgumentsThunk argumentsThunk, Thunk thunk)
 			: Method(class_, name, argumentsThunk, thunk)
 		{}
-		const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const;
+        const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const override;
 	};
 
 	class ReferenceMethod /* creates references without ownership */
@@ -514,7 +519,7 @@ namespace PILS
 		ReferenceMethod(const JuceClassBase &class_, const JuceName *name, ArgumentsThunk argumentsThunk, Thunk thunk, const JuceClass &resultClass)
 			: Method(class_, name, argumentsThunk, thunk), resultClass(resultClass)
 		{}
-		const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const;
+        const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const override;
 	protected:
 		const JuceClass &resultClass;
 	};
@@ -529,7 +534,7 @@ namespace PILS
 		FactoryMethod(const JuceClassBase &class_, const JuceName *name, ArgumentsThunk argumentsThunk, Thunk thunk, const JuceClass &resultClass)
 			: ReferenceMethod(class_, name, argumentsThunk, thunk, resultClass)
 		{}
-		const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const;
+        const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const override;
 	};
 
 	/* this template doesn't compile when instantiated - CopyMethod classes are expanded by the plumming-generator
@@ -563,7 +568,7 @@ namespace PILS
 		ConstructorMethod(const JuceClass &class_, const JuceName *name, ArgumentsThunk argumentsThunk, Thunk thunk, const JuceClass &resultClass)
 			: FactoryMethod(class_.staticClass, name, argumentsThunk, thunk, resultClass)
 		{}
-		const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const;
+        const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const override;
 	};
 
 	class IntMethod
@@ -576,7 +581,7 @@ namespace PILS
 		IntMethod(const JuceClassBase &class_, const JuceName *name, ArgumentsThunk argumentsThunk, Thunk thunk)
 			: Method(class_, name, argumentsThunk, thunk)
 		{}
-		const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const;
+        const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const override;
 	};
 
 	typedef IntMethod CommandIDMethod;
@@ -591,7 +596,7 @@ namespace PILS
 		Uint32Method(const JuceClassBase &class_, const JuceName *name, ArgumentsThunk argumentsThunk, Thunk thunk)
 			: Method(class_, name, argumentsThunk, thunk)
 		{}
-		const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const;
+        const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const override;
 	};
 
 	class ShortMethod
@@ -601,7 +606,7 @@ namespace PILS
 		ShortMethod(const JuceClassBase &class_, const char *name, ArgumentsThunk argumentsThunk, Thunk thunk)
 			: Method(class_, name, argumentsThunk, thunk)
 		{}
-		const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const;
+        const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const override;
 	};
 
 	class Int64Method
@@ -611,7 +616,7 @@ namespace PILS
 		Int64Method(const JuceClassBase &class_, const char *name, ArgumentsThunk argumentsThunk, Thunk thunk)
 			: Method(class_, name, argumentsThunk, thunk)
 		{}
-		const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const;
+        const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const override;
 	};
 
 	class CharMethod
@@ -621,7 +626,7 @@ namespace PILS
 		CharMethod(const JuceClassBase &class_, const char *name, ArgumentsThunk argumentsThunk, Thunk thunk)
 			: Method(class_, name, argumentsThunk, thunk)
 		{}
-		const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const;
+        const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const override;
 	};
 
 	class ConstCharPtrMethod
@@ -634,7 +639,7 @@ namespace PILS
 		ConstCharPtrMethod(const JuceClassBase &class_, const JuceName *name, ArgumentsThunk argumentsThunk, Thunk thunk)
 			: Method(class_, name, argumentsThunk, thunk)
 		{}
-		const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const;
+        const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const override;
 	};
 
 	class BoolMethod
@@ -647,7 +652,7 @@ namespace PILS
 		BoolMethod(const JuceClassBase &class_, const JuceName *name, ArgumentsThunk argumentsThunk, Thunk thunk)
 			: Method(class_, name, argumentsThunk, thunk)
 		{}
-		const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const;
+        const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const override;
 	};
 
 	typedef CharMethod Uint8Method;
@@ -659,7 +664,7 @@ namespace PILS
 		Juce_wcharMethod(const JuceClassBase &class_, const char *name, ArgumentsThunk argumentsThunk, Thunk thunk)
 			: Method(class_, name, argumentsThunk, thunk)
 		{}
-		const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const;
+        const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const override;
 	};
 
 	class DoubleMethod
@@ -669,7 +674,7 @@ namespace PILS
 		DoubleMethod(const JuceClassBase &class_, const char *name, ArgumentsThunk argumentsThunk, Thunk thunk)
 			: Method(class_, name, argumentsThunk, thunk)
 		{}
-		const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const;
+        const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const override;
 	};
 
 	class FloatMethod
@@ -679,7 +684,7 @@ namespace PILS
 		FloatMethod(const JuceClassBase &class_, const char *name, ArgumentsThunk argumentsThunk, Thunk thunk)
 			: Method(class_, name, argumentsThunk, thunk)
 		{}
-		const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const;
+        const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const override;
 	};
 
 	class StringMethod
@@ -692,7 +697,7 @@ namespace PILS
 		StringMethod(const JuceClassBase &class_, const JuceName *name, ArgumentsThunk argumentsThunk, Thunk thunk)
 			: Method(class_, name, argumentsThunk, thunk)
 		{}
-		const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const;
+        const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const override;
 	};
 
 	class TimeMethod
@@ -702,7 +707,7 @@ namespace PILS
 		TimeMethod(const JuceClassBase &class_, const char *name, ArgumentsThunk argumentsThunk, Thunk thunk)
 			: Method(class_, name, argumentsThunk, thunk)
 		{}
-		const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const;
+        const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const override;
 	};
 
     class PilsColorMethod
@@ -712,7 +717,7 @@ namespace PILS
         PilsColorMethod(const JuceClassBase &class_, const char *name, ArgumentsThunk argumentsThunk, Thunk thunk)
             : Method(class_, name, argumentsThunk, thunk)
         {}
-        const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const;
+        const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const override;
     };
 
     class VarMethod
@@ -722,7 +727,7 @@ namespace PILS
         VarMethod(const JuceClassBase &class_, const char *name, ArgumentsThunk argumentsThunk, Thunk thunk)
             : Method(class_, name, argumentsThunk, thunk)
         {}
-        const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const;
+        const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const override;
     };
 
 	class IntrinsicMethod
@@ -741,7 +746,7 @@ namespace PILS
 		ClassExtracterMethod(const char *name)
 			: IntrinsicMethod(name)
 		{}
-		const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const;
+        const Any *invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const override;
 	};
 
 	class CallbackHelperBase
@@ -804,7 +809,7 @@ namespace PILS
 		static bool fromPils(const Any *pils, var &result);
 
 		static const Any *fromPilsPtr(const Any *pils, void *&result, JuceClass &class_, bool nullable = false);
-		const Any *pilsCall(const Any *call) const;
+        const Any *pilsCall(const Any *call) const;
 	};
 
 	class SinkJuceCallback
@@ -814,9 +819,9 @@ namespace PILS
 		SinkJuceCallback(const Any *&result, const Any *whence)
 			: result(result), whence(whence)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, const Any *thing);
-		const Step *miss(Runner &run);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, const Any *thing) override;
+        const Step *miss(Runner &run) override;
 	private:
 		const Any *&result;
 		const Any *whence;

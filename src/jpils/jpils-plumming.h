@@ -2,8 +2,8 @@
 #ifndef _JPILS_PLUMMING_H_
 #define _JPILS_PLUMMING_H_
 
-#include "pils-kernel/writing.h"
-#include <juce.h>
+#include "writing.h"
+#include <juce_gui_basics/juce_gui_basics.h>
 class PlugCompilable;
 class PlugObject;
 
@@ -52,30 +52,30 @@ namespace PILS
 	{
 	public:
 		using Special::specialCalling;
-		virtual const Any *specialCalling(Runner &run, const Constant &name, const Any &args) const;
-		virtual const Any *specialCalling(Runner &run, const Constant &name) const;
-		virtual const Any *specialPlus(Runner &run, const Any &operand) const;
-		virtual const Any *specialMinus(Runner &run, const Any &operand) const;
+        virtual const Any *specialCalling(Runner &run, const Constant &name, const Any &args) const;
+        const Any *specialCalling(Runner &run, const Constant &name) const override;
+        virtual const Any *specialPlus(Runner &run, const Any &operand) const;
+        virtual const Any *specialMinus(Runner &run, const Any &operand) const;
 		// standard extended types: Timestamp, Identifier
-		virtual bool specialComparing(const IdentifierLookup &lookup) const;
-		virtual bool isIdentifier() const;
+        virtual bool specialComparing(const IdentifierLookup &lookup) const;
+        virtual bool isIdentifier() const;
 		// recognize Graphics for rendering
-		virtual juce::Graphics *as_Graphics() const;
+        virtual juce::Graphics *as_Graphics() const;
 		// Simple file operations
-		virtual bool specialComparing(const FileNameLookup &lookup) const;
+        virtual bool specialComparing(const FileNameLookup &lookup) const;
 		// PILS system properties
-		virtual const Any *specialCalling(Runner &run, const SystemProperty &call) const;
+        virtual const Any *specialCalling(Runner &run, const SystemProperty &call) const;
 		// JUCE calls
-		virtual const Any *specialCalling(Runner &run, const JuceName &method, const Any &arg) const;
-		virtual const Any *specialCalling(Runner &run, const JuceName &method) const;
-		virtual bool specialComparing(const JuceLookup &lookup) const;
-		virtual bool converting(JuceSpecialConverter &converter) const;
+        virtual const Any *specialCalling(Runner &run, const JuceName &method, const Any &arg) const;
+        virtual const Any *specialCalling(Runner &run, const JuceName &method) const;
+        virtual bool specialComparing(const JuceLookup &lookup) const;
+        virtual bool converting(JuceSpecialConverter &converter) const;
 		// Threads
-		virtual bool specialComparing(const ThreadLookup &lookup) const;
+        virtual bool specialComparing(const ThreadLookup &lookup) const;
 		// Plugin loader
-		virtual void *loadPlugin(const PilsString &name) const;
-		virtual bool specialComparing(const PlugLibraryLookup &lookup) const;
-		virtual bool specialComparing(const PlugObjectLookup &lookup) const;
+        virtual void *loadPlugin(const PilsString &name) const;
+        virtual bool specialComparing(const PlugLibraryLookup &lookup) const;
+        virtual bool specialComparing(const PlugObjectLookup &lookup) const;
 	protected:
 		ReallySpecial(const HashedConstant *&link) : Special(link) {}
 		ReallySpecial() : Special() {}
@@ -97,18 +97,18 @@ namespace PILS
 		: public SingletonSpecial
 	{
 	public:
-		size_t unlinkAndGetSize();
-		size_t hash() const;
-		bool specialCompare(const ReallySpecial *special) const;
-		const Any *specialCalling(Runner &run, const Constant &name, const Any &args) const;
-		const Any *specialCalling(Runner &run, const Constant &name) const;
-		const Any *specialCalling(Runner &run, const SystemProperty &call) const;
-		const Any *specialCalling(Runner &run, const JuceName &method, const Any &args) const;
-		const Any *specialCalling(Runner &run, const JuceName &method) const;
-		const Any *specialCalling(Runner &run, const Strap &call) const;
-		void *loadPlugin(const PilsString &name) const;
+        size_t unlinkAndGetSize() override;
+        size_t hash() const;
+        bool specialCompare(const ReallySpecial *special) const;
+        const Any *specialCalling(Runner &run, const Constant &name, const Any &args) const override;
+        const Any *specialCalling(Runner &run, const Constant &name) const override;
+        const Any *specialCalling(Runner &run, const SystemProperty &call) const override;
+        const Any *specialCalling(Runner &run, const JuceName &method, const Any &args) const override;
+        const Any *specialCalling(Runner &run, const JuceName &method) const override;
+        const Any *specialCalling(Runner &run, const Strap &call) const override;
+        void *loadPlugin(const PilsString &name) const override;
 	private:
-		void write(Writing &writing) const;
+        void write(Writing &writing) const override;
 		Plumcake();
 		friend class Plum;
 	};
@@ -121,8 +121,8 @@ namespace PILS
 	public:
 		static const Namespace_Juce *singleton;
 		static const Namespace_Juce *opengl_singleton;
-		const ClicheShort *newCliche(const HashedConstant *&link, const Constant *a) const;
-		const JuceName *get(const char *name) const;
+        const ClicheShort *newCliche(const HashedConstant *&link, const Constant *a) const override;
+        const JuceName *get(const char *name) const;
 		static void initialize();
 	private:
 		friend class Plumcake;
@@ -143,10 +143,10 @@ namespace PILS
 		static const JuceName *get(const char *name);
 		const JuceMethod *methods;
 		const JuceReference *staticAccessor;
-		size_t unlinkAndGetSize();
-		const ClicheTiny *newCliche() const;
-		const Any *specialCall(Runner &run, const ReallySpecial &special) const;
-		void compileTypecheck(Compiling &compiling, const CallWho &pattern) const;
+        size_t unlinkAndGetSize() override;
+        const ClicheTiny *newCliche() const override;
+        const Any *specialCall(Runner &run, const ReallySpecial &special) const override;
+        void compileTypecheck(Compiling &compiling, const CallWho &pattern) const override;
 	private:
 		friend class JuceClass;
 		Converter *typecheck;
@@ -159,7 +159,7 @@ namespace PILS
 		JuceCliche(const JuceName *head)
 			: ClicheTiny(head)
 		{}
-		const Any *specialOperation(Runner &run, const ReallySpecial &special, const Any &argument) const;
+        const Any *specialOperation(Runner &run, const ReallySpecial &special, const Any &argument) const override;
 		static const JuceCliche *get(const char *jame);
 	};
 
@@ -169,10 +169,10 @@ namespace PILS
 		: public Converter
 	{
 	public:
-		bool convert(const ReallySpecial &argument);
-		virtual bool converting(const JuceReference &argument);
-		virtual bool converting(const Timestamp &argument);
-		virtual bool converting(const FileName &argument);
+        bool convert(const ReallySpecial &argument) override;
+        virtual bool converting(const JuceReference &argument);
+        virtual bool converting(const Timestamp &argument);
+        virtual bool converting(const FileName &argument);
 	};
 }
 #endif

@@ -11,7 +11,7 @@ namespace PILS
 		PipesourceListBuilderBegin(const Any &thing)
 			: thing(thing)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 		Sink *kick(Runner &run);
 	private:
 		const Any &thing;
@@ -24,7 +24,7 @@ namespace PILS
 		PipesourceHold(const Any *hold)
 			: hold(hold)
 		{}
-		const Step *step_ (Runner &run) const;
+        const Step *step_ (Runner &run) const override;
 		Sink *kick(Runner &run);
 	private:
 		const Any *hold;
@@ -45,7 +45,7 @@ namespace PILS
 		BuilderShort(const PokerClicheShort &cliche, const Any* value)
 			: PokerShort(cliche, value)
 		{}
-		const Step *step_(Runner &run) const;
+        const Step *step_(Runner &run) const override;
 	};
 
 	class BuilderTrailer
@@ -62,8 +62,8 @@ namespace PILS
 			tag->addReference();
 			nameCliche->releaseReference();
 		}
-		size_t unlinkAndGetSize();
-		const Step *step_(Runner &run) const;
+        size_t unlinkAndGetSize() override;
+        const Step *step_(Runner &run) const override;
 	private:
 		const Any *dummy;
 		const NodeConstantTiny *name;

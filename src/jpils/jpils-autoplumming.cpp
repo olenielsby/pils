@@ -1,7 +1,7 @@
 /* This file is public domain */
-#include <src/juce_WithoutMacros.h>
-#include "pils-kernel/initializers.h"
-#include "pilsplug/initializers.h"
+//#include <src/juce_WithoutMacros.h>
+#include "initializers.h"
+//#include "pilsplug/initializers.h"
 #include "jpils-binding-base.h"
 #include "jpils-supplement.h"
 #include "jpils-opengl.h"

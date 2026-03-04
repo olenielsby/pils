@@ -5,18 +5,18 @@
 
 #include "jpils-supplement.h"
 
-#ifdef _WIN32
- #include <gl/gl.h>
- #include <gl/glu.h>
-#elif defined (LINUX)
- #include <GL/gl.h>
- #include <GL/glut.h>
- #undef KeyPress
-#else
- #include <GLUT/glut.h>
-#endif
+// #ifdef _WIN32
+//  #include <gl/gl.h>
+//  #include <gl/glu.h>
+// #elif defined (LINUX)
+//  #include <GL/gl.h>
+//  #include <GL/glut.h>
+//  #undef KeyPress
+// #else
+//  #include <GLUT/glut.h>
+// #endif
 
-BEGIN_JUCE_NAMESPACE
+namespace juce {
 
 MenuBarComponent *pils__DocumentWindow::getMenuBar(DocumentWindow *documentWindow)
 {
@@ -85,7 +85,7 @@ Component *pils__TreeView::createItemComponent(pils__TreeViewItem &)
 
 const String pils__TreeView::getDragSourceDescription(pils__TreeViewItem &)
 {
-	return String::empty;
+    return {};
 }
 
 int pils__TreeView::getItemHeight(const pils__TreeViewItem &)
@@ -100,7 +100,8 @@ int pils__TreeView::getItemWidth(const pils__TreeViewItem &)
 
 const String pils__TreeView::getUniqueName(const pils__TreeViewItem &)
 {
-	return String::empty;
+//	return String::empty;
+    return {};
 }
 
 void pils__TreeView::paintItem(pils__TreeViewItem &item, Graphics&, int, int)
@@ -171,9 +172,9 @@ void pils__TreeViewItem::itemOpennessChanged(bool isNowOpen)
     static_cast<pils__TreeView *>(getOwnerView())->itemOpennessChanged(*this, isNowOpen);
 }
 
-Component *pils__TreeViewItem::createItemComponent()
+std::unique_ptr<Component> pils__TreeViewItem::createItemComponent()
 {
-    return static_cast<pils__TreeView *>(getOwnerView())->createItemComponent(*this);
+    return std::unique_ptr<Component>(static_cast<pils__TreeView *>(getOwnerView())->createItemComponent(*this));
 }
 
 void pils__TreeViewItem::paintItem(Graphics &g, int width, int height)
@@ -196,12 +197,12 @@ void pils__TreeViewItem::itemSelectionChanged(bool isNowSelected)
     static_cast<pils__TreeView *>(getOwnerView())->itemSelectionChanged(*this, isNowSelected);
 }
 
-const var pils__TreeViewItem::getDragSourceDescription()
+var pils__TreeViewItem::getDragSourceDescription()
 {
     return static_cast<pils__TreeView *>(getOwnerView())->getDragSourceDescription(*this);
 }
 
-const String pils__TreeViewItem::getUniqueName() const
+String pils__TreeViewItem::getUniqueName() const
 {
     return static_cast<pils__TreeView *>(getOwnerView())->getUniqueName(*this);
 }
@@ -265,7 +266,7 @@ public:
         }
         else if (lineNum < document.getNumLines())
         {
-            const CodeDocument::Position pos (&document, lineNum, 0);
+            const CodeDocument::Position pos (document, lineNum);
             createTokens (pos.getPosition(), pos.getLineText(),
                           source, analyser, newTokens);
         }
@@ -279,7 +280,7 @@ public:
         {
             const String line (document.getLine (lineNum));
 
-            CodeDocument::Position lineStart (&document, lineNum, 0), lineEnd (&document, lineNum + 1, 0);
+            CodeDocument::Position lineStart (document, lineNum, 0), lineEnd (document, lineNum + 1, 0);
             newHighlightStart = indexToColumn (jmax (0, selectionStart.getPosition() - lineStart.getPosition()),
                                                line, spacesPerTab);
             newHighlightEnd = indexToColumn (jmin (lineEnd.getPosition() - lineStart.getPosition(), selectionEnd.getPosition() - lineStart.getPosition()),
@@ -333,7 +334,7 @@ public:
 			for (int i = 0; i < tokens.size() /*&& col < highlightColumnEnd*/; ++i)
 			{
 				// Walk through tokens, add widths as needed to xStart, xEnd
-				SyntaxToken& token = tokens.getReference(i);
+                const SyntaxToken & token = tokens.getReference(i);
                 if (token.width < 0)
                     token.width = font.getStringWidthFloat (token.text);
 				int nextCol = col + token.text.length();
@@ -371,7 +372,7 @@ public:
 
         for (int i = 0; i < tokens.size(); ++i)
         {
-            SyntaxToken& token = tokens.getReference(i);
+            const SyntaxToken& token = tokens.getReference(i);
 
             if (lastType != token.tokenType)
             {
@@ -406,7 +407,7 @@ private:
 
         String text;
         int tokenType;
-        float width;
+        mutable float width;
     };
 
     Array <SyntaxToken> tokens;
@@ -502,15 +503,16 @@ molested__CodeEditorComponent::molested__CodeEditorComponent (CodeDocument& docu
       xOffset (0),
       verticalScrollBar (true),
       horizontalScrollBar (false),
-      codeTokeniser (codeTokeniser_)
+      codeTokeniser (codeTokeniser_),
+    caret (std::unique_ptr<CaretComponent>(getLookAndFeel().createCaretComponent (this)))
 {
-    caretPos = CodeDocument::Position (&document_, 0, 0);
+    caretPos = CodeDocument::Position (document_, 0);
     caretPos.setPositionMaintained (true);
 
-    selectionStart = CodeDocument::Position (&document_, 0, 0);
+    selectionStart = CodeDocument::Position (document_, 0, 0);
     selectionStart.setPositionMaintained (true);
 
-    selectionEnd = CodeDocument::Position (&document_, 0, 0);
+    selectionEnd = CodeDocument::Position (document_, 0, 0);
     selectionEnd.setPositionMaintained (true);
 
     setOpaque (true);
@@ -522,8 +524,7 @@ molested__CodeEditorComponent::molested__CodeEditorComponent (CodeDocument& docu
 
     addAndMakeVisible (&horizontalScrollBar);
     horizontalScrollBar.setSingleStepSize (1.0);
-
-    addAndMakeVisible (caret = getLookAndFeel().createCaretComponent (this));
+    addAndMakeVisible (caret.get());
 
     Font f (12.0f);
     f.setTypefaceName (Font::getDefaultMonospacedFontName());
@@ -565,7 +566,7 @@ void molested__CodeEditorComponent::setTemporaryUnderlining (const Array <Range<
 
 const Rectangle<int> molested__CodeEditorComponent::getCaretRectangle()
 {
-    return getLocalArea (caret, caret->getLocalBounds());
+    return getLocalArea (caret.get(), caret->getLocalBounds());
 }
 
 //==============================================================================
@@ -665,8 +666,8 @@ void molested__CodeEditorComponent::rebuildLineTokens()
 
     jassert (numNeeded == lines.size());
 
-    CodeDocument::Iterator source (&document);
-    getIteratorForPosition (CodeDocument::Position (&document, firstLineOnScreen, 0).getPosition(), source);
+    CodeDocument::Iterator source (document);
+    getIteratorForPosition (CodeDocument::Position (document, firstLineOnScreen, 0).getPosition(), source);
 
     for (int i = 0; i < numNeeded; ++i)
     {
@@ -911,7 +912,7 @@ const CodeDocument::Position molested__CodeEditorComponent::getPositionAt (int x
 //endchange
     const int index = columnToIndex (line, column);
 
-	return CodeDocument::Position (&document, line, index);
+    return CodeDocument::Position (document, line, index);
 }
 
 //==============================================================================
@@ -947,7 +948,7 @@ void molested__CodeEditorComponent::insertTabAtCaret()
 
 void molested__CodeEditorComponent::cut()
 {
-    insertTextAtCaret (String::empty);
+    insertTextAtCaret ({});
 }
 
 bool molested__CodeEditorComponent::copyToClipboard()
@@ -1026,7 +1027,7 @@ bool molested__CodeEditorComponent::moveCaretDown (const bool selecting)
     newTransaction();
 
     if (caretPos.getLineNumber() == document.getNumLines() - 1)
-        moveCaretTo (CodeDocument::Position (&document, std::numeric_limits<int>::max(), std::numeric_limits<int>::max()), selecting);
+        moveCaretTo (CodeDocument::Position (document, std::numeric_limits<int>::max(), std::numeric_limits<int>::max()), selecting);
     else
         moveLineDelta (1, selecting);
 
@@ -1038,7 +1039,7 @@ bool molested__CodeEditorComponent::moveCaretUp (const bool selecting)
     newTransaction();
 
     if (caretPos.getLineNumber() == 0)
-        moveCaretTo (CodeDocument::Position (&document, 0, 0), selecting);
+        moveCaretTo (CodeDocument::Position (document, 0, 0), selecting);
     else
         moveLineDelta (-1, selecting);
 
@@ -1086,7 +1087,7 @@ bool molested__CodeEditorComponent::scrollDown()
 bool molested__CodeEditorComponent::moveCaretToTop (const bool selecting)
 {
     newTransaction();
-    moveCaretTo (CodeDocument::Position (&document, 0, 0), selecting);
+    moveCaretTo (CodeDocument::Position (document, 0, 0), selecting);
     return true;
 }
 namespace molested__CodeEditorHelpers
@@ -1118,21 +1119,21 @@ bool molested__CodeEditorComponent::moveCaretToStartOfLine (const bool selecting
     if (index >= caretPos.getIndexInLine() && caretPos.getIndexInLine() > 0)
         index = 0;
 
-    moveCaretTo (CodeDocument::Position (&document, caretPos.getLineNumber(), index), selecting);
+    moveCaretTo (CodeDocument::Position (document, caretPos.getLineNumber(), index), selecting);
     return true;
 }
 
 bool molested__CodeEditorComponent::moveCaretToEnd (const bool selecting)
 {
     newTransaction();
-    moveCaretTo (CodeDocument::Position (&document, std::numeric_limits<int>::max(), std::numeric_limits<int>::max()), selecting);
+    moveCaretTo (CodeDocument::Position (document, std::numeric_limits<int>::max(), std::numeric_limits<int>::max()), selecting);
     return true;
 }
 
 bool molested__CodeEditorComponent::moveCaretToEndOfLine (const bool selecting)
 {
     newTransaction();
-    moveCaretTo (CodeDocument::Position (&document, caretPos.getLineNumber(), std::numeric_limits<int>::max()), selecting);
+    moveCaretTo (CodeDocument::Position (document, caretPos.getLineNumber(), std::numeric_limits<int>::max()), selecting);
     return true;
 }
 
@@ -1175,8 +1176,8 @@ bool molested__CodeEditorComponent::deleteForwards (const bool moveInWholeWordSt
 bool molested__CodeEditorComponent::selectAll()
 {
     newTransaction();
-    moveCaretTo (CodeDocument::Position (&document, std::numeric_limits<int>::max(), std::numeric_limits<int>::max()), false);
-    moveCaretTo (CodeDocument::Position (&document, 0, 0), true);
+    moveCaretTo (CodeDocument::Position (document, std::numeric_limits<int>::max(), std::numeric_limits<int>::max()), false);
+    moveCaretTo (CodeDocument::Position (document, 0, 0), true);
     return true;
 }
 
@@ -1207,21 +1208,21 @@ void molested__CodeEditorComponent::timerCallback()
 }
 
 //==============================================================================
-const Range<int> molested__CodeEditorComponent::getHighlightedRegion() const
+Range<int> molested__CodeEditorComponent::getHighlightedRegion() const
 {
     return Range<int> (selectionStart.getPosition(), selectionEnd.getPosition());
 }
 
 void molested__CodeEditorComponent::setHighlightedRegion (const Range<int>& newRange)
 {
-    moveCaretTo (CodeDocument::Position (&document, newRange.getStart()), false);
-    moveCaretTo (CodeDocument::Position (&document, newRange.getEnd()), true);
+    moveCaretTo (CodeDocument::Position (document, newRange.getStart()), false);
+    moveCaretTo (CodeDocument::Position (document, newRange.getEnd()), true);
 }
 
-const String molested__CodeEditorComponent::getTextInRange (const Range<int>& range) const
+String molested__CodeEditorComponent::getTextInRange (const Range<int>& range) const
 {
-    return document.getTextBetween (CodeDocument::Position (&document, range.getStart()),
-                                    CodeDocument::Position (&document, range.getEnd()));
+    return document.getTextBetween (CodeDocument::Position (document, range.getStart()),
+                                    CodeDocument::Position (document, range.getEnd()));
 }
 
 //==============================================================================
@@ -1317,20 +1318,21 @@ void molested__CodeEditorComponent::mouseDoubleClick (const MouseEvent& e)
     moveCaretTo (tokenStart, true);
 }
 
-void molested__CodeEditorComponent::mouseWheelMove (const MouseEvent& e, float wheelIncrementX, float wheelIncrementY)
+void molested__CodeEditorComponent::mouseWheelMove (
+    const MouseEvent& e,
+    const MouseWheelDetails& wheel)
 {
-    if ((verticalScrollBar.isVisible() && wheelIncrementY != 0)
-         || (horizontalScrollBar.isVisible() && wheelIncrementX != 0))
+    if ((verticalScrollBar.isVisible() && wheel.deltaY != 0.0f)
+        || (horizontalScrollBar.isVisible() && wheel.deltaX != 0.0f))
     {
-        verticalScrollBar.mouseWheelMove (e, 0, wheelIncrementY);
-        horizontalScrollBar.mouseWheelMove (e, wheelIncrementX, 0);
+        verticalScrollBar.mouseWheelMove (e, wheel);
+        horizontalScrollBar.mouseWheelMove (e, wheel);
     }
     else
     {
-        Component::mouseWheelMove (e, wheelIncrementX, wheelIncrementY);
+        Component::mouseWheelMove (e, wheel);
     }
 }
-
 void molested__CodeEditorComponent::scrollBarMoved (ScrollBar* scrollBarThatHasMoved, double newRangeStart)
 {
     if (scrollBarThatHasMoved == &verticalScrollBar)
@@ -1418,12 +1420,6 @@ void molested__CodeEditorComponent::setFont (const Font& newFont)
 void molested__CodeEditorComponent::resetToDefaultColours()
 {
     coloursForTokenCategories.clear();
-
-    if (codeTokeniser != nullptr)
-    {
-        for (int i = codeTokeniser->getTokenTypes().size(); --i >= 0;)
-            setColourForTokenType (i, codeTokeniser->getDefaultColour (i));
-    }
 }
 
 void molested__CodeEditorComponent::setColourForTokenType (const int tokenType, const Colour& colour)
@@ -1461,7 +1457,7 @@ void molested__CodeEditorComponent::updateCachedIterators (int maxLineNum)
     const int linesBetweenCachedSources = jmax (10, document.getNumLines() / maxNumCachedPositions);
 
     if (cachedIterators.size() == 0)
-        cachedIterators.add (new CodeDocument::Iterator (&document));
+        cachedIterators.add (new CodeDocument::Iterator (document));
 
     if (codeTokeniser == nullptr)
         return;
@@ -1828,44 +1824,36 @@ int PilsCodeTokeniser::readNextToken (CodeDocument::Iterator& source)
 
     return result;
 }
-
-StringArray PilsCodeTokeniser::getTokenTypes()
+// StringArray PilsCodeTokeniser::getTokenTypes()
+// {
+//     const char* const types[] =
+//     {
+//         "Error",
+//         "Comment",
+//         "Identifier",
+//         "Number",
+//         "String",
+//         "Operator",
+//         "Bracket",
+//         "Punctuation",
+//         0
+//     };
+//     return StringArray (types);
+// }
+CodeEditorComponent::ColourScheme PilsCodeTokeniser::getDefaultColourScheme()
 {
-    const char* const types[] =
-    {
-        "Error",
-        "Comment",
-        "Identifier",
-        "Number",
-        "String",
-        "Operator",
-        "Bracket",
-        "Punctuation",
-        0
-    };
+    CodeEditorComponent::ColourScheme scheme;
 
-    return StringArray (types);
+    scheme.set ("Error",        juce::Colour (0xffcc0000));
+    scheme.set ("Comment",      juce::Colour (0xff007700));
+    scheme.set ("Identifier",   juce::Colour (0xff000000));
+    scheme.set ("Number",       juce::Colour (0xff0000ff));
+    scheme.set ("String",       juce::Colour (0xff992200));
+    scheme.set ("Operator",     juce::Colour (0xff000000));
+    scheme.set ("Bracket",      juce::Colour (0xff000000));
+    scheme.set ("Punctuation",  juce::Colour (0xff000000));
+
+    return scheme;
 }
 
-const Colour PilsCodeTokeniser::getDefaultColour (const int tokenType)
-{
-    const uint32 colours[] =
-    {
-        0xffcc0000,  // error
-        0xff007700,  // comment
-        0xff000000,  // identifier
-        0xff0000ff,  // number
-        0xff992200,  // string
-        0xff000000,  // operator
-        0xff000000,  // bracket
-        0xff000000//,   punctuation
-//        0xff660000   // preprocessor
-    };
-
-    if (tokenType >= 0 && tokenType < numElementsInArray (colours))
-        return Colour (colours [tokenType]);
-
-    return Colours::black;
-}
-
-END_JUCE_NAMESPACE
+} //namespace juce

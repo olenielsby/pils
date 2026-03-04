@@ -57,7 +57,10 @@ namespace PILS
 
 	const Any *FileName::specialCalling(Runner &run, const Constant &method) const
 	{
-		if (!run.isMainThread()) return NULL;
+        this->writeToDebugOutput(5);
+        method.writeToDebugOutput(5);
+        name->writeToDebugOutput(5);
+        if (!run.isMainThread()) return NULL;
 		else if (&method == &Builtin::name.name_)
 		{
 			name->addReference();
@@ -98,9 +101,13 @@ namespace PILS
 		else if(&method == &Builtin::name.text)
 		{
 			if(!file->existsAsFile()) return NULL;
-			MemoryBlock data;
+            juce::MemoryBlock data;
 			if (file->loadFileAsData(data))
-				return PilsString::get((const char *)data.getData(), data.getSize());
+            {
+                const PilsString* filedata = PilsString::get((const char *)data.getData(), data.getSize());
+                filedata->writeToDebugOutput(5);
+                return filedata;
+            }
 		}
 		else if(&method == &Builtin::name.ok)
 		{
@@ -282,12 +289,12 @@ namespace PILS
 		}
 		else
 		{
-			const ZipFile::ZipEntry *entry = zipFile.getEntry(at);
+            const juce::ZipFile::ZipEntry *entry = zipFile.getEntry(at);
 			const Constant *elements[3];
 			elements[0] = pils(entry->filename.replaceCharacter('\\', '/'));
 			elements[2] = pils(entry->fileTime);
-			MemoryBlock data;
-			InputStream *stream = this_->zipFile.createStreamForEntry(this_->at++);
+            juce::MemoryBlock data;
+            juce::InputStream *stream = this_->zipFile.createStreamForEntry(this_->at++);
 			stream->readIntoMemoryBlock(data);
 			delete stream;
 			elements[1] = PilsString::get((char *)data.getData(), data.getSize());

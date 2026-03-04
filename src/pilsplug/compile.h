@@ -825,7 +825,7 @@ namespace PILS
 		PlugNode(const HashedConstant *&link, const ClicheLong &cliche, const Constant *const *value)
 			: NodeConstantTrailer(link, cliche, value)
 		{}
-		virtual const Any *specialCall(Runner &run, const ReallySpecial &special) const;
+        virtual const Any *specialCall(Runner &run, const ReallySpecial &special) const override;
 	private:
 		const Constant *dummy;
 	};

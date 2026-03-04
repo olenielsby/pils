@@ -41,6 +41,6 @@ class Database : public pilsplug::interface::Database
 public:
 	Database(sqlite3 *db);
 	~Database();
-	virtual pilsplug::Result query(pilsplug::interface::Query *&result, const char *sql, ...) const;
+    virtual pilsplug::Result query(pilsplug::interface::Query *&result, const char *sql, ...) const override;
 	sqlite3 *db;
 };

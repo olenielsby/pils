@@ -1,5 +1,5 @@
 /* This file is public domain */
-#include "pils-kernel/compile.h"
+#include "compile.h"
 #include "jpils-standard-specials.h"
 namespace PILS
 {
@@ -36,7 +36,7 @@ namespace PILS
 		minute = time.getMinutes();
 		second = time.getSeconds();
 		millisecond = time.getMilliseconds();
-		juce::RelativeTime zoneshift = time - Time(year, month - 1, day, hour, minute, second, millisecond, false);
+        juce::RelativeTime zoneshift = time - juce::Time(year, month - 1, day, hour, minute, second, millisecond, false);
 		zoneSecond = (long)zoneshift.inSeconds();
 	}
 

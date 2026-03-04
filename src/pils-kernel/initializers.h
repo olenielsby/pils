@@ -228,7 +228,7 @@ namespace PILS
 		channel(_PS("channel")),
 		strap(_PS("strap")),
 		plumcake(_PS("plumcake")),
-		bug(_PS("bug")),
+        buglog(_PS("bug")),
 		thread(_PS("thread")),
 		knot(_PS("knot")),
 		later(_PS("later")),

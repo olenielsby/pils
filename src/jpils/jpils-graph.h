@@ -43,8 +43,8 @@ namespace PILS
 		PredefinedGraphNameGraph(const PILS_CHAR *name)
 			: PredefinedGraphName(name)
 		{}
-		void compileTypecheck(Compiling &compiling, const CallWho &pattern) const;
-		bool recognizing(const PilsGraph &thing){return true;}
+        void compileTypecheck(Compiling &compiling, const CallWho &pattern) const override;
+        bool recognizing(const PilsGraph &thing) override {return true;}
 	};
 
 	class PredefinedGraphNameColor : public PredefinedGraphName
@@ -54,13 +54,13 @@ namespace PILS
 		PredefinedGraphNameColor(const PILS_CHAR *name)
 			: PredefinedGraphName(name)
 		{}
-		const ClicheShort *newCliche(const HashedConstant *&link, const Constant *a) const;
+        const ClicheShort *newCliche(const HashedConstant *&link, const Constant *a) const override;
 	};
 
 	class FontNamespace : public PilsString
 	{
 	public:
-		const ClicheShort *newCliche(const HashedConstant *&link, const Constant *a) const;
+        const ClicheShort *newCliche(const HashedConstant *&link, const Constant *a) const override;
 		bool isBold() const {return ((this - table) & 2) != 0;}
 		bool isItalic() const {return ((this - table) & 1) != 0;}
 	private:
@@ -80,8 +80,8 @@ namespace PILS
 			font.setBold(head->isBold());
 			font.setItalic(head->isItalic());
 		}
-		const ClicheShort *newCliche(const HashedConstant *&link, const Constant *a) const;
-		size_t unlinkAndGetSize();
+        const ClicheShort *newCliche(const HashedConstant *&link, const Constant *a) const override;
+        size_t unlinkAndGetSize() override;
 		juce::Font font;
 	};
 
@@ -89,8 +89,8 @@ namespace PILS
 	{
 	public:
 		PilsFont(const HashedConstant *&link, const FontName *head, const Number *value, float size);
-		bool recognize(Recognizer &recognizer) const;
-		size_t unlinkAndGetSize();
+        bool recognize(Recognizer &recognizer) const override;
+        size_t unlinkAndGetSize() override;
 		static const juce::Font *cast(const Any *thing);
 		juce::Font font;
 	};
@@ -155,10 +155,10 @@ namespace PILS
 	{
 	public:
 		static const BuiltinClicheGraph singleton;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Empty *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Constant *value) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Empty *value) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Constant *value) const;
 	private:
 		BuiltinClicheGraph()
 			: BuiltinClicheTiny(&PredefinedGraphName::graph)
@@ -171,13 +171,13 @@ namespace PILS
 		GraphNode(const HashedConstant *&link, const BuiltinClicheGraph &cliche, const Constant *value)
 			: NodeConstantTiny(link, cliche, value)
 		{}
-		const Any *specialCall(Runner &run, const ReallySpecial &special) const;
+        const Any *specialCall(Runner &run, const ReallySpecial &special) const override;
 	};
 
 	class BuiltinClichePathBase : public BuiltinClicheTiny
 	{
 	public:
-		const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const override;
 		virtual bool draw(const juce::Path &path, Drawing &drawing) const = 0;
 	protected:
 		virtual void closePath(juce::Path &path) const = 0;
@@ -191,8 +191,8 @@ namespace PILS
 	public:
 		static const BuiltinClicheCurve singleton;
 	private:
-		void closePath(juce::Path &path) const;
-		bool draw(const juce::Path &path, Drawing &drawing) const;
+        void closePath(juce::Path &path) const override;
+        bool draw(const juce::Path &path, Drawing &drawing) const override;
 		BuiltinClicheCurve()
 			: BuiltinClichePathBase(&PredefinedGraphName::curve)
 		{}
@@ -203,8 +203,8 @@ namespace PILS
 	public:
 		static const BuiltinClicheShape singleton;
 	private:
-		void closePath(juce::Path &path) const;
-		bool draw(const juce::Path &path, Drawing &drawing) const;
+        void closePath(juce::Path &path) const override;
+        bool draw(const juce::Path &path, Drawing &drawing) const override;
 		BuiltinClicheShape()
 			: BuiltinClichePathBase(&PredefinedGraphName::shape)
 		{}
@@ -216,9 +216,9 @@ namespace PILS
 		PilsGraphTiny(const HashedConstant *&link, const BuiltinClicheTiny &cliche, const Constant *value, Box box)
 			: NodeConstantTiny(link, cliche, value), PilsGraph(box)
 		{}
-		bool recognize(Recognizer &recognizer) const;
-		virtual size_t unlinkAndGetSize() = 0;
-		const Step *calling(Runner &run, const Constant &call) const;
+        bool recognize(Recognizer &recognizer) const override;
+        virtual size_t unlinkAndGetSize() override = 0;
+        const Step *calling(Runner &run, const Constant &call) const override;
 	};
 
 	class PathNode : public PilsGraphTiny
@@ -227,9 +227,9 @@ namespace PILS
 		PathNode(const HashedConstant *&link, const BuiltinClichePathBase &cliche, const Constant *value, const juce::Path path)
 			: PilsGraphTiny(link, cliche, value, path), path(path)
 		{}
-		bool draw(Drawing &drawing) const;
-		bool strokeWalk(StrokeWalk &strokeWalk) const;
-		size_t unlinkAndGetSize();
+        bool draw(Drawing &drawing) const override;
+        bool strokeWalk(StrokeWalk &strokeWalk) const override;
+        size_t unlinkAndGetSize() override;
 		const juce::Path path;
 	};
 
@@ -247,7 +247,7 @@ namespace PILS
 	class BuiltinClicheStroke
 		: public BuiltinClicheTrailer
 	{
-		const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const;
+        const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const override;
 		BuiltinClicheStroke(const Constant *head, const Constant *attribute, juce::PathStrokeType::JointStyle jointStyle, juce::PathStrokeType::EndCapStyle endCapStyle)
 			: BuiltinClicheTrailer(head, &Empty::singleton, attribute), jointStyle(jointStyle), endCapStyle(endCapStyle)
 		{}
@@ -273,10 +273,10 @@ namespace PILS
 		DuploDrawable(const HashedConstant *&link, const ClicheTrailer &cliche, const Constant *const *value, const Box box)
 			: NodeConstantTrailer2(link, cliche, value), PilsGraph(box)
 		{}
-		size_t unlinkAndGetSize();
+        size_t unlinkAndGetSize() override;
 	private:
-		const Step *calling(Runner &run, const Constant &call) const;
-		bool recognize(Recognizer &recognizer) const;
+        const Step *calling(Runner &run, const Constant &call) const override;
+        bool recognize(Recognizer &recognizer) const override;
 		void *dummy;
 	};
 
@@ -287,15 +287,15 @@ namespace PILS
 			: DuploDrawable(link, cliche, value, box)
 		{}
 	private:
-		bool draw(Drawing &drawing) const;
-		bool strokeWalk(StrokeWalk &strokeWalk) const;
+        bool draw(Drawing &drawing) const override;
+        bool strokeWalk(StrokeWalk &strokeWalk) const override;
 	};
 
 	class BuiltinClicheBackground : public BuiltinClicheDuplo
 	{
 	private:
 		static const BuiltinClicheBackground singleton;
-		const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const;
+        const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const override;
 		BuiltinClicheBackground()
 			: BuiltinClicheDuplo(&PredefinedGraphName::background)
 		{}
@@ -307,18 +307,18 @@ namespace PILS
 		TransformerNode(const HashedConstant *&link, const ClicheTrailer &cliche, const Constant *const *value, const juce::AffineTransform &transform, const Box box)
 			: DuploDrawable(link, cliche, value, box.applyTransform(transform)), transform(transform)
 		{}
-		bool draw(Drawing &drawing) const;
-		bool strokeWalk(StrokeWalk &strokeWalk) const;
-		bool bounding(Bounding &bounding) const;
+        bool draw(Drawing &drawing) const override;
+        bool strokeWalk(StrokeWalk &strokeWalk) const override;
+        bool bounding(Bounding &bounding) const;
 		const juce::AffineTransform transform;
-		size_t unlinkAndGetSize();
+        size_t unlinkAndGetSize() override;
 	};
 
 	class BuiltinClicheAt : public BuiltinClicheDuplo
 	{
 	private:
 		static const BuiltinClicheAt singleton;
-		const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const;
+        const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const override;
 		BuiltinClicheAt()
 			: BuiltinClicheDuplo(&PredefinedGraphName::at)
 		{}
@@ -328,7 +328,7 @@ namespace PILS
 	{
 	private:
 		static const BuiltinClicheScale singleton;
-		const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const;
+        const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const override;
 		BuiltinClicheScale()
 			: BuiltinClicheDuplo(&PredefinedGraphName::scale)
 		{}
@@ -338,7 +338,7 @@ namespace PILS
 	{
 	private:
 		static const BuiltinClicheAlign singleton;
-		const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const;
+        const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const override;
 		BuiltinClicheAlign()
 			: BuiltinClicheDuplo(&PredefinedGraphName::align)
 		{}
@@ -348,7 +348,7 @@ namespace PILS
 	{
 	private:
 		static const BuiltinClicheGraphSize singleton;
-		const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const;
+        const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const override;
 		BuiltinClicheGraphSize()
 			: BuiltinClicheDuplo(&PredefinedGraphName::size)
 		{}
@@ -358,7 +358,7 @@ namespace PILS
 	{
 	private:
 		static const BuiltinClicheGraphOutsize singleton;
-		const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const;
+        const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const override;
 		BuiltinClicheGraphOutsize()
 			: BuiltinClicheDuplo(&PredefinedGraphName::outsize)
 		{}
@@ -368,7 +368,7 @@ namespace PILS
 	{
 	private:
 		static const BuiltinClicheInk singleton;
-		const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const;
+        const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const override;
 		BuiltinClicheInk()
 			: BuiltinClicheDuplo(&PredefinedGraphName::ink)
 		{}
@@ -378,7 +378,7 @@ namespace PILS
 	{
 	private:
 		static const BuiltinClicheFont singleton;
-		const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const;
+        const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const override;
 		BuiltinClicheFont()
 			: BuiltinClicheDuplo(&PredefinedGraphName::font)
 		{}
@@ -387,7 +387,7 @@ namespace PILS
 	class BuiltinClicheGradient : public BuiltinClicheDuplo
 	{
 	private:
-		const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const;
+        const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const override;
 		static const BuiltinClicheGradient linear;
 		static const BuiltinClicheGradient circular;
 		BuiltinClicheGradient(const PredefinedGraphName *name)
@@ -401,8 +401,8 @@ namespace PILS
 		GradientNode(const HashedConstant *&link, const BuiltinClicheGradient &cliche, const Constant *const *value, const juce::ColourGradient *gradient)
 			: NodeConstantTrailer(link, cliche, value), gradient(gradient)
 		{}
-		bool recognize(Recognizer &recognizer) const;
-		size_t unlinkAndGetSize();
+        bool recognize(Recognizer &recognizer) const override;
+        size_t unlinkAndGetSize() override;
 	private:
 		const Constant *dummy;
 		const juce::ColourGradient *gradient;
@@ -414,9 +414,9 @@ namespace PILS
 		BrushNode(const HashedConstant *&link, const ClicheTrailer &cliche, const Constant *const *value, FillType &fillType, const Box box)
 			: DuploDrawable(link, cliche, value, box), fillType(fillType)
 		{}
-		bool draw(Drawing &drawing) const;
-		bool strokeWalk(StrokeWalk &strokeWalk) const;
-		size_t unlinkAndGetSize();
+        bool draw(Drawing &drawing) const override;
+        bool strokeWalk(StrokeWalk &strokeWalk) const override;
+        size_t unlinkAndGetSize() override;
 	protected:
 		FillType fillType;
 	};
@@ -427,7 +427,7 @@ namespace PILS
 		BackgroundNode(const HashedConstant *&link, const ClicheTrailer &cliche, const Constant *const *value, FillType &fillType, const Box box)
 			: BrushNode(link, cliche, value, fillType, box)
 		{}
-		bool draw(Drawing &drawing) const;
+        bool draw(Drawing &drawing) const override;
 	};
 
 	class StrokeNode : public DuploDrawable
@@ -436,10 +436,10 @@ namespace PILS
 		StrokeNode(const HashedConstant *&link, const ClicheTrailer &cliche, const Constant *const *value, const juce::Path path)
 			: DuploDrawable(link, cliche, value, path), path(path)
 		{}
-		bool draw(Drawing &drawing) const;
-		bool strokeWalk(StrokeWalk &strokeWalk) const;
+        bool draw(Drawing &drawing) const override;
+        bool strokeWalk(StrokeWalk &strokeWalk) const override;
 		const juce::Path path;
-		size_t unlinkAndGetSize();
+        size_t unlinkAndGetSize() override;
 	};
 
 	class TextNode : public DuploDrawable
@@ -448,11 +448,11 @@ namespace PILS
 		TextNode(const HashedConstant *&link, const ClicheTrailer &cliche, const Constant *const *value, const juce::Font &font, const juce::String &text)
 			: DuploDrawable(link, cliche, value, Box(text, font)), font(font), text(text)
 		{}
-		bool draw(Drawing &drawing) const;
-		bool strokeWalk(StrokeWalk &strokeWalk) const;
+        bool draw(Drawing &drawing) const override;
+        bool strokeWalk(StrokeWalk &strokeWalk) const override;
 		const juce::Font &font;
 		const juce::String text;
-		size_t unlinkAndGetSize();
+        size_t unlinkAndGetSize() override;
 	};
 
 	class ImageNode;
@@ -463,11 +463,11 @@ namespace PILS
 			: BuiltinClicheTiny(&PredefinedGraphName::image)
 		{}
 		static const BuiltinClicheImage singleton;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const;
-		const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const;
-		const ImageNode *newImageNode(const HashedConstant *&link, const Constant *value) const;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const override;
+        const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const override;
+        const ImageNode *newImageNode(const HashedConstant *&link, const Constant *value) const;
 	};
 
 	class ImageNode : public PilsGraphTiny
@@ -476,10 +476,10 @@ namespace PILS
 		ImageNode(const HashedConstant *&link, const BuiltinClicheImage &cliche, const Constant *value, const juce::Image &image, bool own, float x = 0.0f, float y = 0.0f)
 			: PilsGraphTiny(link, cliche, value, Box(image, x, y)), image(image), own(own), x(x), y(y)
 		{}
-		bool draw(Drawing &drawing) const;
-		bool strokeWalk(StrokeWalk &strokeWalk) const;
-		bool recognize(Recognizer &recognizer) const;
-		size_t unlinkAndGetSize();
+        bool draw(Drawing &drawing) const override;
+        bool strokeWalk(StrokeWalk &strokeWalk) const override;
+        bool recognize(Recognizer &recognizer) const override;
+        size_t unlinkAndGetSize() override;
 		const juce::Image image;
 		const bool own;
 		const float x, y;
@@ -491,12 +491,12 @@ namespace PILS
 		JuceDrawableNode(const HashedConstant *&link, const BuiltinClicheImage &cliche, const Constant *value, const juce::Drawable *drawable, bool own)
 			: PilsGraphTiny(link, cliche, value, Box(*drawable)), drawable(drawable), own(own)
 		{}
-		bool draw(Drawing &drawing) const;
-		bool strokeWalk(StrokeWalk &strokeWalk) const;
-		bool recognize(Recognizer &recognizer) const;
+        bool draw(Drawing &drawing) const override;
+        bool strokeWalk(StrokeWalk &strokeWalk) const override;
+        bool recognize(Recognizer &recognizer) const override;
 		const juce::Drawable *const drawable;
 		const bool own;
-		size_t unlinkAndGetSize();
+        size_t unlinkAndGetSize() override;
 	};
 }
 #endif

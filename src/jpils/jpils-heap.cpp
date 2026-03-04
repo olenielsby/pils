@@ -47,16 +47,16 @@ namespace PILS
 	public:
 		/* Simple Malloc wrapper
 		*/
-		void *allocate(size_t bytes)
+        void *allocate(size_t bytes) override
 		{
 			return malloc(bytes);
 		}
 
-		void free(void *block, size_t size)
+        void free(void *block, size_t size) override
 		{
 			return ::free(block);
 		}
-		void shutdown() {}
+        void shutdown() override {}
 		static MallocAllocator singleton;
 	};
 
@@ -68,7 +68,7 @@ namespace PILS
 	public:
 		/* Detect memory leaks before destroying initial data */
 		/* Note: this allocator is not thread-safe */
-		void *allocate(size_t bytes)
+        void *allocate(size_t bytes) override
 		{
 			Link *block = (Link *)malloc(bytes + sizeof(Link));
 			block->previous = &link;
@@ -79,7 +79,7 @@ namespace PILS
 			return block + 1;
 		}
 
-		void free(void *netto, size_t size)
+        void free(void *netto, size_t size) override
 		{
 			Link *block = (Link*)netto - 1;
 			if (block->size != size)
@@ -90,7 +90,7 @@ namespace PILS
 			block->previous->next = block->next;
 			::free(block);
 		}
-		void shutdown()
+        void shutdown() override
 		{
 			while (link.next != &link)
 			{

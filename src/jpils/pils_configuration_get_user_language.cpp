@@ -1,5 +1,5 @@
 /* This file is public domain */
-#include "pils-kernel/sink.h"
+#include "sink.h"
 
 #ifdef _MSC_VER
 
@@ -14,17 +14,17 @@ const PILS::PilsString *pils_configuration_get_user_language()
 	return PILS::PilsString::get(lang);
 }
 
-#elif defined(JUCE_LINUX)
+#elif defined(__linux__)
 
-const PILS::PilsString *pils_configuration_get_user_language()
+const PILS::PilsString* pils_configuration_get_user_language()
 {
-	return PILS::PilsString::get("english");
+    const char* lang = getenv("LANG");
+    //if (!lang)
+        lang = "english";
+    return PILS::PilsString::get(lang);
 }
 
-#else
-
-#include <juce.h>
-#include "pils-kernel/language-switch.h"
+#elif defined(__APPLE__)
 
 const PILS::PilsString *pils_configuration_get_user_language()
 {
@@ -42,5 +42,6 @@ const PILS::PilsString *pils_configuration_get_user_language()
 	if (!language_name) language_name = "english";
 	return PILS::PilsString::get(language_name);
 }
-
+#else
+#error Unsupported platform
 #endif

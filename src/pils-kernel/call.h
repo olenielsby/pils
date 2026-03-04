@@ -11,14 +11,14 @@ namespace PILS
 		SinkHoldWho(const Any *thing)
 			: SinkHold(thing)
 		{}
-		const Step *called(Runner &run, const Constant &call);
-		const Step *called(Runner &run, const Integer &call);
-		const Step *called(Runner &run, const ListConstant &call);
-		const Step *called(Runner &run, const NodeConstant &call);
-		const Step *called(Runner &run, const Empty &call);
-		const Step *called(Runner &run, const ListExpress &call);
-		const Step *called(Runner &run, const NodeExpress &call);
-		const Step *called(Runner &run, const Any &call, const Any *assignValue);
+        const Step *called(Runner &run, const Constant &call) override;
+        const Step *called(Runner &run, const Integer &call) override;
+        const Step *called(Runner &run, const ListConstant &call) override;
+        const Step *called(Runner &run, const NodeConstant &call) override;
+        const Step *called(Runner &run, const Empty &call) override;
+        const Step *called(Runner &run, const ListExpress &call) override;
+        const Step *called(Runner &run, const NodeExpress &call) override;
+        const Step *called(Runner &run, const Any &call, const Any *assignValue) override;
 	};
 
 	class SinkCall
@@ -26,8 +26,8 @@ namespace PILS
 	{
 	public:
 		SinkCall(const Call &what) : what(what) {}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, const Any *thing);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, const Any *thing) override;
 		const Call &what;
 	};
 
@@ -35,8 +35,8 @@ namespace PILS
 		: public Sink
 	{
 	public:
-		Sink *kick(Runner &run);
-		const Step *error(Runner &run, const Any *error, const Express *what, const Any *who);
+        Sink *kick(Runner &run) override;
+        const Step *error(Runner &run, const Any *error, const Express *what, const Any *who) override;
 	protected:
 		SinkCallStackedBase(const Any &stacked)
 			: stacked(stacked)
@@ -51,47 +51,47 @@ namespace PILS
 		SinkCallStacked(const Any &stacked)
 			: SinkCallStackedBase(stacked)
 		{}
-		const Step *pass(Runner &run, long value);
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const PilsColor &value);
-		const Step *pass(Runner &run, const PilsString &value);
-		const Step *pass(Runner &run, const Cliche &value);
-		const Step *pass(Runner &run, const ListConstant &value);
-		const Step *pass(Runner &run, const NodeConstantLong &value);
-		const Step *pass(Runner &run, const NodeConstantShort &value);
-		const Step *pass(Runner &run, const ListExpress &value);
-		const Step *pass(Runner &run, const NodeExpressLong &value);
-		const Step *pass(Runner &run, const NodeExpressShort &value);
-		const Step *pass(Runner &run, const Special &value);
-		const Step *pass(Runner &run, const Integer *value);
-		const Step *pass(Runner &run, const Float *value);
-		const Step *pass(Runner &run, const PilsColor *value);
-		const Step *pass(Runner &run, const PilsDate *value);
-		const Step *pass(Runner &run, const Timestamp *value);
-		const Step *pass(Runner &run, const Duration *value);
-		const Step *pass(Runner &run, const PilsString *value);
-		const Step *pass(Runner &run, const Cliche *value);
-		const Step *pass(Runner &run, const ListConstant *value);
-		const Step *pass(Runner &run, const NodeConstantLong *value);
-		const Step *pass(Runner &run, const NodeConstantShort *value);
-		const Step *pass(Runner &run, const ListExpress *value);
-		const Step *pass(Runner &run, const NodeExpressLong *value);
-		const Step *pass(Runner &run, const NodeExpressShort *value);
-		const Step *pass(Runner &run, const Special *value);
-		const Step *pass(Runner &run, const Any *value); //dummy
-		const Step *called(Runner &run, const Constant &call);
-		const Step *called(Runner &run, const Integer &call);
-		const Step *called(Runner &run, const ListConstant &call);
-		const Step *called(Runner &run, const NodeConstant &call);
-		const Step *called(Runner &run, const Empty &call);
-		const Step *called(Runner &run, const ListExpress &call);
-		const Step *called(Runner &run, const NodeExpress &call);
-		const Step *called(Runner &run, const Any &call, const Any *assignValue);
-		const Step *tailStep(Runner &run, const Any *thing, const Any *where_);
-		const Step *tailStep(Runner &run, const Any *thing);
-		Pipe *connectPipe(Runner &run);
+        const Step *pass(Runner &run, long value) override;
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const PilsColor &value) override;
+        const Step *pass(Runner &run, const PilsString &value) override;
+        const Step *pass(Runner &run, const Cliche &value) override;
+        const Step *pass(Runner &run, const ListConstant &value) override;
+        const Step *pass(Runner &run, const NodeConstantLong &value) override;
+        const Step *pass(Runner &run, const NodeConstantShort &value) override;
+        const Step *pass(Runner &run, const ListExpress &value) override;
+        const Step *pass(Runner &run, const NodeExpressLong &value) override;
+        const Step *pass(Runner &run, const NodeExpressShort &value) override;
+        const Step *pass(Runner &run, const Special &value) override;
+        const Step *pass(Runner &run, const Integer *value) override;
+        const Step *pass(Runner &run, const Float *value) override;
+        const Step *pass(Runner &run, const PilsColor *value) override;
+        const Step *pass(Runner &run, const PilsDate *value) override;
+        const Step *pass(Runner &run, const Timestamp *value) override;
+        const Step *pass(Runner &run, const Duration *value) override;
+        const Step *pass(Runner &run, const PilsString *value) override;
+        const Step *pass(Runner &run, const Cliche *value) override;
+        const Step *pass(Runner &run, const ListConstant *value) override;
+        const Step *pass(Runner &run, const NodeConstantLong *value) override;
+        const Step *pass(Runner &run, const NodeConstantShort *value) override;
+        const Step *pass(Runner &run, const ListExpress *value) override;
+        const Step *pass(Runner &run, const NodeExpressLong *value) override;
+        const Step *pass(Runner &run, const NodeExpressShort *value) override;
+        const Step *pass(Runner &run, const Special *value) override;
+        const Step *pass(Runner &run, const Any *value) override; //dummy
+        const Step *called(Runner &run, const Constant &call) override;
+        const Step *called(Runner &run, const Integer &call) override;
+        const Step *called(Runner &run, const ListConstant &call) override;
+        const Step *called(Runner &run, const NodeConstant &call) override;
+        const Step *called(Runner &run, const Empty &call) override;
+        const Step *called(Runner &run, const ListExpress &call) override;
+        const Step *called(Runner &run, const NodeExpress &call) override;
+        const Step *called(Runner &run, const Any &call, const Any *assignValue) override;
+        const Step *tailStep(Runner &run, const Any *thing, const Any *where_) override;
+        const Step *tailStep(Runner &run, const Any *thing) override;
+        Pipe *connectPipe(Runner &run) override;
 	};
 
 	class SinkThroughStacked
@@ -103,14 +103,14 @@ namespace PILS
 		{
 			run.calling.who = &who;
 		}
-		const Step *called(Runner &run, const Constant &call);
-		const Step *called(Runner &run, const Integer &call);
-		const Step *called(Runner &run, const ListConstant &call);
-		const Step *called(Runner &run, const NodeConstant &call);
-		const Step *called(Runner &run, const Empty &call);
-		const Step *called(Runner &run, const ListExpress &call);
-		const Step *called(Runner &run, const NodeExpress &call);
-		const Step *called(Runner &run, const Any &call, const Any *assignValue);
+        const Step *called(Runner &run, const Constant &call) override;
+        const Step *called(Runner &run, const Integer &call) override;
+        const Step *called(Runner &run, const ListConstant &call) override;
+        const Step *called(Runner &run, const NodeConstant &call) override;
+        const Step *called(Runner &run, const Empty &call) override;
+        const Step *called(Runner &run, const ListExpress &call) override;
+        const Step *called(Runner &run, const NodeExpress &call) override;
+        const Step *called(Runner &run, const Any &call, const Any *assignValue) override;
 	};
 
 	class SinkAroundStacked
@@ -120,14 +120,14 @@ namespace PILS
 		SinkAroundStacked(Runner &run, const Any &who)
 			: SinkThroughStacked(run, who)
 		{}
-		const Step *called(Runner &run, const Constant &call);
-		const Step *called(Runner &run, const Integer &call);
-		const Step *called(Runner &run, const ListConstant &call);
-		const Step *called(Runner &run, const NodeConstant &call);
-		const Step *called(Runner &run, const Empty &call);
-		const Step *called(Runner &run, const ListExpress &call);
-		const Step *called(Runner &run, const NodeExpress &call);
-		const Step *called(Runner &run, const Any &call, const Any *assignValue);
+        const Step *called(Runner &run, const Constant &call) override;
+        const Step *called(Runner &run, const Integer &call) override;
+        const Step *called(Runner &run, const ListConstant &call) override;
+        const Step *called(Runner &run, const NodeConstant &call) override;
+        const Step *called(Runner &run, const Empty &call) override;
+        const Step *called(Runner &run, const ListExpress &call) override;
+        const Step *called(Runner &run, const NodeExpress &call) override;
+        const Step *called(Runner &run, const Any &call, const Any *assignValue) override;
 	};
 
 	class Using
@@ -140,17 +140,17 @@ namespace PILS
 		Using(const PokerClicheTrailer &cliche, const Any *const *element)
 			: PokerTrailer(cliche, element)
 		{}
-		const Step *calling(Runner &run, const Constant &call) const;
-		const Step *calling(Runner &run, const Integer &call) const;
-		const Step *calling(Runner &run, const ListConstant &call) const;
-		const Step *calling(Runner &run, const NodeConstant &call) const;
-		const Step *calling(Runner &run, const Empty &call) const;
-		const Step *calling(Runner &run, const ListExpress &call) const;
-		const Step *calling(Runner &run, const NodeExpress &call) const;
-		const Step *calling(Runner &run, const Any &call, const Any *assignValue) const;
-		const Express *findCatchTag() const;
-		const Express *findCatchTag(const Constant &tag) const;
-		bool convert(Converter &converter) const;
+        const Step *calling(Runner &run, const Constant &call) const override;
+        const Step *calling(Runner &run, const Integer &call) const override;
+        const Step *calling(Runner &run, const ListConstant &call) const override;
+        const Step *calling(Runner &run, const NodeConstant &call) const override;
+        const Step *calling(Runner &run, const Empty &call) const override;
+        const Step *calling(Runner &run, const ListExpress &call) const override;
+        const Step *calling(Runner &run, const NodeExpress &call) const override;
+        const Step *calling(Runner &run, const Any &call, const Any *assignValue) const override;
+        const Express *findCatchTag() const override;
+        const Express *findCatchTag(const Constant &tag) const override;
+        bool convert(Converter &converter) const override;
 	protected:
 		Using(const Cliche &cliche, const Any *base, const Any *use)
 			: PokerTrailer(BuiltinClicheUsing::singleton, base, use)
@@ -169,14 +169,14 @@ namespace PILS
 		Through(const BuiltinClicheThrough &cliche, const Any *const *element)
 			: Using(cliche, element)
 		{}
-		const Step *calling(Runner &run, const Constant &call) const;
-		const Step *calling(Runner &run, const Integer &call) const;
-		const Step *calling(Runner &run, const ListConstant &call) const;
-		const Step *calling(Runner &run, const NodeConstant &call) const;
-		const Step *calling(Runner &run, const Empty &call) const;
-		const Step *calling(Runner &run, const ListExpress &call) const;
-		const Step *calling(Runner &run, const NodeExpress &call) const;
-		const Step *calling(Runner &run, const Any &call, const Any *assignValue) const;
+        const Step *calling(Runner &run, const Constant &call) const override;
+        const Step *calling(Runner &run, const Integer &call) const override;
+        const Step *calling(Runner &run, const ListConstant &call) const override;
+        const Step *calling(Runner &run, const NodeConstant &call) const override;
+        const Step *calling(Runner &run, const Empty &call) const override;
+        const Step *calling(Runner &run, const ListExpress &call) const override;
+        const Step *calling(Runner &run, const NodeExpress &call) const override;
+        const Step *calling(Runner &run, const Any &call, const Any *assignValue) const override;
 	};
 
 	class Around
@@ -189,14 +189,14 @@ namespace PILS
 		Around(const BuiltinClicheAround &cliche, const Any *const *element)
 			: Using(cliche, element)
 		{}
-		const Step *calling(Runner &run, const Constant &call) const;
-		const Step *calling(Runner &run, const Integer &call) const;
-		const Step *calling(Runner &run, const ListConstant &call) const;
-		const Step *calling(Runner &run, const NodeConstant &call) const;
-		const Step *calling(Runner &run, const Empty &call) const;
-		const Step *calling(Runner &run, const ListExpress &call) const;
-		const Step *calling(Runner &run, const NodeExpress &call) const;
-		const Step *calling(Runner &run, const Any &call, const Any *assignValue) const;
+        const Step *calling(Runner &run, const Constant &call) const override;
+        const Step *calling(Runner &run, const Integer &call) const override;
+        const Step *calling(Runner &run, const ListConstant &call) const override;
+        const Step *calling(Runner &run, const NodeConstant &call) const override;
+        const Step *calling(Runner &run, const Empty &call) const override;
+        const Step *calling(Runner &run, const ListExpress &call) const override;
+        const Step *calling(Runner &run, const NodeExpress &call) const override;
+        const Step *calling(Runner &run, const Any &call, const Any *assignValue) const override;
 	};
 
 	class CallingConstant
@@ -206,14 +206,14 @@ namespace PILS
 		CallingConstant(const HashedConstant *&link, const BuiltinClicheCalling &cliche, const Constant *value)
 			: UntypedOperationConstant(link, cliche, value)
 		{}
-		const Step *calling(Runner &run, const Constant &call) const;
-		const Step *calling(Runner &run, const Integer &call) const;
-		const Step *calling(Runner &run, const ListConstant &call) const;
-		const Step *calling(Runner &run, const NodeConstant &call) const;
-		const Step *calling(Runner &run, const Empty &call) const;
-		const Step *calling(Runner &run, const ListExpress &call) const;
-		const Step *calling(Runner &run, const NodeExpress &call) const;
-		const Step *calling(Runner &run, const Any &call, const Any *assignValue) const;
+        const Step *calling(Runner &run, const Constant &call) const override;
+        const Step *calling(Runner &run, const Integer &call) const override;
+        const Step *calling(Runner &run, const ListConstant &call) const override;
+        const Step *calling(Runner &run, const NodeConstant &call) const override;
+        const Step *calling(Runner &run, const Empty &call) const override;
+        const Step *calling(Runner &run, const ListExpress &call) const override;
+        const Step *calling(Runner &run, const NodeExpress &call) const override;
+        const Step *calling(Runner &run, const Any &call, const Any *assignValue) const override;
 	};
 
 	class CallingExpress
@@ -223,14 +223,14 @@ namespace PILS
 		CallingExpress(const BuiltinClicheCalling &cliche, const Express *value)
 			: UntypedOperationExpress(cliche, value)
 		{}
-		const Step *calling(Runner &run, const Constant &call) const;
-		const Step *calling(Runner &run, const Integer &call) const;
-		const Step *calling(Runner &run, const ListConstant &call) const;
-		const Step *calling(Runner &run, const NodeConstant &call) const;
-		const Step *calling(Runner &run, const Empty &call) const;
-		const Step *calling(Runner &run, const ListExpress &call) const;
-		const Step *calling(Runner &run, const NodeExpress &call) const;
-		const Step *calling(Runner &run, const Any &call, const Any *assignValue) const;
+        const Step *calling(Runner &run, const Constant &call) const override;
+        const Step *calling(Runner &run, const Integer &call) const override;
+        const Step *calling(Runner &run, const ListConstant &call) const override;
+        const Step *calling(Runner &run, const NodeConstant &call) const override;
+        const Step *calling(Runner &run, const Empty &call) const override;
+        const Step *calling(Runner &run, const ListExpress &call) const override;
+        const Step *calling(Runner &run, const NodeExpress &call) const override;
+        const Step *calling(Runner &run, const Any &call, const Any *assignValue) const override;
 	};
 
 	class CallingOkConstant
@@ -240,13 +240,13 @@ namespace PILS
 		CallingOkConstant(const HashedConstant *&link, const BuiltinClicheCallingOk &cliche, const Constant *value)
 			: NodeConstantTiny(link, cliche, value)
 		{}
-		const Step *calling(Runner &run, const Constant &call) const;
-		const Step *calling(Runner &run, const Integer &call) const;
-		const Step *calling(Runner &run, const ListConstant &call) const;
-		const Step *calling(Runner &run, const NodeConstant &call) const;
-		const Step *calling(Runner &run, const Empty &call) const;
-		const Step *calling(Runner &run, const ListExpress &call) const;
-		const Step *calling(Runner &run, const NodeExpress &call) const;
+        const Step *calling(Runner &run, const Constant &call) const override;
+        const Step *calling(Runner &run, const Integer &call) const override;
+        const Step *calling(Runner &run, const ListConstant &call) const override;
+        const Step *calling(Runner &run, const NodeConstant &call) const override;
+        const Step *calling(Runner &run, const Empty &call) const override;
+        const Step *calling(Runner &run, const ListExpress &call) const override;
+        const Step *calling(Runner &run, const NodeExpress &call) const override;
 	};
 
 	class CallingOkExpress
@@ -256,13 +256,13 @@ namespace PILS
 		CallingOkExpress(const BuiltinClicheCallingOk &cliche, const Express *value)
 			: NodeExpressTiny(cliche, value)
 		{}
-		const Step *calling(Runner &run, const Constant &call) const;
-		const Step *calling(Runner &run, const Integer &call) const;
-		const Step *calling(Runner &run, const ListConstant &call) const;
-		const Step *calling(Runner &run, const NodeConstant &call) const;
-		const Step *calling(Runner &run, const Empty &call) const;
-		const Step *calling(Runner &run, const ListExpress &call) const;
-		const Step *calling(Runner &run, const NodeExpress &call) const;
+        const Step *calling(Runner &run, const Constant &call) const override;
+        const Step *calling(Runner &run, const Integer &call) const override;
+        const Step *calling(Runner &run, const ListConstant &call) const override;
+        const Step *calling(Runner &run, const NodeConstant &call) const override;
+        const Step *calling(Runner &run, const Empty &call) const override;
+        const Step *calling(Runner &run, const ListExpress &call) const override;
+        const Step *calling(Runner &run, const NodeExpress &call) const override;
 	};
 
 	class SinkCallaround
@@ -272,20 +272,20 @@ namespace PILS
 		SinkCallaround(const Any &who)
 			: who(who)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, const Any *value);
-		const Step *called(Runner &run, const Constant &call);
-		const Step *called(Runner &run, const Integer &call);
-		const Step *called(Runner &run, const ListConstant &call);
-		const Step *called(Runner &run, const NodeConstant &call);
-		const Step *called(Runner &run, const Empty &call);
-		const Step *called(Runner &run, const ListExpress &call);
-		const Step *called(Runner &run, const NodeExpress &call);
-		const Step *called(Runner &run, const Any &call, const Any *assignValue);
-		const Step *tailStep(Runner &run, const Any *thing, const Any *where_);
-		const Step *tailStep(Runner &run, const Any *thing);
-		Pipe *connectPipe(Runner &run);
-		const Step *error(Runner &run, const Any *error, const Express *what, const Any *who);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, const Any *value) override;
+        const Step *called(Runner &run, const Constant &call) override;
+        const Step *called(Runner &run, const Integer &call) override;
+        const Step *called(Runner &run, const ListConstant &call) override;
+        const Step *called(Runner &run, const NodeConstant &call) override;
+        const Step *called(Runner &run, const Empty &call) override;
+        const Step *called(Runner &run, const ListExpress &call) override;
+        const Step *called(Runner &run, const NodeExpress &call) override;
+        const Step *called(Runner &run, const Any &call, const Any *assignValue) override;
+        const Step *tailStep(Runner &run, const Any *thing, const Any *where_) override;
+        const Step *tailStep(Runner &run, const Any *thing) override;
+        Pipe *connectPipe(Runner &run) override;
+        const Step *error(Runner &run, const Any *error, const Express *what, const Any *who) override;
 	private:
 		const Any &who;
 	};
@@ -297,8 +297,8 @@ namespace PILS
 		SinkWhoCalling(const WhoUntypedOperation &what, const Any *who)
 			: what(what), who(who)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, const Any *value);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, const Any *value) override;
 	protected:
 		const WhoUntypedOperation &what;
 		const Any *who;
@@ -311,12 +311,12 @@ namespace PILS
 		SinkCalling(const Any *call, const Any *who)
 			: call(call), who(who)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, const Any *value);
-		const Step *tailStep(Runner &run, const Any *thing, const Any *where_);
-		const Step *tailStep(Runner &run, const Any *thing);
-		Pipe *connectPipe(Runner &run);
-		const Step *error(Runner &run, const Any *error, const Express *what, const Any *who);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, const Any *value) override;
+        const Step *tailStep(Runner &run, const Any *thing, const Any *where_) override;
+        const Step *tailStep(Runner &run, const Any *thing) override;
+        Pipe *connectPipe(Runner &run) override;
+        const Step *error(Runner &run, const Any *error, const Express *what, const Any *who) override;
 	private:
 		const Any *call;
 		const Any *who;
@@ -329,8 +329,8 @@ namespace PILS
 		SinkWhoCallingAssign(const WhoAssign &what,	const Any *who, const Any *assignValue)
 			: what(what), who(who), assignValue(assignValue)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, const Any *call);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, const Any *call) override;
 	private:
 		const WhoAssign &what;
 		const Any *who;
@@ -344,14 +344,14 @@ namespace PILS
 		WhoTagConstant(const HashedConstant *&link, const BuiltinClicheWhoTag &cliche, const Constant *value)
 			: NodeConstantTiny(link, cliche, value)
 		{}
-		const Step *calling(Runner &run, const Constant &call) const;
-		const Step *calling(Runner &run, const Integer &call) const;
-		const Step *calling(Runner &run, const ListConstant &call) const;
-		const Step *calling(Runner &run, const NodeConstant &call) const;
-		const Step *calling(Runner &run, const Empty &call) const;
-		const Step *calling(Runner &run, const ListExpress &call) const;
-		const Step *calling(Runner &run, const NodeExpress &call) const;
-		const Step *calling(Runner &run, const Any &call, const Any *assignValue) const;
+        const Step *calling(Runner &run, const Constant &call) const override;
+        const Step *calling(Runner &run, const Integer &call) const override;
+        const Step *calling(Runner &run, const ListConstant &call) const override;
+        const Step *calling(Runner &run, const NodeConstant &call) const override;
+        const Step *calling(Runner &run, const Empty &call) const override;
+        const Step *calling(Runner &run, const ListExpress &call) const override;
+        const Step *calling(Runner &run, const NodeExpress &call) const override;
+        const Step *calling(Runner &run, const Any &call, const Any *assignValue) const override;
 	};
 
 	class WhoTagExpress
@@ -361,14 +361,14 @@ namespace PILS
 		WhoTagExpress(const BuiltinClicheWhoTag &cliche, const Express *value)
 			: NodeExpressTiny(cliche, value)
 		{}
-		const Step *calling(Runner &run, const Constant &call) const;
-		const Step *calling(Runner &run, const Integer &call) const;
-		const Step *calling(Runner &run, const ListConstant &call) const;
-		const Step *calling(Runner &run, const NodeConstant &call) const;
-		const Step *calling(Runner &run, const Empty &call) const;
-		const Step *calling(Runner &run, const ListExpress &call) const;
-		const Step *calling(Runner &run, const NodeExpress &call) const;
-		const Step *calling(Runner &run, const Any &call, const Any *assignValue) const;
+        const Step *calling(Runner &run, const Constant &call) const override;
+        const Step *calling(Runner &run, const Integer &call) const override;
+        const Step *calling(Runner &run, const ListConstant &call) const override;
+        const Step *calling(Runner &run, const NodeConstant &call) const override;
+        const Step *calling(Runner &run, const Empty &call) const override;
+        const Step *calling(Runner &run, const ListExpress &call) const override;
+        const Step *calling(Runner &run, const NodeExpress &call) const override;
+        const Step *calling(Runner &run, const Any &call, const Any *assignValue) const override;
 	};
 
 	class WhoTagConstantTrailer
@@ -378,14 +378,14 @@ namespace PILS
 		WhoTagConstantTrailer(const HashedConstant *&link, const BuiltinClicheWhoTagTrailer &cliche, const Constant *const *value)
 			: NodeConstantTrailer(link, cliche, value)
 		{}
-		const Step *calling(Runner &run, const Constant &call) const;
-		const Step *calling(Runner &run, const Integer &call) const;
-		const Step *calling(Runner &run, const ListConstant &call) const;
-		const Step *calling(Runner &run, const NodeConstant &call) const;
-		const Step *calling(Runner &run, const Empty &call) const;
-		const Step *calling(Runner &run, const ListExpress &call) const;
-		const Step *calling(Runner &run, const NodeExpress &call) const;
-		const Step *calling(Runner &run, const Any &call, const Any *assignValue) const;
+        const Step *calling(Runner &run, const Constant &call) const override;
+        const Step *calling(Runner &run, const Integer &call) const override;
+        const Step *calling(Runner &run, const ListConstant &call) const override;
+        const Step *calling(Runner &run, const NodeConstant &call) const override;
+        const Step *calling(Runner &run, const Empty &call) const override;
+        const Step *calling(Runner &run, const ListExpress &call) const override;
+        const Step *calling(Runner &run, const NodeExpress &call) const override;
+        const Step *calling(Runner &run, const Any &call, const Any *assignValue) const override;
 	private:
 		const Constant *dummy;
 	};
@@ -397,14 +397,14 @@ namespace PILS
 		WhoTagExpressTrailer(const BuiltinClicheWhoTagTrailer &cliche, const Any *const *value)
 			: NodeExpressTrailer(cliche, value)
 		{}
-		const Step *calling(Runner &run, const Constant &call) const;
-		const Step *calling(Runner &run, const Integer &call) const;
-		const Step *calling(Runner &run, const ListConstant &call) const;
-		const Step *calling(Runner &run, const NodeConstant &call) const;
-		const Step *calling(Runner &run, const Empty &call) const;
-		const Step *calling(Runner &run, const ListExpress &call) const;
-		const Step *calling(Runner &run, const NodeExpress &call) const;
-		const Step *calling(Runner &run, const Any &call, const Any *assignValue) const;
+        const Step *calling(Runner &run, const Constant &call) const override;
+        const Step *calling(Runner &run, const Integer &call) const override;
+        const Step *calling(Runner &run, const ListConstant &call) const override;
+        const Step *calling(Runner &run, const NodeConstant &call) const override;
+        const Step *calling(Runner &run, const Empty &call) const override;
+        const Step *calling(Runner &run, const ListExpress &call) const override;
+        const Step *calling(Runner &run, const NodeExpress &call) const override;
+        const Step *calling(Runner &run, const Any &call, const Any *assignValue) const override;
 	private:
 		const Any *dummy;
 	};
@@ -416,14 +416,14 @@ namespace PILS
 		SinkCallingWhoTag(const Any &who)
 			: SinkCallStacked(who)
 		{}
-		const Step *called(Runner &run, const Constant &call);
-		const Step *called(Runner &run, const Integer &call);
-		const Step *called(Runner &run, const ListConstant &call);
-		const Step *called(Runner &run, const NodeConstant &call);
-		const Step *called(Runner &run, const Empty &call);
-		const Step *called(Runner &run, const ListExpress &call);
-		const Step *called(Runner &run, const NodeExpress &call);
-		const Step *called(Runner &run, const Any &call, const Any *assignValue);
+        const Step *called(Runner &run, const Constant &call) override;
+        const Step *called(Runner &run, const Integer &call) override;
+        const Step *called(Runner &run, const ListConstant &call) override;
+        const Step *called(Runner &run, const NodeConstant &call) override;
+        const Step *called(Runner &run, const Empty &call) override;
+        const Step *called(Runner &run, const ListExpress &call) override;
+        const Step *called(Runner &run, const NodeExpress &call) override;
+        const Step *called(Runner &run, const Any &call, const Any *assignValue) override;
 	};
 
 	class Recalling
@@ -433,11 +433,11 @@ namespace PILS
 		Recalling(const BuiltinClicheRecalling &cliche, const Any *value)
 			: PokerShort(cliche, value)
 		{}
-		const Step *calling(Runner &run, const Constant &call) const;
-		const Step *calling(Runner &run, const Integer &call) const;
-		const Step *calling(Runner &run, const ListConstant &call) const;
-		const Step *calling(Runner &run, const NodeConstant &call) const;
-		const Step *calling(Runner &run, const Empty &call) const;
+        const Step *calling(Runner &run, const Constant &call) const override;
+        const Step *calling(Runner &run, const Integer &call) const override;
+        const Step *calling(Runner &run, const ListConstant &call) const override;
+        const Step *calling(Runner &run, const NodeConstant &call) const override;
+        const Step *calling(Runner &run, const Empty &call) const override;
 	};
 
 	class SinkWhoRecall
@@ -447,7 +447,7 @@ namespace PILS
 		SinkWhoRecall(const WhoUntypedOperation &what, const Any *who)
 			: SinkWhoCalling(what, who)
 		{}
-		const Step *pass(Runner &run, const Any *value);
+        const Step *pass(Runner &run, const Any *value) override;
 	};
 
 	class SinkRecall
@@ -457,25 +457,25 @@ namespace PILS
 		SinkRecall(const Any *call, const Recalling *who, SinkTagged *chain)
 			: SinkTagged(*who, chain), call(call)
 		{}
-		Sink *kick(Runner &run);
-		const Step *skip(Runner &run);
+        Sink *kick(Runner &run) override;
+        const Step *skip(Runner &run) override;
 		const Any *const call;
 		std::map<const Constant *, const Any *> map;
 
 		// un-inherit SinkForget
-		const Step *pass(Runner &run, double value);
-		const Step *pass(Runner &run, const Integer &value);
-		const Step *pass(Runner &run, const Float &value);
-		const Step *pass(Runner &run, const PilsString &value);
-		const Step *pass(Runner &run, const Cliche &value);
-		const Step *pass(Runner &run, const ListConstant &value);
-		const Step *pass(Runner &run, const NodeConstantLong &value);
-		const Step *pass(Runner &run, const NodeConstantShort &value);
-		const Step *pass(Runner &run, const ListExpress &value);
-		const Step *pass(Runner &run, const NodeExpressLong &value);
-		const Step *pass(Runner &run, const NodeExpressShort &value);
-		const Step *pass(Runner &run, const Any *value);
-		bool needsResult();
+        const Step *pass(Runner &run, double value) override;
+        const Step *pass(Runner &run, const Integer &value) override;
+        const Step *pass(Runner &run, const Float &value) override;
+        const Step *pass(Runner &run, const PilsString &value) override;
+        const Step *pass(Runner &run, const Cliche &value) override;
+        const Step *pass(Runner &run, const ListConstant &value) override;
+        const Step *pass(Runner &run, const NodeConstantLong &value) override;
+        const Step *pass(Runner &run, const NodeConstantShort &value) override;
+        const Step *pass(Runner &run, const ListExpress &value) override;
+        const Step *pass(Runner &run, const NodeExpressLong &value) override;
+        const Step *pass(Runner &run, const NodeExpressShort &value) override;
+        const Step *pass(Runner &run, const Any *value) override;
+        bool needsResult() override;
 
 	};
 
@@ -486,13 +486,13 @@ namespace PILS
 		SinkRecalling(SinkRecall &sinkRecall, const Constant &call)
 			: sinkRecall(sinkRecall), call(call)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, const Any *value);
-		const Step *called(Runner &run, const Constant &call);
-		const Step *called(Runner &run, const Integer &call);
-		const Step *called(Runner &run, const ListConstant &call);
-		const Step *called(Runner &run, const NodeConstant &call);
-		const Step *called(Runner &run, const Empty &call);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, const Any *value) override;
+        const Step *called(Runner &run, const Constant &call) override;
+        const Step *called(Runner &run, const Integer &call) override;
+        const Step *called(Runner &run, const ListConstant &call) override;
+        const Step *called(Runner &run, const NodeConstant &call) override;
+        const Step *called(Runner &run, const Empty &call) override;
 	private:
 		SinkRecall &sinkRecall;
 		const Constant &call;
@@ -505,13 +505,13 @@ namespace PILS
 		NotConstant(const HashedConstant *&link, const BuiltinClicheNot &cliche, const Constant *value)
 			: NodeConstantTiny(link, cliche, value)
 		{}
-		const Step *calling(Runner &run, const Constant &call) const;
-		const Step *calling(Runner &run, const Integer &call) const;
-		const Step *calling(Runner &run, const ListConstant &call) const;
-		const Step *calling(Runner &run, const NodeConstant &call) const;
-		const Step *calling(Runner &run, const Empty &call) const;
-		const Step *calling(Runner &run, const ListExpress &call) const;
-		const Step *calling(Runner &run, const NodeExpress &call) const;
+        const Step *calling(Runner &run, const Constant &call) const override;
+        const Step *calling(Runner &run, const Integer &call) const override;
+        const Step *calling(Runner &run, const ListConstant &call) const override;
+        const Step *calling(Runner &run, const NodeConstant &call) const override;
+        const Step *calling(Runner &run, const Empty &call) const override;
+        const Step *calling(Runner &run, const ListExpress &call) const override;
+        const Step *calling(Runner &run, const NodeExpress &call) const override;
 	};
 
 	class NotExpress
@@ -521,13 +521,13 @@ namespace PILS
 		NotExpress(const BuiltinClicheNot &cliche, const Express *value)
 			: NodeExpressTiny(cliche, value)
 		{}
-		const Step *calling(Runner &run, const Constant &call) const;
-		const Step *calling(Runner &run, const Integer &call) const;
-		const Step *calling(Runner &run, const ListConstant &call) const;
-		const Step *calling(Runner &run, const NodeConstant &call) const;
-		const Step *calling(Runner &run, const Empty &call) const;
-		const Step *calling(Runner &run, const ListExpress &call) const;
-		const Step *calling(Runner &run, const NodeExpress &call) const;
+        const Step *calling(Runner &run, const Constant &call) const override;
+        const Step *calling(Runner &run, const Integer &call) const override;
+        const Step *calling(Runner &run, const ListConstant &call) const override;
+        const Step *calling(Runner &run, const NodeConstant &call) const override;
+        const Step *calling(Runner &run, const Empty &call) const override;
+        const Step *calling(Runner &run, const ListExpress &call) const override;
+        const Step *calling(Runner &run, const NodeExpress &call) const override;
 	};
 
 	class SinkCallingNot
@@ -537,17 +537,17 @@ namespace PILS
 		SinkCallingNot(const Any &call)
 			: call(call)
 		{}
-		Sink *kick(Runner &run);
-		const Step *pass(Runner &run, long value);
-		const Step *called(Runner &run, const Constant &call);
-		const Step *called(Runner &run, const Integer &call);
-		const Step *called(Runner &run, const ListConstant &call);
-		const Step *called(Runner &run, const NodeConstant &call);
-		const Step *called(Runner &run, const Empty &call);
-		const Step *called(Runner &run, const ListExpress &call);
-		const Step *called(Runner &run, const NodeExpress &call);
-		const Step *called(Runner &run, const Any &call, const Any *assignValue);
-		const Step *error(Runner &run, const Any *error, const Express *what, const Any *who);
+        Sink *kick(Runner &run) override;
+        const Step *pass(Runner &run, long value) override;
+        const Step *called(Runner &run, const Constant &call) override;
+        const Step *called(Runner &run, const Integer &call) override;
+        const Step *called(Runner &run, const ListConstant &call) override;
+        const Step *called(Runner &run, const NodeConstant &call) override;
+        const Step *called(Runner &run, const Empty &call) override;
+        const Step *called(Runner &run, const ListExpress &call) override;
+        const Step *called(Runner &run, const NodeExpress &call) override;
+        const Step *called(Runner &run, const Any &call, const Any *assignValue) override;
+        const Step *error(Runner &run, const Any *error, const Express *what, const Any *who) override;
 	private:
 		const Any &call;
 	};

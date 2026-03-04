@@ -11,11 +11,11 @@ namespace PILS
 		Ruleset(const Any* rulelist, const Rule *const *rules, size_t count)
 			: PokerShort(BuiltinClicheRuleset::singleton, rulelist), compiled(rules, count)
 		{}
-		const Ruleset *as_Ruleset() const;
-		const Step *step_(Runner &run) const;
-		bool compileBuild(CompilingBuild &compiling) const;
-		bool write(Writing &writing, WriteState state, long level, const Constant *dot) const;
-		size_t unlinkAndGetSize();
+        const Ruleset *as_Ruleset() const override;
+        const Step *step_(Runner &run) const override;
+        bool compileBuild(CompilingBuild &compiling) const override;
+        bool write(Writing &writing, WriteState state, long level, const Constant *dot) const override;
+        size_t unlinkAndGetSize() override;
 		class Compilation
 		{
 		public:

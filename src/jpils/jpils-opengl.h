@@ -3,10 +3,13 @@
 #ifndef _JPILS_OPENGL_H_
 #define _JPILS_OPENGL_H_
 
-#include "pils-kernel/writing.h"
-#include <juce.h>
+#include "writing.h"
+// #include <juce.h>
+#include <juce_core/juce_core.h>
+#include <juce_graphics/juce_graphics.h>
+#include <juce_gui_basics/juce_gui_basics.h>
 
-BEGIN_JUCE_NAMESPACE
+namespace juce {
 
 class OpenGL
 {
@@ -350,5 +353,5 @@ public:
     static void gl__Viewport (int x, int y, int width, int height);
 };
 
-END_JUCE_NAMESPACE
+}
 #endif
