@@ -3,8 +3,8 @@
 
 namespace PILS
 {
-	Runner::Runner(Bridge &bridge, size_t stackSize)
-		: bridge(bridge),  oldTimer(true)
+    Runner::Runner(size_t stackSize)
+        : oldTimer(true)
 	{
 		stackLimit = new char[stackSize];
 		pessimistStackLimit = stackLimit + sizeof(void*) * 0x1000;
@@ -37,7 +37,12 @@ namespace PILS
 		return &what;
 	}
 
-	void *Runner::allocate(size_t size)
+    const Constant *Runner::as_Thread() const
+    {
+        return nullptr;
+    }
+
+    void *Runner::allocate(size_t size)
 	{		char *aim = (char*)sink - size;
 		if (aim < stackLimit)
 			throw L"Stack overflow";

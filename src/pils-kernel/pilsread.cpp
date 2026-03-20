@@ -890,6 +890,7 @@ namespace PILS
 		else if (at == from + 1 && *from == '\'')
 		{
 			result = lastName?lastName:&Empty::singleton;
+            name = PilsString::get("-"); //dummy - this string can be unduplicated
 		}
 		if (!name)
 			name = PilsString::get((const PILS_CHAR *)from, at - from - (nametype == NAMETYPE_ASTERISKED));

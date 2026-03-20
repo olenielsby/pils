@@ -1130,7 +1130,7 @@ namespace PILS
 		const PredefinedName strap;
 		const SystemPropertyPlumcake plumcake;
         const PredefinedName buglog;
-		const SystemPropertyThread thread;
+        // const SystemPropertyThread thread;
 		const PredefinedName knot;
 		const PredefinedName later;
 		const PropertyHexadecimal hexadecimal;
@@ -3491,17 +3491,17 @@ namespace PILS
 	/* Threading
 	 */
 
-	class BuiltinClicheThread
-		: public BuiltinPokerClicheShort
-	{
-	private:
-        const Any *node(const Constant *element) const override;
-        const NodeExpressShort *node(const Express *element) const override;
-		static const BuiltinClicheThread singleton;
-		BuiltinClicheThread()
-			: BuiltinPokerClicheShort(&Builtin::name.thread)
-		{}
-	};
+    // class BuiltinClicheThread
+    // 	: public BuiltinPokerClicheShort
+    // {
+    // private:
+        // const Any *node(const Constant *element) const override;
+        // const NodeExpressShort *node(const Express *element) const override;
+        // static const BuiltinClicheThread singleton;
+        // BuiltinClicheThread()
+        // 	: BuiltinPokerClicheShort(&Builtin::name.thread)
+    // 	{}
+    // };
 
 	class BuiltinClicheKnot
 		: public BuiltinClicheTiny

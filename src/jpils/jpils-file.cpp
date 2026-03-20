@@ -221,7 +221,7 @@ namespace PILS
 	const Any *QuickFetchFileName::specialAttribute(const Special &value) const
 	{
 		FileNameConverter converter;
-		if (value.convert(converter) && converter.name->value[converter.name->count->value - 1] != '/')
+        if (value.convert(converter) && converter.name->count != 0 && converter.name->value[converter.name->count->value - 1] != '/')
 			return converter.name;
 		else return NULL;
 	}
@@ -229,7 +229,7 @@ namespace PILS
 	const Any *QuickFetchFolderName::specialAttribute(const Special &value) const
 	{
 		FileNameConverter converter;
-		if (value.convert(converter) && converter.name->value[converter.name->count->value - 1] == '/')
+        if (value.convert(converter) && converter.name->count != 0 && converter.name->value[converter.name->count->value - 1] == '/')
 			return converter.name;
 		else return NULL;
 	}

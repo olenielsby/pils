@@ -31,7 +31,7 @@ namespace PILS
 
 	bool Writing::write(const Any *thing, WriteState state, long level, const Constant *dot)
 	{
-		if(thing->isMultipleReferenced())
+        if(thing->refcount.isMultipleReferenced())
 		{
 			std::map<const Any *, int>::iterator find = labels.find(thing);
 			if (find != labels.end() && find->second)
@@ -1831,7 +1831,7 @@ namespace PILS
 
 	bool Writing::labeling(const Any *thing)
 	{
-		if (thing->isMultipleReferenced())
+        if (thing->refcount.isMultipleReferenced())
 		{
 			std::pair<std::map<const Any *, int>::iterator, bool> insert = labels.insert(std::pair<const Any *, int>(thing, 0));
 			if (!insert.second)

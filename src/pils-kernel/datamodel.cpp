@@ -7,28 +7,24 @@
 
 namespace PILS
 {
+    Step::~Step() = default;
+
 	Any::Any()
 	{
-		referenceCount = 0;
-	}
+    }
 
 	/* For protection against circularity when inserting callbacks in non-aliens */
 
-	bool Any::isMultipleReferenced() const
-	{
-		return referenceCount != 0;
-	}
-
 	void Any::disposeRoot()
 	{
-		scrapLink = NULL;
+        refcount.becomeScrap(nullptr);
 		for (Any *unroll = destroy(); unroll; unroll = unroll->destroy());
 	}
 
 	Any *Any::destroy()
 	{
 		size_t size = unlinkAndGetSize();
-		Any *link = scrapLink;
+        Any *link = refcount.scrapLink;
 		Heap::free(this, size);
 		return link;
 	}
@@ -494,10 +490,15 @@ namespace PILS
 		return sizeof(PilsColor);
 	}
 
-	const PilsString *PilsString::get(const PILS_CHAR *text)
+    const PilsString *PilsString::get(const PILS_CHAR *text)
 	{
-		return get(text, strlen /*wcslen*/(text));
-	}
+        return get(text, strlen(text));
+    }
+
+    const PilsString *PilsString::get(const std::string &text)
+    {
+        return get(text.data(), text.size());
+    }
 
 	const HashedConstant *&PilsString::hashChain(const PILS_CHAR *text, size_t count)
 	{

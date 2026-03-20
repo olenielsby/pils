@@ -1,6 +1,5 @@
 /* This file is public domain */
-#ifndef DEFINE_PILS_SINK_H
-#define DEFINE_PILS_SINK_H
+#pragma once
 #include "builtin.h"
 namespace PILS
 {
@@ -28,18 +27,18 @@ namespace PILS
 	class Runner
 	{
 	public:
-		Runner(Bridge &bridge, size_t stackSize);
+        Runner(size_t stackSize);
 		virtual ~Runner();
 		void *allocate(size_t size);
 		Sink *pushWhere(const Any *newWhere);
 		void run(const Step *step_);
 		const Step *pass(const Any *thing);
         virtual bool isMainThread() const;
-		virtual const Constant *as_Thread() const = 0;
+        virtual const Constant *as_Thread() const;
 		virtual const Step *callingKnot(const Any &who, const Any &call);
 		virtual const Step *callingKnot(const Any &who, const Any &call, const Any *assignValue);
 		virtual const Step *thread(const Any &what);
-		Bridge &bridge;
+        // Bridge &bridge;
 		char *stackLimit;
 		char *pessimistStackLimit;
 		Sink *sink;
@@ -703,7 +702,7 @@ namespace PILS
 			head->addReference();
 		}
 		SinkTaggedNodeBuilding(Building &tag, SinkTagged *chain, const Constant &head)
-			: SinkTaggedBuilding(tag, chain), head(&head), joker(NULL)
+            : SinkTaggedBuilding(tag, chain), head(&head), joker(nullptr)
 		{
 			head.addReference();
 		}
@@ -728,4 +727,3 @@ namespace PILS
         Sink *kick(Runner &run) override;
 	};
 }
-#endif

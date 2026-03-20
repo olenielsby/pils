@@ -229,7 +229,7 @@ namespace PILS
 		strap(_PS("strap")),
 		plumcake(_PS("plumcake")),
         buglog(_PS("bug")),
-		thread(_PS("thread")),
+        // thread(_PS("thread")),
 		knot(_PS("knot")),
 		later(_PS("later")),
 		hexadecimal(_PS("hexadecimal")),
@@ -356,7 +356,7 @@ namespace PILS
 	const BuiltinClicheChannel BuiltinClicheChannel::singleton;
 	const BuiltinClicheStrap BuiltinClicheStrap::singleton;
 	const BuiltinClicheListen BuiltinClicheListen::singleton;
-	const BuiltinClicheThread BuiltinClicheThread::singleton;
+    // const BuiltinClicheThread BuiltinClicheThread::singleton;
 	const BuiltinClicheKnot BuiltinClicheKnot::singleton;
 	const BuiltinClicheLater BuiltinClicheLater::singleton;
 

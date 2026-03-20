@@ -2,20 +2,20 @@
 #include "pilsthread.h"
 namespace PILS
 {
-	const Any *SystemPropertyThread::get(Runner &run) const
-	{
-		return run.as_Thread();
-	}
+    // const Any *SystemPropertyThread::get(Runner &run) const
+    // {
+    // 	return run.as_Thread();
+    // }
 
-	const Any *BuiltinClicheThread::node(const Constant *element) const
-	{
-		return new (Heap::allocate(sizeof(ThreadPoker))) ThreadPoker(*this, element);
-	}
+    // const Any *BuiltinClicheThread::node(const Constant *element) const
+    // {
+    // 	return new (Heap::allocate(sizeof(ThreadPoker))) ThreadPoker(*this, element);
+    // }
 
-	const NodeExpressShort *BuiltinClicheThread::node(const Express *element) const
-	{
-		return new (Heap::allocate(sizeof(ThreadPoker))) ThreadPoker(*this, element);
-	}
+    // const NodeExpressShort *BuiltinClicheThread::node(const Express *element) const
+    // {
+    // 	return new (Heap::allocate(sizeof(ThreadPoker))) ThreadPoker(*this, element);
+    // }
 
 	const Any *BuiltinClicheLater::node(const Constant *element) const
 	{
@@ -27,10 +27,10 @@ namespace PILS
 		return new (Heap::allocate(sizeof(LaterPoker))) LaterPoker(*this, element);
 	}
 
-	const Step *ThreadPoker::step_(Runner &run) const
-	{
-		return run.thread(*element[0]);
-	}
+    // const Step *ThreadPoker::step_(Runner &run) const
+    // {
+    // 	return run.thread(*element[0]);
+    // }
 
 	const NodeConstantShort *BuiltinClicheKnot::newNode(const HashedConstant *&link, const Integer *value) const
 	{

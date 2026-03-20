@@ -1626,11 +1626,11 @@ this program filename call
 {filename|:ok filename <+#^* "/" . " - " (filename <-#^* "/")}
 ><:[module:. pils icon .timestamp 2008-12-21T14:27:46.589+01 .language system]><;
 { call = icon: .size? .png? | :try call call: platform }
-{ large: .png | :try platform icon: .size [32 32] .png }
-{ small: .png | :try platform icon: .size [16 16] .png }
+{ large: .png | :ok platform icon: .size [32 32] .png }
+{ small: .png | :ok platform icon: .size [16 16] .png }
 ><:[module:. pils icon === .timestamp 2008-12-21T14:27:53.527+01 .language system]><;
-{ large: .png | :try platform icon: .size [32 32] .png }
-{ small: .png | :try platform icon: .size [16 16] .png }
+{ large: .png | :ok platform icon: .size [32 32] .png }
+{ small: .png | :ok platform icon: .size [16 16] .png }
 ><:[module:. pils icon bottle .timestamp 2008-12-21T14:26:42.964+01 .language system]><;
 ><:[module:. pils icon bottle === .timestamp 2008-12-21T14:26:37.824+01 .language system]><;
 ;png

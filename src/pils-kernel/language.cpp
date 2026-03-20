@@ -376,8 +376,8 @@ namespace PILS
 
 	const Step *SinkBug::pass(Runner &run, const Any *value)
 	{
-        const int bugLevels = 5;
-		WritingString writing(run, language, value);
+        const int bugLevels = 10;
+        WritingIndentString writing(run, language, value);
         value->write(writing, WRITING_EXPRESSION, bugLevels, NULL);
 		const PilsString *string = writing.getString();
 		bug(run, *string);

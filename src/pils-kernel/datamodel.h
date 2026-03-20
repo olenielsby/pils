@@ -1,7 +1,7 @@
 /* This file is public domain */
-#ifndef DEFINE_PILS_DATAMODEL_H
-#define DEFINE_PILS_DATAMODEL_H
+#pragma once
 #include "pilsmutex.h"
+#include "pilsatomic.h"
 
 #ifdef PILS_CHAR_IS_UTF16
 typedef wchar_t PILS_CHAR;
@@ -64,6 +64,7 @@ namespace PILS
 	class Step
 	{
 	public:
+        virtual ~Step();
 		virtual const Step *step_(Runner &run) const = 0;
 	protected:
 		Step()
@@ -166,18 +167,15 @@ namespace PILS
 	{
 	public:
         bool duplicateReferenceNoChildren() const;
-        virtual bool isMultipleReferenced() const;
+        // virtual bool isMultipleReferenced() const;
 	protected:
 		Any();
         bool duplicateReference() const;
         bool duplicateReference(bool copying) const;
         virtual void unduplicateChildren() const;
-		union
-		{
-			mutable long referenceCount;
-			mutable Any* scrapLink;
-		};
-	public:
+        friend class Writing;
+        mutable RefcountOrScrap<Any> refcount;
+    public:
         void unduplicateReference() const;
         void addReference() const;
         void releaseReference() const;
@@ -630,6 +628,7 @@ namespace PILS
         size_t unlinkAndGetSize() override;
         static const PilsString *get(const PILS_CHAR *text, size_t count);
 		static const PilsString *get(const PILS_CHAR *text);
+        static const PilsString *get(const std::string &text);
 #ifndef PILS_CHAR_IS_UTF16
 		static const PilsString *get(const wchar_t *text, size_t count);
 		static const PilsString *get(const wchar_t *text);
@@ -1818,4 +1817,4 @@ namespace PILS
 		bool alive;
 	};
 }
-#endif
+

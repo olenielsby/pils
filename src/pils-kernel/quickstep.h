@@ -1,6 +1,5 @@
 /* This file is public domain */
-#ifndef DEFINE_PILS_QUICKSTEP_H
-#define DEFINE_PILS_QUICKSTEP_H
+#pragma once
 #include "catchy.h"
 namespace PILS
 {
@@ -121,7 +120,7 @@ namespace PILS
         const QuickCalling *match(Runner &run, void **stack, const Integer &value) const override;
 	};
 
-	class QuickTestNumber
+    class QuickTestNumber
 		: QuickFail
 	{
 	public:
@@ -1207,4 +1206,3 @@ namespace PILS
 		const InterfaceDesignator &designator;
 	};
 }
-#endif

@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Qt
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets Network)
+find_package(Qt6 REQUIRED COMPONENTS Widgets Network)
 
 # eksterne libs
 find_package(CURL REQUIRED)
@@ -14,22 +14,31 @@ find_package(CURL REQUIRED)
 # interne biblioteker
 add_subdirectory(src/pils-kernel)
 
-# qpils sources
-file(GLOB QPILS_SOURCES CONFIGURE_DEPENDS
+# hovedprogram
+add_executable(pils_app
+    src/main.cpp
+    src/qpils/qpils-commander.cpp
+    src/qpils/qpils-heap.cpp
+    src/qpils/qpils-plumming.cpp
+)
+
+file(GLOB QPILS_SOURCES
     src/qpils/*.cpp
 )
 
-# hovedprogram
-add_executable(pils_app
+target_sources(pils_app PRIVATE
     src/main.cpp
     ${QPILS_SOURCES}
 )
 
-set_target_properties(pils_app PROPERTIES
-    OUTPUT_NAME "pils"
+set_target_properties(pils_kernel PROPERTIES
+    POSITION_INDEPENDENT_CODE ON
 )
 
 target_include_directories(pils_app PRIVATE src)
+set_target_properties(pils_app PROPERTIES
+    OUTPUT_NAME "pils"
+)
 
 target_compile_options(pils_app PRIVATE
     -Wall
@@ -39,7 +48,6 @@ target_compile_options(pils_app PRIVATE
 )
 
 target_link_libraries(pils_app PRIVATE
-    Qt6::Core
     Qt6::Widgets
     Qt6::Network
     pils_kernel

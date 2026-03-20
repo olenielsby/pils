@@ -1,5 +1,6 @@
 /* This file is public domain */
 #include "numeric.h"
+#include "initializers.h"
 
 namespace PILS
 {

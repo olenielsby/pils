@@ -1,16 +1,17 @@
 /* This file is public domain */
 #include "pilsatomic.h"
+#include "datamodel.h"
 
 namespace PILS
 {
 	void Any::addReference() const
 	{
-		PILS_INTERLOCKED_INCREMENT(referenceCount);
+        refcount.retain();
 	}
 
 	void Any::releaseReference() const
 	{
-		if(PILS_INTERLOCKED_DECREMENT_RETURN(referenceCount) < 0)
+        if(refcount.release())
 		{
 			Mutex::Lock lock(Heap::mutex);
 			((Any*)this)->disposeRoot();
@@ -19,7 +20,7 @@ namespace PILS
 
 	void Any::releaseReferenceInsideLock() const
 	{
-		if(PILS_INTERLOCKED_DECREMENT_RETURN(referenceCount) < 0)
+        if(refcount.release())
 		{
 			((Any*)this)->disposeRoot();
 		}
@@ -27,21 +28,27 @@ namespace PILS
 
 	void Any::unduplicateReference() const
 	{
-		PILS_INTERLOCKED_DECREMENT(referenceCount);
+        bool gone = refcount.release();
+        if(gone)
+
+        {
+            writeToDebugOutput(10);
+        }
+        // assert(!gone && "Any::unduplicateReference() underflow");
 	}
 
 	/* For use in hash table lookup: ignore doomed constants */
 
 	bool Any::duplicateReference() const
 	{
-		if (PILS_INTERLOCKED_INCREMENT_RETURN(referenceCount) != 0)
+        if (refcount.refCount++ >= 0)
 		{
 			unduplicateChildren();
 			return true;
 		}
 		else
 		{
-			referenceCount--;
+            refcount.refCount--;
 			return false;
 		}
 	}
@@ -50,31 +57,31 @@ namespace PILS
 
 	bool Any::duplicateReferenceNoChildren() const
 	{
-		if (PILS_INTERLOCKED_INCREMENT_RETURN(referenceCount) != 0)
+        if (++refcount.refCount != 0)
 		{
 			return true;
 		}
 		else
 		{
-			referenceCount--;
+            refcount.refCount--;
 			return false;
 		}
 	}
 
 	void Any::releaseFrom(Any &scrap) const
 	{
-		if (PILS_INTERLOCKED_DECREMENT_RETURN(referenceCount) < 0)
+        if (refcount.release())
 		{
-			scrapLink = scrap.scrapLink;
-			scrap.scrapLink = (Any*)this;
+            refcount.becomeScrap(scrap.refcount.scrapLink);
+            scrap.refcount.scrapLink = (Any*)this;
 		}
 	}
 
 	bool Any::duplicateReference(bool copying) const
 	{
-		if (PILS_INTERLOCKED_INCREMENT_RETURN(referenceCount) == 0)
+        if (++refcount.refCount == 0)
 		{
-			referenceCount--;
+            refcount.refCount--;
 			return false;
 		}
 		else

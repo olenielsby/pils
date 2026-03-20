@@ -1,5 +1,6 @@
 [nonsense]
 ><:[module:. ===, .timestamp 2011-07-20T23:59:11.596+02 .language system]><;
+"INSTANTIATING MODULE: ===" bug {} and:
 !!
 The rules of this module are available to all modules except the
 [pils system ...] ones.
@@ -7,7 +8,8 @@ The rules of this module are available to all modules except the
 Edit with care - the bug pinning depends on this module, so bugs
 here may not be pinned.
 !!
-{ ok graph:graph | :ok } ! validate graphs by call
+
+! { ok graph:graph | :ok } ! validate graphs by call
 { : object list
 | :possibly
   object count .:need call {ok count|:ok} .:need up every (object)
@@ -32,7 +34,8 @@ here may not be pinned.
 }
 { :error .who .module
 | :where :what :try @@ [pils run error]
-  ((error:. .who .what .where .module) bug {})
+  ( "ERROR REPORT (error:. .who .what .where .module)" bug {} and:
+    (error:. .who .what .where .module) bug {})
 }
 { : object find (filter) | :try [items] call (object) .:need find (filter) }
 { : object each (filter) | :try [items] call (object) .:need each (filter) }
@@ -58,9 +61,13 @@ here may not be pinned.
   find {n|module-name +# n & [pils language] & language .(@@) .:try}
 }
 { language: . [system] .module-name +&? .library $? | :ok {} }
-{ .platform | :ok @ [platform [?:?|pils-configuration:platform] entry] }
+{ .platform
+| :ok
+  "RETRIEVING PLATFORM" bug {} and:
+   @ ([platform [?:?|pils-configuration:platform] entry] bug {})
+}
 { datafile: $ filename
-| :possibly file (filename) try (channel: pils-dependency: .thread)
+| :possibly file (filename) try (channel: pils-dependency: .thread ' or [dummy-thread])
 }
 { .datafile-check
 | :ok
@@ -93,6 +100,7 @@ here may not be pinned.
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
 !!
+"INSTANTIATING MODULE: pils system" bug {} and:
 
 { base:
   .expression
@@ -107,7 +115,7 @@ PILS should be restarted and tested after each edit.
 | :ok
   ;draw
     { module-name
-    | module-name try (channel: pils-dependency: .thread)
+    | module-name try (channel: pils-dependency: .thread ' or [dummy-thread])
       call (program-strap) .:need
       call {* ;instance ok|:ok} .:try
     }
@@ -234,6 +242,7 @@ PILS should be restarted and tested after each edit.
   +++ plumcake
 }
 ><:[module:. pils system boot .timestamp 2011-07-21T00:52:13.557+02 .language system]><;
+"INSTANTIATING MODULE: pils system boot" bug {} and:
 !!
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
@@ -245,10 +254,13 @@ that allows the system modules to reference each other
 !!
 { boot: .filename .text
 | :where :ok
+  "BOOTING" bug {} and:
   text -#$* ""efbbbf split "><.:"
   every
   { ok
-  | :ok ' split "><.;" every {ok|:ok ' -#$* ""= *=* ["><..", "><."]} legs:
+  | :ok ' split "><.;"
+    every {ok|:ok ' -#$* ""= *=* ["><..", "><."]}
+    legs:
     { ? := ok | :ok }
     { 1 := ok | :ok ' .({} read) }
     ===
@@ -316,10 +328,11 @@ that allows the system modules to reference each other
 ===
 { :error
 | :what
-  (ERROR: error) bug {} anyway:
-  (WHAT: what) bug {}
+  "********************************ERROR*******************************" bug {} and:
+  (what: .; error) bug {}
 }
 ><:[module:. pils system changed .timestamp 2011-07-20T23:10:44.932+02 .language system]><;
+"INSTANTIATING MODULE: pils system changed" bug {} and:
 !!
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
@@ -360,6 +373,7 @@ knot:
   }
 }
 ><:[module:. pils system librarian .timestamp 2011-09-28T17:23:05.277+02 .language system]><;
+"INSTANTIATING MODULE: pils system librarian" bug {} and:
 !!
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
@@ -435,6 +449,7 @@ is used to notify programs of changes.
   .bootfilename
 }
 ><:[module:. pils system library .timestamp 2011-07-21T00:40:19.962+02 .language system]><;
+"INSTANTIATING MODULE: pils system library" bug {} and:
 !!
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
@@ -513,6 +528,7 @@ PILS should be restarted and tested after each edit.
 | :try @@ (module-name call (library-node) .:need language or :ok {})
 }
 ><:[module:. pils system library-list .timestamp 2011-07-20T23:52:33.178+02 .language system]><;
+"INSTANTIATING MODULE: pils system library-list" bug {} and:
 !!
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
@@ -572,6 +588,7 @@ PILS should be restarted and tested after each edit.
 }
 { .test|:self :try this program filename call (self) }
 ><:[module:. pils system path .timestamp 2011-07-21T00:51:59.932+02 .language system]><;
+"INSTANTIATING MODULE: pils system path" bug {} and:
 !!
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
@@ -661,7 +678,7 @@ Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
 !!
 
-;depend (channel: pils-dependency: .thread);
+;depend (channel: pils-dependency: .thread ' or [dummy-thread]);
 knot:
 { $ program-filename | :ok strap (program: program-filename) }
 ->
@@ -752,6 +769,17 @@ knot:
             ( :list [depend];
               ;depend ' listen {= want|:ok list [depend] := want};
               ;language language (.module .module-name);
+
+(
+language read (module-text)
+===
+{ :error error:. .start .end
+| module-text +# end . "<SYNTAX ERROR>" bug {} and:
+  module-name bug {}
+}
+) or () and:
+
+
               ;expression language read (module-text) .:need;
               ;basement
               ( @@ [pils system base] base:
@@ -808,7 +836,11 @@ knot:
 +++'
 [call: existing-program]
 ===
-{ ::error | :what (what:. .error) bug {} }
+{ ::error
+| :what
+  "BASIC ERROR in @ [pils system program] - (what:. .error)" bug {} and:
+  (what:. .error) bug {}
+}
 ><:[module:. pils system program-file .timestamp 2011-07-20T23:12:23.226+02 .language system]><;
 !!
 Edit with care - everything depends on this module.
@@ -840,6 +872,7 @@ PILS should be restarted and tested after each edit.
   splice "><.:"
 }
 ><:[module:. pils system start .timestamp 2011-09-29T22:05:33.429+02 .language system]><;
+"INSTANTIATING MODULE: pils system start" bug {} and:
 !!
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
@@ -907,8 +940,10 @@ PILS should be restarted and tested after each edit.
 }
 ><:[module:. pils talk .timestamp 2009-04-28T16:25:35.234+02 .language system]><;
 ><:[module:. pils talk english .timestamp 2009-04-28T17:15:49.806+02 .language system]><;
+"INSTANTIATING MODULE: pils talk english" bug {} and:
 @@ [pils talk system]
 ><:[module:. pils talk system .timestamp 2011-07-21T00:21:45.841+02 .language system]><;
+"INSTANTIATING MODULE: pils talk system" bug {} and:
 { say: say
 | :who ' saying (say) .:need title .:try }
 { saying: try
@@ -929,6 +964,7 @@ PILS should be restarted and tested after each edit.
   }
 }
 ><:[module:. pils user .timestamp 2009-06-14T04:15:06.467+02 .language system]><;
+"INSTANTIATING MODULE: pils user" bug {} and:
 ;language {}
 .language-module [pils language system]
 .talk @@ [pils talk system]
@@ -936,4 +972,5 @@ PILS should be restarted and tested after each edit.
 ><:[module:. plug pils .timestamp 2009-06-14T04:16:09.623+02 .language system]><;
 ><:[module:. plug pils language .timestamp 2009-06-14T05:32:10.442+02 .language system]><;
 ><:[module:. plug pils language plug .timestamp 2009-06-14T05:32:17.442+02 .language system]><;
+"INSTANTIATING MODULE: plug pils language" bug {} and:
 language: {} .::? merge: "p", ["pils.org/ns/pilsplug"]:

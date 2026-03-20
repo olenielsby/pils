@@ -1,12 +1,64 @@
 /* This file is public domain */
-#ifndef _PILS_PILSATOMIC_H_
-#define _PILS_PILSATOMIC_H_
-#include "datamodel.h"
+#pragma once
+#include <atomic>
+#include <cassert>
+template<class T>
+class RefcountOrScrap
+{
+public:
+    union
+    {
+        std::atomic<long> refCount;
+        T* scrapLink;
+    };
 
-#define PILS_INTERLOCKED_INCREMENT(x) __sync_add_and_fetch(&(x), 1)
-#define PILS_INTERLOCKED_DECREMENT(x) __sync_add_and_fetch(&(x), -1)
-#define PILS_INTERLOCKED_INCREMENT_RETURN PILS_INTERLOCKED_INCREMENT
-#define PILS_INTERLOCKED_DECREMENT_RETURN PILS_INTERLOCKED_DECREMENT
-
+#ifndef NDEBUG
+    bool isScrap = false;
 #endif
 
+    RefcountOrScrap() noexcept
+    {
+        new (&refCount) std::atomic<long>(0);
+    }
+
+    ~RefcountOrScrap() noexcept
+    {
+        assert(isScrap && "RefcountOrScrap destroyed before becomeScrap()");
+    }
+
+    void retain() noexcept
+    {
+        assert(!isScrap && "RefcountOrScrap::retaion after becomeScrap()");
+        refCount.fetch_add(1, std::memory_order_relaxed);
+    }
+
+    bool release() noexcept
+    {
+        assert(!isScrap && "RefcountOrScrap::release after becomeScrap()");
+        return refCount.fetch_sub(1, std::memory_order_release) == 0;
+    }
+    bool isMultipleReferenced() const
+    {
+        assert(!isScrap && "RefcountOrScrap::isMultipleReferenced after becomeScrap()");
+        return refCount != 0;
+    }
+
+    static void acquireFence() noexcept
+    {
+        std::atomic_thread_fence(std::memory_order_acquire);
+    }
+
+    void becomeScrap(T* next) noexcept
+    {
+#ifndef NDEBUG
+        isScrap = true;
+#endif
+        refCount.~atomic<long>();
+        scrapLink = next;
+    }
+
+    T* nextScrap() const noexcept
+    {
+        return scrapLink;
+    }
+};

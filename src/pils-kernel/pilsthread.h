@@ -5,15 +5,15 @@
 #include "sink.h"
 namespace PILS
 {
-	class ThreadPoker
-		: public PokerShort
-	{
-	public:
-		ThreadPoker(const BuiltinClicheThread &cliche, const Any *value)
-			: PokerShort(cliche, value)
-		{}
-        const Step *step_(Runner &run) const override;
-	};
+    // class ThreadPoker
+    // 	: public PokerShort
+    // {
+    // public:
+    // 	ThreadPoker(const BuiltinClicheThread &cliche, const Any *value)
+    // 		: PokerShort(cliche, value)
+    // 	{}
+    // const Step *step_(Runner &run) const override;
+    // };
 
 	class LaterPoker
 		: public PokerShort
