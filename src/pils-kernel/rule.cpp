@@ -16,7 +16,7 @@ namespace PILS
 
 	const Any *BuiltinClicheRule::node(const Any *const *element) const
 	{
-		return new (Heap::allocate(sizeof(Rule))) const Rule(element);
+        return new const Rule(element);
 	}
 
 	const Rule *Rule::as_Rule() const
@@ -24,21 +24,24 @@ namespace PILS
 		return this;
 	}
 
-	const NodeExpressShort *BuiltinClicheRuleset::node(const Express *element) const
-	{
-		const Any *const *rules;
-		const Integer *count;
-		if (element->isList(rules, count))
-		{
-			for (size_t i = 0; i < (size_t)count->value; i++)
-				if (rules[i]->as_Rule() == NULL)
-					goto bad;
-		return new (Heap::allocate(sizeof(Ruleset)))
-			Ruleset(element, (const Rule *const *)rules, count->value);
-		}
-	bad:
-		return PokerClicheShort::node(element);
-	}
+    const NodeExpressShort* BuiltinClicheRuleset::node(const Express* element) const
+    {
+        const Any* const* rules;
+        const Integer* count;
+
+        if (!element->isList(rules, count))
+            return PokerClicheShort::node(element);
+
+        size_t n = (size_t)count->value;
+
+        for (size_t i = 0; i < n; ++i)
+        {
+            if (rules[i]->as_Rule() == nullptr)
+                return PokerClicheShort::node(element);
+        }
+
+        return new Ruleset(element, (const Rule* const*)rules, n);
+    }
 
 	const Ruleset *Ruleset::as_Ruleset() const
 	{
@@ -48,15 +51,15 @@ namespace PILS
 	const Any *BuiltinClicheClosure::node(const Any *const *element) const
 	{
 		if (element[1]->as_Ruleset())
-			return new (Heap::allocate(sizeof(Closure))) Closure(element);
-		return new (Heap::allocate(sizeof(PokerLong) + sizeof(Any*))) const PokerLong(*this, element);
+            return new const Closure(element);
+        return BuiltinPokerClicheLong::node(element);
 	}
 
 	const Step *Ruleset::step_(Runner &run) const
 	{
 		addReference();
 		run.where_->addReference();
-		const Closure *closure = new (Heap::allocate(sizeof(Closure))) Closure(run.where_, this);
+        const Closure *closure = new const Closure(run.where_, this);
 		return run.sink->pass(run, closure);
 	}
 
@@ -67,8 +70,8 @@ namespace PILS
 		run.where_->addReference();
 		run.where_->addReference();
 		new (run.allocate(sizeof(SinkWhereabout))) SinkWhereabout(run.where_);
-		const Closure *closure = new (Heap::allocate(sizeof(Closure))) Closure(run.where_, ruleset);
-		run.where_ = new (Heap::allocate(sizeof(Using))) Using(run.where_, closure);
+        const Closure *closure = new const Closure(run.where_, ruleset);
+        run.where_ = new const Using(run.where_, closure);
 		return whoAttribute();
 	}
 
@@ -79,8 +82,8 @@ namespace PILS
 		run.where_->addReference();
 		run.where_->addReference();
 		new (run.allocate(sizeof(SinkWhereabout))) SinkWhereabout(run.where_);
-		const Closure *closure = new (Heap::allocate(sizeof(Closure))) Closure(run.where_, ruleset);
-		run.where_ = new (Heap::allocate(sizeof(Using))) Using(run.where_, closure);
+        const Closure *closure = new const Closure(run.where_, ruleset);
+        run.where_ = new const Using(run.where_, closure);
 		return element[0];
 	}
 

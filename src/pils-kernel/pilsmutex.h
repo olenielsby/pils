@@ -16,6 +16,7 @@ namespace PILS
     class Mutex : public QMutex
     {
     public:
+        static Mutex singleMutex;
         class Lock
         {
             QMutexLocker<QMutex> locker;

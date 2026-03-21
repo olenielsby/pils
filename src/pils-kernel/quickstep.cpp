@@ -861,9 +861,7 @@ namespace PILS
 		if (constant)
 			value = ListConstant::get((const Constant **)stack, count);
 		else
-			value =
-				new (Heap::allocate(sizeof(ListExpress)+ (count - 1)*sizeof(const Any *)))
-				ListExpress((const Any **)stack, count);
+            value =	new ((count - 1)*sizeof(const Any *)) ListExpress((const Any **)stack, count);
 		stack += count - 1;
 		*(const Any**)(stack) = value;
 		return ((QuickBuild*)(this + 1))->build(run, stack);

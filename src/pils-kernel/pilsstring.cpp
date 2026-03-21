@@ -20,9 +20,7 @@ namespace PILS
 
 	const CallWho* TypecheckPropertyCount::callWho(const Any* who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoCount)))
-			WhoCount(this, who);
+        return new const WhoCount(this, who);
 	}
 
 	const Step *WhoCount::step_(Runner &run) const
@@ -49,9 +47,7 @@ namespace PILS
 			if (!element[i]->as_Constant())
 			{
 				for (size_t j = 0; j < count; j++) element[j]->addReference();
-				const ListExpress *listExpress = new
-					(Heap::allocate(sizeof(ListExpress) + (count - 1) * sizeof(Any*)))
-					const ListExpress(element, count);
+                const ListExpress *listExpress = new ((count - 1) * sizeof(Any*)) const ListExpress(element, count);
 				anchor->releaseReference();
 				return pass(run, listExpress);
 			}
@@ -393,24 +389,24 @@ namespace PILS
 	const NodeConstantShort *BuiltinClicheRange::newNode(const HashedConstant *&link, const Integer *value) const
 	{
 		if (value->value >= 0)
-			return new (Heap::allocate(sizeof(RangeConstant))) RangeConstant(link, *this, value);
+            return new RangeConstant(link, *this, value);
 		else
-			return new (Heap::allocate(sizeof(NodeConstantTiny))) NodeConstantTiny(link, *this, value);
+            return new NodeConstantTiny(link, *this, value);
 	}
 
 	const NodeExpressShort *BuiltinClicheRange::node(const Express *element) const
 	{
-		return new (Heap::allocate(sizeof(RangeExpress))) RangeExpress(*this, element);
+        return new RangeExpress(*this, element);
 	}
 
 	const CallWho *RangeConstant::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoRangeConstant))) const WhoRangeConstant(this, who);
+        return new const WhoRangeConstant(this, who);
 	}
 
 	const CallWho *RangeExpress::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoRangeExpress))) const WhoRangeExpress(this, who);
+        return new const WhoRangeExpress(this, who);
 	}
 
 	const Step *WhoRangeConstant::step_(Runner &run) const
@@ -1050,92 +1046,92 @@ namespace PILS
 
 	const CallWho *SearchName::whoSearch(const SearchString *call, const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoSearchString))) const WhoSearchString(call, who);
+        return new const WhoSearchString(call, who);
 	}
 
 	const CallWho *SearchName::whoSearch(const SearchListConstant *call, const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoSearchListConstant))) const WhoSearchListConstant(call, who);
+        return new const WhoSearchListConstant(call, who);
 	}
 
 	const CallWho *SearchName::whoSearch(const SearchExpress *call, const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoSearchExpress))) const WhoSearchExpress(call, who);
+        return new const WhoSearchExpress(call, who);
 	}
 
 	const CallWho *PlusRangeSearchName::whoSearch(const SearchString *call, const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoPlusRangeSearchString))) const WhoPlusRangeSearchString(call, who);
+        return new const WhoPlusRangeSearchString(call, who);
 	}
 
 	const CallWho *PlusRangeSearchName::whoSearch(const SearchListConstant *call, const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoPlusRangeSearchListConstant))) const WhoPlusRangeSearchListConstant(call, who);
+        return new const WhoPlusRangeSearchListConstant(call, who);
 	}
 
 	const CallWho *PlusRangeSearchName::whoSearch(const SearchExpress *call, const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoPlusRangeSearchExpress))) const WhoPlusRangeSearchExpress(call, who);
+        return new const WhoPlusRangeSearchExpress(call, who);
 	}
 
 	const CallWho *PlusRangeReverseSearchName::whoSearch(const SearchString *call, const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoPlusRangeReverseSearchString))) const WhoPlusRangeReverseSearchString(call, who);
+        return new const WhoPlusRangeReverseSearchString(call, who);
 	}
 
 	const CallWho *PlusRangeReverseSearchName::whoSearch(const SearchListConstant *call, const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoPlusRangeReverseSearchListConstant))) const WhoPlusRangeReverseSearchListConstant(call, who);
+        return new const WhoPlusRangeReverseSearchListConstant(call, who);
 	}
 
 	const CallWho *PlusRangeReverseSearchName::whoSearch(const SearchExpress *call, const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoPlusRangeReverseSearchExpress))) const WhoPlusRangeReverseSearchExpress(call, who);
+        return new const WhoPlusRangeReverseSearchExpress(call, who);
 	}
 
 	const CallWho *MinusRangeSearchName::whoSearch(const SearchString *call, const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoMinusRangeSearchString))) const WhoMinusRangeSearchString(call, who);
+        return new const WhoMinusRangeSearchString(call, who);
 	}
 
 	const CallWho *MinusRangeSearchName::whoSearch(const SearchListConstant *call, const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoMinusRangeSearchListConstant))) const WhoMinusRangeSearchListConstant(call, who);
+        return new const WhoMinusRangeSearchListConstant(call, who);
 	}
 
 	const CallWho *MinusRangeSearchName::whoSearch(const SearchExpress *call, const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoMinusRangeSearchExpress))) const WhoMinusRangeSearchExpress(call, who);
+        return new const WhoMinusRangeSearchExpress(call, who);
 	}
 
 	const CallWho *MinusRangeReverseSearchName::whoSearch(const SearchString *call, const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoMinusRangeReverseSearchString))) const WhoMinusRangeReverseSearchString(call, who);
+        return new const WhoMinusRangeReverseSearchString(call, who);
 	}
 
 	const CallWho *MinusRangeReverseSearchName::whoSearch(const SearchListConstant *call, const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoMinusRangeReverseSearchListConstant))) const WhoMinusRangeReverseSearchListConstant(call, who);
+        return new const WhoMinusRangeReverseSearchListConstant(call, who);
 	}
 
 	const CallWho *MinusRangeReverseSearchName::whoSearch(const SearchExpress *call, const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoMinusRangeReverseSearchExpress))) const WhoMinusRangeReverseSearchExpress(call, who);
+        return new const WhoMinusRangeReverseSearchExpress(call, who);
 	}
 
 	const NodeConstantShort *BuiltinClicheSearchAbstract::newNode(const HashedConstant *&link, const PilsString *value) const
 	{
-		return new (Heap::allocate(sizeof(SearchString))) SearchString(link, *this, value);
+        return new const SearchString(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheSearchAbstract::newNode(const HashedConstant *&link, const ListConstant *value) const
 	{
-		return new (Heap::allocate(sizeof(SearchListConstant))) SearchListConstant(link, *this, value);
+        return new const SearchListConstant(link, *this, value);
 	}
 
 	const NodeExpressShort *BuiltinClicheSearchAbstract::node(const Express *value) const
 	{
-		return new (Heap::allocate(sizeof(SearchExpress))) SearchExpress(*this, value);
+        return new const SearchExpress(*this, value);
 	}
 
 	const CallWho *SearchString::callWho(const Any *who) const
@@ -2113,7 +2109,7 @@ namespace PILS
 
 	const CallWho *PropertyCasing::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoCasing))) const WhoCasing(this, who);
+        return new const WhoCasing(this, who);
 	}
 
 	const Step *WhoCasing::step_(Runner &run) const
@@ -2147,7 +2143,7 @@ namespace PILS
 
 	const CallWho *PropertyTraverse::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoPropertyTraverse))) const WhoPropertyTraverse(this, who);
+        return new const WhoPropertyTraverse(this, who);
 	}
 
 	const Step *WhoPropertyTraverse::step_(Runner &run) const
@@ -2158,7 +2154,7 @@ namespace PILS
 
 	const CallWho *PropertySinglewise::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoPropertySinglewise))) const WhoPropertySinglewise(this, who);
+        return new const WhoPropertySinglewise(this, who);
 	}
 
 	const Step *WhoPropertySinglewise::step_(Runner &run) const
@@ -2201,7 +2197,7 @@ namespace PILS
 
 	const CallWho *PropertyListwise::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoPropertyListwise))) const WhoPropertyListwise(this, who);
+        return new const WhoPropertyListwise(this, who);
 	}
 
 	const Step *WhoPropertyListwise::step_(Runner &run) const
@@ -2225,7 +2221,7 @@ namespace PILS
 		if (value->as_Constant())
 			return (run.sink = this + 1)->pass(run, ListConstant::get((const Constant *const *)&value, 1));
 		else
-			return (run.sink = this + 1)->pass(run, new (Heap::allocate(sizeof(ListExpress))) const ListExpress(&value, 1));
+            return (run.sink = this + 1)->pass(run, new const ListExpress(&value, 1));
 	}
 
 	const Step *SinkPropertyTraverse::pass(Runner &run, const ListConstant *value)
@@ -2291,12 +2287,12 @@ namespace PILS
 				if (!express && !e->as_Constant()) express = true;
 			}
 			if (express)
-				list[j] = new (Heap::allocate(sizeof(ListExpress) + (elementSize - 1) * sizeof(Any*))) ListExpress(element, elementSize);
+                list[j] = new ((elementSize - 1) * sizeof(Any*)) ListExpress(element, elementSize);
 			else list[j] = ListConstant::get((const Constant *const *)element, elementSize);
 		}
         delete[] cursor;
         delete[] element;
-		const ListExpress *result = new (Heap::allocate(sizeof(ListExpress) + (listSize - 1) * sizeof(Any*))) ListExpress(list, listSize);
+        const ListExpress *result = new ((listSize - 1) * sizeof(Any*)) ListExpress(list, listSize);
         delete[] list;
 		return (run.sink = this + 1)->pass(run, result);
 	}
@@ -2575,7 +2571,7 @@ namespace PILS
 				}
 				if (!(*test)->as_Constant())
 				{
-					item = new (Heap::allocate(sizeof(ListExpress) + (char*)(at - 1) - (char*)begin())) ListExpress(begin(), at - begin());
+                    item = new ((char*)(at - 1) - (char*)begin()) ListExpress(begin(), at - begin());
 					break;
 				}
 			}
@@ -2604,7 +2600,7 @@ namespace PILS
 				}
 				if (!(*test)->as_Constant())
 				{
-					item = new (Heap::allocate(sizeof(ListExpress) + (char*)(at - 1) - (char*)begin())) ListExpress(begin(), at - begin());
+                    item = new ((char*)(at - 1) - (char*)begin()) ListExpress(begin(), at - begin());
 					break;
 				}
 			}
@@ -2924,7 +2920,7 @@ namespace PILS
 
 	const CallWho *PropertyCharacterEncoding::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoCharacterEncoding))) WhoCharacterEncoding(this, who);
+        return new const WhoCharacterEncoding(this, who);
 	}
 
 	const Step *WhoCharacterEncoding::step_(Runner &run) const

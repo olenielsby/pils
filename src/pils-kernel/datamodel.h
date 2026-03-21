@@ -13,44 +13,6 @@ typedef char PILS_CHAR;
 
 namespace PILS
 {
-	/* The Heap class is a static wrapper for functions dealing with
-	   memory management and constant hashing. */
-
-	class Heap
-	{
-	public:
-		static void *allocate(size_t size) {return allocator->allocate(size);}
-		static void free(void *block, size_t size) {return allocator->free(block, size);}
-		class Allocator
-		{
-		public:
-			virtual void *allocate(size_t size) = 0;
-			virtual void free(void *block, size_t size) = 0;
-			virtual void shutdown() = 0;
-		};
-		static void useStandardAllocator();
-		static void shutdown();
-		static Mutex mutex;
-	private:
-		static Allocator *allocator;
-	};
-
-	class InitialAllocator
-		: public Heap::Allocator
-	{
-	public:
-		/* All initial allocations are kept in a chain for deletion on exit.
-		   This should prevent memory checkers from reporting them as leaks.
-		*/
-        void *allocate(size_t bytes) override;
-        void free(void *block, size_t size) override;
-        void shutdown() override;
-		static InitialAllocator singleton;
-	private:
-		void* chain;
-		InitialAllocator(): chain(NULL) {}
-	};
-
 	class Runner;
 	class Sink;
 
@@ -165,8 +127,24 @@ namespace PILS
 	class Any
 		: public Step
 	{
-	public:
-        bool duplicateReferenceNoChildren() const;
+    public:
+        static void* operator new(size_t baseSize, size_t extra)
+        {
+            return ::operator new(baseSize + extra);
+        }
+        static void* operator new(size_t size)
+        {
+            return ::operator new(size);
+        }
+        static void operator delete(void* p) noexcept
+        {
+            ::operator delete(p);
+        }
+        // DEN VIGTIGE:
+        static void operator delete(void* p, size_t) noexcept
+        {
+            ::operator delete(p);
+        }        bool duplicateReferenceNoChildren() const;
         // virtual bool isMultipleReferenced() const;
 	protected:
 		Any();

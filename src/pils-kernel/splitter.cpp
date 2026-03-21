@@ -4,22 +4,19 @@ namespace PILS
 {
 	const ClicheLong *PredefinedNameSplit::newCliche(const HashedConstant *&link, const Constant *const *a, size_t c) const
 	{
-		void *chunk = Heap::allocate(sizeof(ClicheLong) + (c - 1) * sizeof(Constant*));
 		if (a[0] == &Empty::singleton)
-			return	new (chunk) const ClicheSplitter(link, this, a, c);
-		else return	new (chunk) const ClicheLong(link, this, a, c);
+            return	new ((c - 1) * sizeof(Constant*)) const ClicheSplitter(link, this, a, c);
+        else return PredefinedName::newCliche(link, a, c);
 	}
 
 	const NodeConstantLong *ClicheSplitter::newNodeConstant(const HashedConstant *&link, const Constant *const *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(NodeConstantTrailer) + (count - 1) * sizeof(Constant*)))
-			const Splitter(link, *this, value);
+        return new ((count - 1) * sizeof(Constant*)) const Splitter(link, *this, value);
 	}
 
 	const CallWho *Splitter::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoSplitter))) WhoSplitter(this, who);
+        return new const WhoSplitter(this, who);
 	}
 
 	const Step *WhoSplitter::step_(Runner &run) const

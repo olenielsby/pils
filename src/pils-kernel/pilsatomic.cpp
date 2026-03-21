@@ -13,7 +13,7 @@ namespace PILS
 	{
         if(refcount.release())
 		{
-			Mutex::Lock lock(Heap::mutex);
+            Mutex::Lock lock(Mutex::singleMutex);
 			((Any*)this)->disposeRoot();
 		}
 	}

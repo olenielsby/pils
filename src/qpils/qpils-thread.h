@@ -117,14 +117,14 @@ namespace PILS
 		Pending(PendableThread &thread)
 			: thread(thread), link(&thread.pending)
 		{
-			Mutex::Lock lock(Heap::mutex);
+            Mutex::Lock lock(Mutex::singleMutex);
 			next = *link;
 			*link = this;
 		}
 		virtual ~Pending(){}
 		Pending *unlink()
 		{
-			Mutex::Lock lock(Heap::mutex);
+            Mutex::Lock lock(Mutex::singleMutex);
 			*link = next;
 			if (next) next->link = link;
 			return this;

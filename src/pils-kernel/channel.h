@@ -19,7 +19,7 @@ namespace PILS
 		const Step *called(Runner &run, const T &call)
 		{
 			{
-				Mutex::Lock lock(Heap::mutex);
+                Mutex::Lock lock(Mutex::singleMutex);
 				for (Listener *next = listener->next; next; next = next->next)
 				{
 					if (next->duplicateReferenceNoChildren())
@@ -89,7 +89,7 @@ namespace PILS
 		const Step *called(Runner &run, const Any &call, const Any *assignValue)
 		{
 			{
-				Mutex::Lock lock(Heap::mutex);
+                Mutex::Lock lock(Mutex::singleMutex);
 				for (Listener *next = listener->next; next; next = next->next)
 				{
 					if (next->duplicateReferenceNoChildren())

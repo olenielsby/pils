@@ -50,7 +50,7 @@ namespace PILS
 	const Timestamp *Timestamp::get(long long value)
 	{
 		const HashedConstant *&chain = hashChain((size_t)value ^ (size_t)(value >> 32));
-		Mutex::Lock lock (Heap::mutex);
+        Mutex::Lock lock (Mutex::singleMutex);
 		return chain->hashLookupTimestamp(value);
 	}
 
@@ -112,39 +112,39 @@ namespace PILS
 	const Duration *Duration::get(long long value)
 	{
 		const HashedConstant *&chain = hashChain((size_t)value ^ (size_t)(value >> 32));
-		Mutex::Lock lock (Heap::mutex);
+        Mutex::Lock lock (Mutex::singleMutex);
 		return chain->hashLookupDuration(value);
 	}
 
 	const PilsDate *PilsDate::get(long long value)
 	{
 		const HashedConstant *&chain = hashChain((size_t)value ^ (size_t)(value >> 32));
-		Mutex::Lock lock (Heap::mutex);
+        Mutex::Lock lock (Mutex::singleMutex);
 		return chain->hashLookupPilsDate(value);
 	}
 
 	const PilsColor *ShortInteger::hashLookupPilsColor(unsigned int value) const
 	{
 		/* End of hash chain - construct Timestamp */
-		return new (Heap::allocate(sizeof(PilsColor))) PilsColor(((ShortInteger*)this)->hashLink, value);
+        return new const PilsColor(((ShortInteger*)this)->hashLink, value);
 	}
 
 	const Timestamp *ShortInteger::hashLookupTimestamp(long long value) const
 	{
 		/* End of hash chain - construct Timestamp */
-		return new (Heap::allocate(sizeof(Timestamp))) Timestamp(((ShortInteger*)this)->hashLink, value);
+        return new const Timestamp(((ShortInteger*)this)->hashLink, value);
 	}
 
 	const Duration *ShortInteger::hashLookupDuration(long long value) const
 	{
 		/* End of hash chain - construct Duration */
-		return new (Heap::allocate(sizeof(Duration))) Duration(((ShortInteger*)this)->hashLink, value);
+        return new const Duration(((ShortInteger*)this)->hashLink, value);
 	}
 
 	const PilsDate *ShortInteger::hashLookupPilsDate(long long value) const
 	{
 		/* End of hash chain - construct PilsDate */
-		return new (Heap::allocate(sizeof(PilsDate))) PilsDate(((ShortInteger*)this)->hashLink, value);
+        return new const PilsDate(((ShortInteger*)this)->hashLink, value);
 	}
 
 	const Timestamp *Timestamp::hashLookupTimestamp(long long value) const

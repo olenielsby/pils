@@ -4,6 +4,7 @@
 #include <typeinfo>
 #include <cxxabi.h>
 #include <memory>
+#include <cstring>
 
 namespace PILS
 {
@@ -25,8 +26,8 @@ namespace PILS
 	{
 		size_t size = unlinkAndGetSize();
         Any *link = refcount.scrapLink;
-		Heap::free(this, size);
-		return link;
+        delete this;
+        return link;
 	}
 
 	bool Any::isList(const Any *const *&element, const Integer *&count) const
@@ -209,7 +210,7 @@ namespace PILS
 
 	const ClicheShort *Empty::newCliche(const HashedConstant *&link, const Constant *a) const
 	{
-		return new (Heap::allocate(sizeof(ClicheShort))) EmptyClicheShort(link, this, a);
+        return new EmptyClicheShort(link, this, a);
 	}
 
 	const ClicheLong *Empty::newCliche(const HashedConstant *&link, const Constant *const *a, size_t c) const
@@ -219,40 +220,32 @@ namespace PILS
 			switch(c)
 			{
 			case 2:
-				return new (Heap::allocate(sizeof(BindCliche1))) BindCliche1(link, this, a, c);
+                return new BindCliche1(link, this, a, c);
 			case 3:
-				return new (Heap::allocate(sizeof(BindCliche2))) BindCliche2(link, this, a, c);
+                return new BindCliche2(link, this, a, c);
 			case 4:
-				return new (Heap::allocate(sizeof(BindCliche3))) BindCliche3(link, this, a, c);
+                return new BindCliche3(link, this, a, c);
 			default:
-				return new
-					(Heap::allocate(sizeof(BindCliche) + (c - 1) * sizeof(Constant*)))
-					BindCliche(link, this, a, c);
+                return new ((c - 1) * sizeof(Constant*)) BindCliche(link, this, a, c);
 			}
 		}
 		else
-			return new
-			(Heap::allocate(sizeof(BindCliche) + (c - 1) * sizeof(Constant*)))
-			EmptyClicheLong(link, this, a, c);
+            return new ((c - 1) * sizeof(Constant*)) EmptyClicheLong(link, this, a, c);
 	}
 
 	const Any *EmptyClicheShort::node(const Constant *element) const
 	{
-		return new (Heap::allocate(sizeof(NodeExpressShort))) NodeExpressShort(*this, element);
+        return new NodeExpressShort(*this, element);
 	}
 
 	const Any *EmptyClicheLong::node(const Any *const *element) const
 	{
-		return new
-			(Heap::allocate(sizeof(NodeExpressLong) + (count - 1) * sizeof(Any*)))
-			NodeExpressLong(*this, element);
+        return new ((count - 1) * sizeof(Any*))	NodeExpressLong(*this, element);
 	}
 
 	const Any *EmptyClicheLong::node(const Constant *const *element) const
 	{
-		return new
-			(Heap::allocate(sizeof(NodeExpressLong) + (count - 1) * sizeof(Any*)))
-			NodeExpressLong(*this, (const Any *const *)element);
+        return new ((count - 1) * sizeof(Any*)) NodeExpressLong(*this, (const Any *const *)element);
 	}
 
 	const ClicheLong *JumperHead::newCliche(const HashedConstant *&link, const Constant *const *a, size_t c) const
@@ -262,15 +255,13 @@ namespace PILS
 			switch(c)
 			{
 			case 2:
-				return new (Heap::allocate(sizeof(JumperCliche1))) JumperCliche1(link, this, a, c);
+                return new JumperCliche1(link, this, a, c);
 			case 3:
-				return new (Heap::allocate(sizeof(JumperCliche2))) JumperCliche2(link, this, a, c);
+                return new JumperCliche2(link, this, a, c);
 			case 4:
-				return new (Heap::allocate(sizeof(JumperCliche3))) JumperCliche3(link, this, a, c);
+                return new JumperCliche3(link, this, a, c);
 			default:
-				return new
-					(Heap::allocate(sizeof(JumperCliche) + (c - 1) * sizeof(Constant*)))
-					JumperCliche(link, this, a, c);
+                return new ((c - 1) * sizeof(Constant*)) JumperCliche(link, this, a, c);
 			}
 		}
 		else return Constant::newCliche(link, a, c);
@@ -278,9 +269,7 @@ namespace PILS
 
 	const Any *JumperHead::node(const Constant *element) const
 	{
-		return new
-			(Heap::allocate(sizeof(NodeExpressTiny)))
-			NodeExpressTiny(*this, element);
+        return new NodeExpressTiny(*this, element);
 	}
 
 	size_t Integer::unlinkAndGetSize()
@@ -326,7 +315,7 @@ namespace PILS
 		else
 		{
 			const HashedConstant *&link = HashedConstant::hashChain(v);
-			Mutex::Lock lock(Heap::mutex);
+            Mutex::Lock lock(Mutex::singleMutex);
 			return link->hashLookup(v);
 		}
 	}
@@ -360,7 +349,7 @@ namespace PILS
 	const Integer *ShortInteger::hashLookup(long v) const
 	{
 		/* End of hash chain - construct integer */
-		return new (Heap::allocate(sizeof(Integer))) Integer(((ShortInteger*)this)->hashLink, v);
+        return new Integer(((ShortInteger*)this)->hashLink, v);
 	}
 
 	const Number *Number::get(double v)
@@ -370,14 +359,14 @@ namespace PILS
 			return Integer::get(truncated);
 		unsigned long const *slice = (unsigned long const*)&v;
 		const HashedConstant *&link = HashedConstant::hashChain(slice[0] + slice[1]);
-		Mutex::Lock lock (Heap::mutex);
+        Mutex::Lock lock (Mutex::singleMutex);
 		return link->hashLookup(v);
 	}
 
 	const Float *ShortInteger::hashLookup(double v) const
 	{
 		/* End of hash chain - construct float */
-		return new (Heap::allocate(sizeof(const Float))) Float(hashLink, v);
+        return new Float(hashLink, v);
 	}
 
 	size_t Float::unlinkAndGetSize()
@@ -468,7 +457,7 @@ namespace PILS
 	const PilsColor *PilsColor::get(unsigned int v)
 	{
 		const HashedConstant *&link = HashedConstant::hashChain((long)v);
-		Mutex::Lock lock(Heap::mutex);
+        Mutex::Lock lock(Mutex::singleMutex);
 		return link->hashLookupPilsColor(v);
 	}
 
@@ -514,7 +503,7 @@ namespace PILS
 	const PilsString *PilsString::get(const PILS_CHAR *text, size_t count)
 	{
 		const HashedConstant *&chain = hashChain(text, count);
-		Mutex::Lock lock (Heap::mutex);
+        Mutex::Lock lock (Mutex::singleMutex);
 		return chain->hashLookup(text, count);
 	}
 
@@ -525,26 +514,21 @@ namespace PILS
 		(PILS_CHAR&)value[count] = 0;
 	}
 
-	const PilsString *PilsString::hashLookup(const PILS_CHAR *text, size_t c) const
-	{
-		if ((size_t)count->value != c) goto bad;
-		for (size_t i = 0; i < c; i++)
-		{
-			if (text[i] != value[i])
-				goto bad;
-		}
-		if (duplicateReference())
-		{
-			return this;
-		}
-	bad:
-		return hashLink->hashLookup(text, c);
-	}
+    const PilsString* PilsString::hashLookup(const PILS_CHAR* text, size_t c) const
+    {
+        if ((size_t)count->value == c &&
+            std::memcmp(text, value, c * sizeof(PILS_CHAR)) == 0 &&
+            duplicateReference())
+        {
+            return this;
+        }
+
+        return hashLink->hashLookup(text, c);
+    }
 
 	const PilsString *ShortInteger::hashLookup(const PILS_CHAR *text, size_t c) const
 	{
-		void *buffer = Heap::allocate(sizeof(CountedConstant) + sizeof(PILS_CHAR) + c * sizeof(PILS_CHAR));
-		return new (buffer) PilsString(hashLink, text, c);
+        return new (c * sizeof(PILS_CHAR)) PilsString(hashLink, text, c);
 	}
 
 	PilsString::PilsString(const HashedConstant *&link, const PILS_CHAR *text, size_t c)
@@ -876,9 +860,8 @@ namespace PILS
 		{
 			if(element[i]->as_Constant() == NULL)
 			{
-				return new
-					(Heap::allocate(sizeof(NodeExpressLong) + (count - 1) * sizeof(Constant*)))
-					NodeExpressLong((const ClicheLong&)*this, element);
+                return new ((count - 1) * sizeof(Constant*))
+                    const NodeExpressLong((const ClicheLong&)*this, element);
 			}
 		}
 		return node((const Constant *const *)(void *const *)element);
@@ -895,9 +878,8 @@ namespace PILS
 		{
 			if(element[i]->as_Constant() == NULL)
 			{
-				return new
-					(Heap::allocate(sizeof(NodeExpressTrailer) + (count - 1) * sizeof(Constant*)))
-					const NodeExpressTrailer((const ClicheTrailer&)*this, element);
+                return new ((count - 1) * sizeof(Constant*))
+                    const NodeExpressTrailer((const ClicheTrailer&)*this, element);
 			}
 		}
 		return ((const ClicheLong*)this)->node((const Constant *const *)(void*const *)element);
@@ -915,7 +897,7 @@ namespace PILS
 			attribute->unduplicateReference();
 			return clichefy();
 		}
-		Mutex::Lock lock (Heap::mutex);
+        Mutex::Lock lock (Mutex::singleMutex);
 		return clichefying(attribute);
 	}
 
@@ -940,7 +922,7 @@ namespace PILS
 
 	const ClicheShort *Constant::newCliche(const HashedConstant *&link, const Constant *a) const
 	{
-		return new (Heap::allocate(sizeof(ClicheShort))) const ClicheShort(link, this, a);
+        return new const ClicheShort(link, this, a);
 	}
 
 	const ClicheShort* ClicheShort::as_ClicheShort() const
@@ -972,9 +954,7 @@ namespace PILS
 
 	const NodeExpressShort *ClicheShort::node(const Express *element) const
 	{
-		return new
-			(Heap::allocate(sizeof(NodeExpressShort)))
-			const NodeExpressShort(*this, element);
+        return new const NodeExpressShort(*this, element);
 	}
 
 	const ClicheShort *ShortInteger::hashLookup(const Constant *h, const Constant *a) const
@@ -1003,7 +983,7 @@ namespace PILS
 
 	const ClicheTiny *Constant::clichefy() const
 	{
-		Mutex::Lock lock (Heap::mutex);
+        Mutex::Lock lock (Mutex::singleMutex);
 		return clichefying();
 	}
 
@@ -1023,7 +1003,7 @@ namespace PILS
 
 	const ClicheTiny *HashedConstant::newCliche() const
 	{
-		return new (Heap::allocate(sizeof(ClicheTiny))) const ClicheTiny(this);
+        return new const ClicheTiny(this);
 	}
 
 	ClicheTiny::ClicheTiny(const HashedConstant *h)
@@ -1039,9 +1019,7 @@ namespace PILS
 
 	const NodeExpressShort *ClicheTiny::node(const Express *element) const
 	{
-		return new
-			(Heap::allocate(sizeof(NodeExpressTiny)))
-			NodeExpressTiny(*this, element);
+        return new NodeExpressTiny(*this, element);
 	}
 
 	void ClicheTiny::unduplicateChildren() const
@@ -1056,7 +1034,7 @@ namespace PILS
 
 	const ClicheLong *Constant::clichefy(const Constant *const *attribute, size_t count) const
 	{
-		Mutex::Lock lock (Heap::mutex);
+        Mutex::Lock lock (Mutex::singleMutex);
 		return clichefying(attribute, count);
 	}
 
@@ -1087,15 +1065,17 @@ namespace PILS
 		else return hashLink->hashLookup(h, a, c);
 	}
 
-	const ClicheLong *Constant::newCliche(const HashedConstant *&link, const Constant *const *a, size_t c) const
-	{
-		void *chunk = Heap::allocate(sizeof(ClicheLong) + (c - 1) * sizeof(Constant*));
-		if (a[0] == &Empty::singleton)
-			return	new (chunk) const ClicheTrailer(link, this, a, c);
-		else return	new (chunk) const ClicheLong(link, this, a, c);
-	}
+    const ClicheLong* Constant::newCliche(const HashedConstant*& link, const Constant* const* a, size_t c) const
+    {
+        size_t extra = (c - 1) * sizeof(Constant*);
 
-	ClicheLong::ClicheLong(const HashedConstant *&link, const Constant *h, const Constant *const *a, size_t c)
+        if (a[0] == &Empty::singleton)
+            return new (extra) ClicheTrailer(link, this, a, c);
+        else
+            return new (extra) ClicheLong(link, this, a, c);
+    }
+
+    ClicheLong::ClicheLong(const HashedConstant *&link, const Constant *h, const Constant *const *a, size_t c)
 		:  Cliche(link, h, a, c)
 	{}
 
@@ -1129,7 +1109,7 @@ namespace PILS
 			hash += (unsigned long)reinterpret_cast<size_t>(attributes[i]);
 		}
 		const HashedConstant *&link = HashedConstant::hashChain(hash);
-		Mutex::Lock lock (Heap::mutex);
+        Mutex::Lock lock (Mutex::singleMutex);
 		return link->hashLookup(*this, attributes);
 	}
 
@@ -1141,16 +1121,12 @@ namespace PILS
 
 	const Any *PokerClicheShort::node(const Constant *element) const
 	{
-		return new
-			(Heap::allocate(sizeof(PokerShort)))
-			const PokerShort(*this, element);
+        return new const PokerShort(*this, element);
 	}
 
 	const NodeExpressShort *PokerClicheShort::node(const Express *element) const
 	{
-		return new
-			(Heap::allocate(sizeof(PokerShort)))
-			const PokerShort(*this, element);
+        return new const PokerShort(*this, element);
 	}
 
 	PokerClicheLong::PokerClicheLong(const HashedConstant *&link, const Constant *const *a, size_t c)
@@ -1166,9 +1142,7 @@ namespace PILS
 
 	const Any *PokerClicheLong::node(const Any *const *element) const
 	{
-		return new
-			(Heap::allocate(sizeof(PokerLong) + (count - 1) * sizeof(Any*)))
-			const PokerLong(*this, element);
+        return new ((count - 1) * sizeof(Any*)) const PokerLong(*this, element);
 	}
 
 	PokerClicheTrailer::PokerClicheTrailer(const HashedConstant *&link, const Constant *const *a, size_t c)
@@ -1184,8 +1158,7 @@ namespace PILS
 
 	const Any *PokerClicheTrailer::node(const Any *const *element) const
 	{
-		return new
-			(Heap::allocate(sizeof(PokerTrailer) + (count - 1) * sizeof(Any*)))
+        return new ((count - 1) * sizeof(Any*))
 			const PokerTrailer(*this, element);
 	}
 
@@ -1196,58 +1169,43 @@ namespace PILS
 
 	const Any* BindCliche::node(const Any *const *element) const
 	{
-		return new
-			(Heap::allocate(sizeof(Bind) + (count - 1) * sizeof(Any*)))
+        return new ((count - 1) * sizeof(Any*))
 			Bind(*this, element);
 	}
 
 	const Any* BindCliche1::node(const Any *const *element) const
 	{
-		return new
-			(Heap::allocate(sizeof(Bind1)))
-			Bind1(*this, element);
+        return new Bind1(*this, element);
 	}
 
 	const Any* BindCliche2::node(const Any *const *element) const
 	{
-		return new
-			(Heap::allocate(sizeof(Bind2)))
-			Bind2(*this, element);
+        return new Bind2(*this, element);
 	}
 
 	const Any* BindCliche3::node(const Any *const *element) const
 	{
-		return new
-			(Heap::allocate(sizeof(Bind3)))
-			Bind3(*this, element);
+        return new Bind3(*this, element);
 	}
 
 	const Any* JumperCliche::node(const Any *const *element) const
 	{
-		return new
-			(Heap::allocate(sizeof(Bind) + (count - 1) * sizeof(Any*)))
-			Jumper(*this, element);
+        return new ((count - 1) * sizeof(Any*)) Jumper(*this, element);
 	}
 
 	const Any* JumperCliche1::node(const Any *const *element) const
 	{
-		return new
-			(Heap::allocate(sizeof(Jumper1)))
-			Jumper1(*this, element);
+        return new Jumper1(*this, element);
 	}
 
 	const Any* JumperCliche2::node(const Any *const *element) const
 	{
-		return new
-			(Heap::allocate(sizeof(Jumper2)))
-			Jumper2(*this, element);
+        return new Jumper2(*this, element);
 	}
 
 	const Any* JumperCliche3::node(const Any *const *element) const
 	{
-		return new
-			(Heap::allocate(sizeof(Jumper3)))
-			Jumper3(*this, element);
+        return new Jumper3(*this, element);
 	}
 
 	NodeConstant::NodeConstant(const HashedConstant *&link, const Cliche &c)
@@ -1309,156 +1267,112 @@ namespace PILS
 
 	const NodeConstantShort *ClicheShort::newNode(const HashedConstant *&link, const Integer *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(NodeConstantShort)))
-			const NodeConstantShort(link, *this, value);
+        return new const NodeConstantShort(link, *this, value);
 	}
 
 	const NodeConstantShort *ClicheShort::newNode(const HashedConstant *&link, const Float *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(NodeConstantShort)))
-			const NodeConstantShort(link, *this, value);
+        return new const NodeConstantShort(link, *this, value);
 	}
 
 	const NodeConstantShort *ClicheShort::newNode(const HashedConstant *&link, const PilsColor *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(NodeConstantShort)))
-			const NodeConstantShort(link, *this, value);
+        return new const NodeConstantShort(link, *this, value);
 	}
 
 	const NodeConstantShort *ClicheShort::newNode(const HashedConstant *&link, const Timestamp *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(NodeConstantShort)))
-			const NodeConstantShort(link, *this, value);
+        return new const NodeConstantShort(link, *this, value);
 	}
 
 	const NodeConstantShort *ClicheShort::newNode(const HashedConstant *&link, const Duration *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(NodeConstantShort)))
-			const NodeConstantShort(link, *this, value);
+        return new const NodeConstantShort(link, *this, value);
 	}
 
 	const NodeConstantShort *ClicheShort::newNode(const HashedConstant *&link, const PilsDate *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(NodeConstantShort)))
-			const NodeConstantShort(link, *this, value);
+        return new const NodeConstantShort(link, *this, value);
 	}
 
 	const NodeConstantShort *ClicheShort::newNode(const HashedConstant *&link, const PilsString *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(NodeConstantShort)))
-			const NodeConstantShort(link, *this, value);
+        return new const NodeConstantShort(link, *this, value);
 	}
 
 	const NodeConstantShort *ClicheShort::newNode(const HashedConstant *&link, const Cliche *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(NodeConstantShort)))
-			const NodeConstantShort(link, *this, value);
+        return new const NodeConstantShort(link, *this, value);
 	}
 
 	const NodeConstantShort *ClicheShort::newNode(const HashedConstant *&link, const NodeConstant *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(NodeConstantShort)))
-			const NodeConstantShort(link, *this, value);
+        return new const NodeConstantShort(link, *this, value);
 	}
 
 	const NodeConstantShort *ClicheShort::newNode(const HashedConstant *&link, const ListConstant *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(NodeConstantShort)))
-			const NodeConstantShort(link, *this, value);
+        return new const NodeConstantShort(link, *this, value);
 	}
 
 	const NodeConstantShort *ClicheShort::newNode(const HashedConstant *&link, const Special *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(NodeConstantShort)))
-			const NodeConstantShort(link, *this, value);
+        return new const NodeConstantShort(link, *this, value);
 	}
 
 	const NodeConstantShort *ClicheTiny::newNode(const HashedConstant *&link, const Integer *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(NodeConstantTiny)))
-			NodeConstantTiny(link, *this, value);
+        return new const NodeConstantTiny(link, *this, value);
 	}
 
 	const NodeConstantShort *ClicheTiny::newNode(const HashedConstant *&link, const Float *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(NodeConstantTiny)))
-			NodeConstantTiny(link, *this, value);
+        return new const NodeConstantTiny(link, *this, value);
 	}
 
 	const NodeConstantShort *ClicheTiny::newNode(const HashedConstant *&link, const PilsColor *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(NodeConstantTiny)))
-			NodeConstantTiny(link, *this, value);
+        return new const NodeConstantTiny(link, *this, value);
 	}
 
 	const NodeConstantShort *ClicheTiny::newNode(const HashedConstant *&link, const Timestamp *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(NodeConstantTiny)))
-			NodeConstantTiny(link, *this, value);
+        return new const NodeConstantTiny(link, *this, value);
 	}
 
 	const NodeConstantShort *ClicheTiny::newNode(const HashedConstant *&link, const Duration *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(NodeConstantTiny)))
-			NodeConstantTiny(link, *this, value);
+        return new const NodeConstantTiny(link, *this, value);
 	}
 
 	const NodeConstantShort *ClicheTiny::newNode(const HashedConstant *&link, const PilsDate *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(NodeConstantTiny)))
-			NodeConstantTiny(link, *this, value);
+        return new const NodeConstantTiny(link, *this, value);
 	}
 
 	const NodeConstantShort *ClicheTiny::newNode(const HashedConstant *&link, const PilsString *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(NodeConstantTiny)))
-			NodeConstantTiny(link, *this, value);
+        return new const NodeConstantTiny(link, *this, value);
 	}
 
 	const NodeConstantShort *ClicheTiny::newNode(const HashedConstant *&link, const Cliche *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(NodeConstantTiny)))
-			NodeConstantTiny(link, *this, value);
+        return new const NodeConstantTiny(link, *this, value);
 	}
 
 	const NodeConstantShort *ClicheTiny::newNode(const HashedConstant *&link, const NodeConstant *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(NodeConstantTiny)))
-			NodeConstantTiny(link, *this, value);
+        return new const NodeConstantTiny(link, *this, value);
 	}
 
 	const NodeConstantShort *ClicheTiny::newNode(const HashedConstant *&link, const ListConstant *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(NodeConstantTiny)))
-			NodeConstantTiny(link, *this, value);
+        return new const NodeConstantTiny(link, *this, value);
 	}
 
 	const NodeConstantShort *ClicheTiny::newNode(const HashedConstant *&link, const Special *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(NodeConstantTiny)))
-			NodeConstantTiny(link, *this, value);
+        return new const NodeConstantTiny(link, *this, value);
 	}
 
 	NodeConstantShort::NodeConstantShort(const HashedConstant *&link, const ClicheShort &cliche, const Constant *v)
@@ -1484,7 +1398,7 @@ namespace PILS
 	{
 		size_t hash = reinterpret_cast<size_t>(this) - 5 * reinterpret_cast<size_t>(value);
 		const HashedConstant *&link = HashedConstant::hashChain(hash);
-		Mutex::Lock lock (Heap::mutex);
+        Mutex::Lock lock (Mutex::singleMutex);
 		return link->hashLookup(*this, value);
 	}
 
@@ -1507,18 +1421,13 @@ namespace PILS
 
 	const NodeConstantLong *ClicheLong::newNodeConstant(const HashedConstant *&link, const Constant *const *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(NodeConstantLong) + (count - 1) * sizeof(Constant*)))
-			const NodeConstantLong(link, *this, value);
+        return new ((count - 1) * sizeof(Constant*)) const NodeConstantLong(link, *this, value);
 	}
 
 	const NodeConstantLong *ClicheTrailer::newNodeConstant(const HashedConstant *&link, const Constant *const *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(NodeConstantTrailer) + (count - 1) * sizeof(Constant*)))
-			const NodeConstantTrailer(link, *this, value);
+        return new ((count - 1) * sizeof(Constant*)) const NodeConstantTrailer(link, *this, value);
 	}
-
 
 	NodeConstantLong::NodeConstantLong(const HashedConstant *&link, const ClicheLong &cliche, const Constant *const *v)
 		: NodeConstant(link, cliche)
@@ -1553,8 +1462,7 @@ namespace PILS
 
 	const ListConstant *ShortInteger::hashLookup(const Constant *const *a, size_t c, bool copying) const
 	{
-		size_t size = sizeof(CountedConstant) + c * sizeof(Constant*);
-		return new (Heap::allocate(size)) const ListConstant(hashLink, a, c, copying);
+        return new ((c - 1) * sizeof(Constant*)) const ListConstant(hashLink, a, c, copying);
 	}
 
 	ListConstant::ListConstant(const HashedConstant *&link, const Constant *const *a, size_t c, bool copying)
@@ -1578,7 +1486,7 @@ namespace PILS
 				hash *= 19;
 			}
 			const HashedConstant *&link = HashedConstant::hashChain(hash);
-			Mutex::Lock lock (Heap::mutex);
+            Mutex::Lock lock (Mutex::singleMutex);
 			return link->hashLookup(e, c, copying);
 		}
 		else
@@ -1602,18 +1510,15 @@ namespace PILS
 	const ClicheShort* PokerHead::newCliche(const HashedConstant *&link, const Constant *a) const
 	{
 		return
-			new (Heap::allocate(sizeof(PokerClicheShort)))
-			const PokerClicheShort(link, a);
+            new const PokerClicheShort(link, a);
 	}
 
 	const ClicheLong* PokerHead::newCliche(const HashedConstant *&link, const Constant *const *a, size_t c) const
 	{
-		if (a[0] == &Empty::singleton) return
-			new (Heap::allocate(sizeof(PokerClicheTrailer) + (c - 1) * sizeof(Constant*)))
-			const PokerClicheTrailer(link, a, c);
-		else return
-			new (Heap::allocate(sizeof(PokerClicheLong) + (c - 1) * sizeof(Constant*)))
-			const PokerClicheLong(link, a, c);
+        if (a[0] == &Empty::singleton)
+            return new ((c - 1) * sizeof(Constant*)) const PokerClicheTrailer(link, a, c);
+        else
+            return new ((c - 1) * sizeof(Constant*)) const PokerClicheLong(link, a, c);
 	}
 
 	bool Any::recognize(Recognizer &recognizer) const
@@ -1639,7 +1544,7 @@ namespace PILS
 	const ReallySpecial *SpecialLookup::lookup()
 	{
 		size_t hash = this->hash();
-		Mutex::Lock lock (Heap::mutex);
+        Mutex::Lock lock (Mutex::singleMutex);
 		return HashedConstant::hashTable[(hash + (hash >> 16)) & 0xFFFF].hashLink->hashLookup(*this);
 	}
 
@@ -1947,9 +1852,7 @@ namespace PILS
 		{
 			if (element[i]->as_Constant() == NULL)
 			{
-				return new
-					(Heap::allocate(sizeof(ListExpress) + (count - 1) * sizeof(Any*)))
-					const ListExpress(element, count);
+                return new ((count - 1) * sizeof(Any*)) const ListExpress(element, count);
 			}
 		}
 		return ListConstant::get((const Constant *const *)(element), count);
@@ -1957,12 +1860,12 @@ namespace PILS
 
 	const Any *JumperCliche0::node(const Constant *element) const
 	{
-		return new (Heap::allocate(sizeof(Jumper0))) Jumper0(element);
+        return new Jumper0(element);
 	}
 
 	const NodeExpressShort *JumperCliche0::node(const Express *element) const
 	{
-		return new (Heap::allocate(sizeof(Jumper0))) Jumper0(element);
+        return new Jumper0(element);
 	}
 
 	void Any::unduplicateChildren() const

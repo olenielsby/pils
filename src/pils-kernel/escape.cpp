@@ -14,9 +14,7 @@ namespace PILS
 
 	const Escape *Any::escape() const
 	{
-		return new
-			(Heap::allocate(sizeof(Escape)))
-			Escape(this);
+        return new const Escape(this);
 	}
 
 	const Step *Escape::step_(Runner &run) const
@@ -68,9 +66,7 @@ namespace PILS
 
 	const Escape *NodeConstantShort::escape() const
 	{
-		return new
-			(Heap::allocate(sizeof(EscapeNodeConstantShort)))
-			EscapeNodeConstantShort(this);
+        return new const EscapeNodeConstantShort(this);
 	}
 
 	const Step *EscapeNodeConstantShort::calling(Runner &run, const Constant &call) const
@@ -105,9 +101,7 @@ namespace PILS
 
 	const Escape *NodeConstantLong::escape() const
 	{
-		return new
-			(Heap::allocate(sizeof(EscapeNodeConstantLong)))
-			EscapeNodeConstantLong(this);
+        return new const EscapeNodeConstantLong(this);
 	}
 
 	const Step *EscapeNodeConstantLong::calling(Runner &run, const Constant &call) const
@@ -137,9 +131,7 @@ namespace PILS
 
 	const Escape *NodeConstantTrailer::escape() const
 	{
-		return new
-			(Heap::allocate(sizeof(EscapeNodeConstantTrailer)))
-			EscapeNodeConstantTrailer(this);
+        return new const EscapeNodeConstantTrailer(this);
 	}
 
 	const Step *EscapeNodeConstantTrailer::calling(Runner &run, const Constant &call) const
@@ -169,9 +161,7 @@ namespace PILS
 
 	const Escape *NodeExpressShort::escape() const
 	{
-		return new
-			(Heap::allocate(sizeof(EscapeNodeExpressShort)))
-			EscapeNodeExpressShort(this);
+        return new const EscapeNodeExpressShort(this);
 	}
 
 	const Step *EscapeNodeExpressShort::step_(Runner &run) const
@@ -230,9 +220,7 @@ namespace PILS
 
 	const Escape *NodeExpressLong::escape() const
 	{
-		return new
-			(Heap::allocate(sizeof(EscapeNodeExpressLong)))
-			EscapeNodeExpressLong(this);
+        return new const EscapeNodeExpressLong(this);
 	}
 
 	const Step *EscapeNodeExpressLong::step_(Runner &run) const
@@ -290,9 +278,7 @@ namespace PILS
 
 	const Escape *NodeExpressTrailer::escape() const
 	{
-		return new
-			(Heap::allocate(sizeof(EscapeNodeExpressTrailer)))
-			EscapeNodeExpressTrailer(this);
+        return new EscapeNodeExpressTrailer(this);
 	}
 
 	const Step *EscapeNodeExpressTrailer::calling(Runner &run, const Constant &call) const

@@ -4,77 +4,77 @@ namespace PILS
 {
 	const NodeConstantShort *BuiltinClicheConcatenate::newNode(const HashedConstant *&link, const Integer *value) const
 	{
-		return new (Heap::allocate(sizeof(ConcatenateConstant))) ConcatenateConstant(link, *this, value);
+        return new ConcatenateConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheConcatenate::newNode(const HashedConstant *&link, const Float *value) const
 	{
-		return new (Heap::allocate(sizeof(ConcatenateConstant))) ConcatenateConstant(link, *this, value);
+        return new ConcatenateConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheConcatenate::newNode(const HashedConstant *&link, const PilsString *value) const
 	{
-		return new (Heap::allocate(sizeof(ConcatenateConstant))) ConcatenateConstant(link, *this, value);
+        return new ConcatenateConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheConcatenate::newNode(const HashedConstant *&link, const PilsColor *value) const
 	{
-		return new (Heap::allocate(sizeof(ConcatenateConstant))) ConcatenateConstant(link, *this, value);
+        return new ConcatenateConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheConcatenate::newNode(const HashedConstant *&link, const Timestamp *value) const
 	{
-		return new (Heap::allocate(sizeof(ConcatenateConstant))) ConcatenateConstant(link, *this, value);
+        return new ConcatenateConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheConcatenate::newNode(const HashedConstant *&link, const Duration *value) const
 	{
-		return new (Heap::allocate(sizeof(ConcatenateConstant))) ConcatenateConstant(link, *this, value);
+        return new ConcatenateConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheConcatenate::newNode(const HashedConstant *&link, const PilsDate *value) const
 	{
-		return new (Heap::allocate(sizeof(ConcatenateConstant))) ConcatenateConstant(link, *this, value);
+        return new ConcatenateConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheConcatenate::newNode(const HashedConstant *&link, const Cliche *value) const
 	{
-		return new (Heap::allocate(sizeof(ConcatenateConstant))) ConcatenateConstant(link, *this, value);
+        return new ConcatenateConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheConcatenate::newNode(const HashedConstant *&link, const NodeConstant *value) const
 	{
-		return new (Heap::allocate(sizeof(ConcatenateConstant))) ConcatenateConstant(link, *this, value);
+        return new ConcatenateConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheConcatenate::newNode(const HashedConstant *&link, const Special *value) const
 	{
-		return new (Heap::allocate(sizeof(ConcatenateConstant))) ConcatenateConstant(link, *this, value);
+        return new ConcatenateConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheConcatenate::newNode(const HashedConstant *&link, const Listener *value) const
 	{
-		return new (Heap::allocate(sizeof(ConcatenateConstant))) ConcatenateConstant(link, *this, value);
+        return new ConcatenateConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheConcatenate::newNode(const HashedConstant *&link, const ListConstant *value) const
 	{
-		return new (Heap::allocate(sizeof(ConcatenateConstant))) ConcatenateConstant(link, *this, value);
+        return new ConcatenateConstant(link, *this, value);
 	}
 
 	const NodeExpressShort *BuiltinClicheConcatenate::node(const Express *element) const
 	{
-		return new (Heap::allocate(sizeof(ConcatenateExpress))) ConcatenateExpress(*this, element);
+        return new ConcatenateExpress(*this, element);
 	}
 
 	const CallWho *ConcatenateConstant::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoConcatenateConstant))) WhoConcatenateConstant(this, who);
+        return new WhoConcatenateConstant(this, who);
 	}
 
 	const CallWho *ConcatenateExpress::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoConcatenateExpress))) WhoConcatenateExpress(this, who);
+        return new WhoConcatenateExpress(this, who);
 	}
 
 	const Step *WhoConcatenateConstant::step_(Runner &run) const

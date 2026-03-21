@@ -100,9 +100,7 @@ namespace PILS
 				}
 				if ((*i)->as_Constant() == NULL)
 				{
-					list = new
-						(Heap::allocate(sizeof(ListExpress) + (count - 1) * sizeof(Any*)))
-						const ListExpress(&elements[0], count);
+                    list = new ((count - 1) * sizeof(Any*))	const ListExpress(&elements[0], count);
 					break;
 				}
 			}
@@ -943,12 +941,12 @@ namespace PILS
 
 	const CallWho *PropertyIncrementRange::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoPropertyIncrementRange))) const WhoPropertyIncrementRange(this, who);
+        return new const WhoPropertyIncrementRange(this, who);
 	}
 
 	const CallWho *PropertyDecrementRange::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoPropertyIncrementRange))) const WhoPropertyDecrementRange(this, who);
+        return new const WhoPropertyDecrementRange(this, who);
 	}
 
 	const Step *WhoPropertyIncrementRange::step_(Runner &run) const
@@ -1039,23 +1037,23 @@ namespace PILS
 
 	const NodeConstantShort *BuiltinClicheOperationUpDown::newNode(const HashedConstant *&link, const Integer *value) const
 	{
-		return new (Heap::allocate(sizeof(UpDownInteger))) UpDownInteger(link, *this, value);
+        return new UpDownInteger(link, *this, value);
 	}
 
 	const CallWho *BuiltinClicheOperationUpDown::whoOperation(const NodeExpressShort *operation, const Any *who) const
 	{
 		if (downwards)
-			return new (Heap::allocate(sizeof(WhoDownExpress))) const WhoDownExpress(operation, who);
+            return new const WhoDownExpress(operation, who);
 		else
-			return new (Heap::allocate(sizeof(WhoUpExpress))) const WhoUpExpress(operation, who);
+            return new const WhoUpExpress(operation, who);
 	}
 
 	const CallWho *UpDownInteger::callWho(const Any *who) const
 	{
 		if (((BuiltinClicheOperationUpDown*)cliche)->downwards)
-			return new (Heap::allocate(sizeof(WhoDownInteger))) const WhoDownInteger(this, who);
+            return new const WhoDownInteger(this, who);
 		else
-			return new (Heap::allocate(sizeof(WhoUpInteger))) const WhoUpInteger(this, who);
+            return new const WhoUpInteger(this, who);
 	}
 
 	const Step *WhoUpExpress::step_(Runner &run) const
@@ -1261,7 +1259,7 @@ namespace PILS
 
 	const CallWho *PropertyReverse::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoReverse))) const WhoReverse(this, who);
+        return new  const WhoReverse(this, who);
 	}
 
 	const Step *WhoReverse::step_(Runner &run) const
@@ -1335,7 +1333,7 @@ namespace PILS
 
 	const CallWho *PropertySplice::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoPropertySplice))) const WhoPropertySplice(this, who);
+        return new const WhoPropertySplice(this, who);
 	}
 
 	const Step *WhoPropertySplice::step_(Runner &run) const
@@ -1745,7 +1743,7 @@ namespace PILS
 
 	const CallWho *PredefinedAggregateFunctionName::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(AggregateCallWho))) AggregateCallWho(this, who);
+        return new AggregateCallWho(this, who);
 	}
 
 	const Step *AggregateCallWho::step_(Runner &run) const

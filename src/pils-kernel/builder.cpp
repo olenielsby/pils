@@ -5,7 +5,7 @@ namespace PILS
 	const Any *BuiltinClicheBuilding::node(const Any *const *element) const
 	{
 		if (element[1]->as_Constant())
-			return new (Heap::allocate(sizeof(Building))) Building(*this, element);
+            return new Building(*this, element);
 		else return BuiltinPokerClicheTrailer::node(element);
 	}
 
@@ -256,24 +256,24 @@ namespace PILS
 
 	const NodeExpressShort *BuiltinClicheBuilderShort::node(const Express *element) const
 	{
-		return new (Heap::allocate(sizeof(BuilderShort))) BuilderShort(*this, element);
+        return new BuilderShort(*this, element);
 	}
 
 	const Any *BuiltinClicheBuilderShort::node(const Constant *element) const
 	{
-		return new (Heap::allocate(sizeof(BuilderShort))) BuilderShort(*this, element);
+        return new BuilderShort(*this, element);
 	}
 
 	const Any *BuiltinClicheBuilderTrailer::node(const Constant *const *element) const
 	{
-		return new (Heap::allocate(sizeof(BuilderTrailer))) BuilderTrailer(*this, element[0], element[1]);
+        return new BuilderTrailer(*this, element[0], element[1]);
 	}
 
 	const Any *BuiltinClicheBuilderTrailer::node(const Any *const *element) const
 	{
 		const Constant *name = element[1]->as_Constant();
 		if (name)
-			return new (Heap::allocate(sizeof(BuilderTrailer))) BuilderTrailer(*this, element[0], name);
+            return new BuilderTrailer(*this, element[0], name);
 		else
 			return BuiltinPokerClicheTrailer::node(element);
 	}
@@ -292,7 +292,7 @@ namespace PILS
 		const BuilderName *kind = (const BuilderName *)cliche->attributes[0];
 		kind->addReference();
 		run.where_->addReference();
-		const Building *building = new (Heap::allocate(sizeof(Building))) Building(run.where_, kind);
+        const Building *building = new Building(run.where_, kind);
 		run.where_ = building;
 		return kind->building(run, *element[0], *kind);
 	}
@@ -302,7 +302,7 @@ namespace PILS
 		const BuilderName *kind = (const BuilderName *)cliche->attributes[1];
 		name->addReference();
 		run.where_->addReference();
-		const Building *building = new (Heap::allocate(sizeof(Building))) Building(run.where_, name);
+        const Building *building = new Building(run.where_, name);
 		run.where_ = building;
 		return kind->building(run, *element[0], *(const Constant *)element[1]);
 	}

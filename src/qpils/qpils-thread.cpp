@@ -51,7 +51,7 @@ namespace PILS
 	const ReallySpecial *ThreadLookup::newSpecial(const HashedConstant *&link)
 	{
 		if (!MainThread::singleton)
-			return new (Heap::allocate(sizeof(MainThread))) MainThread(link, threadID);
+            return new const MainThread(link, threadID);
 		else
             throw L"ThreadLookup::newSpecial: WorkerThread not implemented";
             // return new (Heap::allocate(sizeof(WorkerThread))) WorkerThread(link, threadID);

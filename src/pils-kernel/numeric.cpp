@@ -15,7 +15,7 @@ namespace PILS
 
 	const CallWho *PropertyMinus::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoPropertyMinus))) const WhoPropertyMinus(this, who);
+        return new const WhoPropertyMinus(this, who);
 	}
 
 	const Step *WhoPropertyMinus::step_(Runner &run) const
@@ -85,9 +85,7 @@ namespace PILS
 
 	const CallWho *FloatProperty::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoFloatProperty)))
-			WhoFloatProperty(this, who);
+        return new const WhoFloatProperty(this, who);
 	}
 
 	size_t WhoFloatProperty::unlinkAndGetSize()
@@ -143,72 +141,52 @@ namespace PILS
 
 	const NodeConstantShort *BuiltinClicheOperationPlus::newNode(const HashedConstant *&link, const Integer *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationPlusInteger)))
-			OperationPlusInteger(link, value);
+        return new const OperationPlusInteger(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationPlus::newNode(const HashedConstant *&link, const Float *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationPlusFloat)))
-			OperationPlusFloat(link, value);
+        return new const OperationPlusFloat(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationPlus::newNode(const HashedConstant *&link, const Timestamp *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationPlusTimestamp)))
-			OperationPlusTimestamp(link, value);
+        return new const OperationPlusTimestamp(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationPlus::newNode(const HashedConstant *&link, const Duration *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationPlusDuration)))
-			OperationPlusDuration(link, value);
+        return new const OperationPlusDuration(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationPlus::newNode(const HashedConstant *&link, const PilsDate *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationPlusPilsDate)))
-			OperationPlusPilsDate(link, value);
+        return new const OperationPlusPilsDate(link, value);
 	}
 
 	const CallWho *OperationPlusInteger::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoPlusInteger)))
-			WhoPlusInteger(this, who);
+        return new const WhoPlusInteger(this, who);
 	}
 
 	const CallWho *OperationPlusFloat::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoPlusFloat)))
-			WhoPlusFloat(this, who);
+        return new const WhoPlusFloat(this, who);
 	}
 
 	const CallWho *OperationPlusTimestamp::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoPlusTimestamp)))
-			WhoPlusTimestamp(this, who);
+        return new const WhoPlusTimestamp(this, who);
 	}
 
 	const CallWho *OperationPlusDuration::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoPlusDuration)))
-			WhoPlusDuration(this, who);
+        return new const WhoPlusDuration(this, who);
 	}
 
 	const CallWho *OperationPlusPilsDate::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoPlusPilsDate)))
-			WhoPlusPilsDate(this, who);
+        return new const WhoPlusPilsDate(this, who);
 	}
 
 	const Step *WhoPlusInteger::step_(Runner &run) const
@@ -251,9 +229,7 @@ namespace PILS
 
 	const CallWho *BuiltinClicheOperationPlus::whoOperation(const NodeExpressShort *operation, const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoExpressPlus)))
-			WhoExpressPlus(operation, who);
+        return new const WhoExpressPlus(operation, who);
 	}
 
 	const Step *WhoExpressPlus::pass(Runner &run, long value)
@@ -673,72 +649,52 @@ namespace PILS
 
 	const NodeConstantShort *BuiltinClicheOperationMinus::newNode(const HashedConstant *&link, const Integer *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationMinusInteger)))
-			OperationMinusInteger(link, value);
+        return new const OperationMinusInteger(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationMinus::newNode(const HashedConstant *&link, const Float *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationMinusFloat)))
-			OperationMinusFloat(link, value);
+        return new const OperationMinusFloat(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationMinus::newNode(const HashedConstant *&link, const Timestamp *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationMinusTimestamp)))
-			OperationMinusTimestamp(link, value);
+        return new const OperationMinusTimestamp(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationMinus::newNode(const HashedConstant *&link, const Duration *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationMinusDuration)))
-			OperationMinusDuration(link, value);
+        return new const OperationMinusDuration(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationMinus::newNode(const HashedConstant *&link, const PilsDate *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationMinusPilsDate)))
-			OperationMinusPilsDate(link, value);
+        return new const OperationMinusPilsDate(link, value);
 	}
 
 	const CallWho *OperationMinusInteger::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoMinusInteger)))
-			WhoMinusInteger(this, who);
+        return new const WhoMinusInteger(this, who);
 	}
 
 	const CallWho *OperationMinusFloat::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoMinusFloat)))
-			WhoMinusFloat(this, who);
+        return new const WhoMinusFloat(this, who);
 	}
 
 	const CallWho *OperationMinusTimestamp::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoMinusTimestamp)))
-			WhoMinusTimestamp(this, who);
+        return new const WhoMinusTimestamp(this, who);
 	}
 
 	const CallWho *OperationMinusDuration::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoMinusDuration)))
-			WhoMinusDuration(this, who);
+        return new const WhoMinusDuration(this, who);
 	}
 
 	const CallWho *OperationMinusPilsDate::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoMinusPilsDate)))
-			WhoMinusPilsDate(this, who);
+        return new const WhoMinusPilsDate(this, who);
 	}
 
 	const Step *WhoMinusInteger::step_(Runner &run) const
@@ -781,9 +737,7 @@ namespace PILS
 
 	const CallWho *BuiltinClicheOperationMinus::whoOperation(const NodeExpressShort *operation, const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoExpressMinus)))
-			WhoExpressMinus(operation, who);
+        return new const WhoExpressMinus(operation, who);
 	}
 
 	const Step *WhoExpressMinus::pass(Runner &run, long value)
@@ -1203,44 +1157,32 @@ namespace PILS
 
 	const NodeConstantShort *BuiltinClicheOperationTimes::newNode(const HashedConstant *&link, const Integer *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationTimesInteger)))
-			OperationTimesInteger(link, value);
+        return new const OperationTimesInteger(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationTimes::newNode(const HashedConstant *&link, const Float *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationTimesFloat)))
-			OperationTimesFloat(link, value);
+        return new const OperationTimesFloat(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationTimes::newNode(const HashedConstant *&link, const Duration *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationTimesDuration)))
-			OperationTimesDuration(link, value);
+        return new OperationTimesDuration(link, value);
 	}
 
 	const CallWho *OperationTimesInteger::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoTimesInteger)))
-			WhoTimesInteger(this, who);
+        return new const WhoTimesInteger(this, who);
 	}
 
 	const CallWho *OperationTimesFloat::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoTimesFloat)))
-			WhoTimesFloat(this, who);
+        return new const WhoTimesFloat(this, who);
 	}
 
 	const CallWho *OperationTimesDuration::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoTimesDuration)))
-			WhoTimesDuration(this, who);
+        return new const WhoTimesDuration(this, who);
 	}
 
 	const Step *WhoTimesInteger::step_(Runner &run) const
@@ -1267,9 +1209,7 @@ namespace PILS
 
 	const CallWho *BuiltinClicheOperationTimes::whoOperation(const NodeExpressShort *operation, const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoExpressTimes)))
-			WhoExpressTimes(operation, who);
+        return new const WhoExpressTimes(operation, who);
 	}
 
 	const Step *WhoExpressTimes::pass(Runner &run, long value)
@@ -1738,44 +1678,32 @@ namespace PILS
 
 	const NodeConstantShort *BuiltinClicheOperationDivide::newNode(const HashedConstant *&link, const Integer *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationDivideInteger)))
-			OperationDivideInteger(link, value);
+        return new const OperationDivideInteger(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationDivide::newNode(const HashedConstant *&link, const Float *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationDivideFloat)))
-			OperationDivideFloat(link, value);
+        return new const OperationDivideFloat(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationDivide::newNode(const HashedConstant *&link, const Duration *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationDivideDuration)))
-			OperationDivideDuration(link, value);
+        return new const OperationDivideDuration(link, value);
 	}
 
 	const CallWho *OperationDivideInteger::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoDivideInteger)))
-			WhoDivideInteger(this, who);
+        return new const WhoDivideInteger(this, who);
 	}
 
 	const CallWho *OperationDivideFloat::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoDivideFloat)))
-			WhoDivideFloat(this, who);
+        return new const WhoDivideFloat(this, who);
 	}
 
 	const CallWho *OperationDivideDuration::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoDivideDuration)))
-			WhoDivideDuration(this, who);
+        return new const WhoDivideDuration(this, who);
 	}
 
 	const Step *WhoDivideInteger::step_(Runner &run) const
@@ -1802,9 +1730,7 @@ namespace PILS
 
 	const CallWho *BuiltinClicheOperationDivide::whoOperation(const NodeExpressShort *operation, const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoExpressDivide)))
-			WhoExpressDivide(operation, who);
+        return new const WhoExpressDivide(operation, who);
 	}
 
 	const Step *WhoExpressDivide::pass(Runner &run, long value)
@@ -2194,37 +2120,27 @@ namespace PILS
 
 	const NodeConstantShort *BuiltinClicheOperationIntegerDivide::newNode(const HashedConstant *&link, const Integer *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationIntegerDivideInteger)))
-			OperationIntegerDivideInteger(link, value);
+        return new const OperationIntegerDivideInteger(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationIntegerDivide::newNode(const HashedConstant *&link, const Float *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationIntegerDivideFloat)))
-			OperationIntegerDivideFloat(link, value);
+        return new const OperationIntegerDivideFloat(link, value);
 	}
 
 	const CallWho *OperationIntegerDivideInteger::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoIntegerDivideInteger)))
-			WhoIntegerDivideInteger(this, who);
+        return new const WhoIntegerDivideInteger(this, who);
 	}
 
 	const CallWho *OperationIntegerDivideFloat::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoIntegerDivideFloat)))
-			WhoIntegerDivideFloat(this, who);
+        return new const WhoIntegerDivideFloat(this, who);
 	}
 
 	const CallWho *OperationIntegerDivideDuration::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoIntegerDivideDuration)))
-			WhoIntegerDivideDuration(this, who);
+        return new const WhoIntegerDivideDuration(this, who);
 	}
 
 	const Step *WhoIntegerDivideInteger::step_(Runner &run) const
@@ -2251,16 +2167,12 @@ namespace PILS
 
 	const CallWho *BuiltinClicheOperationIntegerDivide::whoOperation(const NodeExpressShort *operation, const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoExpressIntegerDivide)))
-			WhoExpressIntegerDivide(operation, who);
+        return new const WhoExpressIntegerDivide(operation, who);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationIntegerDivide::newNode(const HashedConstant *&link, const Duration *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationIntegerDivideDuration)))
-			OperationIntegerDivideDuration(link, value);
+        return new const OperationIntegerDivideDuration(link, value);
 	}
 
 	const Step *WhoExpressIntegerDivide::pass(Runner &run, long value)
@@ -2670,30 +2582,22 @@ namespace PILS
 
 	const NodeConstantShort *BuiltinClicheOperationModulo::newNode(const HashedConstant *&link, const Integer *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationModuloInteger)))
-			OperationModuloInteger(link, value);
+        return new const OperationModuloInteger(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationModulo::newNode(const HashedConstant *&link, const Float *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationModuloFloat)))
-			OperationModuloFloat(link, value);
+        return new const OperationModuloFloat(link, value);
 	}
 
 	const CallWho *OperationModuloInteger::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoModuloInteger)))
-			WhoModuloInteger(this, who);
+        return new const WhoModuloInteger(this, who);
 	}
 
 	const CallWho *OperationModuloFloat::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoModuloFloat)))
-			WhoModuloFloat(this, who);
+        return new const WhoModuloFloat(this, who);
 	}
 
 	const Step *WhoModuloInteger::step_(Runner &run) const
@@ -2712,9 +2616,7 @@ namespace PILS
 
 	const CallWho *BuiltinClicheOperationModulo::whoOperation(const NodeExpressShort *operation, const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoExpressModulo)))
-			WhoExpressModulo(operation, who);
+        return new const WhoExpressModulo(operation, who);
 	}
 
 	const Step *WhoExpressModulo::pass(Runner &run, long value)
@@ -3041,7 +2943,7 @@ namespace PILS
 
 	const CallWho *PropertyHexadecimal::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoPropertyHexadecimal))) const WhoPropertyHexadecimal(this, who);
+        return new const WhoPropertyHexadecimal(this, who);
 	}
 
 	const Step *WhoPropertyHexadecimal::step_(Runner &run) const
@@ -3250,12 +3152,12 @@ namespace PILS
 
 	const CallWho *PropertyLocalTime::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoPropertyLocalTime))) const WhoPropertyLocalTime(this, who);
+        return new const WhoPropertyLocalTime(this, who);
 	}
 
 	const CallWho *PropertyGreenwichMeanTime::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoPropertyGreenwichMeanTime))) const WhoPropertyGreenwichMeanTime(this, who);
+        return new const WhoPropertyGreenwichMeanTime(this, who);
 	}
 
 	const Step *WhoPropertyLocalTime::step_(Runner &run) const

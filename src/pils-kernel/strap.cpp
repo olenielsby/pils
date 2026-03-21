@@ -11,62 +11,62 @@ namespace PILS
 
 	const NodeConstantShort *BuiltinClicheStrap::newNode(const HashedConstant *&link, const Integer *value) const
 	{
-		return new (Heap::allocate(sizeof(Strap))) Strap(link, *this, value);
+        return new const Strap(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheStrap::newNode(const HashedConstant *&link, const Float *value) const
 	{
-		return new (Heap::allocate(sizeof(Strap))) Strap(link, *this, value);
+        return new const Strap(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheStrap::newNode(const HashedConstant *&link, const PilsColor *value) const
 	{
-		return new (Heap::allocate(sizeof(Strap))) Strap(link, *this, value);
+        return new const Strap(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheStrap::newNode(const HashedConstant *&link, const Timestamp *value) const
 	{
-		return new (Heap::allocate(sizeof(Strap))) Strap(link, *this, value);
+        return new const Strap(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheStrap::newNode(const HashedConstant *&link, const Duration *value) const
 	{
-		return new (Heap::allocate(sizeof(Strap))) Strap(link, *this, value);
+        return new const Strap(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheStrap::newNode(const HashedConstant *&link, const PilsDate *value) const
 	{
-		return new (Heap::allocate(sizeof(Strap))) Strap(link, *this, value);
+        return new const Strap(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheStrap::newNode(const HashedConstant *&link, const PilsString *value) const
 	{
-		return new (Heap::allocate(sizeof(Strap))) Strap(link, *this, value);
+        return new const Strap(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheStrap::newNode(const HashedConstant *&link, const Cliche *value) const
 	{
-		return new (Heap::allocate(sizeof(Strap))) Strap(link, *this, value);
+        return new const Strap(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheStrap::newNode(const HashedConstant *&link, const Listener *value) const
 	{
-		return new (Heap::allocate(sizeof(Strap))) Strap(link, *this, value);
+        return new const Strap(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheStrap::newNode(const HashedConstant *&link, const Special *value) const
 	{
-		return new (Heap::allocate(sizeof(Strap))) Strap(link, *this, value);
+        return new const Strap(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheStrap::newNode(const HashedConstant *&link, const NodeConstant *value) const
 	{
-		return new (Heap::allocate(sizeof(Strap))) Strap(link, *this, value);
+        return new const Strap(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheStrap::newNode(const HashedConstant *&link, const ListConstant *value) const
 	{
-		return new (Heap::allocate(sizeof(Strap))) Strap(link, *this, value);
+        return new const Strap(link, *this, value);
 	}
 
 	size_t Strap::unlinkAndGetSize()
@@ -90,7 +90,7 @@ namespace PILS
 
 	void Strap::Sticker::stick(const Strap &strap)
 	{
-		Mutex::Lock lock(Heap::mutex);
+        Mutex::Lock lock(Mutex::singleMutex);
 		if (stuck.insert(&strap).second == true)
 		{
 			strap.addReference();
@@ -102,7 +102,7 @@ namespace PILS
 	{
 		const Any *drop = NULL;
 		{
-			Mutex::Lock lock(Heap::mutex);
+            Mutex::Lock lock(Mutex::singleMutex);
 			if (!--stickCount)
 			{
 				drop = mind;
@@ -116,7 +116,7 @@ namespace PILS
 
 	const Any *Strap::get() const
 	{
-		Mutex::Lock lock(Heap::mutex);
+        Mutex::Lock lock(Mutex::singleMutex);
 		mind->addReference();
 		return mind;
 	}
@@ -184,7 +184,7 @@ namespace PILS
 		{
 			const Any *result = NULL;
 			{
-				Mutex::Lock lock(Heap::mutex);
+                Mutex::Lock lock(Mutex::singleMutex);
 				if (stickCount)
 				{
 					result = mind;

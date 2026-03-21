@@ -53,121 +53,87 @@ namespace PILS
 
 	const NodeConstantShort *BuiltinClicheOperationEqual::newNode(const HashedConstant *&link, const Integer *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationEqualInteger)))
-			OperationEqualInteger(link, value);
+        return new const OperationEqualInteger(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationEqual::newNode(const HashedConstant *&link, const Float *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationEqualFloat)))
-			OperationEqualFloat(link, value);
+        return new const OperationEqualFloat(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationEqual::newNode(const HashedConstant *&link, const PilsString *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationEqualString)))
-			OperationEqualString(link, value);
+        return new const OperationEqualString(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationEqual::newNode(const HashedConstant *&link, const PilsColor *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationEqualConstant)))
-			OperationEqualConstant(link, value);
+        return new const OperationEqualConstant(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationEqual::newNode(const HashedConstant *&link, const Timestamp *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationEqualConstant)))
-			OperationEqualConstant(link, value);
+        return new const OperationEqualConstant(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationEqual::newNode(const HashedConstant *&link, const Duration *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationEqualConstant)))
-			OperationEqualConstant(link, value);
+        return new const OperationEqualConstant(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationEqual::newNode(const HashedConstant *&link, const PilsDate *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationEqualConstant)))
-			OperationEqualConstant(link, value);
+        return new const OperationEqualConstant(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationEqual::newNode(const HashedConstant *&link, const Cliche *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationEqualConstant)))
-			OperationEqualConstant(link, value);
+        return new const OperationEqualConstant(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationEqual::newNode(const HashedConstant *&link, const ListConstant *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationEqualConstant)))
-			OperationEqualConstant(link, value);
+        return new const OperationEqualConstant(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationEqual::newNode(const HashedConstant *&link, const NodeConstant *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationEqualConstant)))
-			OperationEqualConstant(link, value);
+        return new const OperationEqualConstant(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationEqual::newNode(const HashedConstant *&link, const Special *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationEqualConstant)))
-			OperationEqualConstant(link, value);
+        return new const OperationEqualConstant(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationEqual::newNode(const HashedConstant *&link, const Listener *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationEqualConstant)))
-			OperationEqualConstant(link, value);
+        return new const OperationEqualConstant(link, value);
 	}
 
 	const CallWho *BuiltinClicheOperationEqual::whoOperation(const NodeExpressShort *operation, const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoExpressEqual)))
-			WhoExpressEqual(operation, who);
+        return new const WhoExpressEqual(operation, who);
 	}
 
 	const CallWho *OperationEqualConstant::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoEqualConstant)))
-			WhoEqualConstant(this, who);
+        return new const WhoEqualConstant(this, who);
 	}
 
 	const CallWho *OperationEqualInteger::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoEqualInteger)))
-			WhoEqualInteger(this, who);
+        return new const WhoEqualInteger(this, who);
 	}
 
 	const CallWho *OperationEqualFloat::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoEqualFloat)))
-			WhoEqualFloat(this, who);
+        return new const WhoEqualFloat(this, who);
 	}
 
 	const CallWho *OperationEqualString::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoEqualString)))
-			WhoEqualString(this, who);
+        return new const WhoEqualString(this, who);
 	}
 
 	const Step *WhoEqualConstant::step_(Runner &run) const
@@ -1422,121 +1388,87 @@ namespace PILS
 
 	const NodeConstantShort *BuiltinClicheOperationNotEqual::newNode(const HashedConstant *&link, const Integer *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationNotEqualInteger)))
-			OperationNotEqualInteger(link, value);
+        return new const OperationNotEqualInteger(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationNotEqual::newNode(const HashedConstant *&link, const Float *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationNotEqualFloat)))
-			OperationNotEqualFloat(link, value);
+        return new const OperationNotEqualFloat(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationNotEqual::newNode(const HashedConstant *&link, const PilsString *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationNotEqualString)))
-			OperationNotEqualString(link, value);
+        return new const OperationNotEqualString(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationNotEqual::newNode(const HashedConstant *&link, const PilsColor *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationNotEqualConstant)))
-			OperationNotEqualConstant(link, value);
+        return new const OperationNotEqualConstant(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationNotEqual::newNode(const HashedConstant *&link, const Timestamp *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationNotEqualConstant)))
-			OperationNotEqualConstant(link, value);
+        return new const OperationNotEqualConstant(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationNotEqual::newNode(const HashedConstant *&link, const Duration *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationNotEqualConstant)))
-			OperationNotEqualConstant(link, value);
+        return new const OperationNotEqualConstant(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationNotEqual::newNode(const HashedConstant *&link, const PilsDate *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationNotEqualConstant)))
-			OperationNotEqualConstant(link, value);
+        return new const OperationNotEqualConstant(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationNotEqual::newNode(const HashedConstant *&link, const Cliche *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationNotEqualConstant)))
-			OperationNotEqualConstant(link, value);
+        return new const OperationNotEqualConstant(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationNotEqual::newNode(const HashedConstant *&link, const ListConstant *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationNotEqualConstant)))
-			OperationNotEqualConstant(link, value);
+        return new const OperationNotEqualConstant(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationNotEqual::newNode(const HashedConstant *&link, const NodeConstant *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationNotEqualConstant)))
-			OperationNotEqualConstant(link, value);
+        return new const OperationNotEqualConstant(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationNotEqual::newNode(const HashedConstant *&link, const Special *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationNotEqualConstant)))
-			OperationNotEqualConstant(link, value);
+        return new const OperationNotEqualConstant(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationNotEqual::newNode(const HashedConstant *&link, const Listener *value) const
 	{
-		return new
-			(Heap::allocate(sizeof(OperationNotEqualConstant)))
-			OperationNotEqualConstant(link, value);
+        return new const OperationNotEqualConstant(link, value);
 	}
 
 	const CallWho *BuiltinClicheOperationNotEqual::whoOperation(const NodeExpressShort *operation, const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoExpressNotEqual)))
-			WhoExpressNotEqual(operation, who);
+        return new const WhoExpressNotEqual(operation, who);
 	}
 
 	const CallWho *OperationNotEqualConstant::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoNotEqualConstant)))
-			WhoNotEqualConstant(this, who);
+        return new const WhoNotEqualConstant(this, who);
 	}
 
 	const CallWho *OperationNotEqualInteger::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoNotEqualInteger)))
-			WhoNotEqualInteger(this, who);
+        return new const WhoNotEqualInteger(this, who);
 	}
 
 	const CallWho *OperationNotEqualFloat::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoNotEqualFloat)))
-			WhoNotEqualFloat(this, who);
+        return new const WhoNotEqualFloat(this, who);
 	}
 
 	const CallWho *OperationNotEqualString::callWho(const Any *who) const
 	{
-		return new
-			(Heap::allocate(sizeof(WhoNotEqualString)))
-			WhoNotEqualString(this, who);
+        return new const WhoNotEqualString(this, who);
 	}
 
 	const Step *WhoNotEqualConstant::step_(Runner &run) const
@@ -2780,142 +2712,142 @@ namespace PILS
 
 	const NodeConstantShort *BuiltinClicheOperationLess::newNode(const HashedConstant *&link, const Integer *value) const
 	{
-		return new (Heap::allocate(sizeof(OperationLessInteger))) OperationLessInteger(link, value);
+        return new const OperationLessInteger(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationLess::newNode(const HashedConstant *&link, const Float *value) const
 	{
-		return new (Heap::allocate(sizeof(OperationLessFloat))) OperationLessFloat(link, value);
+        return new const OperationLessFloat(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationLess::newNode(const HashedConstant *&link, const PilsString *value) const
 	{
-		return new (Heap::allocate(sizeof(OperationLessInteger))) OperationLessString(link, value);
+        return new const OperationLessString(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationLessEqual::newNode(const HashedConstant *&link, const Integer *value) const
 	{
-		return new (Heap::allocate(sizeof(OperationLessEqualInteger))) OperationLessEqualInteger(link, value);
+        return new const OperationLessEqualInteger(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationLessEqual::newNode(const HashedConstant *&link, const Float *value) const
 	{
-		return new (Heap::allocate(sizeof(OperationLessEqualFloat))) OperationLessEqualFloat(link, value);
+        return new const OperationLessEqualFloat(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationLessEqual::newNode(const HashedConstant *&link, const PilsString *value) const
 	{
-		return new (Heap::allocate(sizeof(OperationLessEqualInteger))) OperationLessEqualString(link, value);
+        return new const OperationLessEqualString(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationGreater::newNode(const HashedConstant *&link, const Integer *value) const
 	{
-		return new (Heap::allocate(sizeof(OperationGreaterInteger))) OperationGreaterInteger(link, value);
+        return new const OperationGreaterInteger(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationGreater::newNode(const HashedConstant *&link, const Float *value) const
 	{
-		return new (Heap::allocate(sizeof(OperationGreaterFloat))) OperationGreaterFloat(link, value);
+        return new const OperationGreaterFloat(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationGreater::newNode(const HashedConstant *&link, const PilsString *value) const
 	{
-		return new (Heap::allocate(sizeof(OperationGreaterInteger))) OperationGreaterString(link, value);
+        return new const OperationGreaterString(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationGreaterEqual::newNode(const HashedConstant *&link, const Integer *value) const
 	{
-		return new (Heap::allocate(sizeof(OperationGreaterEqualInteger))) OperationGreaterEqualInteger(link, value);
+        return new const OperationGreaterEqualInteger(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationGreaterEqual::newNode(const HashedConstant *&link, const Float *value) const
 	{
-		return new (Heap::allocate(sizeof(OperationGreaterEqualFloat))) OperationGreaterEqualFloat(link, value);
+        return new const OperationGreaterEqualFloat(link, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationGreaterEqual::newNode(const HashedConstant *&link, const PilsString *value) const
 	{
-		return new (Heap::allocate(sizeof(OperationGreaterEqualInteger))) OperationGreaterEqualString(link, value);
+        return new const OperationGreaterEqualString(link, value);
 	}
 
 	const CallWho *OperationLessInteger::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoLessInteger))) const WhoLessInteger(this, who);
+        return new const WhoLessInteger(this, who);
 	}
 
 	const CallWho *OperationLessFloat::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoLessFloat))) const WhoLessFloat(this, who);
+        return new const WhoLessFloat(this, who);
 	}
 
 	const CallWho *OperationLessString::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoLessString))) const WhoLessString(this, who);
+        return new const WhoLessString(this, who);
 	}
 
 	const CallWho *BuiltinClicheOperationLess::whoOperation(const NodeExpressShort *operation, const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoLessExpress))) const WhoLessExpress((NodeExpressTiny*)operation, who);
+        return new const WhoLessExpress((NodeExpressTiny*)operation, who);
 	}
 
 	const CallWho *OperationLessEqualInteger::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoLessEqualInteger))) const WhoLessEqualInteger(this, who);
+        return new const WhoLessEqualInteger(this, who);
 	}
 
 	const CallWho *OperationLessEqualFloat::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoLessEqualFloat))) const WhoLessEqualFloat(this, who);
+        return new const WhoLessEqualFloat(this, who);
 	}
 
 	const CallWho *OperationLessEqualString::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoLessEqualString))) const WhoLessEqualString(this, who);
+        return new const WhoLessEqualString(this, who);
 	}
 
 	const CallWho *BuiltinClicheOperationLessEqual::whoOperation(const NodeExpressShort *operation, const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoLessEqualExpress))) const WhoLessEqualExpress((NodeExpressTiny*)operation, who);
+        return new const WhoLessEqualExpress((NodeExpressTiny*)operation, who);
 	}
 
 	const CallWho *OperationGreaterInteger::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoGreaterInteger))) const WhoGreaterInteger(this, who);
+        return new const WhoGreaterInteger(this, who);
 	}
 
 	const CallWho *OperationGreaterFloat::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoGreaterFloat))) const WhoGreaterFloat(this, who);
+        return new const WhoGreaterFloat(this, who);
 	}
 
 	const CallWho *OperationGreaterString::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoGreaterString))) const WhoGreaterString(this, who);
+        return new const WhoGreaterString(this, who);
 	}
 
 	const CallWho *BuiltinClicheOperationGreater::whoOperation(const NodeExpressShort *operation, const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoGreaterExpress))) const WhoGreaterExpress((NodeExpressTiny*)operation, who);
+        return new const WhoGreaterExpress((NodeExpressTiny*)operation, who);
 	}
 
 	const CallWho *OperationGreaterEqualInteger::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoGreaterEqualInteger))) const WhoGreaterEqualInteger(this, who);
+        return new const WhoGreaterEqualInteger(this, who);
 	}
 
 	const CallWho *OperationGreaterEqualFloat::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoGreaterEqualFloat))) const WhoGreaterEqualFloat(this, who);
+        return new const WhoGreaterEqualFloat(this, who);
 	}
 
 	const CallWho *OperationGreaterEqualString::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoGreaterEqualString))) const WhoGreaterEqualString(this, who);
+        return new const WhoGreaterEqualString(this, who);
 	}
 
 	const CallWho *BuiltinClicheOperationGreaterEqual::whoOperation(const NodeExpressShort *operation, const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoGreaterEqualExpress))) const WhoGreaterEqualExpress((NodeExpressTiny*)operation, who);
+        return new const WhoGreaterEqualExpress((NodeExpressTiny*)operation, who);
 	}
 
 	const Step *WhoLessInteger::step_(Runner &run) const

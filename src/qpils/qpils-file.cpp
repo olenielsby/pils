@@ -38,7 +38,7 @@ namespace PILS
 	const ReallySpecial *FileNameLookup::newSpecial(const HashedConstant *&link)
 	{
 		name.addReference();
-		return new (Heap::allocate(sizeof(FileName))) FileName(link, &name, isFolder);
+        return new const FileName(link, &name, isFolder);
 	}
 
 	void FileName::write(Writing & writing) const
@@ -61,7 +61,7 @@ namespace PILS
         // method.writeToDebugOutput(5);
         // name->writeToDebugOutput(5);
         if (!run.isMainThread()) return nullptr;
-		else if (&method == &Builtin::name.name_)
+        else if (&method == &Builtin::name.name_)
 		{
 			name->addReference();
 			return name;

@@ -18,7 +18,7 @@ namespace PILS
 	{
         long long time = QDateTime::currentMSecsSinceEpoch();
 		{
-			Mutex::Lock lock(Heap::mutex);
+            Mutex::Lock lock(Mutex::singleMutex);
             run.oldTimer = false;
             time = Timestamp::stamp = Timestamp::stamp < time?time:Timestamp::stamp + 1;
 		}
@@ -113,7 +113,7 @@ namespace PILS
 
 	const ReallySpecial *IdentifierLookup::newSpecial(const HashedConstant *&link)
 	{
-		return new (Heap::allocate(sizeof(Identifier))) Identifier(link, value);
+        return new const Identifier(link, value);
 	}
 
 	bool IdentifierLookup::compare(const PILS::ReallySpecial &other) const

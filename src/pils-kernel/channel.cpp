@@ -5,107 +5,77 @@ namespace PILS
 {
 	const NodeConstantShort *ClicheShort::newNode(const HashedConstant *&link, const Listener *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(NodeConstantShort)))
-			const NodeConstantShort(link, *this, value);
+        return new const NodeConstantShort(link, *this, value);
 	}
 
 	const NodeConstantShort *ClicheTiny::newNode(const HashedConstant *&link, const Listener *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(NodeConstantTiny)))
-			const NodeConstantTiny(link, *this, value);
+        return new const NodeConstantTiny(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheUntypedOperation::newNode(const HashedConstant *&link, const Listener *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(UntypedOperationConstant)))
-			const UntypedOperationConstant(link, *this, value);
+        return new const UntypedOperationConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheChannel::newNode(const HashedConstant *&link, const Integer *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(Channel)))
-			const Channel(link, *this, value);
+        return new const Channel(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheChannel::newNode(const HashedConstant *&link, const Float *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(Channel)))
-			const Channel(link, *this, value);
+        return new const Channel(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheChannel::newNode(const HashedConstant *&link, const PilsColor *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(Channel)))
-			const Channel(link, *this, value);
+        return new const Channel(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheChannel::newNode(const HashedConstant *&link, const Timestamp *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(Channel)))
-			const Channel(link, *this, value);
+        return new const Channel(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheChannel::newNode(const HashedConstant *&link, const Duration *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(Channel)))
-			const Channel(link, *this, value);
+        return new const Channel(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheChannel::newNode(const HashedConstant *&link, const PilsDate *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(Channel)))
-			const Channel(link, *this, value);
+        return new const Channel(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheChannel::newNode(const HashedConstant *&link, const PilsString *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(Channel)))
-			const Channel(link, *this, value);
+        return new const Channel(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheChannel::newNode(const HashedConstant *&link, const Cliche *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(Channel)))
-			const Channel(link, *this, value);
+        return new const Channel(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheChannel::newNode(const HashedConstant *&link, const NodeConstant *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(Channel)))
-			const Channel(link, *this, value);
+        return new const Channel(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheChannel::newNode(const HashedConstant *&link, const ListConstant *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(Channel)))
-			const Channel(link, *this, value);
+        return new const Channel(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheChannel::newNode(const HashedConstant *&link, const Special *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(Channel)))
-			const Channel(link, *this, value);
+        return new const Channel(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheChannel::newNode(const HashedConstant *&link, const Listener *value) const
 	{
-		return
-			new (Heap::allocate(sizeof(Channel)))
-			const Channel(link, *this, value);
+        return new const Channel(link, *this, value);
 	}
 
 	const Channel *Channel::as_Channel() const
@@ -141,7 +111,7 @@ namespace PILS
 	const Step *Channel::calling(Runner &run, const Constant &call) const
 	{
 		{
-			Mutex::Lock lock(Heap::mutex);
+            Mutex::Lock lock(Mutex::singleMutex);
 			for (Listener *first = listening; first; first = first->next)
 			{
 				if (first->duplicateReferenceNoChildren())
@@ -154,7 +124,7 @@ namespace PILS
 	const Step *Channel::calling(Runner &run, const Integer &call) const
 	{
 		{
-			Mutex::Lock lock(Heap::mutex);
+            Mutex::Lock lock(Mutex::singleMutex);
 			for (Listener *first = listening; first; first = first->next)
 			{
 				if (first->duplicateReferenceNoChildren())
@@ -167,7 +137,7 @@ namespace PILS
 	const Step *Channel::calling(Runner &run, const ListConstant &call) const
 	{
 		{
-			Mutex::Lock lock(Heap::mutex);
+            Mutex::Lock lock(Mutex::singleMutex);
 			for (Listener *first = listening; first; first = first->next)
 			{
 				if (first->duplicateReferenceNoChildren())
@@ -180,7 +150,7 @@ namespace PILS
 	const Step *Channel::calling(Runner &run, const NodeConstant &call) const
 	{
 		{
-			Mutex::Lock lock(Heap::mutex);
+            Mutex::Lock lock(Mutex::singleMutex);
 			for (Listener *first = listening; first; first = first->next)
 			{
 				if (first->duplicateReferenceNoChildren())
@@ -193,7 +163,7 @@ namespace PILS
 	const Step *Channel::calling(Runner &run, const Empty &call) const
 	{
 		{
-			Mutex::Lock lock(Heap::mutex);
+            Mutex::Lock lock(Mutex::singleMutex);
 			for (Listener *first = listening; first; first = first->next)
 			{
 				if (first->duplicateReferenceNoChildren())
@@ -206,7 +176,7 @@ namespace PILS
 	const Step *Channel::calling(Runner &run, const ListExpress &call) const
 	{
 		{
-			Mutex::Lock lock(Heap::mutex);
+            Mutex::Lock lock(Mutex::singleMutex);
 			for (Listener *first = listening; first; first = first->next)
 			{
 				if (first->duplicateReferenceNoChildren())
@@ -219,7 +189,7 @@ namespace PILS
 	const Step *Channel::calling(Runner &run, const NodeExpress &call) const
 	{
 		{
-			Mutex::Lock lock(Heap::mutex);
+            Mutex::Lock lock(Mutex::singleMutex);
 			for (Listener *first = listening; first; first = first->next)
 			{
 				if (first->duplicateReferenceNoChildren())
@@ -232,7 +202,7 @@ namespace PILS
 	const Step *Channel::calling(Runner &run, const Any &call, const Any *assignValue) const
 	{
 		{
-			Mutex::Lock lock(Heap::mutex);
+            Mutex::Lock lock(Mutex::singleMutex);
 			for (Listener *first = listening; first; first = first->next)
 			{
 				if (first->duplicateReferenceNoChildren())
@@ -278,8 +248,8 @@ namespace PILS
 
 	const Listener *Channel::listen(const Any *ear) const
 	{
-		Mutex::Lock lock(Heap::mutex);
-		return new (Heap::allocate(sizeof(Listener))) Listener(this, ear);
+        Mutex::Lock lock(Mutex::singleMutex);
+        return new Listener(this, ear);
 	}
 
 	const Step *Listener::step_(Runner &run) const

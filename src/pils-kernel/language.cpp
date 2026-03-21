@@ -326,18 +326,13 @@ namespace PILS
 			if (defaultUrl)
 				index->prefix[defaultUrl] = NULL;
 
-			return
-				(const NodeConstantShort*)
-				new (Heap::allocate(sizeof(Language)))
-				Language(link, value, defaultNames, index);
+            return new const Language(link, value, defaultNames, index);
 		}
 
 	invalidLanguage:
 		/* Create a standard const NodeConstant */
 		delete index;
-		return
-			new (Heap::allocate(sizeof(NodeConstantShort)))
-			const NodeConstantShort(link, *this, value);
+        return new const NodeConstantShort(link, *this, value);
 	}
 
 	size_t Language::unlinkAndGetSize()

@@ -119,7 +119,7 @@ namespace PILS
     {
         const Any *commandLineHandler = nullptr;
 
-        Heap::useStandardAllocator();
+        // Heap::useStandardAllocator();
 
         const Language *language;
 

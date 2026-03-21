@@ -4,7 +4,7 @@ namespace PILS
 {
 	const CallWho *TypecheckPropertyCliche::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoPropertyCliche))) WhoPropertyCliche(this, who);
+        return new WhoPropertyCliche(this, who);
 	}
 
 	const Step *WhoPropertyCliche::step_(Runner &run) const
@@ -67,7 +67,7 @@ namespace PILS
 
 	const CallWho *PropertyHead::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoPropertyHead))) WhoPropertyHead(this, who);
+        return new WhoPropertyHead(this, who);
 	}
 
 	const Step *WhoPropertyHead::step_(Runner &run) const
@@ -78,7 +78,7 @@ namespace PILS
 
 	const CallWho *TypecheckPropertyLegs::callWho(const Any *who) const
 	{
-		return new (Heap::allocate(sizeof(WhoPropertyLegs))) const WhoPropertyLegs(this, who);
+        return new const WhoPropertyLegs(this, who);
 	}
 
 	const Step *WhoPropertyLegs::step_(Runner &run) const

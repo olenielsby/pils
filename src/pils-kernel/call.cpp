@@ -1416,132 +1416,132 @@ namespace PILS
 
 	const NodeConstantShort *BuiltinClicheCalling::newNode(const HashedConstant *&link, const Integer *value) const
 	{
-		return new (Heap::allocate(sizeof(CallingConstant))) CallingConstant(link, *this, value);
+        return new CallingConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheCalling::newNode(const HashedConstant *&link, const Float *value) const
 	{
-		return new (Heap::allocate(sizeof(CallingConstant))) CallingConstant(link, *this, value);
+        return new CallingConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheCalling::newNode(const HashedConstant *&link, const PilsColor *value) const
 	{
-		return new (Heap::allocate(sizeof(CallingConstant))) CallingConstant(link, *this, value);
+        return new CallingConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheCalling::newNode(const HashedConstant *&link, const Timestamp *value) const
 	{
-		return new (Heap::allocate(sizeof(CallingConstant))) CallingConstant(link, *this, value);
+        return new CallingConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheCalling::newNode(const HashedConstant *&link, const Duration *value) const
 	{
-		return new (Heap::allocate(sizeof(CallingConstant))) CallingConstant(link, *this, value);
+        return new CallingConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheCalling::newNode(const HashedConstant *&link, const PilsDate *value) const
 	{
-		return new (Heap::allocate(sizeof(CallingConstant))) CallingConstant(link, *this, value);
+        return new CallingConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheCalling::newNode(const HashedConstant *&link, const PilsString *value) const
 	{
-		return new (Heap::allocate(sizeof(CallingConstant))) CallingConstant(link, *this, value);
+        return new CallingConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheCalling::newNode(const HashedConstant *&link, const Cliche *value) const
 	{
-		return new (Heap::allocate(sizeof(CallingConstant))) CallingConstant(link, *this, value);
+        return new CallingConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheCalling::newNode(const HashedConstant *&link, const ListConstant *value) const
 	{
-		return new (Heap::allocate(sizeof(CallingConstant))) CallingConstant(link, *this, value);
+        return new CallingConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheCalling::newNode(const HashedConstant *&link, const NodeConstant *value) const
 	{
-		return new (Heap::allocate(sizeof(CallingConstant))) CallingConstant(link, *this, value);
+        return new CallingConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheCalling::newNode(const HashedConstant *&link, const Special *value) const
 	{
-		return new (Heap::allocate(sizeof(CallingConstant))) CallingConstant(link, *this, value);
+        return new CallingConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheCalling::newNode(const HashedConstant *&link, const Listener *value) const
 	{
-		return new (Heap::allocate(sizeof(CallingConstant))) CallingConstant(link, *this, value);
+        return new CallingConstant(link, *this, value);
 	}
 
 	const NodeExpressShort *BuiltinClicheCalling::node(const Express *element) const
 	{
-		return new (Heap::allocate(sizeof(CallingExpress))) CallingExpress(*this, element);
+        return new CallingExpress(*this, element);
 	}
 
 	const NodeConstantShort *BuiltinClicheCallingOk::newNode(const HashedConstant *&link, const Integer *value) const
 	{
-		return new (Heap::allocate(sizeof(CallingOkConstant))) CallingOkConstant(link, *this, value);
+        return new CallingOkConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheCallingOk::newNode(const HashedConstant *&link, const Float *value) const
 	{
-		return new (Heap::allocate(sizeof(CallingOkConstant))) CallingOkConstant(link, *this, value);
+        return new CallingOkConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheCallingOk::newNode(const HashedConstant *&link, const PilsColor *value) const
 	{
-		return new (Heap::allocate(sizeof(CallingOkConstant))) CallingOkConstant(link, *this, value);
+        return new CallingOkConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheCallingOk::newNode(const HashedConstant *&link, const Timestamp *value) const
 	{
-		return new (Heap::allocate(sizeof(CallingOkConstant))) CallingOkConstant(link, *this, value);
+        return new CallingOkConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheCallingOk::newNode(const HashedConstant *&link, const Duration *value) const
 	{
-		return new (Heap::allocate(sizeof(CallingOkConstant))) CallingOkConstant(link, *this, value);
+        return new CallingOkConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheCallingOk::newNode(const HashedConstant *&link, const PilsDate *value) const
 	{
-		return new (Heap::allocate(sizeof(CallingOkConstant))) CallingOkConstant(link, *this, value);
+        return new CallingOkConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheCallingOk::newNode(const HashedConstant *&link, const PilsString *value) const
 	{
-		return new (Heap::allocate(sizeof(CallingOkConstant))) CallingOkConstant(link, *this, value);
+        return new CallingOkConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheCallingOk::newNode(const HashedConstant *&link, const Cliche *value) const
 	{
-		return new (Heap::allocate(sizeof(CallingOkConstant))) CallingOkConstant(link, *this, value);
+        return new CallingOkConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheCallingOk::newNode(const HashedConstant *&link, const ListConstant *value) const
 	{
-		return new (Heap::allocate(sizeof(CallingOkConstant))) CallingOkConstant(link, *this, value);
+        return new CallingOkConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheCallingOk::newNode(const HashedConstant *&link, const NodeConstant *value) const
 	{
-		return new (Heap::allocate(sizeof(CallingOkConstant))) CallingOkConstant(link, *this, value);
+        return new CallingOkConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheCallingOk::newNode(const HashedConstant *&link, const Special *value) const
 	{
-		return new (Heap::allocate(sizeof(CallingOkConstant))) CallingOkConstant(link, *this, value);
+        return new CallingOkConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheCallingOk::newNode(const HashedConstant *&link, const Listener *value) const
 	{
-		return new (Heap::allocate(sizeof(CallingOkConstant))) CallingOkConstant(link, *this, value);
+        return new CallingOkConstant(link, *this, value);
 	}
 
 	const NodeExpressShort *BuiltinClicheCallingOk::node(const Express *element) const
 	{
-		return new (Heap::allocate(sizeof(CallingOkExpress))) CallingOkExpress(*this, element);
+        return new CallingOkExpress(*this, element);
 	}
 
 	const Step *CallingOkConstant::calling(Runner &run, const Constant &call) const
@@ -1965,55 +1965,55 @@ namespace PILS
 	}
 	const NodeConstantShort *BuiltinClicheWhoTag::newNode(const HashedConstant *&link, const Integer *value) const
 	{
-		return new (Heap::allocate(sizeof(WhoTagConstant))) WhoTagConstant(link, *this, value);
+        return new WhoTagConstant(link, *this, value);
 	}
 	const NodeConstantShort *BuiltinClicheWhoTag::newNode(const HashedConstant *&link, const Float *value) const
 	{
-		return new (Heap::allocate(sizeof(WhoTagConstant))) WhoTagConstant(link, *this, value);
+        return new WhoTagConstant(link, *this, value);
 	}
 	const NodeConstantShort *BuiltinClicheWhoTag::newNode(const HashedConstant *&link, const PilsColor *value) const
 	{
-		return new (Heap::allocate(sizeof(WhoTagConstant))) WhoTagConstant(link, *this, value);
+        return new WhoTagConstant(link, *this, value);
 	}
 	const NodeConstantShort *BuiltinClicheWhoTag::newNode(const HashedConstant *&link, const Timestamp *value) const
 	{
-		return new (Heap::allocate(sizeof(WhoTagConstant))) WhoTagConstant(link, *this, value);
+        return new WhoTagConstant(link, *this, value);
 	}
 	const NodeConstantShort *BuiltinClicheWhoTag::newNode(const HashedConstant *&link, const Duration *value) const
 	{
-		return new (Heap::allocate(sizeof(WhoTagConstant))) WhoTagConstant(link, *this, value);
+        return new WhoTagConstant(link, *this, value);
 	}
 	const NodeConstantShort *BuiltinClicheWhoTag::newNode(const HashedConstant *&link, const PilsDate *value) const
 	{
-		return new (Heap::allocate(sizeof(WhoTagConstant))) WhoTagConstant(link, *this, value);
+        return new WhoTagConstant(link, *this, value);
 	}
 	const NodeConstantShort *BuiltinClicheWhoTag::newNode(const HashedConstant *&link, const PilsString *value) const
 	{
-		return new (Heap::allocate(sizeof(WhoTagConstant))) WhoTagConstant(link, *this, value);
+        return new WhoTagConstant(link, *this, value);
 	}
 	const NodeConstantShort *BuiltinClicheWhoTag::newNode(const HashedConstant *&link, const Cliche *value) const
 	{
-		return new (Heap::allocate(sizeof(WhoTagConstant))) WhoTagConstant(link, *this, value);
+        return new WhoTagConstant(link, *this, value);
 	}
 	const NodeConstantShort *BuiltinClicheWhoTag::newNode(const HashedConstant *&link, const Special *value) const
 	{
-		return new (Heap::allocate(sizeof(WhoTagConstant))) WhoTagConstant(link, *this, value);
+        return new WhoTagConstant(link, *this, value);
 	}
 	const NodeConstantShort *BuiltinClicheWhoTag::newNode(const HashedConstant *&link, const Listener *value) const
 	{
-		return new (Heap::allocate(sizeof(WhoTagConstant))) WhoTagConstant(link, *this, value);
+        return new WhoTagConstant(link, *this, value);
 	}
 	const NodeConstantShort *BuiltinClicheWhoTag::newNode(const HashedConstant *&link, const NodeConstant *value) const
 	{
-		return new (Heap::allocate(sizeof(WhoTagConstant))) WhoTagConstant(link, *this, value);
+        return new WhoTagConstant(link, *this, value);
 	}
 	const NodeConstantShort *BuiltinClicheWhoTag::newNode(const HashedConstant *&link, const ListConstant *value) const
 	{
-		return new (Heap::allocate(sizeof(WhoTagConstant))) WhoTagConstant(link, *this, value);
+        return new WhoTagConstant(link, *this, value);
 	}
 	const NodeExpressShort *BuiltinClicheWhoTag::node(const Express *value) const
 	{
-		return new (Heap::allocate(sizeof(WhoTagExpress))) WhoTagExpress(*this, value);
+        return new WhoTagExpress(*this, value);
 	}
 
 	const Step *WhoTagConstant::calling(Runner &run, const Constant &call) const
@@ -2118,9 +2118,7 @@ namespace PILS
 		{
 			if(element[i]->as_Constant() == NULL)
 			{
-				return new
-					(Heap::allocate(sizeof(WhoTagExpressTrailer)))
-					const WhoTagExpressTrailer(*this, element);
+                return new const WhoTagExpressTrailer(*this, element);
 			}
 		}
 		return ((const ClicheLong*)this)->node((const Constant *const *)(void*const *)element);
@@ -2128,7 +2126,7 @@ namespace PILS
 
 	const NodeConstantLong *BuiltinClicheWhoTagTrailer::newNodeConstant(const HashedConstant *&link, const Constant *const *value) const
 	{
-		return new (Heap::allocate(sizeof(WhoTagConstantTrailer))) WhoTagConstantTrailer(link, *this, value);
+        return new WhoTagConstantTrailer(link, *this, value);
 	}
 
 	const Step *WhoTagConstantTrailer::calling(Runner &run, const Constant &call) const
@@ -2293,12 +2291,12 @@ namespace PILS
 
 	const NodeExpressShort *BuiltinClicheRecalling::node(const Express *element) const
 	{
-		return new (Heap::allocate(sizeof(Recalling))) Recalling(*this, element);
+        return new Recalling(*this, element);
 	}
 
 	const Any *BuiltinClicheRecalling::node(const Constant *element) const
 	{
-		return new (Heap::allocate(sizeof(Recalling))) Recalling(*this, element);
+        return new Recalling(*this, element);
 	}
 
 	const Step *BuiltinClicheRecall::gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const
@@ -2309,7 +2307,7 @@ namespace PILS
 
 	const Step *SinkWhoRecall::pass(Runner &run, const Any* call)
 	{
-		const Recalling *who = new (Heap::allocate(sizeof(Recalling))) Recalling(BuiltinClicheRecalling::singleton, this->who);
+        const Recalling *who = new Recalling(BuiltinClicheRecalling::singleton, this->who);
 		const WhoUntypedOperation &what = this->what;
 		run.sink = this + 1;
 		run.sinkTagChain = new (run.allocate(sizeof(SinkRecall))) SinkRecall(call, who, run.sinkTagChain);
@@ -2417,67 +2415,67 @@ namespace PILS
 
 	const NodeConstantShort *BuiltinClicheNot::newNode(const HashedConstant *&link, const Integer *value) const
 	{
-		return new (Heap::allocate(sizeof(NotConstant))) NotConstant(link, *this, value);
+        return new NotConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheNot::newNode(const HashedConstant *&link, const Float *value) const
 	{
-		return new (Heap::allocate(sizeof(NotConstant))) NotConstant(link, *this, value);
+        return new NotConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheNot::newNode(const HashedConstant *&link, const PilsColor *value) const
 	{
-		return new (Heap::allocate(sizeof(NotConstant))) NotConstant(link, *this, value);
+        return new NotConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheNot::newNode(const HashedConstant *&link, const Timestamp *value) const
 	{
-		return new (Heap::allocate(sizeof(NotConstant))) NotConstant(link, *this, value);
+        return new NotConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheNot::newNode(const HashedConstant *&link, const Duration *value) const
 	{
-		return new (Heap::allocate(sizeof(NotConstant))) NotConstant(link, *this, value);
+        return new NotConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheNot::newNode(const HashedConstant *&link, const PilsDate *value) const
 	{
-		return new (Heap::allocate(sizeof(NotConstant))) NotConstant(link, *this, value);
+        return new NotConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheNot::newNode(const HashedConstant *&link, const PilsString *value) const
 	{
-		return new (Heap::allocate(sizeof(NotConstant))) NotConstant(link, *this, value);
+        return new NotConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheNot::newNode(const HashedConstant *&link, const Cliche *value) const
 	{
-		return new (Heap::allocate(sizeof(NotConstant))) NotConstant(link, *this, value);
+        return new NotConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheNot::newNode(const HashedConstant *&link, const Special *value) const
 	{
-		return new (Heap::allocate(sizeof(NotConstant))) NotConstant(link, *this, value);
+        return new NotConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheNot::newNode(const HashedConstant *&link, const Listener *value) const
 	{
-		return new (Heap::allocate(sizeof(NotConstant))) NotConstant(link, *this, value);
+        return new NotConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheNot::newNode(const HashedConstant *&link, const ListConstant *value) const
 	{
-		return new (Heap::allocate(sizeof(NotConstant))) NotConstant(link, *this, value);
+        return new NotConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheNot::newNode(const HashedConstant *&link, const NodeConstant *value) const
 	{
-		return new (Heap::allocate(sizeof(NotConstant))) NotConstant(link, *this, value);
+        return new NotConstant(link, *this, value);
 	}
 
 	const NodeExpressShort *BuiltinClicheNot::node(const Express *value) const
 	{
-		return new (Heap::allocate(sizeof(NotExpress))) NotExpress(*this, value);
+        return new NotExpress(*this, value);
 	}
 
 	const Step *NotConstant::calling(Runner &run, const Constant &call) const

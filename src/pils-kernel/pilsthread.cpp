@@ -19,12 +19,12 @@ namespace PILS
 
 	const Any *BuiltinClicheLater::node(const Constant *element) const
 	{
-		return new (Heap::allocate(sizeof(LaterPoker))) LaterPoker(*this, element);
+        return new const LaterPoker(*this, element);
 	}
 
 	const NodeExpressShort *BuiltinClicheLater::node(const Express *element) const
 	{
-		return new (Heap::allocate(sizeof(LaterPoker))) LaterPoker(*this, element);
+        return new const LaterPoker(*this, element);
 	}
 
     // const Step *ThreadPoker::step_(Runner &run) const
@@ -34,67 +34,67 @@ namespace PILS
 
 	const NodeConstantShort *BuiltinClicheKnot::newNode(const HashedConstant *&link, const Integer *value) const
 	{
-		return new (Heap::allocate(sizeof(KnotConstant))) KnotConstant(link, *this, value);
+        return new const KnotConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheKnot::newNode(const HashedConstant *&link, const Float *value) const
 	{
-		return new (Heap::allocate(sizeof(KnotConstant))) KnotConstant(link, *this, value);
+        return new const KnotConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheKnot::newNode(const HashedConstant *&link, const PilsString *value) const
 	{
-		return new (Heap::allocate(sizeof(KnotConstant))) KnotConstant(link, *this, value);
+        return new const KnotConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheKnot::newNode(const HashedConstant *&link, const PilsColor *value) const
 	{
-		return new (Heap::allocate(sizeof(KnotConstant))) KnotConstant(link, *this, value);
+        return new const KnotConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheKnot::newNode(const HashedConstant *&link, const Timestamp *value) const
 	{
-		return new (Heap::allocate(sizeof(KnotConstant))) KnotConstant(link, *this, value);
+        return new const KnotConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheKnot::newNode(const HashedConstant *&link, const Duration *value) const
 	{
-		return new (Heap::allocate(sizeof(KnotConstant))) KnotConstant(link, *this, value);
+        return new const KnotConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheKnot::newNode(const HashedConstant *&link, const PilsDate *value) const
 	{
-		return new (Heap::allocate(sizeof(KnotConstant))) KnotConstant(link, *this, value);
+        return new const KnotConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheKnot::newNode(const HashedConstant *&link, const Cliche *value) const
 	{
-		return new (Heap::allocate(sizeof(KnotConstant))) KnotConstant(link, *this, value);
+        return new const KnotConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheKnot::newNode(const HashedConstant *&link, const ListConstant *value) const
 	{
-		return new (Heap::allocate(sizeof(KnotConstant))) KnotConstant(link, *this, value);
+        return new const KnotConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheKnot::newNode(const HashedConstant *&link, const NodeConstant *value) const
 	{
-		return new (Heap::allocate(sizeof(KnotConstant))) KnotConstant(link, *this, value);
+        return new const KnotConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheKnot::newNode(const HashedConstant *&link, const Listener *value) const
 	{
-		return new (Heap::allocate(sizeof(KnotConstant))) KnotConstant(link, *this, value);
+        return new const KnotConstant(link, *this, value);
 	}
 
 	const NodeConstantShort *BuiltinClicheKnot::newNode(const HashedConstant *&link, const Special *value) const
 	{
-		return new (Heap::allocate(sizeof(KnotConstant))) KnotConstant(link, *this, value);
+        return new const KnotConstant(link, *this, value);
 	}
 
 	const NodeExpressShort *BuiltinClicheKnot::node(const Express *element) const
 	{
-		return new (Heap::allocate(sizeof(KnotExpress))) KnotExpress(*this, element);
+        return new const KnotExpress(*this, element);
 	}
 
 	const Step *KnotConstant::calling(Runner &run, const Constant &call) const

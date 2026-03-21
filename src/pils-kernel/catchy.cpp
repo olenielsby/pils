@@ -54,38 +54,34 @@ namespace PILS
 
 	const Any *BuiltinClicheOk::node(const Constant *element) const
 	{
-		return new (Heap::allocate(sizeof(OkConstant))) const OkConstant(*this, element);
+        return new const OkConstant(*this, element);
 	}
 
 	const NodeExpressShort *BuiltinClicheOk::node(const Express *element) const
 	{
-		return new (Heap::allocate(sizeof(Ok))) const Ok(*this, element);
+        return new const Ok(*this, element);
 	}
 
 	const Any *ImplicitParameter::ImplicitClicheShort::node(const Constant *element) const
 	{
-		return new (Heap::allocate(sizeof(ImplicitParameterShort)))
-			ImplicitParameterShort(*this, element);
+        return new ImplicitParameterShort(*this, element);
 	}
 
 	const NodeExpressShort *ImplicitParameter::ImplicitClicheShort::node(const Express *element) const
 	{
-		return new (Heap::allocate(sizeof(ImplicitParameterShort)))
-			ImplicitParameterShort(*this, element);
+        return new ImplicitParameterShort(*this, element);
 	}
 
 	const Any *ImplicitParameter::ImplicitClicheTrailer::node(const Constant *const *element) const
 	{
-		return new (Heap::allocate(sizeof(ImplicitParameterTrailer)))
-			ImplicitParameterTrailer(*this, (const Any *const *)element);
+        return new ImplicitParameterTrailer(*this, (const Any *const *)element);
 	}
 
 	const Any *ImplicitParameter::ImplicitClicheTrailer::node(const Any *const *element) const
 	{
 		if (element[1]->as_Constant())
 		{
-			return new (Heap::allocate(sizeof(ImplicitParameterTrailer)))
-				ImplicitParameterTrailer(*this, element);
+            return new ImplicitParameterTrailer(*this, element);
 		}
 		else
 		{
@@ -330,27 +326,27 @@ namespace PILS
 
 	const NodeExpressShort *BuiltinClichePossibly::node(const Express *element) const
 	{
-		return new (Heap::allocate(sizeof(Possibly))) Possibly(*this, element);
+        return new Possibly(*this, element);
 	}
 
 	const Any *BuiltinClichePossibly::node(const Constant *element) const
 	{
-		return new (Heap::allocate(sizeof(Possibly))) Possibly(*this, element);
+        return new Possibly(*this, element);
 	}
 
 	const NodeExpressShort *BuiltinClicheTry::node(const Express *element) const
 	{
-		return new (Heap::allocate(sizeof(Try))) Try(*this, element);
+        return new Try(*this, element);
 	}
 
 	const Any *BuiltinClicheTry::node(const Constant *element) const
 	{
-		return new (Heap::allocate(sizeof(Try))) Try(*this, element);
+        return new Try(*this, element);
 	}
 
 	const Any *BuiltinClicheOkTrailer::node(const Any *const *element) const
 	{
-		return new (Heap::allocate(sizeof(OkTrailer))) OkTrailer(*this, element);
+        return new OkTrailer(*this, element);
 	}
 
 	const Any *BuiltinClicheOkTrailer::node(const Constant *const *element) const
@@ -360,7 +356,7 @@ namespace PILS
 
 	const Any *BuiltinClichePossiblyTrailer::node(const Any *const *element) const
 	{
-		return new (Heap::allocate(sizeof(PossiblyTrailer))) PossiblyTrailer(*this, element);
+        return new PossiblyTrailer(*this, element);
 	}
 
 	const Any *BuiltinClichePossiblyTrailer::node(const Constant *const *element) const
@@ -370,7 +366,7 @@ namespace PILS
 
 	const Any *BuiltinClicheTryTrailer::node(const Any *const *element) const
 	{
-		return new (Heap::allocate(sizeof(TryTrailer))) TryTrailer(*this, element);
+        return new TryTrailer(*this, element);
 	}
 
 	const Any *BuiltinClicheTryTrailer::node(const Constant *const *element) const
@@ -380,7 +376,7 @@ namespace PILS
 
 	const Any *BuiltinClicheNeedTrailer::node(const Any *const *element) const
 	{
-		return new (Heap::allocate(sizeof(NeedTrailer))) NeedTrailer(*this, element);
+        return new NeedTrailer(*this, element);
 	}
 
 	const Any *BuiltinClicheNeedTrailer::node(const Constant *const *element) const
@@ -390,7 +386,7 @@ namespace PILS
 
 	const Any *BuiltinClicheErrorTrailer::node(const Any *const *element) const
 	{
-		return new (Heap::allocate(sizeof(ErrorTrailer))) ErrorTrailer(*this, element);
+        return new ErrorTrailer(*this, element);
 	}
 
 	const Any *BuiltinClicheErrorTrailer::node(const Constant *const *element) const
@@ -674,12 +670,12 @@ namespace PILS
 
 	const NodeExpressShort *BuiltinClicheNeed::node(const Express *element) const
 	{
-		return new (Heap::allocate(sizeof(Need))) Need(*this, element);
+        return new Need(*this, element);
 	}
 
 	const Any *BuiltinClicheNeed::node(const Constant *element) const
 	{
-		return new (Heap::allocate(sizeof(Need))) Need(*this, element);
+		return new Need(*this, element);
 	}
 
 	const Step *Need::catching(Runner &run, Catch &catching) const
@@ -720,12 +716,12 @@ namespace PILS
 		return (run.sink = trial)->pass(run, Empty::singleton);
 	}
 */
-	const Any *BuiltinClicheTag::node(const Any *const *element) const
+    const Any *BuiltinClicheTag::node(const Any *const *elements) const
 	{
-		if (element[0]->as_Constant())
-			return new (Heap::allocate(sizeof(Tag))) Tag(*this, element);
+        if (elements[0]->as_Constant())
+            return new Tag(*this, elements);
 		else
-			return new (Heap::allocate(sizeof(PokerTrailer) + sizeof(const Any *))) Tag(*this, element);
+            return BuiltinPokerClicheTrailer::node(elements);
 	}
 
 	const Step *Tag::step_(Runner &run) const
@@ -734,7 +730,7 @@ namespace PILS
 		run.where_->addReference();
 		element[1]->addReference();
 		const Any *legs[] = {run.where_, element[1]};
-		run.where_ = new (Heap::allocate(sizeof(Tag))) Tag((const BuiltinPokerClicheTrailer &)*cliche, legs);
+        run.where_ = new Tag((const BuiltinPokerClicheTrailer &)*cliche, legs);
 		return element[0];
 	}
 

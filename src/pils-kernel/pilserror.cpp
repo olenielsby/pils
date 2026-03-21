@@ -4,9 +4,9 @@ namespace PILS
 {
 	const Step *Sink::error(Runner &run, const Any *thing, const Express *what, const Any *who)
 	{
-        const int debugOutputLevels = 5;
-		Error *error = new (Heap::allocate(sizeof(Error))) Error(thing);
-//        error->writeToDebugOutput(debugOutputLevels);
+        const Error *error = new const Error(thing);
+        // const int debugOutputLevels = 5;
+        // error->writeToDebugOutput(debugOutputLevels);
 		new (run.allocate(sizeof(SinkErrorCall))) SinkErrorCall(error, what, who);
 		run.calling.who = who;
 		run.calling.what = what;
@@ -15,12 +15,12 @@ namespace PILS
 
 	const Any *BuiltinClicheError::node(const Constant *element) const
 	{
-		return new (Heap::allocate(sizeof(Error))) Error(element);
+        return new const Error(element);
 	}
 
 	const NodeExpressShort *BuiltinClicheError::node(const Express *element) const
 	{
-		return new (Heap::allocate(sizeof(Error))) Error(element);
+        return new const Error(element);
 	}
 
 	Sink *SinkErrorCall::kick(Runner &run)

@@ -8,15 +8,15 @@ namespace PILS
 		: public Sink
 	{
 	public:
-		SinkErrorCall(Error *error, const Express *what, const Any *who)
-			: error(error), what(what), who(who)
+        SinkErrorCall(const Error *error, const Express *what, const Any *who)
+            : error(error), what(what), who(who)
 		{}
 		Sink *kick(Runner &run);
 		const Step *pass(Runner &run, const Any *value);
 		const Step *tailStep(Runner &run, const Any *thing, const Any *where_);
 		const Step *called(Runner &run, const NodeExpress &call);
 	private:
-		Error *error;
+        const Error *error;
 		const Express *what;
 		const Any *who;
 	};

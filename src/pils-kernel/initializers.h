@@ -5,9 +5,7 @@
 
 namespace PILS
 {
-	Mutex Heap::mutex;
-	InitialAllocator InitialAllocator::singleton;
-	Heap::Allocator* Heap::allocator = &InitialAllocator::singleton;
+    Mutex Mutex::singleMutex;
 	long ShortInteger::initial = 0;
 	const ShortInteger HashedConstant::hashTable[0x10000];
 	const Empty Empty::singleton;

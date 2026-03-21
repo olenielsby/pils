@@ -171,22 +171,22 @@ namespace PILS
 
     void Namespace_Qt::initialize()
 	{
-		singleton =
-            new (Heap::allocate(sizeof(PilsString) + 14 * sizeof(PILS_CHAR)))
-            Namespace_Qt(_PS("pils.org/ns/qt"), 14);
+        const PILS_CHAR* uri = _PS("pils.org/ns/qt");
+        size_t c = std::char_traits<PILS_CHAR>::length(uri);
+        singleton = new (c * sizeof(PILS_CHAR)) Namespace_Qt(uri, c);
 	}
 
     void Namespace_QtClass::initialize()
     {
-        singleton =
-            new (Heap::allocate(sizeof(PilsString) + 19 * sizeof(PILS_CHAR)))
-            Namespace_QtClass(_PS("pils.org/ns/qtclass"), 19);
+        const PILS_CHAR* uri = _PS("pils.org/ns/qtclass");
+        size_t c = std::char_traits<PILS_CHAR>::length(uri);
+        singleton = new (c * sizeof(PILS_CHAR)) Namespace_QtClass(uri, c);
     }
 
     const ClicheShort *Namespace_Qt::newCliche(const HashedConstant *&link, const Constant *a) const
 	{
 		const PilsString *name = a->as_String();
-        if (name) return new (Heap::allocate(sizeof(QtName))) QtName(link, this, name);
+        if (name) return new const QtName(link, this, name);
         else return PilsString::newCliche(link, a);
 	}
 
@@ -202,8 +202,7 @@ namespace PILS
             int id = QMetaType::fromName(qtname.constData()).id();
 
             if (id != QMetaType::UnknownType)
-                return new (Heap::allocate(sizeof(QtClassName)))
-                    QtClassName(link, this, name, id);
+                return new const QtClassName(link, this, name, id);
         }
         return PilsString::newCliche(link, a);
     }
@@ -262,7 +261,7 @@ namespace PILS
 
     const ClicheTiny *QtName::newCliche() const
 	{
-        return new (Heap::allocate(sizeof(QtCliche))) QtCliche(this);
+        return new const QtCliche(this);
 	}
 
     const QtCliche *QtCliche::get(const char *name)
