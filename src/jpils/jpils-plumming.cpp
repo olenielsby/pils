@@ -8,16 +8,16 @@ namespace PILS
 
 	const PilsString *pils(const juce::String &string)
 	{
-		int count = string.copyToUTF8(NULL, 0x7fffffff);
+		int count = string.copyToUTF8(nullptr, 0x7fffffff);
 		return PilsString::get(string.toUTF8(), count - 1);
 	}
 
 	void *ReallySpecial::loadPlugin(const PilsString &name) const
 	{
-		return NULL;
+		return nullptr;
 	}
 
-	const HashedConstant *SingletonSpecial::dummyHashLink = NULL;
+	const Constant *SingletonSpecial::dummyHashLink = nullptr;
 	Plum::Plum()
 		: plumcake(*new Plumcake())
 	{}
@@ -54,7 +54,7 @@ namespace PILS
 
 	const Any *Plumcake::specialCalling(Runner &run, const Strap &call) const
 	{
-		if (!run.isMainThread()) return NULL;
+		if (!run.isMainThread()) return nullptr;
 		run.temporaryStrapSticker->stick(call);
 		call.addReference();
 		return &call;
@@ -72,7 +72,7 @@ namespace PILS
 
 	const Any *SystemPropertyNew::get(Runner &run) const
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	const Any *SystemPropertyPlumcake::get(Runner &run) const
@@ -87,22 +87,22 @@ namespace PILS
 
 	const Any *ReallySpecial::specialCalling(Runner &run, const JuceName &method) const
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	const Any *ReallySpecial::specialPlus(Runner &run, const Any &argument) const
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	const Any *ReallySpecial::specialMinus(Runner &run, const Any &argument) const
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	juce::Graphics *ReallySpecial::as_Graphics() const
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	const Any *BuiltinClicheOperationPlus::specialOperation(Runner &run, const ReallySpecial &special, const Any &operand) const
@@ -122,7 +122,7 @@ namespace PILS
 
 	const Any *ClicheTiny::specialOperation(Runner &run, const ReallySpecial &special, const Any &argument, const Any &assignValue) const
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	const Any *JuceCliche::specialOperation(Runner &run, const ReallySpecial &special, const Any &argument) const
@@ -142,12 +142,12 @@ namespace PILS
 
 	const Any *ReallySpecial::specialCalling(Runner &run, const Constant &name, const Any &arg) const
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	const Any *ReallySpecial::specialCalling(Runner &run, const Constant &name) const
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	bool ReallySpecial::specialComparing(const IdentifierLookup &lookup) const
@@ -177,7 +177,7 @@ namespace PILS
 
 	const Any *ReallySpecial::specialCalling(Runner &run, const JuceName &method, const Any &arg) const
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	const Any *TypecheckLanguage::get(Runner &run) const
@@ -195,7 +195,7 @@ namespace PILS
 			Namespace_Juce(_PS("pils.org/ns/opengl"), 18);
 	}
 
-	const ClicheShort *Namespace_Juce::newCliche(const HashedConstant *&link, const Constant *a) const
+	const ClicheShort *Namespace_Juce::newCliche(const Constant *&link, const Constant *a) const
 	{
 		const PilsString *name = a->as_String();
 		if (name) return new (Heap::allocate(sizeof(JuceName))) JuceName(link, this, name);
@@ -299,6 +299,6 @@ namespace PILS
 
     void* Plumcake::loadPlugin(const PilsString&) const
     {
-        return NULL;
+        return nullptr;
     }
 }

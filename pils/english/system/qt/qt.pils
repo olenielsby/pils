@@ -204,12 +204,7 @@
   )
 }
 ><:[module:. platform qt entry icon .timestamp 2010-02-26T18:55:28.627+01 .language qt]><;
-{ icon: .size .png
-| :ok
-  ;png-decoder juce-PNGImageFormat ();
-  png-decoder juce-decodeImage (juce-MemoryInputStream (png, 1))
-  ! TODO: rescale
-}
+{ icon: .size .png | :ok Q:Image: png }
 ><:[module:. platform qt entry image .timestamp 2011-07-20T23:53:59.457+02 .language qt]><;
 ;wrap @@ wrapper image;
 { image: .filename
@@ -288,16 +283,19 @@
 { window: title | :who :try who window: say (title) }
 { window: $ title
 | :possibly
-  plumcake juce-DocumentWindow (title, #ffc846, 7 bug {})
-  try {?|"Got DocumentWindow" bug {}}
-  juce-setBounds [100 200 300 400]
-  juce-setResizable (1, 0)
-  juce-setTitleBarTextCentred 0
-  juce-setWantsKeyboardFocus 0
-  juce-setVisible 1
-  try {?|"Did setVisible" bug {}}
+  ;color #ffc846 bug {};
+  plumcake Q:MainWindow
+  ! q:setWindowFlags 7
+  bug {}
+  q:setWindowTitle (title)
+  q:setGeometry [100 200 300 400]
+!  q:setFocusPolicy 0
+  q:show
+  try {?|"Did q:show" bug {}}
+  try {?|"WHEN-WHEN" bug{}}
   bug {}
   when
+  { qs:windowTitleChanged: ' | (': .) bug {}}
   { juce-new: ok juce-Component
   | :who :ok
     who juce-setContentComponent (ok)
@@ -313,7 +311,11 @@
     :need @@ ([platform qt parent] & name)
   }
   { title: $ title | :who ' juce-setName (title) .:try }
-  { icon: icon | :who ' juce-setIcon (icon) .:try }
+  { icon: icon
+  | :who :ok
+    "Setting icon" bug {} and:
+    who bug {} q:setWindowIcon (icon bug {})
+  }
   { .inner
   | :who :ok
     { size: size | who juce-setContentComponentSize (size) .:try }
@@ -322,7 +324,7 @@
       who juce-getContentComponent .:need
     }
   }
-  { .pinpoint | :who :ok who mind juce-pinpoint call: @@ [pils run pinpoint] }
+  { .pinpoint | :who :ok who mind pinpointer call: @@ [pils run pinpoint] }
   { .up | :who ' try [call: juce-toFront: 1] .:ok }
   { size: size | :who ' juce-setSize (size) .:try }
   { position: position | :who ' juce-setTopLeftPosition (position) .:try }
@@ -358,7 +360,9 @@
     }
   }
   try {?|"Did when" bug {}}
-   .(@ strap) .:need
+  q:setWindowTitle "title changed"
+  try {?|"Changed title" bug {}}
+  .(@ strap) .:need
 }
 ><:[module:. platform qt graphics .timestamp 2011-07-21T00:05:14.412+02 .language qt]><;
 ;centred juce-Justification 63;
@@ -1814,7 +1818,8 @@
 ><:[module:. platform qt pils language .timestamp 2008-06-21T23:43:29.112+02 .language system]><;
 ><:[module:. platform qt pils language qt .timestamp 2009-02-04T14:02:35.939+01 .language system]><;
 language: {}? merge:
-;"q" ["pils.org/ns/qt":]
+;"q" ["pils.org/ns/qtmethod":]
+."qs" ["pils.org/ns/qtsignal":]
 ."Q" ["pils.org/ns/qtclass":]
 ><:[module:. platform qt strap .timestamp 2009-01-15T02:44:21.050+01 .language qt]><;
 ;straps
@@ -1823,8 +1828,11 @@ language: {}? merge:
 ;
 { strap: window
 | :where :what :ok
-  straps every (window) and:
-  window mind juce-pinpoint := (pinpoint: .what .module where this module);
+  straps
+  every {strap|:ok strap bug {}}
+  every (window)
+  and:
+  window bug {} mind pinpointer := (pinpoint: .what .module where this module);
   window
 }
 ><:[module:. platform qt window .timestamp 2011-07-21T01:01:26.842+02 .language qt]><;

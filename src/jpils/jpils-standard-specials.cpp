@@ -107,7 +107,7 @@ namespace PILS
 		return 0;
 	}
 
-	const ReallySpecial *IdentifierLookup::newSpecial(const HashedConstant *&link)
+	const ReallySpecial *IdentifierLookup::newSpecial(const Constant *&link)
 	{
 		return new (Heap::allocate(sizeof(Identifier))) Identifier(link, value);
 	}
@@ -137,26 +137,26 @@ namespace PILS
 		GUID g;
 		unsigned char *cp = g.Data4;
 		unsigned long accumulator (0);
-		if (end - cc != 36) return NULL;
+		if (end - cc != 36) return nullptr;
 		for (long i = 0; i < 36; i++)
 		{
 			const PILS_CHAR c = *(cc++);
 			switch (i)
 			{
 			case 8:
-				if (c != '-') return NULL;
+				if (c != '-') return nullptr;
 				g.Data1 = accumulator;
 				break;
 			case 13:
-				if (c != '-') return NULL;
+				if (c != '-') return nullptr;
 				g.Data2 = (unsigned short)accumulator;
 				break;
 			case 18:
-				if (c != '-') return NULL;
+				if (c != '-') return nullptr;
 				g.Data3 = (unsigned short)accumulator;
 				break;
 			case 23:
-				if (c != '-') return NULL;
+				if (c != '-') return nullptr;
 				*cp++ = (char)accumulator;
 				break;
 			case 21:
@@ -199,7 +199,7 @@ namespace PILS
 					accumulator += c - 'a' + 10;
 					break;
 				default:
-					return NULL;
+					return nullptr;
 				}
 			}
 		}

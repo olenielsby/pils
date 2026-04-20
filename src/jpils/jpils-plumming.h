@@ -77,7 +77,7 @@ namespace PILS
         virtual bool specialComparing(const PlugLibraryLookup &lookup) const;
         virtual bool specialComparing(const PlugObjectLookup &lookup) const;
 	protected:
-		ReallySpecial(const HashedConstant *&link) : Special(link) {}
+		ReallySpecial(const Constant *&link) : Special(link) {}
 		ReallySpecial() : Special() {}
 	};
 
@@ -90,7 +90,7 @@ namespace PILS
 			: ReallySpecial(dummyHashLink)
 		{}
 	private:
-		static const HashedConstant *dummyHashLink;
+		static const Constant *dummyHashLink;
 	};
 
 	class Plumcake
@@ -121,7 +121,7 @@ namespace PILS
 	public:
 		static const Namespace_Juce *singleton;
 		static const Namespace_Juce *opengl_singleton;
-        const ClicheShort *newCliche(const HashedConstant *&link, const Constant *a) const override;
+        const ClicheShort *newCliche(const Constant *&link, const Constant *a) const override;
         const JuceName *get(const char *name) const;
 		static void initialize();
 	private:
@@ -137,8 +137,8 @@ namespace PILS
 		: public ClicheShort
 	{
 	public:
-		JuceName(const HashedConstant *&link, const Namespace_Juce *h, const PilsString *a)
-			: ClicheShort(link, h, a), methods(NULL), staticAccessor(NULL), typecheck(&Converter::dummy)
+		JuceName(const Constant *&link, const Namespace_Juce *h, const PilsString *a)
+			: ClicheShort(link, h, a), methods(nullptr), staticAccessor(nullptr), typecheck(&Converter::dummy)
 		{}
 		static const JuceName *get(const char *name);
 		const JuceMethod *methods;

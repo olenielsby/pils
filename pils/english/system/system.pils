@@ -34,8 +34,9 @@ here may not be pinned.
 }
 { :error .who .module
 | :where :what :try @@ [pils run error]
-  ( "ERROR REPORT (error:. .who .what .where .module)" bug {} and:
-    (error:. .who .what .where .module) bug {})
+  ( "ERROR REPORT (what: .) (error:. .who .what .where .module)" bug {} and:
+    (what: .) bug {} and:
+    (error:. .who .what .where .module) bug {} )
 }
 { : object find (filter) | :try [items] call (object) .:need find (filter) }
 { : object each (filter) | :try [items] call (object) .:need each (filter) }
@@ -63,7 +64,6 @@ here may not be pinned.
 { language: . [system] .module-name +&? .library $? | :ok {} }
 { .platform
 | :ok
-  "RETRIEVING PLATFORM" bug {} and:
    @ ([platform [?:?|pils-configuration:platform] entry] bug {})
 }
 { datafile: $ filename
@@ -890,6 +890,7 @@ PILS should be restarted and tested after each edit.
   call (@@ [pils system program]) [pils editor new] try [call: instance]
   new (.filename)
   .else
+  "Fil fundet" bug {} and:
   command (. [open] .filename)
 }
 { command-line:. exe, command $* "-", filename

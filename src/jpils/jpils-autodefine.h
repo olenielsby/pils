@@ -8690,7 +8690,7 @@ namespace PILS
         };
 
         struct pils__TreeViewItem__setMind {
-            const PILS :: Constant * arg1;
+            const PILS :: HalfbakedConstant * arg1;
             bool fill(ArgumentSource &source) {
                 if (!source.fill(arg1)) return false;
                 return source.done();
@@ -28019,7 +28019,7 @@ namespace PILS
         typedef void *no;
         template <typename T> static T *copy_argument(T *arg) {
             typedef T TT;
-            return arg?new TT(*arg):NULL;
+            return arg?new TT(*arg):nullptr;
         }
     public:
         static void AbstractFifo__ctor(no object, ArgPass::AbstractFifo__ctor &args, juce :: AbstractFifo *&result) {
@@ -39689,7 +39689,7 @@ namespace PILS
         static void pils__MemoryBlock__ctor__3(no object, no args, juce :: pils__MemoryBlock *&result) {
             result = new juce::pils__MemoryBlock();
         }
-        static void pils__MemoryBlock__getData(juce::pils__MemoryBlock &object, no args, const PILS :: Constant *&result) {
+        static void pils__MemoryBlock__getData(juce::pils__MemoryBlock &object, no args, const PILS :: HalfbakedConstant *&result) {
             result = object.getData();
         }
         static void pils__MemoryOutputStream__ctor__1(CallbackHelperBase *&callbackHelper, ArgPass::MemoryInputStream__ctor__1 &args, extend__pils__MemoryOutputStream *&result) {
@@ -39700,7 +39700,7 @@ namespace PILS
             result = new extend__pils__MemoryOutputStream(args.arg1);
             callbackHelper = result;
         }
-        static void pils__MemoryOutputStream__getData(juce::pils__MemoryOutputStream &object, no args, const PILS :: Constant *&result) {
+        static void pils__MemoryOutputStream__getData(juce::pils__MemoryOutputStream &object, no args, const PILS :: HalfbakedConstant *&result) {
             result = object.getData();
         }
         static void pils__OpenGLComponent__ctor(CallbackHelperBase *&callbackHelper, no args, extend__pils__OpenGLComponent *&result) {
@@ -39776,7 +39776,7 @@ namespace PILS
             result = new extend__pils__TreeViewItem();
             callbackHelper = result;
         }
-        static void pils__TreeViewItem__getMind(juce::pils__TreeViewItem &object, no args, const PILS :: Constant *&result) {
+        static void pils__TreeViewItem__getMind(juce::pils__TreeViewItem &object, no args, const PILS :: HalfbakedConstant *&result) {
             result = object.getMind();
         }
         static void pils__TreeViewItem__getParentItem(juce::pils__TreeViewItem &object, no args, juce::pils__TreeViewItem *&result) {
@@ -39794,126 +39794,126 @@ namespace PILS
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::AffineTransform(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__BigInteger::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::BigInteger result;
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::BigInteger(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__CodeDocument__Position::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::CodeDocument::Position result;
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::CodeDocument::Position(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__Colour::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::Colour result;
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::Colour(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__ColourGradient::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::ColourGradient result;
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::ColourGradient(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__Expression::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::Expression result;
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::Expression(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__File::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::File result;
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::File(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__FileSearchPath::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::FileSearchPath result;
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::FileSearchPath(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__Font::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::Font result;
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::Font(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__Identifier::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::Identifier result;
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::Identifier(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__Image::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::Image result;
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::Image(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__Justification::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::Justification result(0);
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::Justification(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__KeyPress::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::KeyPress result;
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::KeyPress(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__MemoryBlock::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::MemoryBlock result;
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::MemoryBlock(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__MidiMessage::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::MidiMessage result(0);
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::MidiMessage(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__ModifierKeys::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::ModifierKeys result;
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::ModifierKeys(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__MouseCursor::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::MouseCursor result;
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::MouseCursor(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__NamedValueSet::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::NamedValueSet result;
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::NamedValueSet(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__OpenGLPixelFormat::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         // juce::OpenGLPixelFormat result;
@@ -39921,42 +39921,42 @@ namespace PILS
         // if (this->argumentsThunk(rawObject, source, thunk, &result))
         //     return resultClass.ownedReference(new juce::OpenGLPixelFormat(result));
         // else
-        return NULL;
+        return nullptr;
     }
     const Any *CopyMethod__Path::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::Path result;
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::Path(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__PathStrokeType::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::PathStrokeType result(0);
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::PathStrokeType(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__PixelARGB::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::PixelARGB result;
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::PixelARGB(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__PopupMenu::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::PopupMenu result;
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::PopupMenu(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__PopupMenu__Options::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::PopupMenu::Options result;
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::PopupMenu::Options(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__RectangleList::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         // juce::RectangleList result;
@@ -39964,70 +39964,70 @@ namespace PILS
         // if (this->argumentsThunk(rawObject, source, thunk, &result))
         //     return resultClass.ownedReference(new juce::RectangleList(result));
         // else
-        return NULL;
+        return nullptr;
     }
     const Any *CopyMethod__RelativeParallelogram::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::RelativeParallelogram result;
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::RelativeParallelogram(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__RelativePoint::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::RelativePoint result;
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::RelativePoint(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__RelativeRectangle::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::RelativeRectangle result;
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::RelativeRectangle(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__RelativeTime::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::RelativeTime result;
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::RelativeTime(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__Result::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::Result result(Result::ok());
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::Result(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__StringArray::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::StringArray result;
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::StringArray(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__StringPairArray::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::StringPairArray result;
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::StringPairArray(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__Time::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::Time result;
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::Time(result));
-        else return NULL;
+        else return nullptr;
     }
     const Any *CopyMethod__URL::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const {
         juce::URL result;
         ArgumentSource source(operand);
         if (this->argumentsThunk(rawObject, source, thunk, &result))
             return resultClass.ownedReference(new juce::URL(result));
-        else return NULL;
+        else return nullptr;
     }
     AbstractFifo__methods::AbstractFifo__methods() :
         ctor(

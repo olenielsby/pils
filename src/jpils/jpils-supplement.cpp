@@ -23,7 +23,7 @@ MenuBarComponent *pils__DocumentWindow::getMenuBar(DocumentWindow *documentWindo
 	for (int i = 0; i < documentWindow->getNumChildComponents(); i++)
 		if (MenuBarComponent *menuBar = dynamic_cast<MenuBarComponent *>(documentWindow->getChildComponent(i)))
 			return menuBar;
-	return NULL;
+	return nullptr;
 }
 
 void pils__DocumentWindow::setIcon(const Image &imageToUse)
@@ -74,13 +74,13 @@ pils__TreeViewItem *pils__TreeView::newRootItem() throw ()
 void pils__TreeView::clear() throw ()
 {
 	pils__TreeViewItem *oldRoot = getRootItem();
-	TreeView::setRootItem(NULL);
+	TreeView::setRootItem(nullptr);
 	delete oldRoot;
 }
 
 Component *pils__TreeView::createItemComponent(pils__TreeViewItem &)
 {
-	return NULL;
+	return nullptr;
 }
 
 const String pils__TreeView::getDragSourceDescription(pils__TreeViewItem &)
@@ -139,13 +139,13 @@ pils__TreeViewItem *pils__TreeViewItem::addSubItem(const int insertPosition)
 	return newItem;
 }
 
-const PILS::Constant *pils__TreeViewItem::getMind()
+const PILS::HalfbakedConstant *pils__TreeViewItem::getMind()
 {
 	if (mind) mind->addReference();
 	return mind;
 }
 
-void pils__TreeViewItem::setMind(const PILS::Constant *value)
+void pils__TreeViewItem::setMind(const PILS::HalfbakedConstant *value)
 {
 	value->addReference();
 	if (mind) mind->releaseReference();

@@ -2,7 +2,7 @@
 #include "jpils-thread.h"
 namespace PILS
 {
-	MainThread *MainThread::singleton = NULL;
+	MainThread *MainThread::singleton = nullptr;
 	volatile long JuceComponent::desktopComponentCount = 0;
 	Bridge Bridge::singleton;
 
@@ -49,7 +49,7 @@ namespace PILS
 	void ThreadLookup::unduplicate()
 	{}
 
-	const ReallySpecial *ThreadLookup::newSpecial(const HashedConstant *&link)
+	const ReallySpecial *ThreadLookup::newSpecial(const Constant *&link)
 	{
 		if (!MainThread::singleton)
 			return new (Heap::allocate(sizeof(MainThread))) MainThread(link, threadID);
@@ -111,7 +111,7 @@ namespace PILS
 		const Step *backToWork(Runner &run)
 		{
 			run.sink = kick(run);
-			return NULL;
+			return nullptr;
 		}
 		WorkerThread &thread;
 		const Any *whence;
@@ -243,6 +243,6 @@ namespace PILS
 	void *WorkerThread::knotCallback(void *step_)
 	{
 		MainThread::singleton->run((const Step *)step_);
-		return NULL;
+		return nullptr;
 	}
 }

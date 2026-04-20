@@ -98,7 +98,7 @@ namespace PILS
 		}
 		recognizer;
 		if (thing->recognize(recognizer)) return recognizer.value;
-		else return NULL;
+		else return nullptr;
 	}
 
 	class Bounding : public Box, public ListRecognizer
@@ -136,22 +136,22 @@ namespace PILS
 		}
 	};
 
-	const NodeConstantShort *BuiltinClicheGraph::newNode(const HashedConstant *&link, const NodeConstant *value) const
+	const NodeConstantShort *BuiltinClicheGraph::newNode(const Constant *&link, const NodeConstant *value) const
 	{
 		return new (Heap::allocate(sizeof(GraphNode))) const GraphNode(link, *this, value);
 	}
 
-	const NodeConstantShort *BuiltinClicheGraph::newNode(const HashedConstant *&link, const ListConstant *value) const
+	const NodeConstantShort *BuiltinClicheGraph::newNode(const Constant *&link, const ListConstant *value) const
 	{
 		return new (Heap::allocate(sizeof(GraphNode))) const GraphNode(link, *this, value);
 	}
 
-	const NodeConstantShort *BuiltinClicheGraph::newNode(const HashedConstant *&link, const Empty *value) const
+	const NodeConstantShort *BuiltinClicheGraph::newNode(const Constant *&link, const Empty *value) const
 	{
 		return new (Heap::allocate(sizeof(GraphNode))) const GraphNode(link, *this, value);
 	}
 
-	const NodeConstantShort *BuiltinClicheGraph::newNode(const HashedConstant *&link, const Constant *value) const
+	const NodeConstantShort *BuiltinClicheGraph::newNode(const Constant *&link, const Constant *value) const
 	{
 		return new (Heap::allocate(sizeof(GraphNode))) const GraphNode(link, *this, value);
 	}
@@ -193,7 +193,7 @@ namespace PILS
 		else return NodeConstantTrailer2::calling(run, call);
 	}
 
-	const NodeConstantShort *BuiltinClichePathBase::newNode(const HashedConstant *&link, const ListConstant *value) const
+	const NodeConstantShort *BuiltinClichePathBase::newNode(const Constant *&link, const ListConstant *value) const
 	{
 		juce::Path path;
 		bool first = true;
@@ -332,7 +332,7 @@ bad:
 		return sizeof(TransformerNode);
 	}
 
-	const NodeConstantLong *BuiltinClicheAt::newNodeConstant(const HashedConstant *&link, const Constant *const *value) const
+	const NodeConstantLong *BuiltinClicheAt::newNodeConstant(const Constant *&link, const Constant *const *value) const
 	{
 		if (const ListConstant *list = value[1]->as_ListConstant())
 		{
@@ -352,7 +352,7 @@ bad:
 		return BuiltinClicheDuplo::newNodeConstant(link, value);
 	}
 
-	const NodeConstantLong *BuiltinClicheAlign::newNodeConstant(const HashedConstant *&link, const Constant *const *value) const
+	const NodeConstantLong *BuiltinClicheAlign::newNodeConstant(const Constant *&link, const Constant *const *value) const
 	{
 		float rx;
 		float ry = 0;
@@ -392,7 +392,7 @@ bad:
 		return BuiltinClicheDuplo::newNodeConstant(link, value);
 	}
 
-	const NodeConstantLong *BuiltinClicheGraphSize::newNodeConstant(const HashedConstant *&link, const Constant *const *value) const
+	const NodeConstantLong *BuiltinClicheGraphSize::newNodeConstant(const Constant *&link, const Constant *const *value) const
 	{
 		float width;
 		float height;
@@ -420,7 +420,7 @@ bad:
 		return BuiltinClicheDuplo::newNodeConstant(link, value);
 	}
 
-	const NodeConstantLong *BuiltinClicheGraphOutsize::newNodeConstant(const HashedConstant *&link, const Constant *const *value) const
+	const NodeConstantLong *BuiltinClicheGraphOutsize::newNodeConstant(const Constant *&link, const Constant *const *value) const
 	{
 		float width;
 		float height;
@@ -448,7 +448,7 @@ bad:
 		return BuiltinClicheDuplo::newNodeConstant(link, value);
 	}
 
-	const NodeConstantLong *BuiltinClicheScale::newNodeConstant(const HashedConstant *&link, const Constant *const *value) const
+	const NodeConstantLong *BuiltinClicheScale::newNodeConstant(const Constant *&link, const Constant *const *value) const
 	{
 		Bounding bounding;
 		if (value[0]->recognize(bounding))
@@ -472,11 +472,11 @@ bad:
 		return BuiltinClicheDuplo::newNodeConstant(link, value);
 	}
 
-	const ClicheShort *FontNamespace::newCliche(const HashedConstant *&link, const Constant *a) const
+	const ClicheShort *FontNamespace::newCliche(const Constant *&link, const Constant *a) const
 	{
 		if (const PilsString *name = a->as_String())
 			return new (Heap::allocate(sizeof(FontName))) FontName(link, this, name);
-		else return Constant::newCliche(link, a);
+		else return HalfbakedConstant::newCliche(link, a);
 	}
 
 	size_t FontName::unlinkAndGetSize()
@@ -486,15 +486,15 @@ bad:
 		return sizeof(FontName);
 	}
 
-	const ClicheShort *FontName::newCliche(const HashedConstant *&link, const Constant *a) const
+	const ClicheShort *FontName::newCliche(const Constant *&link, const Constant *a) const
 	{
 		float size;
 		if (a->isNumber(size))
 			return new (Heap::allocate(sizeof(PilsFont))) PilsFont(link, this, (const Number *)a, size);
-		else return Constant::newCliche(link, a);
+		else return HalfbakedConstant::newCliche(link, a);
 	}
 
-	PilsFont::PilsFont(const HashedConstant *&link, const FontName *head, const Number *number, float size)
+	PilsFont::PilsFont(const Constant *&link, const FontName *head, const Number *number, float size)
 		: ClicheShort(link, head, number), font(head->font)
 	{
 		font.setHeight(size);
@@ -522,7 +522,7 @@ bad:
 		fontRecognizer;
 		if (thing->recognize(fontRecognizer))
 			return fontRecognizer.font;
-		else return NULL;
+		else return nullptr;
 	}
 
 	bool PilsFont::recognize(Recognizer &recognizer) const
@@ -530,7 +530,7 @@ bad:
 		return recognizer.recognizing(*this);
 	}
 
-	const NodeConstantLong *BuiltinClicheFont::newNodeConstant(const HashedConstant *&link, const Constant *const *value) const
+	const NodeConstantLong *BuiltinClicheFont::newNodeConstant(const Constant *&link, const Constant *const *value) const
 	{
 		if (const juce::Font *font = PilsFont::cast(value[1]))
 		{
@@ -542,7 +542,7 @@ bad:
 		return BuiltinClicheDuplo::newNodeConstant(link, value);
 	}
 
-	const NodeConstantLong *BuiltinClicheInk::newNodeConstant(const HashedConstant *&link, const Constant *const *value) const
+	const NodeConstantLong *BuiltinClicheInk::newNodeConstant(const Constant *&link, const Constant *const *value) const
 	{
 		BrushMaker brush;
 		Bounding bounding;
@@ -589,7 +589,7 @@ bad:
 		return ok;
 	}
 
-	const NodeConstantLong *BuiltinClicheBackground::newNodeConstant(const HashedConstant *&link, const Constant *const *value) const
+	const NodeConstantLong *BuiltinClicheBackground::newNodeConstant(const Constant *&link, const Constant *const *value) const
 	{
 		BrushMaker brush;
 		Bounding bounding;
@@ -598,7 +598,7 @@ bad:
 		return BuiltinClicheDuplo::newNodeConstant(link, value);
 	}
 
-	const NodeConstantLong *BuiltinClicheStroke::newNodeConstant(const HashedConstant *&link, const Constant *const *value) const
+	const NodeConstantLong *BuiltinClicheStroke::newNodeConstant(const Constant *&link, const Constant *const *value) const
 	{
 		float strokeThickness;
 		StrokeWalk strokeWalk;
@@ -635,7 +635,7 @@ bad:
 		return sizeof(StrokeNode);
 	}
 
-	const NodeConstantLong *BuiltinClicheGradient::newNodeConstant(const HashedConstant *&link, const Constant *const *value) const
+	const NodeConstantLong *BuiltinClicheGradient::newNodeConstant(const Constant *&link, const Constant *const *value) const
 	{
 		juce::ColourGradient *gradient = new juce::ColourGradient();
 		{
@@ -718,7 +718,7 @@ bad:
 		return sizeof(GradientNode);
 	}
 
-	const NodeConstantShort *BuiltinClicheImage::newNode(const HashedConstant *&link, const PilsString *value) const
+	const NodeConstantShort *BuiltinClicheImage::newNode(const Constant *&link, const PilsString *value) const
 	{
 		const juce::Image image = juce::ImageFileFormat::loadFrom(value->value, value->count->value);
 		if (image.isValid())
@@ -728,17 +728,17 @@ bad:
 		else return BuiltinClicheTiny::newNode(link, value);
 	}
 
-	const NodeConstantShort *BuiltinClicheImage::newNode(const HashedConstant *&link, const Special *value) const
+	const NodeConstantShort *BuiltinClicheImage::newNode(const Constant *&link, const Special *value) const
 	{
 		class ImageNodeBuilder : public Recognizer
 		{
 		public:
-			ImageNodeBuilder(const HashedConstant *&link, const BuiltinClicheImage &cliche, const Special *value)
+			ImageNodeBuilder(const Constant *&link, const BuiltinClicheImage &cliche, const Special *value)
 				: link(link), cliche(cliche), value(value)
 			{}
 			const NodeConstantTiny *result;
 		private:
-			const HashedConstant *&link;
+			const Constant *&link;
 			const BuiltinClicheImage &cliche;
 			const Special *value;
             bool recognizing(const juce::Image &image) override
@@ -757,24 +757,24 @@ bad:
 		else return BuiltinClicheTiny::newNode(link, value);
 	}
 
-	const NodeConstantShort *BuiltinClicheImage::newNode(const HashedConstant *&link, const ListConstant *value) const
+	const NodeConstantShort *BuiltinClicheImage::newNode(const Constant *&link, const ListConstant *value) const
 	{
 		if (const ImageNode *node = newImageNode(link, value))
 			return node;
 		else return BuiltinClicheTiny::newNode(link, value);
 	}
 
-	const NodeConstantShort *BuiltinClicheImage::newNode(const HashedConstant *&link, const NodeConstant *value) const
+	const NodeConstantShort *BuiltinClicheImage::newNode(const Constant *&link, const NodeConstant *value) const
 	{
 		if (const ImageNode *node = newImageNode(link, value))
 			return node;
 		else return BuiltinClicheTiny::newNode(link, value);
 	}
 
-	const ImageNode *BuiltinClicheImage::newImageNode(const HashedConstant *&link, const Constant *value) const
+	const ImageNode *BuiltinClicheImage::newImageNode(const Constant *&link, const Constant *value) const
 	{
 		Bounding bounding;
-		if (!value->recognize(bounding) || bounding.isEmpty()) return NULL;
+		if (!value->recognize(bounding) || bounding.isEmpty()) return nullptr;
 		juce::Image image(Image::ARGB, (int)bounding.width, (int)bounding.height, true);
 		juce::Graphics graphics(image);
 		juce::AffineTransform transform = juce::AffineTransform::translation(-bounding.x, -bounding.y);

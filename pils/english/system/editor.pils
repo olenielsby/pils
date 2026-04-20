@@ -254,7 +254,7 @@ The differences function is not utf-8-aware.
   :ok
   ;window
     platform window (@@ title)
-    inner size (@@ size)
+!    inner size (@@ size)
     icon
     ( :call @@:
       [pils icon opener] &
@@ -264,7 +264,7 @@ The differences function is not utf-8-aware.
     )
     when (this module channel)
   ;
-  window mind . (this module channel listen: ;window) := ();
+  window mind module-listener := (this module channel listen: ;window);
   ;inner window column;
   window mind state := [new];
   ;splitter

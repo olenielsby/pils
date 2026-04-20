@@ -54,13 +54,13 @@ namespace PILS
 		PredefinedGraphNameColor(const PILS_CHAR *name)
 			: PredefinedGraphName(name)
 		{}
-        const ClicheShort *newCliche(const HashedConstant *&link, const Constant *a) const override;
+        const ClicheShort *newCliche(const Constant *&link, const Constant *a) const override;
 	};
 
 	class FontNamespace : public PilsString
 	{
 	public:
-        const ClicheShort *newCliche(const HashedConstant *&link, const Constant *a) const override;
+        const ClicheShort *newCliche(const Constant *&link, const Constant *a) const override;
 		bool isBold() const {return ((this - table) & 2) != 0;}
 		bool isItalic() const {return ((this - table) & 1) != 0;}
 	private:
@@ -74,13 +74,13 @@ namespace PILS
 	class FontName : public ClicheShort
 	{
 	public:
-		FontName(const HashedConstant *&link, const FontNamespace *head, const PilsString *name)
+		FontName(const Constant *&link, const FontNamespace *head, const PilsString *name)
 			: ClicheShort(link, head, name), font(juce::String::fromUTF8(name->value, name->count->value), 0, 0)
 		{
 			font.setBold(head->isBold());
 			font.setItalic(head->isItalic());
 		}
-        const ClicheShort *newCliche(const HashedConstant *&link, const Constant *a) const override;
+        const ClicheShort *newCliche(const Constant *&link, const Constant *a) const override;
         size_t unlinkAndGetSize() override;
 		juce::Font font;
 	};
@@ -88,7 +88,7 @@ namespace PILS
 	class PilsFont : public ClicheShort
 	{
 	public:
-		PilsFont(const HashedConstant *&link, const FontName *head, const Number *value, float size);
+		PilsFont(const Constant *&link, const FontName *head, const Number *value, float size);
         bool recognize(Recognizer &recognizer) const override;
         size_t unlinkAndGetSize() override;
 		static const juce::Font *cast(const Any *thing);
@@ -155,10 +155,10 @@ namespace PILS
 	{
 	public:
 		static const BuiltinClicheGraph singleton;
-        const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const override;
-        const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const override;
-        const NodeConstantShort *newNode(const HashedConstant *&link, const Empty *value) const;
-        const NodeConstantShort *newNode(const HashedConstant *&link, const Constant *value) const;
+        const NodeConstantShort *newNode(const Constant *&link, const NodeConstant *value) const override;
+        const NodeConstantShort *newNode(const Constant *&link, const ListConstant *value) const override;
+        const NodeConstantShort *newNode(const Constant *&link, const Empty *value) const;
+        const NodeConstantShort *newNode(const Constant *&link, const Constant *value) const;
 	private:
 		BuiltinClicheGraph()
 			: BuiltinClicheTiny(&PredefinedGraphName::graph)
@@ -168,7 +168,7 @@ namespace PILS
 	class GraphNode : public NodeConstantTiny
 	{
 	public:
-		GraphNode(const HashedConstant *&link, const BuiltinClicheGraph &cliche, const Constant *value)
+		GraphNode(const Constant *&link, const BuiltinClicheGraph &cliche, const Constant *value)
 			: NodeConstantTiny(link, cliche, value)
 		{}
         const Any *specialCall(Runner &run, const ReallySpecial &special) const override;
@@ -177,7 +177,7 @@ namespace PILS
 	class BuiltinClichePathBase : public BuiltinClicheTiny
 	{
 	public:
-        const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const override;
+        const NodeConstantShort *newNode(const Constant *&link, const ListConstant *value) const override;
 		virtual bool draw(const juce::Path &path, Drawing &drawing) const = 0;
 	protected:
 		virtual void closePath(juce::Path &path) const = 0;
@@ -213,7 +213,7 @@ namespace PILS
 	class PilsGraphTiny : public NodeConstantTiny, public PilsGraph
 	{
 	public:
-		PilsGraphTiny(const HashedConstant *&link, const BuiltinClicheTiny &cliche, const Constant *value, Box box)
+		PilsGraphTiny(const Constant *&link, const BuiltinClicheTiny &cliche, const Constant *value, Box box)
 			: NodeConstantTiny(link, cliche, value), PilsGraph(box)
 		{}
         bool recognize(Recognizer &recognizer) const override;
@@ -224,7 +224,7 @@ namespace PILS
 	class PathNode : public PilsGraphTiny
 	{
 	public:
-		PathNode(const HashedConstant *&link, const BuiltinClichePathBase &cliche, const Constant *value, const juce::Path path)
+		PathNode(const Constant *&link, const BuiltinClichePathBase &cliche, const Constant *value, const juce::Path path)
 			: PilsGraphTiny(link, cliche, value, path), path(path)
 		{}
         bool draw(Drawing &drawing) const override;
@@ -247,7 +247,7 @@ namespace PILS
 	class BuiltinClicheStroke
 		: public BuiltinClicheTrailer
 	{
-        const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const override;
+        const NodeConstantLong *newNodeConstant(const Constant *&link, const Constant *const *value) const override;
 		BuiltinClicheStroke(const Constant *head, const Constant *attribute, juce::PathStrokeType::JointStyle jointStyle, juce::PathStrokeType::EndCapStyle endCapStyle)
 			: BuiltinClicheTrailer(head, &Empty::singleton, attribute), jointStyle(jointStyle), endCapStyle(endCapStyle)
 		{}
@@ -260,7 +260,7 @@ namespace PILS
 	class NodeConstantTrailer2 : public NodeConstantTrailer
 	{
 	protected:
-		NodeConstantTrailer2(const HashedConstant *&link, const ClicheTrailer &cliche, const Constant *const *value)
+		NodeConstantTrailer2(const Constant *&link, const ClicheTrailer &cliche, const Constant *const *value)
 			: NodeConstantTrailer(link, cliche, value)
 		{}
 	private:
@@ -270,7 +270,7 @@ namespace PILS
 	class DuploDrawable : public NodeConstantTrailer2, public PilsGraph
 	{
 	protected:
-		DuploDrawable(const HashedConstant *&link, const ClicheTrailer &cliche, const Constant *const *value, const Box box)
+		DuploDrawable(const Constant *&link, const ClicheTrailer &cliche, const Constant *const *value, const Box box)
 			: NodeConstantTrailer2(link, cliche, value), PilsGraph(box)
 		{}
         size_t unlinkAndGetSize() override;
@@ -283,7 +283,7 @@ namespace PILS
 	class DummyDrawable : public DuploDrawable
 	{
 	public:
-		DummyDrawable(const HashedConstant *&link, const ClicheTrailer &cliche, const Constant *const *value, const Box box)
+		DummyDrawable(const Constant *&link, const ClicheTrailer &cliche, const Constant *const *value, const Box box)
 			: DuploDrawable(link, cliche, value, box)
 		{}
 	private:
@@ -295,7 +295,7 @@ namespace PILS
 	{
 	private:
 		static const BuiltinClicheBackground singleton;
-        const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const override;
+        const NodeConstantLong *newNodeConstant(const Constant *&link, const Constant *const *value) const override;
 		BuiltinClicheBackground()
 			: BuiltinClicheDuplo(&PredefinedGraphName::background)
 		{}
@@ -304,7 +304,7 @@ namespace PILS
 	class TransformerNode : public DuploDrawable
 	{
 	public:
-		TransformerNode(const HashedConstant *&link, const ClicheTrailer &cliche, const Constant *const *value, const juce::AffineTransform &transform, const Box box)
+		TransformerNode(const Constant *&link, const ClicheTrailer &cliche, const Constant *const *value, const juce::AffineTransform &transform, const Box box)
 			: DuploDrawable(link, cliche, value, box.applyTransform(transform)), transform(transform)
 		{}
         bool draw(Drawing &drawing) const override;
@@ -318,7 +318,7 @@ namespace PILS
 	{
 	private:
 		static const BuiltinClicheAt singleton;
-        const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const override;
+        const NodeConstantLong *newNodeConstant(const Constant *&link, const Constant *const *value) const override;
 		BuiltinClicheAt()
 			: BuiltinClicheDuplo(&PredefinedGraphName::at)
 		{}
@@ -328,7 +328,7 @@ namespace PILS
 	{
 	private:
 		static const BuiltinClicheScale singleton;
-        const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const override;
+        const NodeConstantLong *newNodeConstant(const Constant *&link, const Constant *const *value) const override;
 		BuiltinClicheScale()
 			: BuiltinClicheDuplo(&PredefinedGraphName::scale)
 		{}
@@ -338,7 +338,7 @@ namespace PILS
 	{
 	private:
 		static const BuiltinClicheAlign singleton;
-        const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const override;
+        const NodeConstantLong *newNodeConstant(const Constant *&link, const Constant *const *value) const override;
 		BuiltinClicheAlign()
 			: BuiltinClicheDuplo(&PredefinedGraphName::align)
 		{}
@@ -348,7 +348,7 @@ namespace PILS
 	{
 	private:
 		static const BuiltinClicheGraphSize singleton;
-        const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const override;
+        const NodeConstantLong *newNodeConstant(const Constant *&link, const Constant *const *value) const override;
 		BuiltinClicheGraphSize()
 			: BuiltinClicheDuplo(&PredefinedGraphName::size)
 		{}
@@ -358,7 +358,7 @@ namespace PILS
 	{
 	private:
 		static const BuiltinClicheGraphOutsize singleton;
-        const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const override;
+        const NodeConstantLong *newNodeConstant(const Constant *&link, const Constant *const *value) const override;
 		BuiltinClicheGraphOutsize()
 			: BuiltinClicheDuplo(&PredefinedGraphName::outsize)
 		{}
@@ -368,7 +368,7 @@ namespace PILS
 	{
 	private:
 		static const BuiltinClicheInk singleton;
-        const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const override;
+        const NodeConstantLong *newNodeConstant(const Constant *&link, const Constant *const *value) const override;
 		BuiltinClicheInk()
 			: BuiltinClicheDuplo(&PredefinedGraphName::ink)
 		{}
@@ -378,7 +378,7 @@ namespace PILS
 	{
 	private:
 		static const BuiltinClicheFont singleton;
-        const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const override;
+        const NodeConstantLong *newNodeConstant(const Constant *&link, const Constant *const *value) const override;
 		BuiltinClicheFont()
 			: BuiltinClicheDuplo(&PredefinedGraphName::font)
 		{}
@@ -387,7 +387,7 @@ namespace PILS
 	class BuiltinClicheGradient : public BuiltinClicheDuplo
 	{
 	private:
-        const NodeConstantLong *newNodeConstant(const HashedConstant *&link, const Constant *const *value) const override;
+        const NodeConstantLong *newNodeConstant(const Constant *&link, const Constant *const *value) const override;
 		static const BuiltinClicheGradient linear;
 		static const BuiltinClicheGradient circular;
 		BuiltinClicheGradient(const PredefinedGraphName *name)
@@ -398,7 +398,7 @@ namespace PILS
 	class GradientNode : public NodeConstantTrailer
 	{
 	public:
-		GradientNode(const HashedConstant *&link, const BuiltinClicheGradient &cliche, const Constant *const *value, const juce::ColourGradient *gradient)
+		GradientNode(const Constant *&link, const BuiltinClicheGradient &cliche, const Constant *const *value, const juce::ColourGradient *gradient)
 			: NodeConstantTrailer(link, cliche, value), gradient(gradient)
 		{}
         bool recognize(Recognizer &recognizer) const override;
@@ -411,7 +411,7 @@ namespace PILS
 	class BrushNode : public DuploDrawable
 	{
 	public:
-		BrushNode(const HashedConstant *&link, const ClicheTrailer &cliche, const Constant *const *value, FillType &fillType, const Box box)
+		BrushNode(const Constant *&link, const ClicheTrailer &cliche, const Constant *const *value, FillType &fillType, const Box box)
 			: DuploDrawable(link, cliche, value, box), fillType(fillType)
 		{}
         bool draw(Drawing &drawing) const override;
@@ -424,7 +424,7 @@ namespace PILS
 	class BackgroundNode : public BrushNode
 	{
 	public:
-		BackgroundNode(const HashedConstant *&link, const ClicheTrailer &cliche, const Constant *const *value, FillType &fillType, const Box box)
+		BackgroundNode(const Constant *&link, const ClicheTrailer &cliche, const Constant *const *value, FillType &fillType, const Box box)
 			: BrushNode(link, cliche, value, fillType, box)
 		{}
         bool draw(Drawing &drawing) const override;
@@ -433,7 +433,7 @@ namespace PILS
 	class StrokeNode : public DuploDrawable
 	{
 	public:
-		StrokeNode(const HashedConstant *&link, const ClicheTrailer &cliche, const Constant *const *value, const juce::Path path)
+		StrokeNode(const Constant *&link, const ClicheTrailer &cliche, const Constant *const *value, const juce::Path path)
 			: DuploDrawable(link, cliche, value, path), path(path)
 		{}
         bool draw(Drawing &drawing) const override;
@@ -445,7 +445,7 @@ namespace PILS
 	class TextNode : public DuploDrawable
 	{
 	public:
-		TextNode(const HashedConstant *&link, const ClicheTrailer &cliche, const Constant *const *value, const juce::Font &font, const juce::String &text)
+		TextNode(const Constant *&link, const ClicheTrailer &cliche, const Constant *const *value, const juce::Font &font, const juce::String &text)
 			: DuploDrawable(link, cliche, value, Box(text, font)), font(font), text(text)
 		{}
         bool draw(Drawing &drawing) const override;
@@ -463,17 +463,17 @@ namespace PILS
 			: BuiltinClicheTiny(&PredefinedGraphName::image)
 		{}
 		static const BuiltinClicheImage singleton;
-        const NodeConstantShort *newNode(const HashedConstant *&link, const PilsString *value) const override;
-        const NodeConstantShort *newNode(const HashedConstant *&link, const Special *value) const override;
-        const NodeConstantShort *newNode(const HashedConstant *&link, const NodeConstant *value) const override;
-        const NodeConstantShort *newNode(const HashedConstant *&link, const ListConstant *value) const override;
-        const ImageNode *newImageNode(const HashedConstant *&link, const Constant *value) const;
+        const NodeConstantShort *newNode(const Constant *&link, const PilsString *value) const override;
+        const NodeConstantShort *newNode(const Constant *&link, const Special *value) const override;
+        const NodeConstantShort *newNode(const Constant *&link, const NodeConstant *value) const override;
+        const NodeConstantShort *newNode(const Constant *&link, const ListConstant *value) const override;
+        const ImageNode *newImageNode(const Constant *&link, const Constant *value) const;
 	};
 
 	class ImageNode : public PilsGraphTiny
 	{
 	public:
-		ImageNode(const HashedConstant *&link, const BuiltinClicheImage &cliche, const Constant *value, const juce::Image &image, bool own, float x = 0.0f, float y = 0.0f)
+		ImageNode(const Constant *&link, const BuiltinClicheImage &cliche, const Constant *value, const juce::Image &image, bool own, float x = 0.0f, float y = 0.0f)
 			: PilsGraphTiny(link, cliche, value, Box(image, x, y)), image(image), own(own), x(x), y(y)
 		{}
         bool draw(Drawing &drawing) const override;
@@ -488,7 +488,7 @@ namespace PILS
 	class JuceDrawableNode : public PilsGraphTiny
 	{
 	public:
-		JuceDrawableNode(const HashedConstant *&link, const BuiltinClicheImage &cliche, const Constant *value, const juce::Drawable *drawable, bool own)
+		JuceDrawableNode(const Constant *&link, const BuiltinClicheImage &cliche, const Constant *value, const juce::Drawable *drawable, bool own)
 			: PilsGraphTiny(link, cliche, value, Box(*drawable)), drawable(drawable), own(own)
 		{}
         bool draw(Drawing &drawing) const override;

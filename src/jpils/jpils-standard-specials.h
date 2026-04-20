@@ -16,7 +16,7 @@ namespace PILS
         int order(const Constant *other) const override;
 	private:
 		friend class IdentifierLookup;
-		Identifier(const HashedConstant *&link, const GUID &value)
+		Identifier(const Constant *&link, const GUID &value)
 			: ReallySpecial(link), value(value)
 		{}
 		const GUID value;
@@ -33,7 +33,7 @@ namespace PILS
 			: value(value)
 		{}
 		const GUID value;
-		const ReallySpecial *newSpecial(const HashedConstant *&link);
+		const ReallySpecial *newSpecial(const Constant *&link);
 		void unduplicate();
         bool compare(const ReallySpecial &other) const override;
         size_t hash() const override;

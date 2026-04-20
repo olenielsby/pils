@@ -10,4 +10,14 @@ Makefile
 *.so
 
 *.swp
+.qtcreator/
+.clangd
+src/jpils/
+*.user
+/Debug
+/Release
+*.user.*
+compile_commands.json
+backup/
+
 

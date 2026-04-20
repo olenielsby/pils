@@ -43,7 +43,7 @@ namespace PILS
 		{}
 		virtual const JuceName &getName() const = 0;
 		virtual void* cast(const TypedPtr &ptr) const = 0;
-		virtual const JuceReference *newSpecial(const HashedConstant *&link, TypedPtr &object, const JuceReference *owner) const;
+		virtual const JuceReference *newSpecial(const Constant *&link, TypedPtr &object, const JuceReference *owner) const;
 		virtual void release(void *ptr) const = 0;
 		virtual bool recognizing(const void *instance, Recognizer &recognizer) const;
 		const int level;
@@ -121,7 +121,7 @@ namespace PILS
 		JuceReferenceCountedClass(const char *name, int level, const JuceClass *const *lineage, void (* releaseThunk)(void *), int mixinCount, const JuceClass::Mixin *mixinOf)
 			: JuceClass(name, level, lineage, releaseThunk, mixinCount, mixinOf)
 		{}
-        const JuceReference *newSpecial(const HashedConstant *&link, TypedPtr &object, const JuceReference *owner) const override;
+        const JuceReference *newSpecial(const Constant *&link, TypedPtr &object, const JuceReference *owner) const override;
         const JuceReference *wrap(void *object, CallbackHelperBase *helper) const override;
 	};
 
@@ -175,11 +175,11 @@ namespace PILS
 	protected:
 		friend class JuceClassBase;
 		friend class JuceStaticClass;
-		JuceReference(const HashedConstant *&link, TypedPtr &typedPtr, const JuceReference *const owner)
+		JuceReference(const Constant *&link, TypedPtr &typedPtr, const JuceReference *const owner)
 			: ReallySpecial(link), TypedPtr(typedPtr), owner(owner)
 		{}
 		JuceReference(TypedPtr &typedPtr)
-			: TypedPtr(typedPtr), owner(NULL)
+			: TypedPtr(typedPtr), owner(nullptr)
 		{}
         const Any *specialCalling(Runner &run, const JuceName &method, const Any &arg) const override;
         const Any *specialCalling(Runner &run, const JuceName &method) const override;
@@ -198,8 +198,8 @@ namespace PILS
 		: public JuceReference
 	{
 	public:
-		JuceOwnedReference(const HashedConstant *&link, TypedPtr &typedPtr)
-			: JuceReference(link, typedPtr, NULL)
+		JuceOwnedReference(const Constant *&link, TypedPtr &typedPtr)
+			: JuceReference(link, typedPtr, nullptr)
 		{}
 	private:
         size_t unlinkAndGetSize() override;
@@ -210,7 +210,7 @@ namespace PILS
 		: public JuceReference
 	{
 	public:
-		JuceObject(const HashedConstant *&link, TypedPtr &typedPtr, CallbackHelperBase *helper);
+		JuceObject(const Constant *&link, TypedPtr &typedPtr, CallbackHelperBase *helper);
         void alert() override;
 		virtual void deleted();
 	protected:
@@ -224,7 +224,7 @@ namespace PILS
 		: public JuceObject, PassingMindMap
 	{
 	public:
-		JuceComponent(const HashedConstant *&link, TypedPtr &typedPtr, CallbackHelperBase *helper);
+		JuceComponent(const Constant *&link, TypedPtr &typedPtr, CallbackHelperBase *helper);
         void alert() override;
         void deleted() override;
         const Any *mindError() const override;
@@ -244,9 +244,9 @@ namespace PILS
 		friend class JuceClass;
 		friend class JuceReference;
 		JuceLookup(TypedPtr &object)
-			: object(object), owner(NULL)
+			: object(object), owner(nullptr)
 		{}
-        const ReallySpecial *newSpecial(const HashedConstant *&link) override;
+        const ReallySpecial *newSpecial(const Constant *&link) override;
         bool compare(const ReallySpecial &special) const override;
         void unduplicate() override;
         size_t hash() const override;
@@ -287,7 +287,7 @@ namespace PILS
 		}
 		const Any *getArgument()
 		{
-			if (at == end) return NULL;
+			if (at == end) return nullptr;
 			else return *at++;
 		}
 		int remainingArgumentCount()
@@ -302,7 +302,7 @@ namespace PILS
 
 	template <typename T> struct ArrayArgument
 	{
-		ArrayArgument() : value(NULL) {}
+		ArrayArgument() : value(nullptr) {}
 		~ArrayArgument() {if (value) delete [] value;}
 		T *value;
 		void size(int size)
@@ -551,7 +551,7 @@ namespace PILS
 			ArgumentSource source(operand);
 			if ( (*this->argumentsThunk)(rawObject, source, thunk, &result))
 				return resultClass.ownedReference(new T(result));
-			else return NULL;
+			else return nullptr;
 		}
     private:
         typedef T type;
@@ -752,7 +752,7 @@ namespace PILS
 	class CallbackHelperBase
 	{
 	public:
-		CallbackHelperBase() : thread(NULL) {}
+		CallbackHelperBase() : thread(nullptr) {}
 		~CallbackHelperBase();
 		JuceObject *who;
 		PilsThread *thread;
@@ -760,13 +760,13 @@ namespace PILS
 	protected:
 		static const Constant *toPils(const juce::String &arg)
 		{
-			if(int count = arg.copyToUTF8(NULL, 0x7fffffff))
+			if(int count = arg.copyToUTF8(nullptr, 0x7fffffff))
 			{
 				std::vector<char> buffer(count);
 				arg.copyToUTF8(&buffer[0], count);
 				return PilsString::get(&buffer[0], count - 1);
 			}
-			else return PilsString::get((const char *)NULL, 0);
+			else return PilsString::get((const char *)nullptr, 0);
 		}
 
 		static const Constant *toPils(int arg)

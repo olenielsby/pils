@@ -28,6 +28,6 @@ namespace PILS
 		if (convert(toGraphics))
 			return (juce::Graphics *)toGraphics.value;
 		else
-			return NULL;
+			return nullptr;
 	}
 }

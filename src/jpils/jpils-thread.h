@@ -25,7 +25,7 @@ namespace PILS
 		class RunLevel
 		{
 		public:
-			RunLevel(PilsThread *candidate = NULL)
+			RunLevel(PilsThread *candidate = nullptr)
 				: thread(*getCurrent(candidate))
 			{
 				thread.runLevels++;
@@ -38,12 +38,12 @@ namespace PILS
 				thread.releaseReference();
 			}
 			Runner &run() {return thread;}
-			static PilsThread *getCurrent(PilsThread *candidate = NULL);
+			static PilsThread *getCurrent(PilsThread *candidate = nullptr);
 		private:
 			PilsThread &thread;
 		};
 	protected:
-		PilsThread(const HashedConstant *&link, juce::Thread::ThreadID threadID)
+		PilsThread(const Constant *&link, juce::Thread::ThreadID threadID)
 			:  ReallySpecial(link), Runner(Bridge::singleton, 0x10000), threadID(threadID), runLevels(0)
 		{}
 		static void postThreadDestructionMessage(juce::Thread *deadThread);
@@ -59,8 +59,8 @@ namespace PILS
 		void doPending();
         void runLevelTouchDown() override;
 	protected:
-		PendableThread(const HashedConstant *&link, juce::Thread::ThreadID threadID)
-			:  PilsThread(link, threadID), pending(NULL)
+		PendableThread(const Constant *&link, juce::Thread::ThreadID threadID)
+			:  PilsThread(link, threadID), pending(nullptr)
 		{}
 	private:
 		friend class Pending;
@@ -77,7 +77,7 @@ namespace PILS
 	private:
         const Step *thread(const Any &what) override;
 		friend class ThreadLookup;
-		MainThread(const HashedConstant *&link, juce::Thread::ThreadID threadID)
+		MainThread(const Constant *&link, juce::Thread::ThreadID threadID)
 			: PendableThread(link, threadID)
 		{}
 	};
@@ -86,7 +86,7 @@ namespace PILS
 		: public PilsThread
 	{
 	public:
-		WorkerThread(const HashedConstant *&link, juce::Thread::ThreadID threadID)
+		WorkerThread(const Constant *&link, juce::Thread::ThreadID threadID)
 			: PilsThread(link, threadID)
 		{}
         size_t unlinkAndGetSize() override;
@@ -105,7 +105,7 @@ namespace PILS
 		const juce::Thread::ThreadID threadID;
 		virtual ~ThreadLookup() {}
         bool compare(const ReallySpecial &special) const override;
-        const ReallySpecial *newSpecial(const HashedConstant *&link) override;
+        const ReallySpecial *newSpecial(const Constant *&link) override;
         size_t hash() const override;
         void unduplicate() override;
 	};

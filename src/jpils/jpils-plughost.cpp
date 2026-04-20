@@ -17,7 +17,7 @@ namespace pilsplug
 
 	void *PilsplugHost::service(const char *) const
 	{
-		return NULL;
+		return nullptr;
 	}
 }
 
@@ -50,7 +50,7 @@ namespace PILS
 		return h->getFunction(juce::String::fromUTF8(name));
 	}
 
-	const ReallySpecial *PlugLibraryLookup::newSpecial(const HashedConstant *&link)
+	const ReallySpecial *PlugLibraryLookup::newSpecial(const Constant *&link)
 	{
 		return new (Heap::allocate(sizeof(PlugLibrarySpecial))) PlugLibrarySpecial(link, handle);
 	}
@@ -102,7 +102,7 @@ namespace PILS
 		return other.specialComparing(*this);
 	}
 
-	const ReallySpecial *PlugObjectLookup::newSpecial(const HashedConstant *&link)
+	const ReallySpecial *PlugObjectLookup::newSpecial(const Constant *&link)
 	{
 		types.addReference();
 		handle.addReference();
@@ -116,7 +116,7 @@ namespace PILS
 
 	void PlugObjectSpecial::write(Writing &writing) const
 	{
-		types->cliche->attributes[PlugObject::type]->write(writing, WRITING_CONSTANT, 10, NULL);
+		types->cliche->attributes[PlugObject::type]->write(writing, WRITING_CONSTANT, 10, nullptr);
 	}
 
 	const Special *PlugObjectSpecial::as_Special() const
@@ -149,7 +149,7 @@ namespace PILS
 		PlugCompilableRecognizer recognizer;
 		if (thing->recognize(recognizer))
 			return recognizer.plugCompilable;
-		else return NULL;
+		else return nullptr;
 	}
 
 	bool PlugName::recognize(Recognizer &recognizer) const
@@ -172,6 +172,6 @@ namespace PILS
 		PlugObjectRecognizer recognizer;
 		if (thing->recognize(recognizer))
 			return recognizer.object;
-		else return NULL;
+		else return nullptr;
 	}
 }

@@ -8,7 +8,7 @@ namespace PILS
 	class PilsCommander
 	{
 	public:
-		PilsCommander() : tooltipWindow(NULL) {}
+		PilsCommander() : tooltipWindow(nullptr) {}
 	protected:
 		const Any *getCommandLineHandler();
 		bool executeCommandLine(const juce::String &commandLine);

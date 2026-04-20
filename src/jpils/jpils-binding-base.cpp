@@ -16,7 +16,7 @@ namespace PILS
 	{
 		if (name.staticAccessor)
 			return JuceMethod::invokeChain(name.methods, run, *name.staticAccessor, &arg);
-		else return NULL;
+		else return nullptr;
 	}
 
 	const Any *JuceReference::specialCalling(Runner &run, const JuceName &method, const Any &arg) const
@@ -26,7 +26,7 @@ namespace PILS
 
 	const Any *JuceReference::specialCalling(Runner &run, const JuceName &method) const
 	{
-		return JuceMethod::invokeChain(method.methods, run, *this, NULL);
+		return JuceMethod::invokeChain(method.methods, run, *this, nullptr);
 	}
 
 	bool JuceReference::specialComparing(const JuceLookup &lookup) const
@@ -57,7 +57,7 @@ namespace PILS
 	void *JuceStaticClass::cast(const TypedPtr &ptr) const
 	{
 		if (&ptr.class_ == this) return ptr.ptr;
-		else return NULL;
+		else return nullptr;
 	}
 
 	void *JuceDummyClass::cast(const TypedPtr &ptr) const
@@ -73,7 +73,7 @@ namespace PILS
 			void *v = mixinOf[i].of.cast(ptr);
 			if (v) return ((char *)v) + mixinOf[i].offset;
 		}
-		return NULL;
+		return nullptr;
 	}
 
 	bool JuceClassBase::recognizing(const void *instance, PILS::Recognizer &recognizer) const
@@ -89,7 +89,7 @@ namespace PILS
 
 	bool JuceClass::converting(const JuceReference &argument)
 	{
-		return cast(argument) != NULL;
+		return cast(argument) != nullptr;
 	}
 
 	const Any *Plumcake::specialCalling(Runner &run, const JuceName &method) const
@@ -99,7 +99,7 @@ namespace PILS
 		return accessor;
 	}
 
-	const ReallySpecial *JuceLookup::newSpecial(const HashedConstant *&link)
+	const ReallySpecial *JuceLookup::newSpecial(const Constant *&link)
 	{
 		return object.class_.newSpecial(link, object, owner);
 	}
@@ -117,7 +117,7 @@ namespace PILS
 		return reinterpret_cast<size_t>(object.ptr);
 	}
 
-	const JuceReference *JuceClassBase::newSpecial(const HashedConstant *&link, TypedPtr &object, const JuceReference *owner) const
+	const JuceReference *JuceClassBase::newSpecial(const Constant *&link, TypedPtr &object, const JuceReference *owner) const
 	{
 		if (owner) owner->addReference();
 		return new (Heap::allocate(sizeof(JuceReference))) JuceReference(link, object, owner);
@@ -125,7 +125,7 @@ namespace PILS
 
 	void JuceReference::write(Writing &writing) const
 	{
-		class_.getName().write(writing, WRITING_NAME, 10, NULL);
+		class_.getName().write(writing, WRITING_NAME, 10, nullptr);
 		writing.write('?');
 	}
 
@@ -147,7 +147,7 @@ namespace PILS
 
 	void JuceOwnedReference::write(Writing &writing) const
 	{
-		class_.getName().write(writing, WRITING_NAME, 10, NULL);
+		class_.getName().write(writing, WRITING_NAME, 10, nullptr);
 		writing.write('&');
 	}
 
@@ -162,8 +162,8 @@ namespace PILS
 		return sizeof(JuceReference);
 	}
 
-	JuceObject::JuceObject(const HashedConstant *&link, TypedPtr &typedPtr, CallbackHelperBase *helper)
-		: JuceReference(link, typedPtr, NULL), helper(helper)
+	JuceObject::JuceObject(const Constant *&link, TypedPtr &typedPtr, CallbackHelperBase *helper)
+		: JuceReference(link, typedPtr, nullptr), helper(helper)
 	{
 		if (helper) helper->who = this;
 	}
@@ -172,12 +172,12 @@ namespace PILS
 
 	void JuceObject::deleted()
 	{
-		ptr = NULL;
+		ptr = nullptr;
 	}
 
 	void JuceObject::write(Writing &writing) const
 	{
-		class_.getName().write(writing, WRITING_NAME, 10, NULL);
+		class_.getName().write(writing, WRITING_NAME, 10, nullptr);
 		writing.write('+');
 	}
 
@@ -189,13 +189,13 @@ namespace PILS
 		return sizeof(JuceObject);
 	}
 
-	const JuceReference *JuceReferenceCountedClass::newSpecial(const HashedConstant *&link, TypedPtr &object, const JuceReference *owner) const
+	const JuceReference *JuceReferenceCountedClass::newSpecial(const Constant *&link, TypedPtr &object, const JuceReference *owner) const
 	{
 		((ReferenceCountedObject *)object.ptr)->incReferenceCount();
 		return new (Heap::allocate(sizeof(JuceOwnedReference))) JuceOwnedReference(link, object);
 	}
 
-	JuceComponent::JuceComponent(const HashedConstant *&link, TypedPtr &typedPtr, CallbackHelperBase *helper)
+	JuceComponent::JuceComponent(const Constant *&link, TypedPtr &typedPtr, CallbackHelperBase *helper)
 		: JuceObject(link, typedPtr, helper), desktop(false)
 	{
         addReference(); // sikr mod sletning
@@ -277,7 +277,7 @@ namespace PILS
 
 	const Any *JuceComponent::specialCalling(Runner &run, const Strap &call) const
 	{
-		if (!ptr) return NULL;
+		if (!ptr) return nullptr;
 		strapSticker.stick(call);
 		call.addReference();
 		return &call;
@@ -318,8 +318,8 @@ namespace PILS
 
 	const Any *JuceMethod::invokeChain(const JuceMethod *method, Runner &run, const JuceReference &object, const Any *operand)
 	{
-		const Any *result = NULL;
-		for (;result == NULL && method != NULL; method = method->next)
+		const Any *result = nullptr;
+		for (;result == nullptr && method != nullptr; method = method->next)
 		{
 			void *rawObject = method->class_.cast(object);
 			if (rawObject)
@@ -880,13 +880,13 @@ namespace PILS
 
 	bool JuceClassConverter::convert(const Cliche &className)
 	{
-		value = NULL;
+		value = nullptr;
 		return nullable && &toClass.getName() == &className;
 	}
 
 	bool JuceClassConverter::converting(const JuceReference &argument)
 	{
-		return ((value = toClass.cast(argument)) != NULL);
+		return ((value = toClass.cast(argument)) != nullptr);
 	}
 
 	bool JuceReference::converting(JuceSpecialConverter &converter) const
@@ -896,59 +896,59 @@ namespace PILS
 
 	const Any *UnimplementedMethod::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	const Any *VarMethod::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	const Any *VoidMethod::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const
 	{
 		ArgumentSource source(operand);
-		if (this->argumentsThunk(rawObject, source, thunk, NULL))
+		if (this->argumentsThunk(rawObject, source, thunk, nullptr))
 		{
 			object.addReference();
 			return &object;
 		}
-		else return NULL;
+		else return nullptr;
 	}
 
 	const Any *ConstructorMethod::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const
 	{
 		ArgumentSource source(operand);
-		CallbackHelperBase *helper = NULL;
+		CallbackHelperBase *helper = nullptr;
 		if (argumentsThunk(&helper, source, thunk, &rawObject))
 			return resultClass.wrap(rawObject, helper);
-		else return NULL;
+		else return nullptr;
 	}
 
 	const Any *ReferenceMethod::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const
 	{
-		void *result = NULL;
+		void *result = nullptr;
 		ArgumentSource source(operand);
 		if (this->argumentsThunk(rawObject, source, thunk, &result) && result)
 			return resultClass.reference(result);
-		else return NULL;
+		else return nullptr;
 	}
 
 	const Any *FactoryMethod::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const
 	{
-		void *result = NULL;
+		void *result = nullptr;
 		ArgumentSource source(operand);
 		if (this->argumentsThunk(rawObject, source, thunk, &result) && result)
 			return resultClass.ownedReference(result);
-		else return NULL;
+		else return nullptr;
 	}
 
 	const Any *PilsReferenceMethod::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const
 	{
-		const Any *result = NULL;
+		const Any *result = nullptr;
 		ArgumentSource source(operand);
 		if (this->argumentsThunk(rawObject, source, thunk, &result))
 			return result;
-		else return NULL;
+		else return nullptr;
 	}
 
 	const Any *IntMethod::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const
@@ -959,7 +959,7 @@ namespace PILS
 		{
 			return Integer::get(result);
 		}
-		else return NULL;
+		else return nullptr;
 	}
 
 	const Any *Uint32Method::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const
@@ -970,7 +970,7 @@ namespace PILS
 		{
 			return Number::get(result);
 		}
-		else return NULL;
+		else return nullptr;
 	}
 
 	const Any *ShortMethod::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const
@@ -981,7 +981,7 @@ namespace PILS
 		{
 			return Integer::get(result);
 		}
-		else return NULL;
+		else return nullptr;
 	}
 
 	const Any *CharMethod::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const
@@ -992,7 +992,7 @@ namespace PILS
 		{
 			return Integer::get(result);
 		}
-		else return NULL;
+		else return nullptr;
 	}
 
 	const Any *ConstCharPtrMethod::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const
@@ -1009,7 +1009,7 @@ namespace PILS
 				return &Empty::singleton;
 			}
 		}
-		else return NULL;
+		else return nullptr;
 	}
 
 	const Any *BoolMethod::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const
@@ -1020,7 +1020,7 @@ namespace PILS
 		{
 			return Integer::get(result);
 		}
-		else return NULL;
+		else return nullptr;
 	}
 
 	const Any *Juce_wcharMethod::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const
@@ -1031,7 +1031,7 @@ namespace PILS
 		{
 			return Integer::get(result);
 		}
-		else return NULL;
+		else return nullptr;
 	}
 
 	const Any *DoubleMethod::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const
@@ -1042,7 +1042,7 @@ namespace PILS
 		{
 			return Number::get(result);
 		}
-		else return NULL;
+		else return nullptr;
 	}
 
 	const Any *FloatMethod::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const
@@ -1053,7 +1053,7 @@ namespace PILS
 		{
 			return Number::get(result);
 		}
-		else return NULL;
+		else return nullptr;
 	}
 
 	const Any *Int64Method::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const
@@ -1064,7 +1064,7 @@ namespace PILS
 		{
 			return Number::get((double)result);
 		}
-		else return NULL;
+		else return nullptr;
 	}
 
 	const Any *StringMethod::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const
@@ -1073,7 +1073,7 @@ namespace PILS
 		juce::String result;
 		if (this->argumentsThunk(rawObject, source, thunk, &result))
 			return pils(result);
-		else return NULL;
+		else return nullptr;
 	}
 
 	const Any *TimeMethod::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const
@@ -1084,7 +1084,7 @@ namespace PILS
 		{
 			return pils(result);
 		}
-		else return NULL;
+		else return nullptr;
 	}
 
 	const Any *PilsColorMethod::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const
@@ -1095,7 +1095,7 @@ namespace PILS
 		{
 			return PilsColor::get(result);
 		}
-		else return NULL;
+		else return nullptr;
 	}
 
 	const Any *ClassExtracterMethod::invoke(Runner &run, const JuceReference &object, void *rawObject, const Any *operand) const
@@ -1106,30 +1106,25 @@ namespace PILS
 			class_.addReference();
 			return &class_;
 		}
-		else return NULL;
+		else return nullptr;
 	}
 
-	const Any *CallbackHelperBase::pilsCall(const Any *call) const
+    void CallbackHelperBase::pilsCall(const Any *call) const
 	{
-		if (!who->when) return NULL;
-		PilsThread *thread = PilsThread::RunLevel::getCurrent(this->thread);
+        if (!when) return nullptr;
+        PilsThread *thread = PilsThread::RunLevel::getCurrent(this->thread);
 		PilsThread::RunLevel running(thread);
 		Runner &run = running.run();
-		const Any *result = NULL;
-		who->when->addReference();
-		JuceObject *who = this->who;
-		run.calling.who = who;
-		who->addReference();
-		run.calling.what = (const Express *)who;
-		new (run.allocate(sizeof(SinkJuceCallback))) SinkJuceCallback(result, run.where_);
-		run.where_ = who->when;
-		run.run(call->caller(*thread, *who->when));
+        when->retain();
+        run.calling.who = this;
+        retain();
+        run.calling.what = (const Express *)this;
+        new (run.allocate(sizeof(SinkQtSignalCallback))) SinkQtSignalCallback(run.where_);
+        run.where_ = when;
+        run.run(call->caller(*thread, *when));
 		call->releaseReference();
-		if (result)
-			who->alert();
 		who->releaseReference();
 		thread->releaseReference();
-		return result;
 	}
 
 	Sink *SinkJuceCallback::kick(Runner &run)
@@ -1143,14 +1138,14 @@ namespace PILS
 	{
 		result = value;
 		run.sink = kick(run);
-		return NULL;
+		return nullptr;
 	}
 
 	const Step *SinkJuceCallback::miss(Runner &run)
 	{
 		while (run.sink != this) run.sink = run.sink->kick(run);
 		run.sink = kick(run);
-		return NULL;
+		return nullptr;
 	}
 
 	bool CallbackHelperBase::fromPils(const PILS::Any *pils)
@@ -1294,7 +1289,7 @@ namespace PILS
 
 	const Any *CallbackHelperBase::fromPilsPtr(const Any *pils, void *&result, JuceClass &class_, bool nullable)
 	{
-		if (!pils) return NULL;
+		if (!pils) return nullptr;
 		JuceClassConverter converter(class_, nullable);
 		if (pils->convert(converter))
 		{
@@ -1304,14 +1299,14 @@ namespace PILS
 		else
 		{
 			pils->releaseReference();
-			return NULL;
+			return nullptr;
 		}
 	}
 
 	const JuceReference *JuceClass::wrap(void *ptr, CallbackHelperBase *helper) const
 	{
 		TypedPtr typedPtr = {*this, ptr};
-		const HashedConstant *&link = HashedConstant::hashChain(typedPtr.hash());
+		const Constant *&link = Constant::hashChain(typedPtr.hash());
 		Mutex::Lock lock(Heap::mutex);
 		return new (Heap::allocate(sizeof(JuceObject))) JuceObject(link, typedPtr, helper);
 	}
@@ -1319,7 +1314,7 @@ namespace PILS
 	const JuceReference *JuceReferenceCountedClass::wrap(void *ptr, CallbackHelperBase *helper) const
 	{
 		TypedPtr typedPtr = {*this, ptr};
-		const HashedConstant *&link = HashedConstant::hashChain(typedPtr.hash());
+		const Constant *&link = Constant::hashChain(typedPtr.hash());
 		Mutex::Lock lock(Heap::mutex);
 		return new (Heap::allocate(sizeof(JuceOwnedReference))) JuceOwnedReference(link, typedPtr);
 	}
@@ -1327,7 +1322,7 @@ namespace PILS
 	const JuceReference *JuceComponentClass::wrap(void *ptr, CallbackHelperBase *helper) const
 	{
 		TypedPtr typedPtr = {*this, ptr};
-		const HashedConstant *&link = HashedConstant::hashChain(typedPtr.hash());
+		const Constant *&link = Constant::hashChain(typedPtr.hash());
 		Mutex::Lock lock(Heap::mutex);
 		return new (Heap::allocate(sizeof(PILS::JuceComponent))) JuceComponent(link, typedPtr, helper);
 	}
@@ -1352,7 +1347,7 @@ namespace PILS
 			return &Empty::singleton;
 		}
 		TypedPtr typedPtr = {*this, ptr};
-		const HashedConstant *&link = HashedConstant::hashChain(typedPtr.hash());
+		const Constant *&link = Constant::hashChain(typedPtr.hash());
 		Mutex::Lock lock(Heap::mutex);
 		return new (Heap::allocate(sizeof(PILS::JuceOwnedReference))) JuceOwnedReference(link, typedPtr);
 	}

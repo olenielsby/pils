@@ -53,7 +53,7 @@ namespace PILS
 	bool PilsCommander::executeCommandLine(const ::juce::String& commandLine)
 	{
 		Runner &runner = *MainThread::singleton;
-		const Any *cmd = NULL;
+		const Any *cmd = nullptr;
 		runner.where_ = commandLineHandler;
 		commandLineHandler->addReference();
 		//Build PILS argument list
@@ -131,7 +131,7 @@ namespace PILS
 
 	const Any *PilsCommander::getCommandLineHandler()
 	{
-		const Any *commandLineHandler = NULL;
+		const Any *commandLineHandler = nullptr;
 		Heap::useStandardAllocator();
 		const Language *language;
 		{
@@ -174,7 +174,7 @@ namespace PILS
 			config.set(_PS("language"), pils_configuration_get_user_language());
 			config.set(_PS("pils-filetype"), ::juce::File::getSpecialLocation(File::currentExecutableFile).getFileNameWithoutExtension().toUTF8());
 			gloss.set(config.build());
-			language = (const Language*)BuiltinClicheLanguage::singleton.nodeConstant((Constant*)gloss.build());
+			language = (const Language*)BuiltinClicheLanguage::singleton.nodeConstant((HalfbakedConstant*)gloss.build());
 		}
 		MainThread::singleton = (MainThread *)PILS::PilsThread::RunLevel::getCurrent();
 		Runner &runner = *MainThread::singleton;

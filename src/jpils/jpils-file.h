@@ -9,7 +9,7 @@ namespace PILS
 		: public ReallySpecial
 	{
 	public:
-		FileName(const HashedConstant *&link, const PilsString *name, bool isFolder)
+		FileName(const Constant *&link, const PilsString *name, bool isFolder)
 			:  ReallySpecial(link), file(new juce::File (juce::String::fromUTF8 (name->value, name->count->value - isFolder))), name(name)
 		{}
         const Any *specialCalling(Runner &run, const Constant &name) const override;
@@ -31,7 +31,7 @@ namespace PILS
 		FileNameLookup(const PilsString &name)
 			: name(name), isFolder(name.value[name.count->value-1] == '/')
 		{}
-        const ReallySpecial *newSpecial(const HashedConstant *&link) override;
+        const ReallySpecial *newSpecial(const Constant *&link) override;
         bool compare(const ReallySpecial &special) const override;
         void unduplicate() override;
         size_t hash() const override;
@@ -44,7 +44,7 @@ namespace PILS
 	{
 	public:
 		FileNameConverter()
-			: name(NULL)
+			: name(nullptr)
 		{}
 		const PilsString *name;
         bool converting(const FileName &argument) override;

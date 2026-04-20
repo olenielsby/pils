@@ -11,7 +11,7 @@ namespace PILS
 		: public ReallySpecial, private PlugLibrary
 	{
 	public:
-		PlugLibrarySpecial(const HashedConstant *&link, void *handle)
+		PlugLibrarySpecial(const Constant *&link, void *handle)
 			: ReallySpecial(link), PlugLibrary(handle)
 		{}
 		size_t unlinkAndGetSize();
@@ -25,7 +25,7 @@ namespace PILS
 	{
 		friend class PlugTools;
 	public:
-		PlugObjectSpecial(const HashedConstant *&link, pilsplug::interface::Object *const object, const NodeConstant *types, size_t type, pilsplug::Plug &plug, const Special *handle)
+		PlugObjectSpecial(const Constant *&link, pilsplug::interface::Object *const object, const NodeConstant *types, size_t type, pilsplug::Plug &plug, const Special *handle)
 			: ReallySpecial(link), PlugObject(object, types, type, plug, handle)
 		{}
 		size_t unlinkAndGetSize();

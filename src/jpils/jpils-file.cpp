@@ -6,7 +6,7 @@ namespace PILS
 {
 	const Any *Plumcake::specialCalling(Runner &run, const Constant &name) const
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	const Any *Plumcake::specialCalling(Runner &run, const Constant &name, const Any &arg) const
@@ -19,7 +19,7 @@ namespace PILS
 				return FileNameLookup(*fileName).lookup();
 			}
 		}
-		return NULL;
+		return nullptr;
 	}
 
 	bool FileNameLookup::compare(const ReallySpecial &special) const
@@ -35,7 +35,7 @@ namespace PILS
 		return reinterpret_cast<size_t>(&name);
 	}
 
-	const ReallySpecial *FileNameLookup::newSpecial(const HashedConstant *&link)
+	const ReallySpecial *FileNameLookup::newSpecial(const Constant *&link)
 	{
 		name.addReference();
 		return new (Heap::allocate(sizeof(FileName))) FileName(link, &name, isFolder);
@@ -60,7 +60,7 @@ namespace PILS
         this->writeToDebugOutput(5);
         method.writeToDebugOutput(5);
         name->writeToDebugOutput(5);
-        if (!run.isMainThread()) return NULL;
+        if (!run.isMainThread()) return nullptr;
 		else if (&method == &Builtin::name.name_)
 		{
 			name->addReference();
@@ -100,7 +100,7 @@ namespace PILS
 		}
 		else if(&method == &Builtin::name.text)
 		{
-			if(!file->existsAsFile()) return NULL;
+			if(!file->existsAsFile()) return nullptr;
             juce::MemoryBlock data;
 			if (file->loadFileAsData(data))
             {
@@ -111,33 +111,33 @@ namespace PILS
 		}
 		else if(&method == &Builtin::name.ok)
 		{
-			if(!file->existsAsFile()) return NULL;
+			if(!file->existsAsFile()) return nullptr;
 			addReference();
 			return this;
 		}
 		else if (&method == &Builtin::name.timestamp)
 		{
-			if(!file->existsAsFile()) return NULL;
+			if(!file->existsAsFile()) return nullptr;
 			return pils(file->getLastModificationTime());
 		}
 		else if (&method == &Builtin::name.count_)
 		{
-			if(!file->existsAsFile()) return NULL;
+			if(!file->existsAsFile()) return nullptr;
 			return Number::get((double)file->getSize());
 		}
 		else if (&method == &Builtin::name.readable)
 		{
-			if(!file->existsAsFile()) return NULL;
+			if(!file->existsAsFile()) return nullptr;
 			return Integer::get(1); //TODO: test
 		}
 		else if (&method == &Builtin::name.writable)
 		{
-			if(!file->existsAsFile()) return NULL;
+			if(!file->existsAsFile()) return nullptr;
 			return Integer::get(file->hasWriteAccess());
 		}
 		else if (&method == &Builtin::name.delete_)
 		{
-			if(!file->existsAsFile()) return NULL;
+			if(!file->existsAsFile()) return nullptr;
 			return Integer::get(file->deleteFile());
 		}
 		else if (&method == &Builtin::name.zip)
@@ -147,13 +147,13 @@ namespace PILS
 			new (run.allocate(sizeof(PipesourceUnzip))) PipesourceUnzip(*file);
 			return this;
 		}
-		return NULL;
+		return nullptr;
 	}
 
 	const Any *FileName::specialCalling(Runner &run, const Constant &method, const Any &arg) const
 	{
-		if (!run.isMainThread()) return NULL;
-		if (name->count->value == 0 || name->value[name->count->value - 1] == '/') return NULL;
+		if (!run.isMainThread()) return nullptr;
+		if (name->count->value == 0 || name->value[name->count->value - 1] == '/') return nullptr;
 		//Write text string to file
 		if (&method == &Builtin::name.text)
 		{
@@ -166,7 +166,7 @@ namespace PILS
 		}
 		else if (&method == &Builtin::name.move)
 		{
-			if(!file->existsAsFile()) return NULL;
+			if(!file->existsAsFile()) return nullptr;
 			if (const PilsString *string = arg.as_String())
 			{
 				juce::String newName = juce::String::fromUTF8(string->value, string->count->value);
@@ -179,7 +179,7 @@ namespace PILS
 		}
 		else if (&method == &Builtin::name.copy)
 		{
-			if(!file->existsAsFile()) return NULL;
+			if(!file->existsAsFile()) return nullptr;
 			if (const PilsString *string = arg.as_String())
 			{
 				juce::String newName = juce::String::fromUTF8(string->value, string->count->value);
@@ -205,7 +205,7 @@ namespace PILS
 		{
 			// not supported in juce
 		}
-		return NULL;
+		return nullptr;
 	}
 
 	bool FileName::specialComparing(const FileNameLookup &lookup) const
@@ -223,7 +223,7 @@ namespace PILS
 		FileNameConverter converter;
         if (value.convert(converter) && converter.name->count != 0 && converter.name->value[converter.name->count->value - 1] != '/')
 			return converter.name;
-		else return NULL;
+		else return nullptr;
 	}
 
 	const Any *QuickFetchFolderName::specialAttribute(const Special &value) const
@@ -231,7 +231,7 @@ namespace PILS
 		FileNameConverter converter;
         if (value.convert(converter) && converter.name->count != 0 && converter.name->value[converter.name->count->value - 1] == '/')
 			return converter.name;
-		else return NULL;
+		else return nullptr;
 	}
 
 	bool FileNameConverter::converting(const FileName &argument)

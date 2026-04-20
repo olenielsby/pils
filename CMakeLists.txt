@@ -1,47 +1,22 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.21)
 
-project(pils VERSION 1.0.0 LANGUAGES C CXX)
+project(pils VERSION 1.0.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Qt
+# Qt automoc
+set(CMAKE_AUTOMOC OFF)
+set(CMAKE_AUTOUIC OFF)
+set(CMAKE_AUTORCC OFF)
+
+# Dependencies
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets Network)
-
-# eksterne libs
 find_package(CURL REQUIRED)
 
-# interne biblioteker
-add_subdirectory(src/pils-kernel)
+# Submodules
+add_subdirectory(src/pils_kernel)
+add_subdirectory(src/pils_qtbinding)
+add_subdirectory(src/pils_app)
 
-# qpils sources
-file(GLOB QPILS_SOURCES CONFIGURE_DEPENDS
-    src/qpils/*.cpp
-)
-
-# hovedprogram
-add_executable(pils_app
-    src/main.cpp
-    ${QPILS_SOURCES}
-)
-
-set_target_properties(pils_app PROPERTIES
-    OUTPUT_NAME "pils"
-)
-
-target_include_directories(pils_app PRIVATE src)
-
-target_compile_options(pils_app PRIVATE
-    -Wall
-    -Wextra
-    -Wsuggest-override
-    -Werror=suggest-override
-)
-
-target_link_libraries(pils_app PRIVATE
-    Qt6::Core
-    Qt6::Widgets
-    Qt6::Network
-    pils_kernel
-    CURL::libcurl
-)

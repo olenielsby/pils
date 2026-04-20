@@ -60,13 +60,13 @@ class pils__TreeViewItem
 	: public TreeViewItem
 {
 public:
-	pils__TreeViewItem() : mind(NULL) {}
+	pils__TreeViewItem() : mind(nullptr) {}
 	~pils__TreeViewItem();
 	pils__TreeViewItem *getSubItem(const int index) const throw();
 	pils__TreeViewItem *getParentItem() const throw ();
     pils__TreeViewItem *addSubItem(const int insertPosition = -1);
-	const PILS::Constant *getMind();
-	void setMind(const PILS::Constant *value);
+	const PILS::HalfbakedConstant *getMind();
+	void setMind(const PILS::HalfbakedConstant *value);
 private:
 	friend class pils__TreeView;
     bool mightContainSubItems() override;
@@ -80,7 +80,7 @@ private:
     void itemDoubleClicked(const MouseEvent &e) override;
     void itemSelectionChanged(bool isNowSelected) override;
     var getDragSourceDescription() override;
-	const PILS::Constant *mind;
+	const PILS::HalfbakedConstant *mind;
 };
 
 class pils__MenuBarModel
@@ -122,7 +122,7 @@ public:
 
 	~pils__DocumentWindow()
 	{
-		setMenuBar(NULL, 0);
+		setMenuBar(nullptr, 0);
 	}
 
 	MenuBarComponent *getMenuBar() {return getMenuBar(this);}
@@ -144,7 +144,7 @@ public:
 
 	~pils__DialogWindow()
 	{
-		setMenuBar(NULL, 0);
+		setMenuBar(nullptr, 0);
 	}
 
 	MenuBarComponent *getMenuBar() {return pils__DocumentWindow::getMenuBar(this);}
@@ -158,12 +158,12 @@ class pils__ListBox
 {
 public:
     pils__ListBox(const String &componentName = {}) throw ()
-		: ListBox(componentName, NULL)
+		: ListBox(componentName, nullptr)
 	{
 		setModel(this);
 	}
 	~pils__ListBox(){
-		setModel(NULL);
+		setModel(nullptr);
 	}
 	/* dummy implementations of abstract methods */
     int getNumRows() override {return 0;}
@@ -176,13 +176,13 @@ class pils__TableListBox
 {
 public:
     pils__TableListBox(const String &componentName = {}) throw ()
-		: TableListBox(componentName, NULL)
+		: TableListBox(componentName, nullptr)
 	{
 		setModel(this);
 	}
 	~pils__TableListBox()
 	{
-		setModel(NULL);
+		setModel(nullptr);
 	}
 	/* dummy implementations of abstract methods */
     int getNumRows() override {return 0;}
@@ -245,7 +245,7 @@ public:
 	pils__MemoryBlock(const void *const dataToInitialiseFrom, const int sizeInBytes) throw ()
 		: MemoryBlock(dataToInitialiseFrom, sizeInBytes)
 	{}
-	const PILS::Constant *getData()
+	const PILS::HalfbakedConstant *getData()
 	{
 		return PILS::PilsString::get((const PILS_CHAR *)MemoryBlock::getData(), getSize());
 	}
@@ -262,7 +262,7 @@ public:
 		: MemoryOutputStream(memoryBlockToWriteTo, appendToExistingBlockContent)
 	{}
 	~pils__MemoryOutputStream() throw () {}
-	const PILS::Constant *getData()
+	const PILS::HalfbakedConstant *getData()
 	{
 		return PILS::PilsString::get((const PILS_CHAR *)MemoryOutputStream::getData(), getDataSize());
 	}
