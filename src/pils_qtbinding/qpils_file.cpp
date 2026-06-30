@@ -228,7 +228,7 @@ namespace PILS
 		return name == &lookup.name;
 	}
 
-    bool FileName::converting(QtConverter &converter) const
+    bool FileName::converting(PlatformSpecificConverter &converter) const
 	{
         return false;
 	}

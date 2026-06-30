@@ -1,6 +1,9 @@
 #pragma once
 #include "qpils_plumming.h"
 #include "qobject.h"
+#include <QMouseEvent>
+#include <type_traits>
+#include <QTextCursor>
 
 namespace PILS {
 
@@ -12,12 +15,12 @@ class NeQByteArray;
 class NeQTransform;
 class QtObjectWrapper;
 
-class QtConverter
-    : public Converter
+class PlatformSpecificConverter : public Converter
 {
 public:
     bool convert(const ReallySpecial &argument) override;
     bool convert(const PlatformSpecializedNodeConstantTiny &argument) override;
+    virtual bool converting(const Cliche &argument) {return false;}
     virtual bool converting(const QtObjectWrapper &argument) {return false;}
     virtual bool converting(const NeQPoint &argument) {return false;}
     virtual bool converting(const NeQSize &argument) {return false;}
@@ -25,11 +28,13 @@ public:
     virtual bool converting(const NeQImage &argument) {return false;}
     virtual bool converting(const NeQByteArray &argument) {return false;}
     virtual bool converting(const NeQTransform &argument) {return false;}
+    virtual bool converting(const QtSignalCliche &argument) {return false;}
+    virtual bool converting(const QtEventCliche &argument) {return false;}
     static QObject* getObject(const QtObjectWrapper &wrap);
 };
 
 class QtImageConverter
-    : public QtConverter
+    : public PlatformSpecificConverter
 {
 public:
     explicit QtImageConverter(QImage &out) : out(out) {}
@@ -38,30 +43,8 @@ private:
     QImage &out;
 };
 
-// class QtArgumentConverter
-//     : public QtConverter
-// {
-// public:
-//     QtArgumentConverter(QtGenericArgumentWithStorage &ga, QMetaType type) : ga(ga), type(type) {}
-//     using QtConverter::convert;
-//     bool convert(const Integer &value) override;
-//     bool convert(const Float &value) override;
-//     bool convert(const Timestamp &value) override;
-//     bool convert(const PilsString &value) override;
-//     bool converting(const QtObjectWrapper &argument) override;
-//     bool converting(const NeQPoint &argument) override;
-//     bool converting(const NeQSize &argument) override;
-//     bool converting(const NeQRect &argument) override;
-//     bool converting(const NeQImage &argument) override;
-//     bool converting(const NeQByteArray &argument) override;
-//     bool converting(const NeQTransform &argument) override;
-// private:
-//     QtGenericArgumentWithStorage &ga;
-//     QMetaType type;
-// };
-
 template<typename T>
-class QObjectConverter : public QtConverter
+class QObjectConverter : public PlatformSpecificConverter
 {
 public:
     QObjectConverter(T*& t) : target(t) {}
@@ -92,6 +75,9 @@ public:
     static bool fill(const Any *a, QIcon &out);
     static bool fill(const Any *a, QPixmap &out);
     static bool fill(const Any *a, QVariant &out);
+    static bool fill(const Any *a, QKeySequence &out);
+    static bool fill(const Any* a, QList<int>& out);
+    static bool fill(const Any* a, QTextCursor& out);
     template<typename T>
     static bool fill(const Any* a, T*& out)
     {
@@ -109,6 +95,15 @@ public:
         out = static_cast<T>(v);
         return true;
     }
+    template<typename Enum>
+    static bool fill(const Any* a, QFlags<Enum>& out)
+    {
+        int v;
+        if (!fill(a, v)) return false;
+
+        out = QFlags<Enum>(static_cast<Enum>(v));
+        return true;
+    }
 };
 
 class QtWrap
@@ -120,10 +115,30 @@ public:
     static const Constant *wrap(double v);
     static const Constant *wrap(bool v);
     static const Constant *wrap(const char* s);
+    static const Constant *wrap(const QMouseEvent &e);
+    static const Constant *wrap(const QKeyEvent &e);
+    static const Constant *wrap(const QResizeEvent &e);
+    static const Constant *wrap(const QWheelEvent &e);
+    static const Constant *wrap(const QFocusEvent &e);
+    static const Constant *wrap(const Qt::MouseButton &e);
+    static const Constant *wrap(const Qt::KeyboardModifier &e);
+    static const Constant *wrap(const QTextCursor &e);
+    template<typename Enum>
+    static const Constant *wrap(QFlags<Enum> flags)
+    {
+        return wrap(static_cast<int>(flags));
+    }
     template<typename T>
     static const Constant *wrap(const T &)
     {
         return PilsString::get(typeid(T).name());
+    }
+
+    template<typename T>
+    static std::enable_if_t<std::is_base_of_v<QObject, T>, const Constant*>
+    wrap(T* obj)
+    {
+        return wrap(static_cast<QObject*>(obj));
     }
 };
 

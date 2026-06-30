@@ -1,12 +1,14 @@
 /* This file is public domain */
 // #include "qpils-standard-specials.h"
 #include "qpils_plumming.h"
+#include "qpils_event.h"
 #include "qpils_qobject_wrapper.h"
 #include <QIODevice>
 namespace PILS
 {
     const Namespace_QtMethod *Namespace_QtMethod::singleton;
     const Namespace_QtSignal *Namespace_QtSignal::singleton;
+    const PilsString *QtEventCliche::namespace_;
     const Namespace_QtClass *Namespace_QtClass::singleton;
 
     const Constant *SingletonSpecial::dummyHashLink = nullptr;
@@ -29,10 +31,12 @@ namespace PILS
         Namespace_QtMethod::initialize();
         Namespace_QtSignal::initialize();
         Namespace_QtClass::initialize();
+        QtEventCliche::initializeNamespace();
         QtValueClassName::initialize();
         QtObjectClassName::initialize();
         QtMethodName::initialize();
         QtSignalName::initialize();
+        QtEventCliche::initialize();
     }
 
 	size_t Plumcake::hash() const
@@ -168,9 +172,9 @@ namespace PILS
 		return false;
 	}
 
-    bool ReallySpecial::converting(QtConverter &converter) const
+    bool ReallySpecial::converting(PlatformSpecificConverter &converter) const
 	{
-		return false; //TODO
+        return false;
 	}
 
     const Any *ReallySpecial::specialCalling(Runner &run, const QtMethodName &method, const Any &arg) const
@@ -202,6 +206,11 @@ namespace PILS
         const PILS_CHAR* uri = _PS("pils.org/ns/qtclass");
         size_t c = std::char_traits<PILS_CHAR>::length(uri);
         singleton = new ((c + 1) * sizeof(PILS_CHAR)) Namespace_QtClass(uri, c);
+    }
+
+    void QtEventCliche::initializeNamespace()
+    {
+        namespace_ = PilsString::get("pils.org/ns/qtevent");
     }
 
     const ClicheShort *Namespace_QtMethod::newCliche(const Constant *&link, const Constant *a) const
@@ -308,7 +317,11 @@ namespace PILS
     {
         unhash();
         className->releaseFrom(*this);
-        if (when) when->releaseFrom(*this);
+        if (when)
+        {
+            when->releaseFrom(*this);
+            when = nullptr;
+        }
         assert(mind == nullptr);
         QObject* o = object.data();
         object = nullptr;
@@ -350,38 +363,38 @@ namespace PILS
                 return obj;
         }
 
-        // 2. fallback til Qt metaobject (Q_INVOKABLE ctors)
-        if (meta)
-        {
-            QVariantList args;
-            args.reserve(argc);
+        // // 2. fallback til Qt metaobject (Q_INVOKABLE ctors)
+        // if (meta)
+        // {
+        //     QVariantList args;
+        //     args.reserve(argc);
 
-            for (size_t i = 0; i < argc; ++i)
-            {
-                QVariant v;
-                // if (!QtFill::fill(argv[i], v))   // du kan lave overload til QVariant
-                    return nullptr;
-                args.push_back(v);
-            }
+        //     for (size_t i = 0; i < argc; ++i)
+        //     {
+        //         QVariant v;
+        //         // if (!QtFill::fill(argv[i], v))   // du kan lave overload til QVariant
+        //             return nullptr;
+        //         args.push_back(v);
+        //     }
 
-            QObject* obj = meta->newInstance(QGenericArgument(
-                args.size() > 0 ? args[0].typeName() : nullptr, args[0].data()
-                ));
-            // NOTE: Qt newInstance er ret begrænset → derfor dit eget system er bedre
-            if (obj)
-                return obj;
-        }
+        //     QObject* obj = meta->newInstance(QGenericArgument(
+        //         args.size() > 0 ? args[0].typeName() : nullptr, args[0].data()
+        //         ));
+        //     // NOTE: Qt newInstance er ret begrænset → derfor dit eget system er bedre
+        //     if (obj)
+        //         return obj;
+        // }
 
-        // 3. gammel fallback (kan fjernes senere)
-        if (argc == 0)
-        {
-            if (meta == &QPushButton::staticMetaObject)
-                return new QPushButton;
-            if (meta == &QWidget::staticMetaObject)
-                return new QWidget;
-            if (meta == &QMainWindow::staticMetaObject)
-                return new QMainWindow;
-        }
+        // // 3. gammel fallback (kan fjernes senere)
+        // if (argc == 0)
+        // {
+        //     if (meta == &QPushButton::staticMetaObject)
+        //         return new QPushButton;
+        //     if (meta == &QWidget::staticMetaObject)
+        //         return new QWidget;
+        //     if (meta == &QMainWindow::staticMetaObject)
+        //         return new QMainWindow;
+        // }
 
         return nullptr;
     }

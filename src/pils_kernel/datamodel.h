@@ -123,6 +123,8 @@ namespace PILS
         static Converter dummy;
 	};
 
+    class PlatformSpecificConverter;
+
 	class InterfaceDesignator;
 
 	class Recognizer;
@@ -219,6 +221,7 @@ namespace PILS
         virtual const Express *findCatchTag() const;
         virtual const Express *findCatchTag(const Constant &tag) const;
 		virtual bool convert(Converter &converter) const = 0;
+        virtual bool platformConvert(PlatformSpecificConverter &converter) const {return false;}
         virtual bool recognize(Recognizer &recognizer) const;
         void writeToDebugOutput(int levels) const;
         void writingToDebugOutputNextLevel(int level) const;
@@ -275,6 +278,7 @@ namespace PILS
         static const Constant *&hashChain(size_t hash);
         const ClicheTiny *clichefy() const;
         const ClicheShort *clichefy(const Constant *attribute) const;
+        const ClicheShort *clichefyInsideLock(const Constant *attribute) const;
         const ClicheLong *clichefy(const Constant *const *attribute, size_t count) const;
     protected:
         virtual const ClicheShort *clichefying(const Constant *attribute) const;
@@ -608,6 +612,8 @@ namespace PILS
         void unlink() override;
         static const PilsString *get(const PILS_CHAR *text, size_t count);
 		static const PilsString *get(const PILS_CHAR *text);
+        static const PilsString *getInsideLock(const PILS_CHAR *text, size_t count);
+        static const PilsString *getInsideLock(const PILS_CHAR *text);
         static const PilsString *get(const std::string &text);
 #ifndef PILS_CHAR_IS_UTF16
 		static const PilsString *get(const wchar_t *text, size_t count);

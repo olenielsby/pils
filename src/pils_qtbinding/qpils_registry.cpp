@@ -1,4 +1,6 @@
 #include "registry.h"
+#include "qpils_event.h"
+#include "qpils_supplement.h"
 namespace PILS
 {
 void QtObjectClassName::initialize()
@@ -81,6 +83,14 @@ void QtObjectClassName::initialize()
     CONSTRUCTOR_ARGS(QPlainTextEdit, QWidget*)
     CONSTRUCTOR_ARGS(QPlainTextEdit, const QString&, QWidget*)
     CONSTRUCTOR_ARGS(QPlainTextEdit, const QString&)
+    END_CLASS()
+
+    // ===== QPilsPlainTextEdit =====
+    BEGIN_CLASS(QPilsPlainTextEdit)
+    CONSTRUCTOR_NOARGS(QPilsPlainTextEdit)
+    // CONSTRUCTOR_ARGS(QPilsPlainTextEdit, QWidget*)
+    // CONSTRUCTOR_ARGS(QPilsPlainTextEdit, const QString&, QWidget*)
+    CONSTRUCTOR_ARGS(QPilsPlainTextEdit, const QString&)
     END_CLASS()
 
     // ===== QLabel =====
@@ -176,135 +186,256 @@ void QtObjectClassName::initialize()
     CONSTRUCTOR_NOARGS(QTableView)
     CONSTRUCTOR_ARGS(QTableView, QWidget*)
     END_CLASS()
+
+    // ===== Layouts =====
+    BEGIN_CLASS(QVBoxLayout)
+    CONSTRUCTOR_NOARGS(QVBoxLayout)
+    CONSTRUCTOR_ARGS(QVBoxLayout, QWidget*)
+    END_CLASS()
+
+    BEGIN_CLASS(QHBoxLayout)
+    CONSTRUCTOR_NOARGS(QHBoxLayout)
+    CONSTRUCTOR_ARGS(QHBoxLayout, QWidget*)
+    END_CLASS()
+
+    BEGIN_CLASS(QGridLayout)
+    CONSTRUCTOR_NOARGS(QGridLayout)
+    CONSTRUCTOR_ARGS(QGridLayout, QWidget*)
+    END_CLASS()
+
+    BEGIN_CLASS(QMenuBar)
+    CONSTRUCTOR_NOARGS(QMenuBar)
+    CONSTRUCTOR_ARGS(QMenuBar, QWidget*)
+    END_CLASS()
+
+    BEGIN_CLASS(QStatusBar)
+    CONSTRUCTOR_NOARGS(QStatusBar)
+    CONSTRUCTOR_ARGS(QStatusBar, QWidget*)
+    END_CLASS()
+
+    BEGIN_CLASS(QScrollArea)
+    CONSTRUCTOR_NOARGS(QScrollArea)
+    CONSTRUCTOR_ARGS(QScrollArea, QWidget*)
+    END_CLASS()
+
+    BEGIN_CLASS(QFrame)
+    CONSTRUCTOR_NOARGS(QFrame)
+    CONSTRUCTOR_ARGS(QFrame, QWidget*)
+    END_CLASS()
+
+    BEGIN_CLASS(QGroupBox)
+    CONSTRUCTOR_NOARGS(QGroupBox)
+    CONSTRUCTOR_ARGS(QGroupBox, QWidget*)
+    CONSTRUCTOR_ARGS(QGroupBox, const QString&, QWidget*)
+    CONSTRUCTOR_ARGS(QGroupBox, const QString&)
+    END_CLASS()
+
+    BEGIN_CLASS(QTabBar)
+    CONSTRUCTOR_NOARGS(QTabBar)
+    CONSTRUCTOR_ARGS(QTabBar, QWidget*)
+    END_CLASS()
+
+
 }
 
 void QtMethodName::initialize()
-    {
-        // QWidget basics
-        IMPLEMENT(QWidget, show)
-        IMPLEMENT(QWidget, hide)
-        IMPLEMENT(QWidget, close)
-        IMPLEMENT_OVERLOAD(QWidget, update, void(QWidget::*)())
-        IMPLEMENT_OVERLOAD(QWidget, repaint, void(QWidget::*)())
+{
+    // QWidget basics
+    IMPLEMENT(QWidget, show)
+    IMPLEMENT(QWidget, hide)
+    IMPLEMENT(QWidget, close)
+    IMPLEMENT_OVERLOAD(QWidget, update, void(QWidget::*)())
+    IMPLEMENT_OVERLOAD(QWidget, repaint, void(QWidget::*)())
 
-        IMPLEMENT(QWidget, width)
-        IMPLEMENT(QWidget, height)
-        IMPLEMENT(QWidget, size)
-        IMPLEMENT(QWidget, pos)
+    IMPLEMENT(QWidget, width)
+    IMPLEMENT(QWidget, height)
+    IMPLEMENT(QWidget, size)
+    IMPLEMENT(QWidget, pos)
 
-        IMPLEMENT(QWidget, setWindowTitle)
-        IMPLEMENT(QWidget, windowTitle)
+    IMPLEMENT(QWidget, setWindowTitle)
+    IMPLEMENT(QWidget, windowTitle)
 
-        IMPLEMENT(QWidget, setEnabled)
-        IMPLEMENT(QWidget, isEnabled)
+    IMPLEMENT(QWidget, setEnabled)
+    IMPLEMENT(QWidget, isEnabled)
 
-        IMPLEMENT(QWidget, setVisible)
-        IMPLEMENT(QWidget, isVisible)
+    IMPLEMENT(QWidget, setVisible)
+    IMPLEMENT(QWidget, isVisible)
 
-        IMPLEMENT(QWidget, setStyleSheet)
+    IMPLEMENT(QWidget, setStyleSheet)
 
-        IMPLEMENT(QWidget, setWindowIcon)
+    IMPLEMENT(QWidget, setWindowIcon)
 
-        IMPLEMENT_OVERLOAD(QWidget, setFocus, void(QWidget::*)())
+    IMPLEMENT_OVERLOAD(QWidget, setFocus, void(QWidget::*)())
 
-        IMPLEMENT_OVERLOAD(QWidget, resize, void(QWidget::*)(int,int))
-        // IMPLEMENT_OVERLOAD(QWidget, resize, void(QWidget::*)(const QSize&))
+    IMPLEMENT_OVERLOAD(QWidget, resize, void(QWidget::*)(int,int))
+    // IMPLEMENT_OVERLOAD(QWidget, resize, void(QWidget::*)(const QSize&))
 
-        IMPLEMENT_OVERLOAD(QWidget, move, void(QWidget::*)(int,int))
+    IMPLEMENT_OVERLOAD(QWidget, move, void(QWidget::*)(int,int))
 
-        IMPLEMENT_OVERLOAD(QWidget, setGeometry, void(QWidget::*)(int,int,int,int))
+    IMPLEMENT_OVERLOAD(QWidget, setGeometry, void(QWidget::*)(int,int,int,int))
 
-        // Layout-ish
-        IMPLEMENT(QWidget, setLayout)
-        IMPLEMENT(QWidget, layout)
+    // Layout-ish
+    IMPLEMENT(QWidget, setLayout)
+    IMPLEMENT(QWidget, layout)
 
-        // QMainWindow
-        IMPLEMENT(QMainWindow, setCentralWidget)
-        IMPLEMENT(QMainWindow, centralWidget)
+    // QWidget ekstra
+    IMPLEMENT_OVERLOAD(QWidget, setMinimumSize, void(QWidget::*)(int,int))
+    IMPLEMENT_OVERLOAD(QWidget, setMaximumSize, void(QWidget::*)(int,int))
+    IMPLEMENT_OVERLOAD(QWidget, setFixedSize, void(QWidget::*)(int,int))
+    IMPLEMENT(QWidget, setToolTip)
 
-        IMPLEMENT(QMainWindow, menuBar)
-        IMPLEMENT(QMainWindow, statusBar)
-        IMPLEMENT_OVERLOAD(QMainWindow, addToolBar, QToolBar*(QMainWindow::*)(const QString&))
+    // Layout helpers
+    IMPLEMENT_OVERLOAD(QWidget, setParent, void(QWidget::*)(QWidget*))
 
-        // QDialog
-        IMPLEMENT(QDialog, exec)
-        IMPLEMENT(QDialog, accept)
-        IMPLEMENT(QDialog, reject)
+    IMPLEMENT(QLayout, addWidget)
+    IMPLEMENT(QLayout, setSpacing)
+    IMPLEMENT_OVERLOAD(QLayout, setContentsMargins, void(QLayout::*)(int,int,int,int))
 
-        // QText / PlainText
-        IMPLEMENT(QPlainTextEdit, setPlainText)
-        IMPLEMENT(QPlainTextEdit, toPlainText)
-        IMPLEMENT(QPlainTextEdit, appendPlainText)
-        IMPLEMENT(QPlainTextEdit, clear)
-        IMPLEMENT(QPlainTextEdit, setReadOnly)
+    IMPLEMENT_OVERLOAD(QBoxLayout, addWidget, void(QBoxLayout::*)(QWidget*, int, Qt::Alignment))
 
-        IMPLEMENT(QTextEdit, setText)
-        IMPLEMENT(QTextEdit, toPlainText)
-        IMPLEMENT(QTextEdit, setHtml)
-        IMPLEMENT(QTextEdit, toHtml)
-        IMPLEMENT(QTextEdit, clear)
+    // QMainWindow
+    IMPLEMENT(QMainWindow, setCentralWidget)
+    IMPLEMENT(QMainWindow, centralWidget)
 
-        // QLineEdit
-        IMPLEMENT(QLineEdit, setText)
-        IMPLEMENT(QLineEdit, text)
-        IMPLEMENT(QLineEdit, clear)
-        IMPLEMENT(QLineEdit, setPlaceholderText)
+    IMPLEMENT(QMainWindow, menuBar)
+    IMPLEMENT(QMainWindow, statusBar)
+    IMPLEMENT_OVERLOAD(QMainWindow, addToolBar, QToolBar*(QMainWindow::*)(const QString&))
 
-        // QLabel
-        IMPLEMENT(QLabel, setText)
-        IMPLEMENT(QLabel, text)
-        IMPLEMENT(QLabel, setPixmap)
+    // QDialog
+    IMPLEMENT(QDialog, exec)
+    IMPLEMENT(QDialog, accept)
+    IMPLEMENT(QDialog, reject)
+    IMPLEMENT(QDialog, setWindowModality)
 
-        // QPushButton
-        IMPLEMENT(QPushButton, setText)
-        IMPLEMENT(QPushButton, text)
-        IMPLEMENT(QPushButton, setEnabled)
-        IMPLEMENT(QPushButton, click)
+    // QPlainTextEdit
+    IMPLEMENT(QPlainTextEdit, setPlainText)
+    IMPLEMENT(QPlainTextEdit, toPlainText)
+    IMPLEMENT(QPlainTextEdit, appendPlainText)
+    IMPLEMENT(QPlainTextEdit, clear)
+    IMPLEMENT(QPlainTextEdit, setReadOnly)
+    // IMPLEMENT(QPlainTextEdit, textCursor)
+    // IMPLEMENT(QPlainTextEdit, setTextCursor)
 
-        // QCheckBox / QRadioButton
-        IMPLEMENT(QCheckBox, setChecked)
-        IMPLEMENT(QCheckBox, isChecked)
+    // QPilsPlainTextEdit
+    IMPLEMENT(QPilsPlainTextEdit, selection)
+    IMPLEMENT(QPilsPlainTextEdit, setSelection)
 
-        IMPLEMENT(QRadioButton, setChecked)
-        IMPLEMENT(QRadioButton, isChecked)
+    IMPLEMENT(QTextEdit, setText)
+    IMPLEMENT(QTextEdit, toPlainText)
+    IMPLEMENT(QTextEdit, setHtml)
+    IMPLEMENT(QTextEdit, toHtml)
+    IMPLEMENT(QTextEdit, clear)
 
-        // QComboBox
-        IMPLEMENT_OVERLOAD(QComboBox, addItem, void(QComboBox::*)(const QString&, const QVariant&))
-        IMPLEMENT(QComboBox, currentText)
-        IMPLEMENT(QComboBox, setCurrentIndex)
-        IMPLEMENT(QComboBox, currentIndex)
+    // QLineEdit
+    IMPLEMENT(QLineEdit, setText)
+    IMPLEMENT(QLineEdit, text)
+    IMPLEMENT(QLineEdit, clear)
+    IMPLEMENT(QLineEdit, setPlaceholderText)
 
-        // QProgressBar
-        IMPLEMENT(QProgressBar, setValue)
-        IMPLEMENT(QProgressBar, value)
-        IMPLEMENT(QProgressBar, setRange)
+    // QLabel
+    IMPLEMENT(QLabel, setText)
+    IMPLEMENT(QLabel, text)
+    IMPLEMENT(QLabel, setPixmap)
 
-        // QFileDialog (statics er tricky – kun hvis du wrapper dem)
-        // IMPLEMENT(QFileDialog, getOpenFileName)
+    // QPushButton
+    IMPLEMENT(QPushButton, setText)
+    IMPLEMENT(QPushButton, text)
+    IMPLEMENT(QPushButton, setEnabled)
+    IMPLEMENT(QPushButton, click)
 
-        // QMessageBox
-        IMPLEMENT(QMessageBox, setText)
-        IMPLEMENT(QMessageBox, exec)
+    // QCheckBox / QRadioButton
+    IMPLEMENT(QCheckBox, setChecked)
+    IMPLEMENT(QCheckBox, isChecked)
 
-        // QTimer
-        IMPLEMENT_OVERLOAD(QTimer, start, void(QTimer::*)(int))
-        IMPLEMENT(QTimer, stop)
-        IMPLEMENT_OVERLOAD(QTimer, setInterval, void(QTimer::*)(int))
+    IMPLEMENT(QRadioButton, setChecked)
+    IMPLEMENT(QRadioButton, isChecked)
 
-        // QSplitter
-        IMPLEMENT(QSplitter, addWidget)
-        IMPLEMENT(QSplitter, setOrientation)
+    // QComboBox
+    IMPLEMENT_OVERLOAD(QComboBox, addItem, void(QComboBox::*)(const QString&, const QVariant&))
+    IMPLEMENT(QComboBox, currentText)
+    IMPLEMENT(QComboBox, setCurrentIndex)
+    IMPLEMENT(QComboBox, currentIndex)
 
-        // QTabWidget
-        IMPLEMENT_OVERLOAD(QTabWidget, addTab, int(QTabWidget::*)(QWidget*, const QString&))
-        IMPLEMENT(QTabWidget, setCurrentIndex)
-        IMPLEMENT(QTabWidget, currentIndex)
+    IMPLEMENT(QVBoxLayout, addWidget)
+    IMPLEMENT_OVERLOAD(QVBoxLayout, addWidget, void(QVBoxLayout::*)(QWidget*, int, Qt::Alignment))
+    IMPLEMENT(QHBoxLayout, addWidget)
+    IMPLEMENT_OVERLOAD(QHBoxLayout, addWidget, void(QHBoxLayout::*)(QWidget*, int, Qt::Alignment))
+    // QProgressBar
+    IMPLEMENT(QProgressBar, setValue)
+    IMPLEMENT(QProgressBar, value)
+    IMPLEMENT(QProgressBar, setRange)
 
-        // QStackedWidget
-        IMPLEMENT(QStackedWidget, addWidget)
-        IMPLEMENT(QStackedWidget, setCurrentIndex)
-        IMPLEMENT(QStackedWidget, currentIndex)
-    }
+    // QFileDialog (statics er tricky – kun hvis du wrapper dem)
+    // IMPLEMENT(QFileDialog, getOpenFileName)
+
+    // QMessageBox
+    IMPLEMENT(QMessageBox, setText)
+    IMPLEMENT(QMessageBox, exec)
+
+    // QTimer
+    IMPLEMENT_OVERLOAD(QTimer, start, void(QTimer::*)(int))
+    IMPLEMENT(QTimer, stop)
+    IMPLEMENT_OVERLOAD(QTimer, setInterval, void(QTimer::*)(int))
+
+    // QSplitter
+    IMPLEMENT(QSplitter, addWidget)
+    IMPLEMENT(QSplitter, setOrientation)
+    IMPLEMENT(QSplitter, setSizes)
+
+    // QTabWidget
+    IMPLEMENT_OVERLOAD(QTabWidget, addTab, int(QTabWidget::*)(QWidget*, const QString&))
+    IMPLEMENT(QTabWidget, setCurrentIndex)
+    IMPLEMENT(QTabWidget, currentIndex)
+    IMPLEMENT(QTabWidget, count)
+    IMPLEMENT(QTabWidget, widget)
+    IMPLEMENT(QTabWidget, removeTab)
+    IMPLEMENT(QTabWidget, setTabText)
+    IMPLEMENT(QTabWidget, tabText)
+    IMPLEMENT(QTabWidget, currentWidget)   // bekvemmelighed
+
+    // QStackedWidget
+    IMPLEMENT(QStackedWidget, addWidget)
+    IMPLEMENT(QStackedWidget, setCurrentIndex)
+    IMPLEMENT(QStackedWidget, currentIndex)
+
+    IMPLEMENT(QScrollArea, setWidget)
+    IMPLEMENT(QScrollArea, widget)
+    IMPLEMENT(QScrollArea, setWidgetResizable)
+
+
+    // QMenuBar
+    IMPLEMENT_OVERLOAD(QMenuBar, addMenu, QMenu*(QMenuBar::*)(const QString&))
+    IMPLEMENT_OVERLOAD(QMenuBar, addAction, QAction*(QMenuBar::*)(const QString&))
+    IMPLEMENT(QMenuBar, clear)
+
+    // QMenu
+    IMPLEMENT_OVERLOAD(QMenu, addAction, QAction*(QMenu::*)(const QString&))
+    IMPLEMENT(QMenu, addSeparator)
+    IMPLEMENT_OVERLOAD(QMenu, addMenu, QMenu*(QMenu::*)(const QString&))
+    IMPLEMENT(QMenu, clear)
+
+    // QAction
+    IMPLEMENT(QAction, setEnabled)
+    IMPLEMENT(QAction, isEnabled)
+    IMPLEMENT(QAction, setVisible)
+    IMPLEMENT(QAction, isVisible)
+    IMPLEMENT(QAction, setText)
+    IMPLEMENT(QAction, text)
+    IMPLEMENT(QAction, setCheckable)
+    IMPLEMENT(QAction, isCheckable)
+    IMPLEMENT(QAction, setChecked)
+    IMPLEMENT(QAction, isChecked)
+    IMPLEMENT(QAction, setShortcut)
+
+    // QStatusBar
+    IMPLEMENT_OVERLOAD(QStatusBar, addWidget, void(QStatusBar::*)(QWidget*, int))
+    IMPLEMENT_OVERLOAD(QStatusBar, addPermanentWidget, void(QStatusBar::*)(QWidget*, int))
+    IMPLEMENT(QStatusBar, removeWidget)
+    IMPLEMENT_OVERLOAD(QStatusBar, showMessage, void(QStatusBar::*)(const QString&, int))
+    IMPLEMENT(QStatusBar, clearMessage)
+    IMPLEMENT(QStatusBar, currentMessage)
+
+}
 
 void QtSignalName::initialize()
 {
@@ -405,4 +536,32 @@ void QtSignalName::initialize()
     SIGNAL_IMPLEMENT(QWindow, xChanged)
     SIGNAL_IMPLEMENT(QWindow, yChanged)
 }
+
+
+template<typename EventT>
+void qtEventDispatch(QEvent *event,
+                     const QtObjectWrapper *wrapper,
+                     const QtEventCliche *c)
+{
+    auto *e = static_cast<EventT*>(event);
+    wrapper->pilsEventCallback(c, QtWrap::wrap(*e));
+}
+
+#define REGISTER_QT_EVENT(TYPE, EVENTTYPE) \
+    new QtEventCliche(QEvent::TYPE, #TYPE, &qtEventDispatch<EVENTTYPE>);
+
+    void QtEventCliche::initialize()
+    {
+        REGISTER_QT_EVENT(MouseMove, QMouseEvent)
+        REGISTER_QT_EVENT(MouseButtonPress, QMouseEvent)
+        REGISTER_QT_EVENT(MouseButtonRelease, QMouseEvent)
+        REGISTER_QT_EVENT(KeyPress, QKeyEvent)
+        REGISTER_QT_EVENT(KeyRelease, QKeyEvent)
+        REGISTER_QT_EVENT(Resize, QResizeEvent)
+        REGISTER_QT_EVENT(Wheel, QWheelEvent)
+        REGISTER_QT_EVENT(FocusIn, QFocusEvent);
+        REGISTER_QT_EVENT(FocusOut, QFocusEvent)
+        REGISTER_QT_EVENT(Enter, QEvent)
+        REGISTER_QT_EVENT(Leave, QEvent)
+    }
 }

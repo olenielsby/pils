@@ -2,6 +2,7 @@
 #include "qpils_qobject_wrapper.h"
 #include "qpils_converter.h"
 #include "qpils_signal.h"
+#include "qpils_event.h"
 namespace PILS{
 
 const Any *Plumcake::specialCalling(Runner &run, const QtObjectClassName &className, const Any &arg) const
@@ -48,203 +49,33 @@ const Any *QtObjectWrapper::invokeMethod(const QtMethodName &name, const Any *co
     {
         if (!meta->inherits(impl->meta))
             continue;
-
         const Any* result = nullptr;
-
         if (!impl->invoker(obj, args, argc, result))
             continue;
-
         if (result)
             return result;
-
         retain();
         return this;
     }
-
-    // const PilsString &nameString = *name.attributes[0]->as_String();
-    // QByteArrayView methodName(nameString.value, nameString.count->value);
-    // if (!obj)
-    //     return nullptr;
-    // int methodCount = meta->methodCount();
-    // for (int i = 0; i < methodCount; ++i)
-    // {
-    //     QMetaMethod method = meta->method(i);
-    //     auto tryMethod = method.name();
-    //     if (method.methodType() != QMetaMethod::Method &&
-    //         method.methodType() != QMetaMethod::Slot)
-    //         continue;
-    //     if (tryMethod != methodName)
-    //         continue;
-    //     QtMethodCallFrame callFrame(method);
-    //     if (!callFrame.convertArguments(args, argc))
-    //         continue;
-    //     if (!callFrame.invoke(obj))
-    //         continue;
-    //     if (const Any *returnValue = callFrame.convertReturnValue())
-    //         return returnValue;
-    //     retain();
-    //     return this;
-    // }
     return nullptr;
 }
-
-// bool QtMethodCallFrame::convertArgument(
-//     const Any* arg,
-//     QMetaType target,
-//     QtGenericArgumentWithStorage &ga)
-// {
-    // switch (target.id())
-    // {
-    // case QMetaType::Int:
-    //     {
-    //         if (const Integer *v = arg->as_Integer())
-    //         {
-    //             ga.int_ = v->value;
-    //             ga.genericArgument = QGenericArgument("int", &ga.int_);
-    //             return true;
-    //         }
-    //     }
-    // case QMetaType::Double:
-    //     {
-    //         if (arg->isNumber(ga.double_))
-    //         {
-    //             ga.genericArgument = QGenericArgument("double", &ga.double_);
-    //             return true;
-    //         }
-    //     }
-    // case QMetaType::QString:
-    //     {
-    //         if (const PilsString *v = arg->as_String())
-    //         {
-    //             if (const PlatformDependentString *twin = v->getPlatformTwin())
-    //             {
-    //                 ga.genericArgument = QGenericArgument("QString", &twin->qString);
-    //                 return true;
-    //             }
-    //         }
-    //     }
-    // case QMetaType::QObjectStar:
-    //     {
-    //         QtObjectArgumentConverter converter(ga);
-    //         return arg->convert(converter);
-    //     }
-    // default:
-    // return false;
-    // }
-// }
-
-// bool QtMethodCallFrame::convertArguments(const Any* const* args, size_t argc)
-// {
-//     if (argc != size_t(method.parameterCount()))
-//         return false;
-
-//     for (int i = 0; i < int(argc); ++i)
-//     {
-//         QtArgumentConverter converter(gas[i], method.parameterMetaType(i));
-//         if (!args[i]->convert(converter))
-//             return false;
-//     }
-//     return true;
-// }
-
-// bool QtArgumentConverter::converting(const QtObjectWrapper &argument)
-// {
-//     if (type.id() != QMetaType::QObjectStar)
-//         return false;
-//     ga.obj = argument.object.data();
-//     if (ga.obj == nullptr) return false;
-//     ga.genericArgument = QGenericArgument("QObject*", &ga.obj);
-//     return true;
-// }
-
-// bool QtMethodCallFrame::invoke(QObject* obj)
-// {
-//     return method.invoke(
-//         obj,
-//         Qt::DirectConnection,
-//         returnArgument,
-//         gas[0].genericArgument,
-//         gas[1].genericArgument,
-//         gas[2].genericArgument,
-//         gas[3].genericArgument,
-//         gas[4].genericArgument,
-//         gas[5].genericArgument,
-//         gas[6].genericArgument,
-//         gas[7].genericArgument,
-//         gas[8].genericArgument,
-//         gas[9].genericArgument
-//         );
-// }
-
-// const Any* QtMethodCallFrame::convertReturnValue() const
-// {
-//     if (returnType.id() == QMetaType::Void)
-//         return nullptr;
-
-//     switch (returnType.id())
-//     {
-//     case QMetaType::Int:
-//         return Integer::get(*reinterpret_cast<const int*>(returnData));
-//     case QMetaType::Double:
-//         return Number::get(*reinterpret_cast<const double*>(returnData));
-//     case QMetaType::Bool:
-//         return Integer::get(*reinterpret_cast<const bool*>(returnData));
-
-//     case QMetaType::QString:
-//     {
-//         const QString& s = *reinterpret_cast<const QString*>(returnData);
-//         // kopi til PILS string (UTF-8)
-//         QByteArray utf8 = s.toUtf8();
-//         return PilsString::get(utf8.constData(), utf8.size());
-//     }
-
-//     case QMetaType::QByteArray:
-//     {
-//         const QByteArray& b =
-//             *reinterpret_cast<const QByteArray*>(returnData);
-
-//         return PilsString::get(b.constData(), b.size());
-//     }
-
-//     case QMetaType::QObjectStar:
-//     {
-//         QObject* obj = *reinterpret_cast<QObject* const*>(returnData);
-//         return QtWrap::wrap(obj);
-//     }
-
-//     default:
-//         break;
-//     }
-
-//     // --- fallback: prøv QObject* via QVariant-less tilgang ---
-//     if (returnType.flags() & QMetaType::PointerToQObject)
-//     {
-//         QObject* obj =
-//             *reinterpret_cast<QObject* const*>(returnData);
-
-//         return QtWrap::wrap(obj);
-//     }
-
-//     // --- ukendt type ---
-//     return nullptr;
-// }
 
 const ReallySpecial *QtObjectLookup::newSpecial(const Constant *&link)
 {
     if (className)
         className->retain();
-    else className = getClassNameFromQObject(object);
+    else className = getClassNameFromQObjectInsideLock(object);
     return new const QtObjectWrapper(link, className, object);
 }
 
-const QtObjectClassName *QtObjectLookup::getClassNameFromQObject(QObject* object)
+const QtObjectClassName *QtObjectLookup::getClassNameFromQObjectInsideLock(QObject* object)
 {
     const QMetaObject* meta = object->metaObject();
     QByteArray qtName(meta->className());
     const char* name = qtName.constData();
-    const PilsString* pilsName = PilsString::get(name+(name[0] == 'Q'));
+    const PilsString* pilsName = PilsString::getInsideLock(name+(name[0] == 'Q'));
     Namespace_QtClass::singleton->retain();
-    const ClicheShort *className = Namespace_QtClass::singleton->clichefy(pilsName);
+    const ClicheShort *className = Namespace_QtClass::singleton->clichefyInsideLock(pilsName);
     const QtObjectClassName* typedClassName = static_cast<const QtObjectClassName*>(className);
     typedClassName->meta = meta;
     return typedClassName;
@@ -274,6 +105,12 @@ const Step *QtObjectWrapper::calling(Runner &run, const Constant &call) const
     return ReallySpecial::calling(run, call);
 }
 
+bool QtObjectWrapper::converting(PlatformSpecificConverter &converter) const
+{
+    return converter.converting(*this);
+}
+
+
 QtObjectWrapper::State QtObjectWrapper::computeCurrentState() const
 {
     if (!object)
@@ -298,23 +135,71 @@ void QtObjectWrapper::checkState() const
 {
     State oldState = state;
     state = computeCurrentState();
+
+// #ifndef NDEBUG
+//     switch (oldState)
+//     {
+//     case State::Attached: std::fputc('a', stderr); break;
+//     case State::Deleted: std::fputc('d', stderr); break;
+//     case State::DetachedHidden: std::fputc('h', stderr); break;
+//     case State::DetachedVisible: std::fputc('v', stderr); break;
+//     }
+//     std::fputc('-', stderr);
+//     switch (state)
+//     {
+//     case State::Attached: std::fputc('a', stderr); break;
+//     case State::Deleted: std::fputc('d', stderr); break;
+//     case State::DetachedHidden: std::fputc('h', stderr); break;
+//     case State::DetachedVisible: std::fputc('v', stderr); break;
+//     }
+//     className->writeToDebugOutput(10);
+// #endif
+
     if (state == oldState) return;
-    if (state == State::DetachedVisible) enableMind();
+    if (state == State::Deleted) removeWhen();
+    else if (state == State::DetachedVisible) enableMind();
     else if (oldState == State::DetachedVisible) disableMind();
+
     switch (retainCount(state) - retainCount(oldState))
     {
     case 1: retain();
         break;
     case -1: release();
+    case 0:
         break;
     default:
-        break;
+        assert(false && state == State::Deleted);
     }
+}
+
+void QtObjectWrapper::checkDeletedState() const
+{
+// #ifndef NDEBUG
+//     switch (state)
+//     {
+//     case State::Attached: std::fputc('a', stderr); break;
+//     case State::Deleted: std::fputc('d', stderr); break;
+//     case State::DetachedHidden: std::fputc('h', stderr); break;
+//     case State::DetachedVisible: std::fputc('v', stderr); break;
+//     }
+//     std::fputc('-', stderr);
+//     std::fputc('D', stderr);
+//     className->writeToDebugOutput(10);
+// #endif
+
+    if (state == State::Deleted) return;
+    State oldState = state;
+    state = State::Deleted;
+    removeWhen();
+    if (oldState == State::DetachedVisible) disableMind();
+    if (retainCount(oldState) == 1) release();
 }
 
 int QtObjectWrapper::retainCount(State s)
 {
-    if (s == State::DetachedVisible || s == State::Attached)
+    if (
+        // s == State::DetachedVisible ||
+        s == State::Attached)
         return 1;
     else return 0;
 }
@@ -328,8 +213,9 @@ void QtObjectWrapper::enableMind() const
 void QtObjectWrapper::disableMind() const
 {
     assert(mind != nullptr);
-    delete mind;
+    auto gone = mind;
     mind = nullptr;
+    delete gone;
 }
 
 const Any *QtObjectWrapper::specialCalling(Runner &run, const Strap &strap) const
@@ -342,29 +228,63 @@ const Any *QtObjectWrapper::specialCalling(Runner &run, const Strap &strap) cons
 
 const Any *QtObjectWrapper::specialWhen(Runner &run, const Any &argument) const
 {
-    if (when)
-    {
-        retain();
-        return this;
-    }
-
-    if (refcount.isMultipleReferenced(retainCount(state)))
+    if (object.get() == nullptr || when != nullptr || refcount.isMultipleReferenced(retainCount(state)))
         return nullptr;
-
+    assert(eventFilterProxy == nullptr);
     argument.retain();
     when = &argument;
-
-    QtSignalClicheExtractor extractor;
+    QtSignalEventClicheExtractor extractor;
     argument.convert(extractor);
-
-    for (const QtSignalCliche* cliche : extractor.cliches)
+    for (const QtSignalCliche* cliche : extractor.signalCliches)
     {
         for (auto implement = cliche->implementations; implement != nullptr; implement = implement->next)
             implement->connectIfCompatible(object.data(), const_cast<QtObjectWrapper*>(this), cliche);
     }
-
+    if (extractor.eventMask != 0)
+    {
+        eventMask = extractor.eventMask;
+        eventFilterProxy = new QtEventFilterProxy(this, object);
+        object->installEventFilter(eventFilterProxy);
+    }
     retain();
     return this;
 }
 
+void QtObjectWrapper::removeWhen() const
+{
+    assert(state == State::Deleted);
+    if (!when) return;
+    auto w = when;
+    when = nullptr;
+    w->release();
+}
+
+QtObjectWrapper::QtObjectWrapper(const Constant *&link, const QtObjectClassName *className, QObject *object)
+    : ReallySpecial (link), className(className), object(object), state(State::Deleted), mind(nullptr)
+{
+    StateChangeFilter *filter = new StateChangeFilter(*this);
+    filter->setParent(object);
+    object->installEventFilter(filter);
+    QObject::connect(object, &QObject::destroyed, object, [this]() { checkDeletedState(); });
+    if (QWindow *win = qobject_cast<QWindow*>(object))
+        QObject::connect(win, &QWindow::visibleChanged, object, [this]() { checkState(); });
+    checkState();
+// #ifndef NDEBUG
+//     std::fputc('+', stderr);
+//     className->writeToDebugOutput(10);
+// #endif
+}
+
+QtObjectWrapper::~QtObjectWrapper()
+{
+// #ifndef NDEBUG
+//     std::fputc('~', stderr);
+//     className->writeToDebugOutput(10);
+// #endif
+    if (eventFilterProxy)
+    {
+        eventFilterProxy->wrapper = nullptr;
+        eventFilterProxy = nullptr;
+    }
+}
 }

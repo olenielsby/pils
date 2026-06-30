@@ -11,6 +11,16 @@ set(CMAKE_AUTOMOC OFF)
 set(CMAKE_AUTOUIC OFF)
 set(CMAKE_AUTORCC OFF)
 
+# Helper for debugging
+function(enable_asan target)
+    target_compile_options(${target} PRIVATE
+        $<$<CONFIG:Debug>:-fsanitize=address -fno-omit-frame-pointer>
+    )
+    target_link_options(${target} PRIVATE
+        $<$<CONFIG:Debug>:-fsanitize=address>
+    )
+endfunction()
+
 # Dependencies
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets Network)
 find_package(CURL REQUIRED)

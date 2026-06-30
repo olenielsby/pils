@@ -507,7 +507,7 @@ namespace PILS
 		}
 		if (result)
 		{
-			delete scratch;
+            delete[] scratch;
 			node->release();
 			operand->release();
 			run.sink = this + 1;
@@ -711,7 +711,7 @@ namespace PILS
 					(scratch[i] = who->element[i])->retain();
 				result = (NodeExpressLong *)oldCliche.node(scratch);
 			}
-			delete scratch;
+            delete[] scratch;
 			who->release();
 			operand->release();
 			return (run.sink = this + 1)->pass(run, result);

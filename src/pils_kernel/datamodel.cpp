@@ -471,12 +471,17 @@ namespace PILS
         return get(text, strlen(text));
     }
 
+    const PilsString *PilsString::getInsideLock(const PILS_CHAR *text)
+    {
+        return getInsideLock(text, strlen(text));
+    }
+
     const PilsString *PilsString::get(const std::string &text)
     {
         return get(text.data(), text.size());
     }
 
-	const Constant *&PilsString::hashChain(const PILS_CHAR *text, size_t count)
+    const Constant *&PilsString::hashChain(const PILS_CHAR *text, size_t count)
 	{
 		unsigned long hash = 7913;
 		for (size_t index = 0; index < count; index++)
@@ -493,6 +498,12 @@ namespace PILS
         Mutex::Lock lock (Mutex::singleMutex);
 		return chain->hashLookup(text, count);
 	}
+
+    const PilsString *PilsString::getInsideLock(const PILS_CHAR *text, size_t count)
+    {
+        const Constant *&chain = hashChain(text, count);
+        return chain->hashLookup(text, count);
+    }
 
     PilsString::PilsString(const PILS_CHAR *text, size_t count)
         : PilsString(hashChain(text, count), text, count)
@@ -884,6 +895,12 @@ namespace PILS
         Mutex::Lock lock (Mutex::singleMutex);
 		return clichefying(attribute);
 	}
+
+    const ClicheShort *Constant::clichefyInsideLock(const Constant *attribute) const
+    {
+        assert (attribute != &Empty::singleton);
+        return clichefying(attribute);
+    }
 
     const ClicheShort *Constant::clichefying(const Constant *attribute) const
 	{

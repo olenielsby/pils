@@ -1,6 +1,5 @@
 [nonsense]
 ><:[module:. ===, .timestamp 2011-07-20T23:59:11.596+02 .language system]><;
-"INSTANTIATING MODULE: ===" bug {} and:
 !!
 The rules of this module are available to all modules except the
 [pils system ...] ones.
@@ -33,10 +32,8 @@ here may not be pinned.
   filename call (@@ [pils system program]) .:need -> [call: instance]
 }
 { :error .who .module
-| :where :what :try @@ [pils run error]
-  ( "ERROR REPORT (what: .) (error:. .who .what .where .module)" bug {} and:
-    (what: .) bug {} and:
-    (error:. .who .what .where .module) bug {} )
+| :where :what
+  :try @@ [pils run error] error:. .who .what .where .module
 }
 { : object find (filter) | :try [items] call (object) .:need find (filter) }
 { : object each (filter) | :try [items] call (object) .:need each (filter) }
@@ -63,8 +60,7 @@ here may not be pinned.
 }
 { language: . [system] .module-name +&? .library $? | :ok {} }
 { .platform
-| :ok
-   @ ([platform [?:?|pils-configuration:platform] entry] bug {})
+| :ok @ ([platform [?:?|pils-configuration:platform] entry])
 }
 { datafile: $ filename
 | :possibly file (filename) try (channel: pils-dependency: .thread ' or [dummy-thread])
@@ -100,7 +96,6 @@ here may not be pinned.
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
 !!
-"INSTANTIATING MODULE: pils system" bug {} and:
 
 { base:
   .expression
@@ -242,7 +237,6 @@ PILS should be restarted and tested after each edit.
   +++ plumcake
 }
 ><:[module:. pils system boot .timestamp 2011-07-21T00:52:13.557+02 .language system]><;
-"INSTANTIATING MODULE: pils system boot" bug {} and:
 !!
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
@@ -254,7 +248,6 @@ that allows the system modules to reference each other
 !!
 { boot: .filename .text
 | :where :ok
-  "BOOTING" bug {} and:
   text -#$* ""efbbbf split "><.:"
   every
   { ok
@@ -373,7 +366,6 @@ knot:
   }
 }
 ><:[module:. pils system librarian .timestamp 2011-09-28T17:23:05.277+02 .language system]><;
-"INSTANTIATING MODULE: pils system librarian" bug {} and:
 !!
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
@@ -449,7 +441,6 @@ is used to notify programs of changes.
   .bootfilename
 }
 ><:[module:. pils system library .timestamp 2011-07-21T00:40:19.962+02 .language system]><;
-"INSTANTIATING MODULE: pils system library" bug {} and:
 !!
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
@@ -528,7 +519,6 @@ PILS should be restarted and tested after each edit.
 | :try @@ (module-name call (library-node) .:need language or :ok {})
 }
 ><:[module:. pils system library-list .timestamp 2011-07-20T23:52:33.178+02 .language system]><;
-"INSTANTIATING MODULE: pils system library-list" bug {} and:
 !!
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
@@ -539,6 +529,7 @@ PILS should be restarted and tested after each edit.
 | ;program-library @@ [pils system librarian] . program-filename .:need;
   :ok
   ( ( system: @@ [pils system path] editor-filename &: bootfilename or: ),
+    ( system: @@ [pils system path] bugpinner-filename &: bootfilename or: ),
     ( platform:
       [platform-filename platform-program-filename]
       every: @@ [pils system path]
@@ -588,7 +579,6 @@ PILS should be restarted and tested after each edit.
 }
 { .test|:self :try this program filename call (self) }
 ><:[module:. pils system path .timestamp 2011-07-21T00:51:59.932+02 .language system]><;
-"INSTANTIATING MODULE: pils system path" bug {} and:
 !!
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
@@ -640,6 +630,9 @@ PILS should be restarted and tested after each edit.
   }
   { .editor-filename
   | :ok bootfilename <-#^* "/" . "editor." [pils-configuration:pils-filetype]
+  }
+  { .bugpinner-filename
+  | :ok bootfilename <-#^* "/" . "bugpinner." [pils-configuration:pils-filetype]
   }
   { encode: $ ok
   | :ok ' *=* ["\", "/"]
@@ -872,7 +865,6 @@ PILS should be restarted and tested after each edit.
   splice "><.:"
 }
 ><:[module:. pils system start .timestamp 2011-09-29T22:05:33.429+02 .language system]><;
-"INSTANTIATING MODULE: pils system start" bug {} and:
 !!
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
@@ -894,13 +886,15 @@ PILS should be restarted and tested after each edit.
   command (. [open] .filename)
 }
 { command-line:. exe, command $* "-", filename
-| :try command (. ' -#$* "-" .(?:? //) .filename ' title *=* ["\", "/"])
+|
+  :try command (. ' -#$* "-" .(?:? //) .filename ' title *=* ["\", "/"])
 }
 { command-line:. exe, "-test", filename
 | ;filename ' title *=* ["\", "/"];
   :if file (filename) count or 0 = 0; :ok
   @@ [pils system path] editor-filename
-  call (@@ [pils system program]) [pils editor new] try [call: instance]
+  call (@@ [pils system program]) [pils editor new]
+  try [call: instance]
   new (.filename)
 }
 { command-line:. exe,

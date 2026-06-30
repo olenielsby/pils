@@ -13,228 +13,8 @@
     juce-SystemClipboard juce-copyTextToClipboard (text) .:need and: :ok who
   }
 }
-><:[module:. platform qt entry create .timestamp 2009-09-12T18:40:26.635+02 .language system]><;
-;create @
-><:[module:. platform qt entry create pdf .timestamp 2011-07-21T00:12:53.372+02 .language qt]><;
-{ (pdf: .dpi) anyway [.dpi 1200]
-| :ok
-  ;out juce-MemoryOutputStream ();
-  ;writer juce-PDFWriter (out, dpi) juce-beginPrinting;
-  [format:. 0 .orientation 0] call
-  { format:. ' call [.0 .1 .2 .3 .4 .5 .6 .7 .8 .9 10 .11]
-    .orientation ' call [.0 .1]
-  | :self :ok
-    { format: format call
-      [ ."Letter" 0
-     	  ."Legal" 1
-  		    ."A3" 2
-		      ."A4" 3 
-		      ."A5" 4 
-		      ."B4" 5
-  		    ."B5" 6
-		      ."Executive" 7
-		      ."US4x6" 8
-		      ."US4x8" 9
-  		    ."US5x7" 10
-		      ."COMM10" 11
-      ]
-    | :ok self format:. .orientation
-    }
-    { orientation call [.portrait 0 .landscape 1]
-    | :ok self format:. .orientation
-    }
-    { .close
-    | :ok writer juce-endPrinting and:
-      out juce-getData
-    }
-    { page: painter
-    | :who :ok
-      @ graphics (. writer juce-beginPage: format, orientation)
-      call (painter) anyway:
-      writer juce-endPage and:
-      who
-    }
-  }
-}
-><:[module:. platform qt entry drawing .timestamp 2011-07-21T00:39:41.426+02 .language qt]><;
-{ drawing: .filename ' <+* ".svg"
-| :try juce-Drawable juce-createFromImageFile (juce-File (filename))
-}
-{ drawing: .svg $ ' | :try juce-Drawable juce-createFromImageData (svg) }
-><:[module:. platform qt entry graph .timestamp 2011-07-21T00:24:40.399+02 .language qt]><;
-;juce-Convert;
-{ graph: .image ' juce-Drawable
-| :try image call
-  { drawable
-  | :who
-    ;drawable ' .(juce-Convert juce-drawableComposite) .:need;
-    :ok drawable juce-getNumDrawables - 1 .(0 up) every
-    { n
-    | :ok drawable juce-getDrawable (n) call (who)
-      try
-      { d
-      | :possibly
-        graph:transform:. drawable juce-getDrawableTransform (n) .:need; d
-      }
-    }
-    splice singlewise
-  }
-  { drawable
-  | :who
-    ;drawable ' .(juce-Convert juce-drawablePath) .:need;
-    :ok
-    ( { path
-      | :possibly
-        graph:ink:. brush (. drawable juce-getCurrentBrush .:need);
-        path **=** {graph:curve: curve|:ok graph:shape: curve}
-      },
-      { path
-      | :possibly
-        graph:ink:. brush (. drawable juce-getOutlineBrush .:need);
-        :call stroke:. drawable juce-getOutlineStroke; path
-      },
-    )
-    each (call: :call path:. drawable juce-getPath)
-    splice singlewise
-  }
-  try {+& ok|:ok ' .(graph:at:. 0, 0;)}
-  call {ok graph:graph|:ok}
-}
-===
-{ path:.
-| :ok
-  path juce-toString *=* ("a ", "", "z ", "z"~, " m", ""~"m") split ""~
-  every
-  { segment
-  | :ok segment split " " first ()
-    fold
-    { a := b | oops }
-    { =' := $ ok|:ok list :=; ok }
-    { ok := n +* "-0123456789"|:ok ' &: {} read: n }
-    { () := "m" | :ok [m] }
-    .(list :=)
-    .:list
-    every
-    {a|oops}
-    {|:ok []}
-    {""|:ok []}
-    {"z"|:ok [z]}
-    {[m], a, b|:ok (a, b),}
-    {ok = "l" 1|:ok ' -# 1 split 2 call {ok = (? & 2) 0|:ok}}
-    {ok = "c" 1|:ok ' -# 1 split 6 call {ok = (? & 6) 0|:ok}}
-    splice
-    call
-    { ok | :ok graph:curve: ok }
-    { ok = (x, y) 1 = ((x) -1 = (y) 0) 0 | :ok graph:shape: ok }
-    { ok = [z] 0 | :ok graph:shape: ok <-# 1 }
-  }
-  each {ok = ;: +&?|:ok} singlewise
-  try
-  { +& segments
-  | :possibly
-    graph:shape:
-    segments every {graph:shape: ok|:ok ' & (,)} .:need
-    splice <-# 1
-  }
-}
-{ stroke:.; path
-| :ok
-  ;thickness stroke juce-getStrokeThickness;
-  :if thickness <> 0;
-  [juce-getJointStyle juce-getEndStyle] every (stroke)
-  call:
-  .[0 0] (graph:stroke:. thickness; path)
-  .[0 1] (graph:stroke: .graph:sharp thickness; path)
-  .[0 2] (graph:stroke: .graph:round thickness; path)
-  .[1 0] (graph:round: .graph:stroke thickness; path)
-  .[1 1] (graph:round: .graph:sharp thickness; path)
-  .[1 2] (graph:round:. thickness; path)
-  .[2 0] (graph:sharp: .graph:stroke thickness; path)
-  .[2 1] (graph:sharp:. thickness; path)
-  .[2 2] (graph:sharp: .graph:round thickness; path)
-}
-{ brush:.|oops}
-{ brush:.
-| :possibly :call gradient:.
-   juce-Convert juce-gradientBrush (brush) .:need juce-getGradient
-}
-{ brush:.
-| :possibly juce-Convert juce-solidColourBrush (brush) .:need juce-getColour
-}
-{ brush:.
-| :possibly :call image:.
-   juce-Convert juce-imageBrush (brush) .:need juce-getImage
-}
-===
-{ gradient:.
-| :ok
-  ;stops
-    0 up (gradient juce-getNumColours - 1) every
-    { n
-    | :ok
-      gradient juce-getColour (n),
-      gradient juce-getColourPosition (n) / 0x0000ffff
-    }
-    call
-    { (c1, 0) 1 = (c2, 1) 0 = ok | :ok }
-  ;
-  gradient juce-isRadial call:
-  .0
-  ( graph:linear:.
-    [juce-x1 juce-y1 juce-x2 juce-y2] every (gradient) split 2
-    every
-    ( :use gradient juce-transform;
-      { x, y
-      | :ok
-        x * juce-mat00 + (y * juce-mat01) + juce-mat02,
-        x * juce-mat10 + (y * juce-mat11) + juce-mat12
-      }
-    )
-    splice;
-    stops
-  )
-  .1
-  ( graph:circular:.
-    ( [juce-x1 juce-y1 juce-x2 juce-y2] every (gradient)
-      &:
-      [juce-mat00 juce-mat01 juce-mat02 juce-mat10 juce-mat11 juce-mat12]
-      every (gradient juce-transform)
-    );
-    stops
-  )
-}
 ><:[module:. platform qt entry icon .timestamp 2010-02-26T18:55:28.627+01 .language qt]><;
 { icon: .size .png | :ok Q:Image: png }
-><:[module:. platform qt entry image .timestamp 2011-07-20T23:53:59.457+02 .language qt]><;
-;wrap @@ wrapper image;
-{ image: .filename
-| :possibly
-  juce-ImageFileFormat juce-loadFrom (juce-File (filename)) .:need
-  when (wrap)
-}
-{ image: .filename ' <$* ".svg"
-| juce-Drawable juce-createFromImageFile (juce-File (filename)) .:try
-}
-{ image: .png
-| :possibly
-  juce-PNGImageFormat () juce-decodeImage (juce-MemoryInputStream (png, 1))
-  .:need
-  when (wrap)
-}
-{ image: .jpeg
-| :possibly
-  juce-JPEGImageFormat () juce-decodeImage (juce-MemoryInputStream (jpeg, 1))
-  .:need
-  when (wrap)
-}
-{ image: .svg
-| :possibly
-  juce-Drawable juce-createFromImageData (svg) .:need
-  when (wrap)
-}
-{ image: .size width, height
-| :possibly juce-Image (1, width, height, 1) .:need when (wrap)
-}
 ><:[module:. platform qt entry keyboard .timestamp 2011-07-20T23:09:04.998+02 .language qt]><;
 ;keyboard
 { ok call
@@ -243,7 +23,8 @@
 }
 ><:[module:. platform qt entry path .timestamp 2009-01-26T00:31:04.937+01 .language system]><;
 ;path
-{ .documents | :ok [pils-configuration:documents-directory] }><:[module:. platform qt entry say .timestamp 2011-05-06T20:18:34.589+02 .language qt]><;
+{ .documents | :ok [pils-configuration:documents-directory] }
+><:[module:. platform qt entry say .timestamp 2011-05-06T20:18:34.589+02 .language qt]><;
 { (say: message .header) anyway [.header information]
 | :ok
   juce-AlertWindow juce-showMessageBoxAsync
@@ -255,187 +36,189 @@
   )
 }
 ><:[module:. platform qt entry system .timestamp 2008-08-04T12:55:32.254+02 .language system]><;
-{ .system | :try @@ [platform qt system [?:?|pils-configuration:system]] }><:[module:. platform qt entry ticking .timestamp 2011-07-21T00:20:40.458+02 .language qt]><;
-{ (ticking: .milliseconds) anyway [.milliseconds 1000]
-| :ok
-  juce-Timer ()
-  when {juce-timerCallback:|:who ' tick .:try}
-  juce-startTimer (milliseconds)
-}
-{ (ticking: time)
-| :try
-  juce-Timer ()
-  when {juce-timerCallback:|:who ' tick .:try}
-  juce-startTimer (time \ 0.001s .:need)
-}
-><:[module:. platform qt entry url .timestamp 2011-09-28T16:59:54.408+02 .language qt]><;
-{ url: url
-| :possibly juce-URL (url) .:need
-  when
-  { .get
-  | :who
-    ;buffer juce-MemoryBlock ();
-    :if who juce-readEntireBinaryStream (buffer) > 0; :ok
-    buffer juce-getData
-  }
-}
+{ .system | :try @@ [platform qt system [?:?|pils-configuration:system]] }
 ><:[module:. platform qt entry window .timestamp 2011-09-28T16:59:07.075+02 .language qt]><;
-{ window: title | :who :try who window: say (title) }
-{ window: $ title
+{ window: handle
 | :possibly
-  ;color #ffc846 bug {};
   plumcake Q:MainWindow
-  ! q:setWindowFlags 7
-  bug {}
-  q:setWindowTitle (title)
-  q:setGeometry [100 200 300 400]
-!  q:setFocusPolicy 0
+  q:setWindowTitle (handle title .:need)
+  q:setWindowIcon (handle icon .:need)
   q:show
-  try {?|"Did q:show" bug {}}
-  try {?|"WHEN-WHEN" bug{}}
-  bug {}
+  q:setGeometry (handle geometry .:need)
   when
-  { qs:windowTitleChanged: ' | (': .) bug {}}
-  { juce-new: ok juce-Component
+  { ask: .; options = :where? .ruleset :' rules
   | :who :ok
-    who juce-setContentComponent (ok)
-    or (who juce-setContentOwned (ok, 0))
-    and: ok
+    ;buttons rules every [call: match];
+    ;dialog plumcake Q:Dialog (who) when
+    {|}
+    ;
+    ;hbox plumcake Q:HBoxLayout;
+    dialog q:setWindowTitle (say (ask) "?")
+    q:setWindowModality 1 ! WindowModal
+    q:setLayout (hbox)
+    and:
+    rules every
+    { ;match .action?
+    | :ok hbox q:addWidget:
+      plumcake Q:PushButton (say (match))
+      when
+      { qs:clicked: ?
+      | :ok
+        dialog q:close and: match try (options)
+      }
+    }
+    and:
+    dialog q:show
+ }
+  { icon: ' | :who :try who q:setWindowIcon (icon) }
+  { qe:mouseButtonPress: ' | (': ') bug {}}
+  { qe:mouseButtonRelease: ' | (': ') bug {}}
+  { title: $ title | :who ' q:setWindowTitle (title) .:try }
+  { .pinpoint | :who :ok who mind pinpointer call: @@ [pils run pinpoint] }
+  { .size | :who :possibly who juce-getWidth .:need, who juce-getHeight .:need }
+  { menubar: handle
+  | :who :ok who q:menuBar
+    when
+    { action: ..name
+    | :who :ok
+      who q:addAction (name)
+      when
+      { qs:triggered: args
+      | handle action (.) or:
+      }
+      and: who
+    }
+    { action: ..name .shortcut
+    | :who :ok
+      who q:addAction (name)
+      when
+      { qs:triggered: args
+      | handle action (.) or:
+      }
+      q:setShortcut (shortcut)
+      anyway: who
+    }
+    { menu: .name
+    | :who :self :ok
+      who q:addMenu (name) when (self)
+    }
+    or: who q:menuBar q:clear
   }
-  { (name = ?:? // ?) * node
-  | :who :try (parent:. who; node) call:
-    :need @@ ([platform qt parent] & name)
-  }
-  { name = ?:? // ?
-  | :who :try (parent:. who; name) call:
-    :need @@ ([platform qt parent] & name)
-  }
-  { title: $ title | :who ' juce-setName (title) .:try }
-  { icon: icon
+  { .statusbar
   | :who :ok
-    "Setting icon" bug {} and:
-    who bug {} q:setWindowIcon (icon bug {})
+    ;statusbar who q:statusBar;
+    { say: $ say | :ok statusbar q:showMessage (say, 0) }
+    { .says | :ok statusbar q:currentMessage }
   }
   { .inner
   | :who :ok
-    { size: size | who juce-setContentComponentSize (size) .:try }
-    { .size
-    | :try [juce-getWidth juce-getHeight] every:
-      who juce-getContentComponent .:need
+    who mind inner or:
+    ;inner plumcake Q:Widget when
+    { .vertical
+    | :who :ok
+      ;layout
+        plumcake Q:VBoxLayout when
+        { .splitter
+        | :who :ok
+          ;splitter
+            plumcake Q:Splitter 2 when
+            { label: text
+            | :who :ok
+              ;label plumcake Q:Label (text) when {|};
+              who q:addWidget (label) and:
+              label
+            }
+            { edit: text
+            | :who :ok
+              ;edit plumcake Q:PilsPlainTextEdit (text) when
+              { .text | :who :ok who q:toPlainText }
+              { text: ' | :who :ok who q:setPlainText: text }
+                  { selection: a, b
+                  | :who :ok who q:setSelection(a, b)
+                  }
+                  { .selection | :who :ok who q:selection }
+                  { .focus | :who :ok who q:setFocus }
+              ;
+              who q:addWidget (edit) and:
+              edit
+            }
+            { .edit
+            | :who :ok
+              ;edit plumcake Q:PilsPlainTextEdit "" when
+              { .text | :who :ok who q:toPlainText }
+              { text: ' | :who :ok who q:setPlainText: text }
+                  { selection: a, b
+                  | :who :ok who q:setSelection(a, b)
+                  }
+                  { .selection | :who :ok who q:selection }
+                  { .focus | :who :ok who q:setFocus }
+              ;
+              who q:addWidget (edit) and:
+              edit
+            }
+            { .tabs
+            | :who :ok
+              plumcake Q:TabWidget when
+              { .tabs
+              | :who :ok
+                who q:count up every
+                { n | :ok who q:widget: n - 1 }
+              }
+              { edit: handle
+              | :who :ok
+                ! Search for existing tab with same id
+                who tabs find
+                (;id handle id;
+                { tab
+                | :if id = tab id; :ok
+                  (found-tab: .id) bug {} and:
+                  tab edit
+                })
+                or:
+                ;edit
+                  plumcake Q:PilsPlainTextEdit (handle text)
+                  when
+                  { qs:textChanged:
+                  | :who handle text:. who q:toPlainText
+                  }
+                  { .handle | :ok handle }
+                  { .text | :who :ok who q:toPlainText }
+                  { selection: a, b
+                  | :who :ok who q:setSelection(a, b)
+                  }
+                  { .selection | :who :ok who q:selection }
+                  { .focus | :who :ok who q:setFocus }
+                ;
+                ;layout plumcake Q:VBoxLayout;
+                ;tab plumcake Q:Widget when
+                { .edit | :ok edit }
+                { .id | :ok handle id }
+                ;
+                tab q:setLayout (layout) and:
+                who q:addTab (tab, handle name) and:
+                layout q:addWidget(edit, 1, 0) and:
+                edit
+              }
+              { .current
+              | :who :ok who q:currentWidget edit
+              }
+              try {tabs|who q:addWidget (tabs)}
+            }
+          ;
+          who q:addWidget (splitter, 1, 0) and:
+          splitter
+        }
+      ;
+      who q:setLayout (layout) and:
+      layout
     }
+    ;
+    who q:setCentralWidget (inner) and:
+    inner
   }
-  { .pinpoint | :who :ok who mind pinpointer call: @@ [pils run pinpoint] }
-  { .up | :who ' try [call: juce-toFront: 1] .:ok }
-  { size: size | :who ' juce-setSize (size) .:try }
-  { position: position | :who ' juce-setTopLeftPosition (position) .:try }
-  { place: position | :who ' juce-setTopLeftPosition (position) .:try }
-  { .position | :who :possibly who juce-getX .:need, who juce-getY .:need }
-  { .size | :who :possibly who juce-getWidth .:need, who juce-getHeight .:need }
-  { .close
-  | :who :ok who juce-closeButtonPressed
-  }
-  { juce-handleCommandMessage: 0x1001
-  | :who ' juce-closeButtonPressed ! NB: no :ok, or jucePILS mightl crash???
-  }
-  { juce-closeButtonPressed: | :who :ok who juce-removeFromDesktop }
-  { juce-getMenuBarNames: | :who :try who mind juce-menu-names }
-  { juce-getMenuForIndex: at, ?
-  | :who :try (at + 1) call: who mind juce-menus .:need
-  }
-  { juce-menuItemSelected: id, ?
-  | :who :try id call: who mind juce-menu-action .:need
-  }
-  { juce-keyPressed: keypress
-  | :who :try @ keypress (.) .:need call:
-    { [key down]: .key .alt-key 1 .ctrl-key 0 .shift-key 0
-    | ;key ' upper .:need .names who juce-getMenuBarNames .:need;
-      0 up (names juce-size - 1)
-      find { n | :if names juce-item_ (n) $* key > 0; :ok n } .:need
-      .(who juce-getMenuBar .:need juce-showMenu) .:try
-    }
-    { shortcut
-    | :possibly
-      shortcut call (who mind juce-shortcuts .:need) .:need
-      call (who mind juce-action .:need) or (?)
-    }
-  }
-  try {?|"Did when" bug {}}
-  q:setWindowTitle "title changed"
-  try {?|"Changed title" bug {}}
   .(@ strap) .:need
 }
-><:[module:. platform qt graphics .timestamp 2011-07-21T00:05:14.412+02 .language qt]><;
-;centred juce-Justification 63;
-{ graphics:. ' juce-Graphics
-| :ok
-  graphics juce-setImageResamplingQuality 1 and:
-  { juce-draw: drawing | :who drawing call (graphics) .:need and: :ok who }
-  { graph: graph
-  | :who graphics graph:graph (graph) .:need and: :ok who
-  }
-  { figure:. .thickness
-  | :who
-    graphics juce-strokePath (figure, juce-PathStrokeType (thickness, 1, 2)) .:need
-    and:
-    :ok who
-  }
-  { figure: .
-  | :who graphics juce-fillPath (figure) .:need and: :ok who
-  }
-  { stroke:. .curve
-  | :who
-    graphics
-    juce-strokePath (curve, juce-PathStrokeType (stroke) .:need) .:need and:
-    :ok who
-  }
-  { image:. ' juce-Drawable .rectangle
-  | :who
-    image juce-drawWithin (graphics & rectangle & juce-RectanglePlacement 36 & 1)
-    .:need
-    and: :ok who
-  }
-  { image:. ' juce-Image .rectangle x, y, width, height
-  | :who
-    graphics juce-drawImageWithin
-    (image, x, y, width, height, juce-RectanglePlacement 36, 0) .:need
-    and:
-    :ok who
-  }
-  { fill: .image ' juce-Drawable .rectangle
-  | :who
-    image juce-drawWithin (graphics & rectangle & juce-RectanglePlacement 164)
-    .:need and: :ok who
-  }
-  { fill: .image ' juce-Image .rectangle x, y, width, height
-  | :who
-    graphics juce-drawImageWithin
-    (image, x, y, width, height, juce-RectanglePlacement 164, 0) .:need
-    and:
-    :ok who
-  }
-  { colour: colour
-  | :who
-    graphics juce-setColour (juce-Colour (colour) .:need) .:need and:
-    :ok who
-  }
-  { fill: colour
-  | :who
-    graphics juce-fillAll (juce-Colour (colour) .:need) .:need and:
-    :ok who
-  }
-  { brush: brush juce-Brush
-  | :who
-    graphics juce-setBrush (brush) .:need and:
-    :ok who
-  }
-  { label:. .rectangle ' = (?, ?, ?, ?)
-  | :who
-    graphics juce-drawFittedText (label & rectangle & centred & 1) .:need
-    and:
-    :ok who
-  }
-  { line: args | :who graphics juce-drawLine (args) .:need and: :ok who }
-}
+
 ><:[module:. platform qt keypress .timestamp 2011-09-06T00:11:05.084+02 .language qt]><;
 { keypress:.
 | :ok
@@ -1273,16 +1056,6 @@
 | :who :try (parent:. who; name) call:
   :need @@ ([platform qt parent] & name)
 }
-><:[module:. platform qt parent room .timestamp 2011-07-21T00:19:14.300+02 .language qt]><;
-;gl:OpenGL;
-{ parent: .; [room]
-| :ok
-  parent juce-new (juce-OpenGLComponent ())
-  juce-setWantsKeyboardFocus 1
-  when (@ common)
-  when
-  { juce-renderOpenGL: | :who ' paint (gl:OpenGL) .:try }
-}
 ><:[module:. platform qt parent row .timestamp 2011-09-06T00:06:59.337+02 .language qt]><;
 { parent: .; [row]
 | :ok
@@ -1820,6 +1593,7 @@
 language: {}? merge:
 ;"q" ["pils.org/ns/qtmethod":]
 ."qs" ["pils.org/ns/qtsignal":]
+."qe" ["pils.org/ns/qtevent":]
 ."Q" ["pils.org/ns/qtclass":]
 ><:[module:. platform qt strap .timestamp 2009-01-15T02:44:21.050+01 .language qt]><;
 ;straps
@@ -1829,10 +1603,9 @@ language: {}? merge:
 { strap: window
 | :where :what :ok
   straps
-  every {strap|:ok strap bug {}}
   every (window)
   and:
-  window bug {} mind pinpointer := (pinpoint: .what .module where this module);
+  window mind pinpointer := (pinpoint: .what .module where this module);
   window
 }
 ><:[module:. platform qt window .timestamp 2011-07-21T01:01:26.842+02 .language qt]><;

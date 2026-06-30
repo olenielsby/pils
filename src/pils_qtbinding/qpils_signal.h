@@ -1,23 +1,29 @@
 #pragma once
 #include <QApplication>
+#include <QDockWidget>
 #include "qpils_plumming.h"
 #include "qpils_converter.h"
 #include "qpils_qobject_wrapper.h"
 namespace PILS{
 
 class QtSignalCliche;
+class QtEventCliche;
 
-class QtSignalClicheExtractor : public Converter
+class QtSignalEventClicheExtractor : public Converter
 {
 public:
     bool convert(const Closure &closure) override;
-    std::set<const QtSignalCliche*> cliches;
+    std::set<const QtSignalCliche*> signalCliches;
+    int64_t eventMask = 0;
 private:
-    class ExtractFromPattern : public Converter
+    class ExtractFromPattern : public PlatformSpecificConverter
     {
     public:
-        const QtSignalCliche *found = nullptr;
+        const QtSignalCliche *signalCliche = nullptr;
+        const QtEventCliche *eventCliche = nullptr;
         bool convert(const Cliche &cliche, const Any *const *value) override;
+        bool converting(const QtSignalCliche &argument) override;
+        bool converting(const QtEventCliche &argument) override;
     };
 };
 
@@ -42,6 +48,7 @@ public:
     QtSignalCliche(const QtSignalName *head)
         : ClicheTiny(head)
     {}
+    bool platformConvert(PlatformSpecificConverter &converter) const override;
     mutable const QtSignalImplementation* implementations = nullptr;
     const QtSignalCliche* add(QtSignalImplementation* impl) const
     {
@@ -79,7 +86,7 @@ struct QtSignalImpl : QtSignalImplementation
                                                                           const Constant* argv[] = {
                                                                               QtWrap::wrap(unpacked)...
                                                                           };
-                                                                          wrapper->pilsCallback(cliche, argv, sizeof...(unpacked));
+                                                                          wrapper->pilsSignalCallback(cliche, argv, sizeof...(unpacked));
                                                                       }, args_copy);
                                                            wrapper->release();
                                                        },
@@ -89,37 +96,37 @@ struct QtSignalImpl : QtSignalImplementation
     }
 };
 
-class SignalListener
-{
-public:
-    QtObjectWrapper *wrapper;
-    const Closure *closure;
-    QByteArray signalName;
+// class SignalListener
+// {
+// public:
+//     const QtObjectWrapper *wrapper;
+//     const Closure *closure;
+//     QByteArray signalName;
 
-    SignalListener(QtObjectWrapper *w,
-                   const Closure *c,
-                   const QByteArray &name)
-        : wrapper(w), closure(c), signalName(name)
-    {}
+//     SignalListener(const QtObjectWrapper *w,
+//                    const Closure *c,
+//                    const QByteArray &name)
+//         : wrapper(w), closure(c), signalName(name)
+//     {}
 
-    template<typename... Args>
-    void handle(Args&&... args)
-    {
-        std::vector<const Any*> pilsArgs;
+//     template<typename... Args>
+//     void handle(Args&&... args)
+//     {
+//         std::vector<const Any*> pilsArgs;
 
-        // (pilsArgs.push_back(
-        //      wrapper->convertFromQt(
-        //          &args,
-        //          QMetaType::fromType<std::decay_t<Args>>()
-        //          )
-        //      ), ...);
+//         // (pilsArgs.push_back(
+//         //      wrapper->convertFromQt(
+//         //          &args,
+//         //          QMetaType::fromType<std::decay_t<Args>>()
+//         //          )
+//         //      ), ...);
 
-        // const Any *node =
-        //     wrapper->buildSignalNode(signalName, pilsArgs);
+//         // const Any *node =
+//         //     wrapper->buildSignalNode(signalName, pilsArgs);
 
-        // wrapper->invokeClosure(closure, node);
-    }
-};
+//         // wrapper->invokeClosure(closure, node);
+//     }
+// };
 
 class SinkQtSignalCallback
     : Sink

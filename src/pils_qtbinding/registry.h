@@ -21,7 +21,8 @@
 #include <QTextEdit>
 #include <QPlainTextEdit>
 #include <QTimer>
-
+#include <QScrollArea>
+#include <QGroupBox>
 #include <QLabel>
 #include <QProgressBar>
 #include <QLayout>

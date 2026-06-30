@@ -3,9 +3,10 @@
 #include "qpils_thread.h"
 #include "qpils_plumming.h"
 #include "qpils_qobject_wrapper.h"
+#include "qpils_event.h"
 namespace PILS{
 
-    bool QtSignalClicheExtractor::convert(const Closure &closure)
+    bool QtSignalEventClicheExtractor::convert(const Closure &closure)
     {
         const Ruleset &ruleset = static_cast<const Ruleset &>(*closure.element[1]);
         const ListExpress &rules = static_cast<const ListExpress &>(*ruleset.element[0]);
@@ -14,27 +15,30 @@ namespace PILS{
         {
             const Rule &rule = static_cast<const Rule &>(*rules.element[i]);
             ExtractFromPattern extract;
-            if (rule.element[0]->convert(extract))
-                cliches.emplace(extract.found);
+            rule.element[0]->convert(extract);
+            if (extract.signalCliche)
+                signalCliches.emplace(extract.signalCliche);
+            if (extract.eventCliche)
+                eventMask |= extract.eventCliche->mask;
         }
-        return !cliches.empty();
+        return !signalCliches.empty();
     }
 
-    bool QtSignalClicheExtractor::ExtractFromPattern::convert(const Cliche &cliche, const Any *const *value)
+    bool QtSignalEventClicheExtractor::ExtractFromPattern::convert(const Cliche &cliche, const Any *const *value)
     {
         // TODO: allow aliases in pattern
-        if (cliche.as_ClicheTiny() == nullptr)
-            return false;
-        if (auto name = cliche.head->as_ClicheShort())
-        {
-            const Any *ns = Namespace_QtSignal::singleton;
-            const Any *nh = name->head;
-            if (name->head != Namespace_QtSignal::singleton || name->attributes[0]->as_String() == nullptr)
-                return false;
-            found = static_cast<const QtSignalCliche *>(&cliche);
-            return true;
-        }
-        return false;
+        return cliche.platformConvert(*this);
+    }
+
+    bool QtSignalCliche::platformConvert(PlatformSpecificConverter &converter) const
+    {
+        return converter.converting(*this);
+    }
+
+    bool QtSignalEventClicheExtractor::ExtractFromPattern::converting(const QtSignalCliche &cliche)
+    {
+        signalCliche = &cliche;
+        return true;
     }
 
     const ClicheTiny *QtSignalName::newCliche() const
@@ -59,31 +63,7 @@ namespace PILS{
         return static_cast<const QtSignalCliche *>(signalCliche);
     }
 
-    // const Any *CallbackHelperBase::pilsCall(const Any *call) const
-    // {
-    //     if (!who->when) return nullptr;
-    //     PilsThread *thread = PilsThread::RunLevel::getCurrent(this->thread);
-    //     PilsThread::RunLevel running(thread);
-    //     Runner &run = running.run();
-    //     const Any *result = nullptr;
-    //     who->when->addReference();
-    //     JuceObject *who = this->who;
-    //     run.calling.who = who;
-    //     who->addReference();
-    //     run.calling.what = (const Express *)who;
-    //     new (run.allocate(sizeof(SinkJuceCallback))) SinkJuceCallback(result, run.where_);
-    //     run.where_ = who->when;
-    //     run.run(call->caller(*thread, *who->when));
-    //     call->releaseReference();
-    //     if (result)
-    //         who->alert();
-    //     who->releaseReference();
-    //     thread->releaseReference();
-    //     return result;
-    // }
-
-
-    void QtObjectWrapper::pilsCallback(const QtSignalCliche *cliche, const Constant **args, size_t argc)
+    void QtObjectWrapper::pilsSignalCallback(const QtSignalCliche *cliche, const Constant **args, size_t argc) const
     {
         const Constant *arg = (argc == 1 ? args[0] : ListConstant::get(args, argc));
         const NodeConstantShort *call = cliche->nodeConstant(arg);

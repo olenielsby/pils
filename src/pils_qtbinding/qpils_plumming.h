@@ -20,6 +20,7 @@ namespace PILS
 {
     class QtObjectWrapper;
     class QtSignalCliche;
+    class QtEventCliche;
 
     const PilsString *pils(const QString &string);
     const Constant *pils(const QDateTime &time);
@@ -60,7 +61,7 @@ namespace PILS
     class QtSignalName;
     class QtValueClassName;
     class QtObjectClassName;
-    class QtConverter;
+    class PlatformSpecificConverter;
 	class QtLookup;
 	class Identifier;
 	class IdentifierLookup;
@@ -94,7 +95,7 @@ namespace PILS
         virtual const Any *specialCalling(Runner &run, const QtObjectClassName &objectClass) const;
 
         virtual bool specialComparing(const QtLookup &lookup) const;
-        virtual bool converting(QtConverter &converter) const;
+        virtual bool converting(PlatformSpecificConverter &converter) const;
 		// Threads
         virtual bool specialComparing(const ThreadLookup &lookup) const;
         virtual const Any *specialWhen(Runner &run, const Any &argument) const;
@@ -357,7 +358,6 @@ namespace PILS
         QObject *object;
         const QtObjectClassName *className;
     private:
-        const QtObjectClassName *getClassNameFromQObject(QObject *object);
+        const QtObjectClassName *getClassNameFromQObjectInsideLock(QObject *object);
     };
-
 }

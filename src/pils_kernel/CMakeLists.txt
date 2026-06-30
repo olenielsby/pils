@@ -9,3 +9,5 @@ set_target_properties(pils_kernel PROPERTIES
 target_include_directories(pils_kernel PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(pils_kernel PUBLIC Qt6::Core)
+
+enable_asan(pils_kernel)

@@ -16,7 +16,7 @@ namespace PILS
         const Any *specialCalling(Runner &run, const Constant &name) const override;
         const Any *specialCalling(Runner &run, const Constant &name, const Any &arg) const override;
         bool specialComparing(const FileNameLookup &lookup) const override;
-        bool converting(QtConverter &converter) const override;
+        bool converting(PlatformSpecificConverter &converter) const override;
         void write(Writing & writing) const override;
         void unlink() override;
     private:

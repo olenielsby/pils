@@ -2,6 +2,15 @@
 #pragma once
 #include <atomic>
 #include <cassert>
+
+namespace PILS {
+
+class Terminator
+{
+public:
+    static bool terminated;
+};
+
 template<class T>
 class RefcountOrScrap
 {
@@ -23,7 +32,7 @@ public:
 
     ~RefcountOrScrap() noexcept
     {
-        assert(isScrap && "RefcountOrScrap destroyed before becomeScrap()");
+        assert(Terminator::terminated || isScrap && "RefcountOrScrap destroyed before becomeScrap()");
     }
 
     void retain() noexcept
@@ -62,3 +71,5 @@ public:
         return scrapLink;
     }
 };
+
+}

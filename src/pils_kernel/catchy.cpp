@@ -722,7 +722,7 @@ namespace PILS
 */
     const Any *BuiltinClicheTag::node(const Any *const *elements) const
 	{
-        if (elements[0]->as_Constant())
+        if (elements[1]->as_Constant())
             return new Tag(*this, elements);
 		else
             return BuiltinPokerClicheTrailer::node(elements);

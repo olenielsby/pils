@@ -1,0 +1,297 @@
+[pils: .use?]
+><:[module:. pils, .timestamp 2008-12-21T14:24:30.089+01 .language system]><;
+><:[module:. pils editor pinpoint .timestamp 2009-04-27T18:28:36.752+02 .language system]><;
+{ pinpoint: .what .where
+| ;module where this .:need module .:need;
+  :try
+  module filename @@@ [pils editor] window mind operations operations
+  module (.module-name module name) .:need
+  selection
+  ( :need @@ . [run pinpoint] pinpoint:
+    .what
+    .expression module expression
+    .source module text
+    .language module language
+  )
+  .:need
+  focus
+}
+><:[module:. pils run error .timestamp 2011-09-28T17:14:33.593+02 .language system]><;
+;channel this module channel;
+:use
+  { ::error say: n | :ok {} write: n }
+  { ::error saying: n | :ok {} write: n }
+;
+{ error:. .where .what .who .module
+| 
+  (ERROR: . what .module where this module name) bug {} and:
+  "in file: " (where this module filename) bug {} and:
+  channel disable or:
+  ;error-title
+    ( say [error:] " " ! bug {}
+      ( error call {+$ message . 1|:ok message <-#+* ""/~} or:
+        saying
+        (error try: [call: text] +++ [ok: .])
+        call {?|:ok "..."}{ok $ (? < 60)|:ok}
+      )
+    )
+  ;
+  ;window platform window
+  { .title | :ok error-title }
+  { .geometry | :ok [500 100 600 300] }
+  { .icon | :ok @@ [pils icon horn hot large] }
+  ;
+  window mind suppress := channel listen {.disable|:ok [BAD ERROR] bug {}};
+  ;splitter window inner vertical splitter;
+  ;input splitter edit;
+  ;output splitter edit;
+  window mind? :=
+    channel listen {|:ok window},
+    (channel: error: this program filename) listen
+    {.close|window mind? := (); window close}
+    {.position|:ok window position}
+    {.size|:ok window size}
+    {.text|:ok input text}
+  ;
+  ( (channel: error: this program filename) hint or () try
+    { hint: .position .size .text
+    | :ok
+      window position (position) anyway:
+      window size (size) anyway:
+      input text (text) anyway:
+    }
+  )
+  and:
+  ;menuitems @ menuitems (.window);
+  ;menubar
+    window menubar
+    { action: .
+    | :ok
+      action bug {} and:
+      action call (@ action (.window .module .error .what .where .who .input .output))
+    }
+  ;
+  @ menubuild (.menuitems .menubar)
+}
+
+><:[module:. pils run error action .timestamp 2011-09-28T17:14:33.593+02 .language system]><;
+{ action: .window .module .error .what .where .who .input .output
+| :ok
+  { [edit find]
+  | :ok
+    window find: .host
+    @@ [pils edit source menu action find] host:
+    .window
+    .minding [find]
+    .pages {.current|:ok output}
+  }
+  { .locate
+  | :ok
+    module filename @@@ [pils editor] window
+    mind operations
+    module (.module-name module name)
+    selection
+    (( @ pinpoint:
+      .what
+      .expression module expression
+      .source module text
+      .language module language
+    ) bug {})
+    bug {}
+    focus
+  }
+  { .test
+  | :possibly :tag [test];
+    ;text input text .language module language;
+    ;expression
+      language read (text)
+      ===
+      { :error error:. .start .end
+      | :ok [test];
+        window ask: . [show syntax error];
+        { .ok | :ok input selection (start, end) }
+        { .cancel | :ok [] }
+      }
+    ;
+    output text:
+    @ textual: .language .result
+    expression ---:
+    where +++: node: :;error .what .module .where .who
+  }
+  { .detach | :ok window icon (@@ [pils icon horn cold large]) mind suppress := () }
+  { locate: .what? .module? | window say [not located] }
+  { locate: .what .module *
+    module: .name .language .text .filename .expression
+  | filename @@@ [pils editor] .:need window mind operations operations
+    module (.module-name name)
+    selection (:need @ pinpoint: .what .expression .source text .language)
+    focus .:try
+  }
+}
+
+><:[module:. pils run error hint .timestamp 2009-08-29T08:53:13.952+02 .language system]><;
+;error-channel (channel: error: this program filename);
+{ .hint | :ok () }
+{ .hint
+| :possibly
+  error-channel listen
+  ( ;hint hint:
+    .position error-channel position .:need
+    .size error-channel size .:need
+    .text error-channel text .:need
+  )
+  call {hint|:ok error-channel close anyway: hint}
+}
+><:[module:. pils run error menuitems .timestamp 2009-08-29T08:53:13.952+02 .language system]><;
+{ menuitems: .window
+| :ok
+  ( [menu:. locate source .shortcut "Ctrl+L" .action locate],
+    [menu:. test test .shortcut "Ctrl+T" .action test],
+    [menu:. window detach .shortcut "Ctrl+D" .action detach],
+    [menu:. edit find .shortcut "Ctrl+F" .action edit find],
+  )
+! TODO: reenable advanced options
+  or:
+  &:
+  error call {ok . ? .:|:ok} or (who)
+  repeat
+  { ? when: ok | :ok }
+  { ([] // ?) * ;: ok | :ok }
+  { * :: ? | ? }
+  { ::using; ok | :self :ok using repeat (self) and: ok }
+  { ::ruleset .where
+  | list := locate: .what ruleset .module where this .:need module .:need
+  }
+  ! Recognize the module referencing rulesets
+  { ::where .ruleset ' = :ruleset
+    ( ;match / (name .:) .: * (node .:) .: .action? ),
+    ( ;match / (name .:) .: * (node .:) .: (:= ' .:) .: .action? ),
+    ( ;match / (name .:) .: .action? ),
+    ( ;match / (name .:) .: (:= ' .:) .: .action? )
+  | ;names where names .:need &
+      (error call  {(?) (/ ok) .:|:ok} {(?) (/ ok * ?) .:| :ok} .:need)
+    ;
+    where module-paths .:need every {ok|:ok ' & names}
+    except (where same .:need)
+    find (where draw .:need)
+    .:try
+  }
+  .:list each
+  { action = locate: .what? .module * ;name ' . 0
+  | :try name:. ' .(this program language name) .:need; action
+  }
+  legs
+  { counting := name: .; action
+  | :ok menu: . [locate], [ruleset], name .action
+  }
+  { counting := name: .; action
+  | :try menu: .
+    [locate], [ruleset], name .action .shortcut :need counting call
+    [ "Ctrl+1", "Ctrl+2", "Ctrl+3", "Ctrl+4", "Ctrl+5",
+      "Ctrl+6", "Ctrl+7", "Ctrl+8", "Ctrl+9"
+    ]
+  }
+}
+
+><:[module:. pils run error menubuild .timestamp 2009-08-29T08:53:13.952+02 .language system]><;
+{ menubuild: .menuitems .menubar
+| :ok
+  menuitems legs
+  { at := item = *;menu path
+  | :ok
+    (item:. .at) & (path listwise reverse) fold
+    { chain := name | :ok name:. .at; chain }
+  }
+  call
+  { level
+  | :who :ok
+    level groups
+    { name:. .at; value | :ok :name (submenu: .name); value }
+    { name:. .at; value = item: .? .at | :ok :name (item: .name); value }
+    legs {group := values = (*;at) 1 |:ok group:. .at; values}
+    order [call: at]
+    every
+    { group: . (item: .name) .at; (item:. .at) 1 | :ok item:. .name .at }
+    { group: . (submenu: .name) .at?; level
+    | :ok submenu: .name; level call (who)
+    }
+  }
+  first (menubar) fold
+  { menu := submenu: .name; items
+  | :self :ok 
+    items first (menu menu (.name saying (name)))
+    fold (self)
+    and: menu
+  }
+  { menu := item:. .at .name
+  | :ok item call
+    { menu:.? .shortcut .action
+    | :ok menu action (. .name saying (name) .shortcut)
+    }
+    { menu:.? .action
+    | :ok menu action (. .name saying (name))
+    }
+  }
+}
+
+><:[module:. pils run log .timestamp 2011-07-21T01:03:26.518+02 .language system]><;
+{ .window
+| :ok
+  this module channel window or:
+  ;window platform window "Log" icon (@@ [pils icon horn cold]);
+  window mind . (this module channel listen (;window)) := ();
+  window mind logging := ();
+  ;log window list [.columns expression, value 200];
+ ! wx:ListView (,, 0x20);
+!  log wx:InsertColumn (0, "expression") and:
+!  log wx:InsertColumn (1, "value") and:
+!  log wx:SetColumnWidth (1, 200) and:
+  window menu (. [menu:. log clear .action clear], .action {|}) and:
+  window mind listen :=
+  [channel: log] listen
+  { item = * log: .what .value
+  | ;logging window mind logging;
+    :if logging count < 500;
+    window mind logging := (logging) (item,);
+    log add (logging count, {} write (what))
+!    log wx:InsertItem (logging count, {} write (what))
+  }
+}
+{ [test test] | :self ' window }
+><:[module:. pils run pinpoint .timestamp 2011-07-21T00:58:18.180+02 .language system]><;
+{ pinpoint: .what .module * ;name .language .text .filename .expression
+| :who :try
+  filename @@@ [pils editor]
+  window mind operations operations
+  module (.module-name name)
+  selection (:need who pinpoint (.what .expression .source text .language))
+  focus
+}
+{ pinpoint: .what .expression .source .language
+| ;path path (. [] .what .expression)
+  .traceread language traceread (source)
+  ;
+  ;tracewhat follow (.path .traceread ' traceread);
+  :try
+  (traceread, tracewhat) repeat
+  { (::traceread .start? .end?; ok), tracewhat | :ok ', tracewhat }
+  { (::traceread .start? .end?; ok), traceread | ? }
+  call {(::traceread? .start .end; ?), ?|:ok start, end}
+}
+===
+{ path:. .what .expression ' legs
+| :self :try
+  expression legs {step := expression|:ok path: . (:;step; path) .what .expression}
+  find (self)
+}
+{ path:. .what .expression what
+| :ok
+  path repeat {:;step; path|:ok list := step; path} .:list reverse
+}
+{ follow: .path .traceread
+| :ok
+  path first (traceread) fold
+  { +& list := + n | :ok (list) (n) }
+  { * node := = attribute | :ok attribute call: :: node }
+}
+

@@ -9,6 +9,7 @@ Makefile
 *.a
 *.so
 
+*.bak
 *.swp
 .qtcreator/
 .clangd
@@ -19,5 +20,6 @@ src/jpils/
 *.user.*
 compile_commands.json
 backup/
-
+asan.supp
+asan.log*
 

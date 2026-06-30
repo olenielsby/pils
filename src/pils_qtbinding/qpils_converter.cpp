@@ -1,135 +1,35 @@
 #include "qpils_converter.h"
 #include "qpils_qobject_wrapper.h"
 #include "qpils_specialized_node.h"
+#include <QMouseEvent>
+#include <QKeyEvent>
+#include <QResizeEvent>
+#include <QWheelEvent>
+#include <QFocusEvent>
 
 namespace PILS {
-
 
 bool PlatformSpecializedNodeConstantTiny::convert(Converter &converter) const
 {
     return converter.convert(*this);
 }
 
-bool QtConverter::convert(const ReallySpecial &argument)
+bool PlatformSpecificConverter::convert(const ReallySpecial &argument)
 {
     return argument.converting(*this);
 }
 
-bool QtConverter::convert(const PlatformSpecializedNodeConstantTiny &argument)
+bool PlatformSpecificConverter::convert(const PlatformSpecializedNodeConstantTiny &argument)
 {
     return argument.converting(*this);
 }
 
-// bool QtArgumentConverter::convert(const Integer &argument)
-// {
-//     switch (type.id())
-//     {
-//     case QMetaType::Double:
-//         ga.double_ = argument.value;
-//         ga.genericArgument = QGenericArgument("double", &ga.double_);
-//         return true;
-//     case QMetaType::Int:
-//         ga.int_ = argument.value;
-//         ga.genericArgument = QGenericArgument("int", &ga.int_);
-//         return true;
-//     default:
-//         return false;
-//     }
-// }
 
-QObject *QtConverter::getObject(const QtObjectWrapper &wrap)
+QObject *PlatformSpecificConverter::getObject(const QtObjectWrapper &wrap)
 {
     return wrap.object;
 }
 
-// bool QtArgumentConverter::convert(const Float &argument)
-// {
-//     if (type.id() == QMetaType::Double)
-//     {
-//         ga.genericArgument = QGenericArgument("double", &argument.value);
-//         return true;
-//     }
-//     else return false;
-// }
-
-// bool QtArgumentConverter::convert(const Timestamp &argument)
-// {
-//     return false;
-// }
-
-// bool QtArgumentConverter::convert(const PilsString &argument)
-// {
-//     if (type.id() == QMetaType::QString)
-//     {
-//         if (const PlatformDependentString *twin = argument.getPlatformTwin())
-//         {
-//             ga.genericArgument = QGenericArgument("QString", &twin->qString);
-//             return true;
-//         }
-//     }
-//     return false;
-// }
-
-// bool QtArgumentConverter::converting(const NeQPoint &argument)
-// {
-//     if (type.id() == QMetaType::QPoint)
-//     {
-//         ga.genericArgument = QGenericArgument("QPoint", &argument.qValue);
-//         return true;
-//     }
-//     return false;
-// }
-
-// bool QtArgumentConverter::converting(const NeQSize &argument)
-// {
-//     if (type.id() == QMetaType::QSize)
-//     {
-//         ga.genericArgument = QGenericArgument("QSize", &argument.qValue);
-//         return true;
-//     }
-//     return false;
-// }
-
-// bool QtArgumentConverter::converting(const NeQRect &argument)
-// {
-//     if (type.id() == QMetaType::QRect)
-//     {
-//         ga.genericArgument = QGenericArgument("QRect", &argument.qValue);
-//         return true;
-//     }
-//     return false;
-// }
-
-// bool QtArgumentConverter::converting(const NeQImage &argument)
-// {
-//     if (type.id() != QMetaType::QImage)
-//         return false;
-//     const QImage &img = argument.qValue();
-//     if (img.isNull())
-//         return false;
-//     ga.genericArgument = QGenericArgument("QImage", &img);
-//     return true;
-// }
-
-// bool QtArgumentConverter::converting(const NeQByteArray &argument)
-// {
-//     if (type.id() == QMetaType::QByteArray)
-//     {
-//         ga.genericArgument = QGenericArgument("QByteArray", &argument.qValue);
-//         return true;
-//     }
-//     return false;
-// }
-
-// bool QtArgumentConverter::converting(const NeQTransform &argument)
-// {
-//     if (type.id() == QMetaType::QTransform)
-//     {
-//         ga.genericArgument = QGenericArgument("QTransform", &argument.qValue);
-//         return true;
-//     }
-//     return false;
-// }
 
 bool QtFill::fill(const Any *a, bool &out)
 {
@@ -166,7 +66,7 @@ bool QtFill::fill(const Any *a, QString &out)
 {
     if (const PilsString *s = a->as_String())
     {
-        out = s->getPlatformTwin()->qString;
+        out = QString::fromUtf8(s->value, s->count->value);
         return true;
     }
     return false;
@@ -219,6 +119,8 @@ bool QtFill::fill(const Any *a, QIcon &out)
     QImage img;
     if (fill(a, img)) {
         out = QIcon(QPixmap::fromImage(img));
+        if (out.isNull())
+            return false;
         return true;
     }
     return false;
@@ -256,6 +158,45 @@ bool QtFill::fill(const Any *a, QVariant &out)
     return false;
 }
 
+bool QtFill::fill(const Any* a, QKeySequence& out)
+{
+    QString s;
+    if (!fill(a, s))
+        return false;
+    out = QKeySequence(s);
+    return true;
+}
+
+bool QtFill::fill(const Any* a, QList<int>& out)
+{
+    auto list = a->as_ListConstant();
+    if (list == nullptr) return false;
+    int c = list->count->value;
+    out.clear();
+    for (int i = 0; i < c; i++)
+    {
+        int x;
+        if (!fill(list->element[i], x)) return false;
+        out.append(x);
+    }
+    return true;
+}
+
+bool QtFill::fill(const Any* a, QTextCursor& out)
+{
+    auto list = a->as_ListConstant();
+    if (list == nullptr) return false;
+    if (list->count->value != 2) return false;
+    int start = 0;
+    int end = 0;
+    if (!fill(list->element[0], start)) return false;
+    if (!fill(list->element[1], end)) return false;
+    out.clearSelection();
+    out.setPosition(start);
+    out.setPosition(end, QTextCursor::KeepAnchor);
+    return true;
+}
+
 const Constant* QtWrap::wrap(int v)
 {
     return Integer::get(v);
@@ -291,6 +232,81 @@ const Constant *QtWrap::wrap(QObject *obj)
     }
     QtObjectLookup lookup(obj);
     return lookup.lookup();
+}
+
+const Constant *QtWrap::wrap(const QMouseEvent &e)
+{
+    const Constant* argv[] = {
+        wrap(e.position().x()),
+        wrap(e.position().y()),
+        wrap(e.button()),
+        wrap(e.buttons()),
+        wrap(e.modifiers())
+    };
+
+    return ListConstant::get(argv, 5);
+}
+
+const Constant *QtWrap::wrap(const QKeyEvent &e)
+{
+    const Constant* argv[] = {
+        wrap(e.key()),
+        wrap(e.text()),
+        wrap(e.modifiers()),
+        wrap(e.isAutoRepeat())
+    };
+
+    return ListConstant::get(argv, 4);
+}
+
+const Constant *QtWrap::wrap(const QResizeEvent &e)
+{
+    const Constant* argv[] = {
+        wrap(e.size().width()),
+        wrap(e.size().height()),
+        wrap(e.oldSize().width()),
+        wrap(e.oldSize().height())
+    };
+
+    return ListConstant::get(argv, 4);
+}
+
+const Constant *QtWrap::wrap(const QWheelEvent &e)
+{
+    const QPoint angle = e.angleDelta();
+
+    const Constant* argv[] = {
+        wrap(e.position().x()),
+        wrap(e.position().y()),
+        wrap(angle.x()),
+        wrap(angle.y()),
+        wrap(e.modifiers())
+    };
+
+    return ListConstant::get(argv, 5);
+}
+
+const Constant *QtWrap::wrap(const Qt::MouseButton &e)
+{
+    return wrap(static_cast<int>(e));
+}
+const Constant *QtWrap::wrap(const Qt::KeyboardModifier &e)
+{
+    return wrap(static_cast<int>(e));
+}
+
+const Constant *QtWrap::wrap(const QFocusEvent &e)
+{
+    return wrap(e.gotFocus());
+}
+
+const Constant *QtWrap::wrap(const QTextCursor &e)
+{
+    const Constant* argv[] = {
+        wrap(e.anchor()),
+        wrap(e.position())
+    };
+    return ListConstant::get(argv, 2);
 }
 
 bool QtImageConverter::converting(const NeQImage &argument)

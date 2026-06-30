@@ -87,6 +87,8 @@ private:
     PILS::PilsCommander& commander_;
 };
 
+bool PILS::Terminator::terminated = false;
+
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
@@ -111,5 +113,7 @@ int main(int argc, char* argv[])
     CommandLineServer server(serverName, commander);
 
     int result = app.exec();
+
+    PILS::Terminator::terminated = true;
     return result;
 }

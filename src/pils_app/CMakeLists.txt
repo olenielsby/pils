@@ -16,3 +16,5 @@ target_link_libraries(pils_app PRIVATE
 )
 
 target_compile_features(pils_app PRIVATE cxx_std_17)
+
+enable_asan(pils_app)

@@ -10,7 +10,7 @@ public:
         : NodeConstantTiny(link, cliche, value)
     {}
     bool convert(Converter &converter) const override;
-    virtual bool converting(QtConverter &converter) const = 0;
+    virtual bool converting(PlatformSpecificConverter &converter) const = 0;
 };
 
 class QtClassNameQPoint : public QtValueClassName
@@ -115,7 +115,7 @@ public:
     NeQPoint(const Constant *&link, const ClicheTiny &cliche, const Constant *value, QPoint qValue)
         : NodeEmbeddedQValueType(link, cliche, value), qValue(qValue)
     {}
-    bool converting(QtConverter &converter) const override {return converter.converting(*this);}
+    bool converting(PlatformSpecificConverter &converter) const override {return converter.converting(*this);}
     QPoint qValue;
 };
 
@@ -125,7 +125,7 @@ public:
     NeQSize(const Constant *&link, const ClicheTiny &cliche, const Constant *value, QSize qValue)
         : NodeEmbeddedQValueType(link, cliche, value), qValue(qValue)
     {}
-    bool converting(QtConverter &converter) const override {return converter.converting(*this);}
+    bool converting(PlatformSpecificConverter &converter) const override {return converter.converting(*this);}
     QSize qValue;
 };
 
@@ -135,7 +135,7 @@ public:
     NeQRect(const Constant *&link, const ClicheTiny &cliche, const Constant *value, QRect qValue)
         : NodeEmbeddedQValueType(link, cliche, value), qValue(qValue)
     {}
-    bool converting(QtConverter &converter) const override {return converter.converting(*this);}
+    bool converting(PlatformSpecificConverter &converter) const override {return converter.converting(*this);}
     QRect qValue;
 };
 
@@ -145,7 +145,7 @@ public:
     NeQImage(const Constant *&link, const ClicheTiny &cliche, const PilsString *value)
         : NodeEmbeddedQValueType(link, cliche, value), ready(false)
     {}
-    bool converting(QtConverter &converter) const override {return converter.converting(*this);}
+    bool converting(PlatformSpecificConverter &converter) const override {return converter.converting(*this);}
     const QImage &qValue() const;
 private:
     mutable QImage lazyQValue;
@@ -158,7 +158,7 @@ public:
     NeQByteArray(const Constant *&link, const ClicheTiny &cliche, const Constant *value, QByteArray qValue)
         : NodeEmbeddedQValueType(link, cliche, value), qValue(qValue)
     {}
-    bool converting(QtConverter &converter) const override {return converter.converting(*this);}
+    bool converting(PlatformSpecificConverter &converter) const override {return converter.converting(*this);}
     QByteArray qValue;
 };
 
@@ -168,7 +168,7 @@ public:
     NeQTransform(const Constant *&link, const ClicheTiny &cliche, const Constant *value, QTransform qValue)
         : NodeEmbeddedQValueType(link, cliche, value), qValue(qValue)
     {}
-    bool converting(QtConverter &converter) const override {return converter.converting(*this);}
+    bool converting(PlatformSpecificConverter &converter) const override {return converter.converting(*this);}
     QTransform qValue;
 };
 

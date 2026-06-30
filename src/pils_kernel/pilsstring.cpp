@@ -276,7 +276,7 @@ namespace PILS
 	const Step *Sink::concatenateBuild(Runner &run, PILS_CHAR *text, PILS_CHAR *at)
 	{
 		const PilsString *string = PilsString::get(text, at - text);
-		delete text;
+        delete [] text;
 		return pass(run, string);
 	}
 
