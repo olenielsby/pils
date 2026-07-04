@@ -2,40 +2,40 @@
 ><:[module:. platform qt .timestamp 2008-06-25T15:43:08.612+02 .language system]><;
 ><:[module:. platform qt dialog .timestamp 2026-07-03T22:26:41.578+02 .language qt]><;
 ;new plumcake .WA_DeleteOnClose 55 .WindowModal 1;
-{ .dialog: .window .handle
+{ .dialog: .window .boss
 | :ok
   new Q:Dialog (window)
   q:setAttribute (WA_DeleteOnClose, 1)
-  q:setWindowTitle (handle title)
+  q:setWindowTitle (boss title)
   q:setWindowModality (WindowModal)
   q:show
   when
   { .bug | shit }
   { .close | :who :ok who q:close }
-  { tree: handle [tree]
+  { tree: boss [tree]
   | :who :ok
     :use
-    { when: .handle
+    { when: .boss
     | :self :ok
       { .bug | shit }
-      { node: handle
+      { node: boss
       | :who
-        ;text handle text .:need; :ok
-        who q:addChild (text) when (self when: .handle)
+        ;text boss text .:need; :ok
+        who q:addChild (text) when (self when: .boss)
       }
-      { .handle | :ok handle }
+      { .boss | :ok boss }
     }
     ;
     ;layout new Q:VBoxLayout(who);
     ;tree new Q:PilsTreeWidget(who) when
     { qs:itemActivated: ?
-    | :who :try handle [tree] picked: who q:currentNode
+    | :who :try boss [tree] picked: who q:currentNode
     }
-    { node: handle
+    { node: boss
     | :who
-      ;text handle text .:need; :ok
+      ;text boss text .:need; :ok
       who q:addRootNode (text)
-      when (when (.handle))
+      when (when (.boss))
     }
     ;
     layout q:addWidget(tree) and:
@@ -45,19 +45,19 @@
 }
 ><:[module:. platform qt edits .timestamp 2026-07-03T22:45:23.295+02 .language qt]><;
 ;new plumcake;
-{ edits: .window .handle
+{ edits: .window .boss
 | :possibly
   new Q:TabWidget
   when
-  { qs:currentChanged: n | :who :try handle select: .tabs who }
+  { qs:currentChanged: n | :who :try boss select: .tabs who }
   { .tabs
   | :who :ok
      who q:count up every
     { n | :ok who q:widget: n - 1 }
   }
-  { edit: handle
+  { edit: boss
   | :who :ok
-    ;tabber who .id handle id;
+    ;tabber who .id boss id;
     ! Search for existing tab with same id
     tabber tabs find
     { tab
@@ -67,12 +67,12 @@
     }
     or:
     ;edit
-      new Q:PilsPlainTextEdit (handle text)
+      new Q:PilsPlainTextEdit (boss text)
       when
       { qs:textChanged:
-      | :who handle text:. who q:toPlainText
+      | :who boss text:. who q:toPlainText
       }
-      { .handle | :ok handle }
+      { .boss | :ok boss }
       { .text | :who :ok who q:toPlainText }
       { selection: a, b
       | :who :ok who q:setSelection(a, b) q:ensureCursorVisible
@@ -90,10 +90,10 @@
     ;layout new Q:VBoxLayout;
     ;tab new Q:Widget when
       { .edit | :ok edit }
-      { .id | :ok handle id }
+      { .id | :ok boss id }
     ;
     tab q:setLayout (layout) and:
-    who q:addTab (tab, handle name) and:
+    who q:addTab (tab, boss name) and:
     layout q:addWidget(edit, 1, 0) and:
     edit
   }
@@ -111,19 +111,19 @@
 { .documents | :ok [pils-configuration:documents-directory] }
 ><:[module:. platform qt entry system .timestamp 2008-08-08T04:55:32.254+02 .language system]><;
 { .system | :try @@ [platform qt system [?:?|pils-configuration:system]] }
-><:[module:. platform qt entry window .timestamp 2026-07-03T22:28:40.347+02 .language qt]><;
+><:[module:. platform qt entry window .timestamp 2026-07-04T16:32:28.353+02 .language qt]><;
 ;new plumcake .WA_DeleteOnClose 55;
-{ window: handle
+{ window: boss
 | :possibly
   new Q:MainWindow
   q:setAttribute (WA_DeleteOnClose, 1)
-  q:setWindowTitle (handle title .:need)
-  q:setWindowIcon (handle icon .:need)
+  q:setWindowTitle (boss title .:need)
+  q:setWindowIcon (boss icon .:need)
   q:show
-  q:setGeometry (handle geometry .:need)
+  q:setGeometry (boss geometry .:need)
   when
-  { filedialog: handle | :who :try @ filedialog: .window who .handle }
-  { dialog: handle | :who :try @ dialog: .window who .handle }
+  { filedialog: boss | :who :try @ filedialog: .window who .boss }
+  { dialog: boss | :who :try @ dialog: .window who .boss }
   { ask: .; options = :where? .ruleset :' rules
   | :who :ok
     ;buttons rules every [call: match];
@@ -154,25 +154,21 @@
   { title: $ title | :who ' q:setWindowTitle (title) .:try }
   { .pinpoint | :who :ok who mind pinpointer call: @@ [pils run pinpoint] }
   { .size | :who :possibly who juce-getWidth .:need, who juce-getHeight .:need }
-  { menubar: handle
+  { menubar: boss
   | :who :ok who q:menuBar
     when
     { action: ..name
     | :who :ok
       who q:addAction (name)
       when
-      { qs:triggered: args
-      | handle action (.) or:
-      }
+      { qs:triggered: args | :try boss action (.) }
       and: who
     }
     { action: ..name .shortcut
     | :who :ok
       who q:addAction (name)
       when
-      { qs:triggered: args
-      | handle action (.) or:
-      }
+      { qs:triggered: args | :try boss action (.) }
       q:setShortcut (shortcut)
       anyway: who
     }
@@ -236,19 +232,19 @@
               who q:addWidget (edit) and:
               edit
             }
-            { tabs: handle
+            { tabs: boss
             | :who :ok
               plumcake Q:TabWidget
               when
-              { qs:currentChanged: n | :who :try handle select: .tabs who }
+              { qs:currentChanged: n | :who :try boss select: .tabs who }
               { .tabs
               | :who :ok
                 who q:count up every
                 { n | :ok who q:widget: n - 1 }
               }
-              { edit: handle
+              { edit: boss
               | :who :ok
-                ;tabber who .id handle id;
+                ;tabber who .id boss id;
                 ! Search for existing tab with same id
                 tabber tabs find
                 { tab
@@ -258,12 +254,12 @@
                 }
                 or:
                 ;edit
-                  plumcake Q:PilsPlainTextEdit (handle text)
+                  plumcake Q:PilsPlainTextEdit (boss text)
                   when
                   { qs:textChanged:
-                  | :who handle text:. who q:toPlainText
+                  | :who boss text:. who q:toPlainText
                   }
-                  { .handle | :ok handle }
+                  { .boss | :ok boss }
                   { .text | :who :ok who q:toPlainText }
                   { selection: a, b
                   | :who :ok who q:setSelection(a, b) q:ensureCursorVisible
@@ -281,10 +277,10 @@
                 ;layout plumcake Q:VBoxLayout;
                 ;tab plumcake Q:Widget when
                 { .edit | :ok edit }
-                { .id | :ok handle id }
+                { .id | :ok boss id }
                 ;
                 tab q:setLayout (layout) and:
-                who q:addTab (tab, handle name) and:
+                who q:addTab (tab, boss name) and:
                 layout q:addWidget(edit, 1, 0) and:
                 edit
               }
@@ -307,22 +303,21 @@
   }
   .(@ strap) .:need
 }
-
-><:[module:. platform qt filedialog .timestamp 2026-07-03T22:28:53.666+02 .language qt]><;
+><:[module:. platform qt filedialog .timestamp 2026-07-04T16:20:33.564+02 .language qt]><;
 ;new plumcake .WA_DeleteOnClose 55;
-{ .filedialog: .window .handle
+{ .filedialog: .window .boss
 | :possibly
   new Q:FileDialog (window)
   q:setAttribute (WA_DeleteOnClose, 1)
-  q:setWindowTitle (handle title .:need) .:need
+  q:setWindowTitle (boss title .:need) .:need
   q:setWindowModality 1 ! WindowModal
-  q:setDirectory (handle path .:need)
+  q:setDirectory (boss path .:need)
   q:show
   when
   { .bug | shit }
-  { .handle | :ok handle }
+  { .boss | :ok boss }
   { .close | :who :ok who q:close }
-  { qs:fileSelected: x | :try handle pick: x }
+  { qs:fileSelected: x | :try boss pick: x }
 }
 ><:[module:. platform qt pils .timestamp 2008-06-25T15:43:24.393+02 .language system]><;
 ><:[module:. platform qt pils language .timestamp 2008-06-25T15:43:29.112+02 .language system]><;
