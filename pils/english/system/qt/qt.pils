@@ -111,7 +111,7 @@
 { .documents | :ok [pils-configuration:documents-directory] }
 ><:[module:. platform qt entry system .timestamp 2008-08-08T04:55:32.254+02 .language system]><;
 { .system | :try @@ [platform qt system [?:?|pils-configuration:system]] }
-><:[module:. platform qt entry window .timestamp 2026-07-04T16:32:28.353+02 .language qt]><;
+><:[module:. platform qt entry window .timestamp 2026-07-04T16:59:01.534+02 .language qt]><;
 ;new plumcake .WA_DeleteOnClose 55;
 { window: boss
 | :possibly
@@ -318,6 +318,31 @@
   { .boss | :ok boss }
   { .close | :who :ok who q:close }
   { qs:fileSelected: x | :try boss pick: x }
+}
+><:[module:. platform qt menubar .timestamp 2026-07-04T17:05:50.309+02 .language qt]><;
+{ menubar: .window .boss
+| :ok window q:menuBar
+  when
+  { action: ..name
+  | :who :ok
+    who q:addAction (name)
+    when
+    { qs:triggered: args | :try boss action (.) }
+    and: who
+  }
+  { action: ..name .shortcut
+  | :who :ok
+    who q:addAction (name)
+    when
+    { qs:triggered: args | :try boss action (.) }
+    q:setShortcut (shortcut)
+    anyway: who
+  }
+  { menu: .name
+  | :who :self :ok
+    who q:addMenu (name) when (self)
+  }
+  or: window q:menuBar q:clear
 }
 ><:[module:. platform qt pils .timestamp 2008-06-25T15:43:24.393+02 .language system]><;
 ><:[module:. platform qt pils language .timestamp 2008-06-25T15:43:29.112+02 .language system]><;
