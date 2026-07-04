@@ -556,14 +556,6 @@ namespace PILS
 
     /* Strings of any length - a limit must be set elsewhere */
 
-    class PlatformDependentStringBase
-    {
-    public:
-        virtual ~PlatformDependentStringBase() = default;
-    };
-
-    class PlatformDependentString;
-
     class PilsString
 		: public CountedConstant
 	{
@@ -603,7 +595,6 @@ namespace PILS
 		};
 
         PilsString(const Constant *&link, const PILS_CHAR *text, size_t c);
-        mutable std::unique_ptr<PlatformDependentStringBase> twin;
 #ifndef NDEBUG
         const std::string bug;
 #endif
@@ -639,7 +630,6 @@ namespace PILS
         int ordering() const override;
         bool recognize(Recognizer &recognizer) const override;
         void writingToDebugOutput(int level) const override;
-        const PlatformDependentString *getPlatformTwin() const;
 	protected:
 		PilsString(const PILS_CHAR *text, size_t count);
 	private:

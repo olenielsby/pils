@@ -235,6 +235,11 @@ void QtObjectClassName::initialize()
     CONSTRUCTOR_ARGS(QTabBar, QWidget*)
     END_CLASS()
 
+    BEGIN_CLASS(QPilsTreeWidget)
+    CONSTRUCTOR_NOARGS(QPilsTreeWidget)
+    CONSTRUCTOR_ARGS(QPilsTreeWidget, QWidget*)
+    END_CLASS()
+
 
 }
 
@@ -273,6 +278,8 @@ void QtMethodName::initialize()
     IMPLEMENT_OVERLOAD(QWidget, move, void(QWidget::*)(int,int))
 
     IMPLEMENT_OVERLOAD(QWidget, setGeometry, void(QWidget::*)(int,int,int,int))
+    IMPLEMENT(QWidget, setAttribute)
+
 
     // Layout-ish
     IMPLEMENT(QWidget, setLayout)
@@ -313,6 +320,8 @@ void QtMethodName::initialize()
     IMPLEMENT(QPlainTextEdit, appendPlainText)
     IMPLEMENT(QPlainTextEdit, clear)
     IMPLEMENT(QPlainTextEdit, setReadOnly)
+    IMPLEMENT(QPlainTextEdit, centerCursor)
+    IMPLEMENT(QPlainTextEdit, ensureCursorVisible)
     // IMPLEMENT(QPlainTextEdit, textCursor)
     // IMPLEMENT(QPlainTextEdit, setTextCursor)
 
@@ -391,7 +400,9 @@ void QtMethodName::initialize()
     IMPLEMENT(QTabWidget, removeTab)
     IMPLEMENT(QTabWidget, setTabText)
     IMPLEMENT(QTabWidget, tabText)
+    IMPLEMENT(QTabWidget, setTabsClosable)
     IMPLEMENT(QTabWidget, currentWidget)   // bekvemmelighed
+    IMPLEMENT(QTabWidget, setCurrentWidget)   // bekvemmelighed
 
     // QStackedWidget
     IMPLEMENT(QStackedWidget, addWidget)
@@ -435,6 +446,28 @@ void QtMethodName::initialize()
     IMPLEMENT(QStatusBar, clearMessage)
     IMPLEMENT(QStatusBar, currentMessage)
 
+    // QPilsTreeWidget
+
+    IMPLEMENT(QPilsTreeWidget, addRootNode)
+    IMPLEMENT(QPilsTreeWidget, currentNode)
+    IMPLEMENT(QPilsTreeWidget, clearTree)
+
+    // QPilsTreeNode
+
+    IMPLEMENT(QPilsTreeNode, text)
+    IMPLEMENT(QPilsTreeNode, setText)
+    IMPLEMENT(QPilsTreeNode, addChild)
+    IMPLEMENT(QPilsTreeNode, parentNode)
+    IMPLEMENT(QPilsTreeNode, childCount)
+    IMPLEMENT(QPilsTreeNode, child)
+    IMPLEMENT(QPilsTreeNode, expand)
+    IMPLEMENT(QPilsTreeNode, collapse)
+
+    // ===== QFileDialog =====
+    IMPLEMENT(QFileDialog, setFileMode)
+    IMPLEMENT(QFileDialog, setNameFilter)
+    IMPLEMENT_OVERLOAD(QFileDialog, setDirectory, void(QFileDialog::*)(const QString &))
+    IMPLEMENT(QFileDialog, selectedFiles)
 }
 
 void QtSignalName::initialize()
@@ -535,8 +568,11 @@ void QtSignalName::initialize()
     SIGNAL_IMPLEMENT(QWindow, heightChanged)
     SIGNAL_IMPLEMENT(QWindow, xChanged)
     SIGNAL_IMPLEMENT(QWindow, yChanged)
-}
 
+    SIGNAL_IMPLEMENT(QTreeWidget, itemActivated)
+
+    SIGNAL_IMPLEMENT(QFileDialog, fileSelected)
+}
 
 template<typename EventT>
 void qtEventDispatch(QEvent *event,

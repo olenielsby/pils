@@ -302,33 +302,6 @@ namespace PILS
 		return recognizer.recognizing(value);
 	}
 
-    void QtObjectWrapper::write(Writing &writing) const
-    {
-        writing.write('Q');
-        if (const PilsString *name = className->attributes[0]->as_String())
-        {
-            writing.write(name->value);
-        }
-        else writing.write('?');
-        writing.write('*');
-    }
-
-    void QtObjectWrapper::unlink()
-    {
-        unhash();
-        className->releaseFrom(*this);
-        if (when)
-        {
-            when->releaseFrom(*this);
-            when = nullptr;
-        }
-        assert(mind == nullptr);
-        QObject* o = object.data();
-        object = nullptr;
-        if (o && o->parent() == nullptr)
-            o->deleteLater();
-    }
-
     const Any *ReallySpecial::specialCalling(Runner &run, const QtObjectClassName &className) const
     {
         return nullptr;
@@ -356,59 +329,12 @@ namespace PILS
 
     QObject* QtObjectClassName::createQObject(const Any *const  argv[], size_t argc) const
     {
-        // 1. prøv registrerede constructors
         for (auto impl = constructors; impl; impl = impl->next)
         {
             if (QObject* obj = impl->construct(argv, argc))
                 return obj;
         }
-
-        // // 2. fallback til Qt metaobject (Q_INVOKABLE ctors)
-        // if (meta)
-        // {
-        //     QVariantList args;
-        //     args.reserve(argc);
-
-        //     for (size_t i = 0; i < argc; ++i)
-        //     {
-        //         QVariant v;
-        //         // if (!QtFill::fill(argv[i], v))   // du kan lave overload til QVariant
-        //             return nullptr;
-        //         args.push_back(v);
-        //     }
-
-        //     QObject* obj = meta->newInstance(QGenericArgument(
-        //         args.size() > 0 ? args[0].typeName() : nullptr, args[0].data()
-        //         ));
-        //     // NOTE: Qt newInstance er ret begrænset → derfor dit eget system er bedre
-        //     if (obj)
-        //         return obj;
-        // }
-
-        // // 3. gammel fallback (kan fjernes senere)
-        // if (argc == 0)
-        // {
-        //     if (meta == &QPushButton::staticMetaObject)
-        //         return new QPushButton;
-        //     if (meta == &QWidget::staticMetaObject)
-        //         return new QWidget;
-        //     if (meta == &QMainWindow::staticMetaObject)
-        //         return new QMainWindow;
-        // }
-
         return nullptr;
-    }
-
-    const PlatformDependentString* PilsString::getPlatformTwin() const
-    {
-        if (!twin)
-        {
-            twin = std::make_unique<PlatformDependentString>(
-                QString::fromUtf8(value, count->value)
-                );
-        }
-
-        return static_cast<PlatformDependentString*>(twin.get());
     }
 
     const Any *BuiltinClicheWhen::specialOperation(Runner &run, const ReallySpecial &special, const Any &argument) const

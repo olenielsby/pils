@@ -44,7 +44,7 @@ namespace PILS
         second = time.time().second();
         millisecond = time.time().msec();
 
-        zoneSecond = time.offsetFromUtc();
+        zoneSecond = -time.offsetFromUtc();
     }
 
     void PilsDate::Split::put(long long source)

@@ -1,6 +1,6 @@
 [pils: .use?]
-><:[module:. pils, .timestamp 2008-12-21T14:24:30.089+01 .language system]><;
-><:[module:. pils editor pinpoint .timestamp 2009-04-27T18:28:36.752+02 .language system]><;
+><:[module:. pils, .timestamp 2008-12-21T14:24:30.089-01 .language system]><;
+><:[module:. pils editor pinpoint .timestamp 2009-04-27T18:28:36.752-02 .language system]><;
 { pinpoint: .what .where
 | ;module where this .:need module .:need;
   :try
@@ -16,7 +16,7 @@
   .:need
   focus
 }
-><:[module:. pils run error .timestamp 2011-09-28T17:14:33.593+02 .language system]><;
+><:[module:. pils run error .timestamp 2026-07-03T14:45:42.165-02 .language system]><;
 ;channel this module channel;
 :use
   { ::error say: n | :ok {} write: n }
@@ -74,7 +74,7 @@
   @ menubuild (.menuitems .menubar)
 }
 
-><:[module:. pils run error action .timestamp 2011-09-28T17:14:33.593+02 .language system]><;
+><:[module:. pils run error action .timestamp 2011-09-28T17:14:33.593-02 .language system]><;
 { action: .window .module .error .what .where .who .input .output
 | :ok
   { [edit find]
@@ -90,6 +90,7 @@
     module filename @@@ [pils editor] window
     mind operations
     module (.module-name module name)
+    pickup
     selection
     (( @ pinpoint:
       .what
@@ -97,7 +98,6 @@
       .source module text
       .language module language
     ) bug {})
-    bug {}
     focus
   }
   { .test
@@ -129,7 +129,7 @@
   }
 }
 
-><:[module:. pils run error hint .timestamp 2009-08-29T08:53:13.952+02 .language system]><;
+><:[module:. pils run error hint .timestamp 2009-08-29T08:53:13.952-02 .language system]><;
 ;error-channel (channel: error: this program filename);
 { .hint | :ok () }
 { .hint
@@ -142,7 +142,48 @@
   )
   call {hint|:ok error-channel close anyway: hint}
 }
-><:[module:. pils run error menuitems .timestamp 2009-08-29T08:53:13.952+02 .language system]><;
+><:[module:. pils run error menubuild .timestamp 2009-08-29T08:53:13.952-02 .language system]><;
+{ menubuild: .menuitems .menubar
+| :ok
+  menuitems legs
+  { at := item = *;menu path
+  | :ok
+    (item:. .at) & (path listwise reverse) fold
+    { chain := name | :ok name:. .at; chain }
+  }
+  call
+  { level
+  | :who :ok
+    level groups
+    { name:. .at; value | :ok :name (submenu: .name); value }
+    { name:. .at; value = item: .? .at | :ok :name (item: .name); value }
+    legs {group := values = (*;at) 1 |:ok group:. .at; values}
+    order [call: at]
+    every
+    { group: . (item: .name) .at; (item:. .at) 1 | :ok item:. .name .at }
+    { group: . (submenu: .name) .at?; level
+    | :ok submenu: .name; level call (who)
+    }
+  }
+  first (menubar) fold
+  { menu := submenu: .name; items
+  | :self :ok 
+    items first (menu menu (.name saying (name)))
+    fold (self)
+    and: menu
+  }
+  { menu := item:. .at .name
+  | :ok item call
+    { menu:.? .shortcut .action
+    | :ok menu action (. .name saying (name) .shortcut)
+    }
+    { menu:.? .action
+    | :ok menu action (. .name saying (name))
+    }
+  }
+}
+
+><:[module:. pils run error menuitems .timestamp 2009-08-29T08:53:13.952-02 .language system]><;
 { menuitems: .window
 | :ok
   ( [menu:. locate source .shortcut "Ctrl+L" .action locate],
@@ -193,48 +234,7 @@
   }
 }
 
-><:[module:. pils run error menubuild .timestamp 2009-08-29T08:53:13.952+02 .language system]><;
-{ menubuild: .menuitems .menubar
-| :ok
-  menuitems legs
-  { at := item = *;menu path
-  | :ok
-    (item:. .at) & (path listwise reverse) fold
-    { chain := name | :ok name:. .at; chain }
-  }
-  call
-  { level
-  | :who :ok
-    level groups
-    { name:. .at; value | :ok :name (submenu: .name); value }
-    { name:. .at; value = item: .? .at | :ok :name (item: .name); value }
-    legs {group := values = (*;at) 1 |:ok group:. .at; values}
-    order [call: at]
-    every
-    { group: . (item: .name) .at; (item:. .at) 1 | :ok item:. .name .at }
-    { group: . (submenu: .name) .at?; level
-    | :ok submenu: .name; level call (who)
-    }
-  }
-  first (menubar) fold
-  { menu := submenu: .name; items
-  | :self :ok 
-    items first (menu menu (.name saying (name)))
-    fold (self)
-    and: menu
-  }
-  { menu := item:. .at .name
-  | :ok item call
-    { menu:.? .shortcut .action
-    | :ok menu action (. .name saying (name) .shortcut)
-    }
-    { menu:.? .action
-    | :ok menu action (. .name saying (name))
-    }
-  }
-}
-
-><:[module:. pils run log .timestamp 2011-07-21T01:03:26.518+02 .language system]><;
+><:[module:. pils run log .timestamp 2026-07-03T14:42:44.323-02 .language system]><;
 { .window
 | :ok
   this module channel window or:
@@ -258,7 +258,7 @@
   }
 }
 { [test test] | :self ' window }
-><:[module:. pils run pinpoint .timestamp 2011-07-21T00:58:18.180+02 .language system]><;
+><:[module:. pils run pinpoint .timestamp 2011-07-21T00:58:18.180-02 .language system]><;
 { pinpoint: .what .module * ;name .language .text .filename .expression
 | :who :try
   filename @@@ [pils editor]

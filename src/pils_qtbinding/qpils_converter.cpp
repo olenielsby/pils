@@ -234,6 +234,16 @@ const Constant *QtWrap::wrap(QObject *obj)
     return lookup.lookup();
 }
 
+const Constant *QtWrap::wrap(QPilsTreeNode *obj)
+{
+    if (obj == nullptr)
+    {
+        return Empty::get();
+    }
+    QtObjectLookup lookup(obj, QPilsTreeNode::getClassName());
+    return lookup.lookup();
+}
+
 const Constant *QtWrap::wrap(const QMouseEvent &e)
 {
     const Constant* argv[] = {

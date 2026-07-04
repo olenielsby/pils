@@ -30,14 +30,6 @@ namespace PILS
 	class PilsFont;
     class NodeEmbeddedQValueType;
 
-    class PlatformDependentString : public PlatformDependentStringBase
-    {
-    public:
-        PlatformDependentString(QString qString) : qString(qString)
-        {}
-        const QString qString;
-    };
-
     class Recognizer
 	{
 	public:

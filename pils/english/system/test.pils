@@ -1,5 +1,7 @@
-><:[module: . test, .timestamp 2008-12-06T22:53:54.506+01 .language system]><;
+><:[module:. test, .timestamp 2026-07-03T22:24:26.744+02 .language system]><;
 { .test
 | :ok
-  ! write your test code here
+  :use {.a|:ok [b]};
+  ;time timestamp;
+  time, 2026-07-03T21:55:05.867+02
 }

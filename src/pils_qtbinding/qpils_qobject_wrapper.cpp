@@ -174,25 +174,16 @@ void QtObjectWrapper::checkState() const
 
 void QtObjectWrapper::checkDeletedState() const
 {
-// #ifndef NDEBUG
-//     switch (state)
-//     {
-//     case State::Attached: std::fputc('a', stderr); break;
-//     case State::Deleted: std::fputc('d', stderr); break;
-//     case State::DetachedHidden: std::fputc('h', stderr); break;
-//     case State::DetachedVisible: std::fputc('v', stderr); break;
-//     }
-//     std::fputc('-', stderr);
-//     std::fputc('D', stderr);
-//     className->writeToDebugOutput(10);
-// #endif
-
-    if (state == State::Deleted) return;
-    State oldState = state;
-    state = State::Deleted;
-    removeWhen();
-    if (oldState == State::DetachedVisible) disableMind();
-    if (retainCount(oldState) == 1) release();
+    retain();
+    if (state != State::Deleted)
+    {
+        State oldState = state;
+        state = State::Deleted;
+        removeWhen();
+        if (oldState == State::DetachedVisible) disableMind();
+        if (retainCount(oldState) == 1) release();
+    }
+    release();
 }
 
 int QtObjectWrapper::retainCount(State s)
@@ -257,6 +248,35 @@ void QtObjectWrapper::removeWhen() const
     auto w = when;
     when = nullptr;
     w->release();
+}
+
+void QtObjectWrapper::write(Writing &writing) const
+{
+    writing.write('Q');
+    if (const PilsString *name = className->attributes[0]->as_String())
+    {
+        writing.write(name->value);
+    }
+    else writing.write('?');
+    if (object.isNull())
+        writing.write('?');
+}
+
+void QtObjectWrapper::unlink()
+{
+    unhash();
+    className->releaseFrom(*this);
+    if (when)
+    {
+        auto w = when;
+        when = nullptr;
+        w->releaseFrom(*this);
+    }
+    assert(mind == nullptr);
+    QObject* o = object.data();
+    object = nullptr;
+    if (o && o->parent() == nullptr)
+        o->deleteLater();
 }
 
 QtObjectWrapper::QtObjectWrapper(const Constant *&link, const QtObjectClassName *className, QObject *object)

@@ -843,6 +843,7 @@ PILS should be restarted and tested after each edit.
 ;library-channel (channel: pils-library: this program filename);
 { call = save: .filename | :try :call }
 { .save | :try save (.filename this program filename) }
+{ .savez | :try save (.filename this program filename . ".testing" bug {}) }
 ===
 { save: .filename
 | :ok

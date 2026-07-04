@@ -1,51 +1,129 @@
-><:[module:. platform, .timestamp 2008-06-21T23:43:00.909+02 .language system]><;
-><:[module:. platform qt .timestamp 2008-06-21T23:43:08.612+02 .language system]><;
-><:[module:. platform qt entry .timestamp 2008-07-19T17:38:47.465+02 .language system]><;
-@><:[module:. platform qt entry ask .timestamp 2011-05-18T00:50:13.502+02 .language system]><;
-{ .ask | :ok @@ . [parent ask] parent [.; ask] }
-{ .asking | :ok @@ . [parent asking] parent [.; asking] }
-><:[module:. platform qt entry clipboard .timestamp 2009-07-02T19:37:51.513+02 .language qt]><;
-{ .clipboard
+><:[module:. platform, .timestamp 2008-06-25T15:43:00.909+02 .language system]><;
+><:[module:. platform qt .timestamp 2008-06-25T15:43:08.612+02 .language system]><;
+><:[module:. platform qt dialog .timestamp 2026-07-03T22:26:41.578+02 .language qt]><;
+;new plumcake .WA_DeleteOnClose 55 .WindowModal 1;
+{ .dialog: .window .handle
 | :ok
-  { .text | :try juce-SystemClipboard juce-getTextFromClipboard }
-  { text: text
-  | :who
-    juce-SystemClipboard juce-copyTextToClipboard (text) .:need and: :ok who
+  new Q:Dialog (window)
+  q:setAttribute (WA_DeleteOnClose, 1)
+  q:setWindowTitle (handle title)
+  q:setWindowModality (WindowModal)
+  q:show
+  when
+  { .bug | shit }
+  { .close | :who :ok who q:close }
+  { tree: handle [tree]
+  | :who :ok
+    :use
+    { when: .handle
+    | :self :ok
+      { .bug | shit }
+      { node: handle
+      | :who
+        ;text handle text .:need; :ok
+        who q:addChild (text) when (self when: .handle)
+      }
+      { .handle | :ok handle }
+    }
+    ;
+    ;layout new Q:VBoxLayout(who);
+    ;tree new Q:PilsTreeWidget(who) when
+    { qs:itemActivated: ?
+    | :who :try handle [tree] picked: who q:currentNode
+    }
+    { node: handle
+    | :who
+      ;text handle text .:need; :ok
+      who q:addRootNode (text)
+      when (when (.handle))
+    }
+    ;
+    layout q:addWidget(tree) and:
+    who q:setLayout(layout) and:
+    tree
   }
 }
-><:[module:. platform qt entry icon .timestamp 2010-02-26T18:55:28.627+01 .language qt]><;
-{ icon: .size .png | :ok Q:Image: png }
-><:[module:. platform qt entry keyboard .timestamp 2011-07-20T23:09:04.998+02 .language qt]><;
-;keyboard
-{ ok call
-  [.shift-key juce-isShiftDown .ctrl-key juce-isCtrlDown .alt-key m juce-isAltDown]
-| :ok ' call: juce-ModifierKeys juce-getCurrentModifiers
+><:[module:. platform qt edits .timestamp 2026-07-03T22:45:23.295+02 .language qt]><;
+;new plumcake;
+{ edits: .window .handle
+| :possibly
+  new Q:TabWidget
+  when
+  { qs:currentChanged: n | :who :try handle select: .tabs who }
+  { .tabs
+  | :who :ok
+     who q:count up every
+    { n | :ok who q:widget: n - 1 }
+  }
+  { edit: handle
+  | :who :ok
+    ;tabber who .id handle id;
+    ! Search for existing tab with same id
+    tabber tabs find
+    { tab
+    | :if id = tab id; :ok
+      (found-tab: .id) bug {} and:
+      tab edit
+    }
+    or:
+    ;edit
+      new Q:PilsPlainTextEdit (handle text)
+      when
+      { qs:textChanged:
+      | :who handle text:. who q:toPlainText
+      }
+      { .handle | :ok handle }
+      { .text | :who :ok who q:toPlainText }
+      { selection: a, b
+      | :who :ok who q:setSelection(a, b) q:ensureCursorVisible
+      }
+      { .selection | :who :ok who q:selection }
+      { .focus | :who :ok who q:setFocus }
+      { .pickup
+      | :who :ok
+        ;widget tabber tabs find { tab | :if tab id = id; :ok tab };
+        tabber q:setCurrentWidget (widget) or ((bad: tapper:.) bug {})
+        and:
+        who
+      }
+    ;
+    ;layout new Q:VBoxLayout;
+    ;tab new Q:Widget when
+      { .edit | :ok edit }
+      { .id | :ok handle id }
+    ;
+    tab q:setLayout (layout) and:
+    who q:addTab (tab, handle name) and:
+    layout q:addWidget(edit, 1, 0) and:
+    edit
+  }
+  { .current
+  | :who :ok who q:currentWidget edit
+  }
+  try {tabs|who q:addWidget (tabs)}
 }
-><:[module:. platform qt entry path .timestamp 2009-01-26T00:31:04.937+01 .language system]><;
+><:[module:. platform qt entry .timestamp 2008-07-23T09:38:47.465+02 .language system]><;
+@
+><:[module:. platform qt entry icon .timestamp 2010-02-28T14:55:28.627+01 .language qt]><;
+{ icon: .size .png | :ok Q:Image: png }
+><:[module:. platform qt entry path .timestamp 2009-01-27T20:31:04.937+01 .language system]><;
 ;path
 { .documents | :ok [pils-configuration:documents-directory] }
-><:[module:. platform qt entry say .timestamp 2011-05-06T20:18:34.589+02 .language qt]><;
-{ (say: message .header) anyway [.header information]
-| :ok
-  juce-AlertWindow juce-showMessageBoxAsync
-  ( 3,
-    say (header),
-    say (message),
-    "",
-    [juce-Component],
-  )
-}
-><:[module:. platform qt entry system .timestamp 2008-08-04T12:55:32.254+02 .language system]><;
+><:[module:. platform qt entry system .timestamp 2008-08-08T04:55:32.254+02 .language system]><;
 { .system | :try @@ [platform qt system [?:?|pils-configuration:system]] }
-><:[module:. platform qt entry window .timestamp 2011-09-28T16:59:07.075+02 .language qt]><;
+><:[module:. platform qt entry window .timestamp 2026-07-03T22:28:40.347+02 .language qt]><;
+;new plumcake .WA_DeleteOnClose 55;
 { window: handle
 | :possibly
-  plumcake Q:MainWindow
+  new Q:MainWindow
+  q:setAttribute (WA_DeleteOnClose, 1)
   q:setWindowTitle (handle title .:need)
   q:setWindowIcon (handle icon .:need)
   q:show
   q:setGeometry (handle geometry .:need)
   when
+  { filedialog: handle | :who :try @ filedialog: .window who .handle }
+  { dialog: handle | :who :try @ dialog: .window who .handle }
   { ask: .; options = :where? .ruleset :' rules
   | :who :ok
     ;buttons rules every [call: match];
@@ -69,7 +147,7 @@
     }
     and:
     dialog q:show
- }
+  }
   { icon: ' | :who :try who q:setWindowIcon (icon) }
   { qe:mouseButtonPress: ' | (': ') bug {}}
   { qe:mouseButtonRelease: ' | (': ') bug {}}
@@ -134,10 +212,11 @@
               { .text | :who :ok who q:toPlainText }
               { text: ' | :who :ok who q:setPlainText: text }
                   { selection: a, b
-                  | :who :ok who q:setSelection(a, b)
+                  | :who :ok who q:setSelection(a, b) q:ensureCursorVisible
                   }
                   { .selection | :who :ok who q:selection }
                   { .focus | :who :ok who q:setFocus }
+                  { .pickup | :who :ok who }
               ;
               who q:addWidget (edit) and:
               edit
@@ -148,17 +227,20 @@
               { .text | :who :ok who q:toPlainText }
               { text: ' | :who :ok who q:setPlainText: text }
                   { selection: a, b
-                  | :who :ok who q:setSelection(a, b)
+                  | :who :ok who q:setSelection(a, b) q:ensureCursorVisible
                   }
                   { .selection | :who :ok who q:selection }
                   { .focus | :who :ok who q:setFocus }
+                  { .pickup | :who :ok who }
               ;
               who q:addWidget (edit) and:
               edit
             }
-            { .tabs
+            { tabs: handle
             | :who :ok
-              plumcake Q:TabWidget when
+              plumcake Q:TabWidget
+              when
+              { qs:currentChanged: n | :who :try handle select: .tabs who }
               { .tabs
               | :who :ok
                 who q:count up every
@@ -166,14 +248,14 @@
               }
               { edit: handle
               | :who :ok
+                ;tabber who .id handle id;
                 ! Search for existing tab with same id
-                who tabs find
-                (;id handle id;
+                tabber tabs find
                 { tab
                 | :if id = tab id; :ok
                   (found-tab: .id) bug {} and:
                   tab edit
-                })
+                }
                 or:
                 ;edit
                   plumcake Q:PilsPlainTextEdit (handle text)
@@ -184,10 +266,17 @@
                   { .handle | :ok handle }
                   { .text | :who :ok who q:toPlainText }
                   { selection: a, b
-                  | :who :ok who q:setSelection(a, b)
+                  | :who :ok who q:setSelection(a, b) q:ensureCursorVisible
                   }
                   { .selection | :who :ok who q:selection }
                   { .focus | :who :ok who q:setFocus }
+                  { .pickup
+                  | :who :ok
+                    ;widget tabber tabs find { tab | :if tab id = id; :ok tab };
+                    tabber q:setCurrentWidget (widget) or ((bad: tapper:.) bug {})
+                    and:
+                    who
+                  }
                 ;
                 ;layout plumcake Q:VBoxLayout;
                 ;tab plumcake Q:Widget when
@@ -219,1383 +308,31 @@
   .(@ strap) .:need
 }
 
-><:[module:. platform qt keypress .timestamp 2011-09-06T00:11:05.084+02 .language qt]><;
-{ keypress:.
-| :ok
-  ;m keypress juce-getModifiers;
-  [key down]: .key
-  keypress juce-getKeyCode call
-  { ok | :ok }
-  { 0x20 <= ok < 0x10000 | :ok ' listwise utf-8 }
-  { ?
-  | :try keypress juce-getTextCharacter call
-     {+ ok|:ok ' listwise utf-8}
-     {+ ok < 27|:ok (' + 64) listwise utf-8}
-  }
-  { ok call
-    [ .8 back .9 tab .13 return .27 escape .65582 delete .127 back
-      .65569 page up
-      .65570 page down
-      .65571 end
-      .65572 home
-      .65573 left
-      .65574 up
-      .65575 right
-      .65576 down
-      .65581 insert
-      .65648 f1 .65649 f2 .65650 f3 .65651 f4 .65652 f5 .65653 f6
-      .65654 f7 .65655 f8 .65656 f9 .65657 f10 .65658 f11 .65659 f12
-      .65660 f13 .65661 f14 .65662 f15 .65663 f16 .65664 f17 .65665 f18
-      .65666 f19 .65667 f20 .65668 f21 .65669 f22 .65670 f23 .65671 f24
-    ]
-  | :ok
-  }
-  .shift-key m juce-isShiftDown
-  .ctrl-key m juce-isCtrlDown
-  .alt-key m juce-isAltDown
-}
-><:[module:. platform qt parent ' .timestamp 2009-01-16T10:28:33.682+01 .language qt]><;
-{ parent: .; [parent] | :ok parent juce-getParentComponent }
-><:[module:. platform qt parent .timestamp 2011-07-21T01:02:42.127+02 .language qt]><;
-{ [self: parent] | :self :ok self }
-{ parent:. ' juce-Component
-| :self [parent]; :ok
-  parent +++
-  { (name = ?:? // ?) * node
-  | :who :try (parent:. who; node) call: :need name call (@@)
-  }
-  { name = ?:? // ?
-  | :who :try (parent:. who; name) call: :need name call (@@)
-  }
-}
-><:[module:. platform qt parent ask .timestamp 2011-09-29T21:59:58.580+02 .language qt]><;
-{ parent: .; [ask]
-| :ok
-  { (text:. .label .header) anyway [.header enter text .text ""]
-  | ;textfield juce-TextEditor ()
-      when
-      { state call [.[juce-escapePressed:] 0 .[juce-returnPressed:] 1]
-      | :who ' juce-getParentComponent juce-exitModalState (state) .:ok
-      }
-      try (call: juce-setText: text)
-    ;
-    ;dialog
-      juce-DialogWindow (say (label), juce-Colour [200 150 100], 1)
-      try (call: juce-setContentOwned: textfield, 0)
-      try (call: juce-centreAroundComponent: parent, 300, 60)
-      when
-      { juce-closeButtonPressed: | :who ' juce-exitModalState 0 .:ok }
-      { juce-focusGained: ? | :ok textfield juce-grabKeyboardFocus }
-    ;
-    dialog juce-runModalLoop
-    call
-    { ? | dialog juce-removeFromDesktop juce-visibilityChanged }
-    { 1
-    | ;text textfield juce-getText call {+$ ok|:ok} .:need;
-      dialog juce-removeFromDesktop juce-visibilityChanged and:
-      :ok text
-    }
-    .:try
-  }
-  { (open: .filename .header .type .filter .path)
-    anyway [.type? .filter? .filename "" .header open .path ""]
-  | ;name filename <+#^* "/" .:need .folder filename <-#^* "/" .:need;
-    ;chooser juce-FileChooser(say (header), juce-File(path));
-    :if chooser juce-browseForFileToOpen = 1;
-    ;filename chooser juce-getResult juce-getFullPathName *=* ("\", "/");
-    :if filename count > 0; :ok filename
-  }
-  { (save: .filename .header .type .filter)
-    anyway [.type? .filter? .filename ""]
-  | ;name filename <+#^* "/" .:need .folder filename <-#^* "/" .:need;
-    ;chooser juce-FileChooser(say (header), juce-File(filename));
-    :if chooser juce-browseForFileToSave 1 = 1;
-    ;filename chooser juce-getResult juce-getFullPathName *=* ("\", "/");
-    :if filename count > 0; :ok filename
-  }
-  { (folder: .header .folder) anyway [.folder ""]
-  | ;chooser juce-FileChooser(say (header), juce-File(folder));
-    :if chooser juce-browseForDirectory = 1;
-    ;filename chooser juce-getResult juce-getFullPathName *=* ("\", "/");
-    :if filename count > 0; :ok filename try {ok <-* "/"|:ok ' "/"}
-  }
-  { (ok:. .header) anyway [.header confirm]
-  | :ok juce-AlertWindow juce-showOkCancelBox (1, say (header), say (ok))
-    or:
-    juce-AlertWindow juce-showOkCancelBox
-    ( 1,
-      say (header),
-      say (ok),
-      "",
-      "",
-      [juce-Component],
-      [juce-ModalComponentManager.Callback]
-    )
-  }
-}
-><:[module:. platform qt parent asking .timestamp 2011-09-28T16:53:46.265+02 .language qt]><;
-{ parent: .; [asking]
-| :ok
-  { (text:. .label .header; done) anyway [.header enter text .text ""]
-  | ;textfield juce-TextEditor ()
-      when
-      { state call [.[juce-escapePressed:] 0 .[juce-returnPressed:] 1]
-      | :who ' juce-getParentComponent juce-exitModalState (state) .:ok
-      }
-      try (call: juce-setText: text)
-    ;
-    ;dialog
-      juce-DialogWindow (say (label), juce-Colour [200 150 100], 1)
-      try (call: juce-setContentOwned: textfield, 0)
-      try (call: juce-centreAroundComponent: parent, 300, 60)
-      when
-      { juce-closeButtonPressed: | :who ' juce-exitModalState 0 .:ok }
-      { juce-focusGained: ? | :ok textfield juce-grabKeyboardFocus }
-    ;
-    dialog juce-runModalLoop
-    call
-    { ? | dialog juce-removeFromDesktop juce-visibilityChanged }
-    { 1
-    | ;text textfield juce-getText call {+$ ok|:ok} .:need;
-      dialog juce-removeFromDesktop juce-visibilityChanged and:
-      :ok text try (done)
-    }
-    .:try
-  }
-  { (open: .filename .header .type .filter .path)
-    anyway [.type? .filter? .filename "" .header open .path ""]
-  | ;name filename <+#^* "/" .:need .folder filename <-#^* "/" .:need;
-    ;chooser juce-FileChooser(say (header), juce-File(path));
-    :if chooser juce-browseForFileToOpen = 1;
-    ;filename chooser juce-getResult juce-getFullPathName *=* ("\", "/");
-    :if filename count > 0; :ok filename
-  }
-  { (save: .filename .header .type .filter)
-    anyway [.type? .filter? .filename ""]
-  | ;name filename <+#^* "/" .:need .folder filename <-#^* "/" .:need;
-    ;chooser juce-FileChooser(say (header), juce-File(filename));
-    :if chooser juce-browseForFileToSave 1 = 1;
-    ;filename chooser juce-getResult juce-getFullPathName *=* ("\", "/");
-    :if filename count > 0; :ok filename
-  }
-  { (folder: .header .folder) anyway [.folder ""]
-  | ;chooser juce-FileChooser(say (header), juce-File(folder));
-    :if chooser juce-browseForDirectory = 1;
-    ;filename chooser juce-getResult juce-getFullPathName *=* ("\", "/");
-    :if filename count > 0; :ok filename try {ok <-* "/"|:ok ' "/"}
-  }
-  { (ok:. .header) anyway [.header confirm]
-  | :ok juce-AlertWindow juce-showOkCancelBox (1, say (header), say (ok))
-    or:
-    juce-AlertWindow juce-showOkCancelBox
-    ( 1,
-      say (header),
-      say (ok),
-      "",
-      "",
-      [juce-Component],
-      [juce-ModalComponentManager.Callback]
-    )
-  }
-}
-><:[module:. platform qt parent at .timestamp 2011-07-20T23:30:19.277+02 .language system]><;
-{ at:. .pane
-| :ok
-  { menu = menu: .? .action?
-  | :try @ menu:. .pane .at
-  }
-}
-><:[module:. platform qt parent at menu .timestamp 2011-07-20T23:30:04.317+02 .language qt]><;
-{ menu: .pane .at .menu menu:. & ' .action
-| :ok
-  @ [menu] tree (.menu)
-  first (juce-PopupMenu ()) fold
-  { menu := submenu: .name; items
-  | :who :ok
-    menu juce-addSubMenu:
-    saying (name),
-    items first (juce-PopupMenu()) fold (who)
-  }
-  { menu := item:. .name .at
-  | :ok
-    menu juce-addItem:
-    at,
-    saying (name),
-   1,
-   item call {*;check 1|:ok 1} or 0
-  }
-  { menu := item:. .name [-] .at | :ok menu juce-addSeparator }
-  juce-show
-  try: menu -> [ok] +++ [call: action] -> action
-}
-><:[module:. platform qt parent button .timestamp 2011-07-21T00:12:18.933+02 .language qt]><;
-{ parent: .; button: $ label
-| :ok
-  parent juce-new (juce-TextButton (label))
-  when {juce-clicked:|:who ' clicked .:try}
-}
-><:[module:. platform qt parent canvas .timestamp 2011-07-21T00:19:29.164+02 .language qt]><;
-{ parent: .; [canvas]
-| :ok
-  parent juce-new (juce-Component ())
-  juce-setWantsKeyboardFocus 1
-  when (@ common)
-  when (@ offspring)
+><:[module:. platform qt filedialog .timestamp 2026-07-03T22:28:53.666+02 .language qt]><;
+;new plumcake .WA_DeleteOnClose 55;
+{ .filedialog: .window .handle
+| :possibly
+  new Q:FileDialog (window)
+  q:setAttribute (WA_DeleteOnClose, 1)
+  q:setWindowTitle (handle title .:need) .:need
+  q:setWindowModality 1 ! WindowModal
+  q:setDirectory (handle path .:need)
+  q:show
   when
-  { .clear | :who ' juce-deleteAllChildren .:ok }
-  { juce-new: ok juce-Component
-  | :who :ok who juce-addAndMakeVisible (ok) and: ok
-  }
-  { juce-paint: graphics | :who ' paint (@ graphics: .) .:try }
+  { .bug | shit }
+  { .handle | :ok handle }
+  { .close | :who :ok who q:close }
+  { qs:fileSelected: x | :try handle pick: x }
 }
-><:[module:. platform qt parent checkbox .timestamp 2011-07-21T00:12:42.100+02 .language qt]><;
-{ parent: .; checkbox: $ label
-| :ok
-  parent juce-new (juce-ToggleButton (label))
-  when
-  { show: show call [.0 .1] | :who :ok who juce-setVisible (show) }
-  { .checked | :who ' juce-getToggleState .:try }
-  { checked: state call [.0 .1] | :who ' juce-setToggleState (state, 0) .:try }
-  { juce-clicked: | :who ' changed .:try }
-}
-><:[module:. platform qt parent codepane .timestamp 2011-09-30T14:05:39.185+02 .language qt]><;
-{ .test | :ok @ [tokeniser] [syntax] }
-{ parent: .; (codepane: .syntax / ' .tabs) anyway [.syntax .tabs 0]
-| :ok
-  ;dummy juce-CodeDocument ()
-  .tokeniser @ [tokeniser] (syntax) or [juce-CodeTokeniser]
-  ;
-  parent juce-new (juce-CodeEditorComponent (dummy, tokeniser))
-  try {x|x juce-setFont (juce-Font 18 .:need)}
-  when
-  { zoom: zoom | :who :ok who } ! TODO
-  { text: $ text | :who ' juce-loadContent (text) .:ok }
-  { .text := $ text | :who ' juce-loadContent (text) .:ok }
-  { .text | :who :ok who juce-getDocument juce-getAllContent <-#$* ""~ }
-  { .focus | :who :ok who juce-grabKeyboardFocus and: who }
-  { show: show call [.0 .1] | :who :ok who juce-setVisible (show) }
-  { (selection: % a, % b .scroll-to-center) anyway [.scroll-to-center 0]
-  | :who :possibly
-    :use {$ ok +# -1 .:|:ok};
-    ;standin who text;
-    ;a standin +# a .:need utf-8 count
-    .b standin +# b .:need utf-8 count
-    ;
-    who juce-setHighlightedRegion (a, b) and:
-    ( :if scroll-to-center = 1;
-      ;line who juce-getCaretPos juce-getLineNumber
-      .total who juce-getNumLinesOnScreen
-      ;
-      ;ideal line - (total \ 2);
-      who juce-scrollToLine:
-      :if ideal > 0; ideal .else 0
-    )
-    and:
-    who
-  }
-  { .selection
-  | :who :ok
-    ;text who juce-getText;
-    [juce-getHighlightedRegionStart juce-getCaretPos] every (who)
-    every {p|:ok text utf-8 +# p utf-8 count}
-  }
-  { .clear | :who :ok who juce-setText "" and: who }
-  { tip: tip | :who :ok who mind tip := tip; who }
-  { (find:. .casing_sensitive .whole_words_only .direction)
-    anyway [.casing_sensitive 0 .whole_words_only 0 .direction down]
-  | :who :ok
-    ;casing_sensitive ' call (.1 [ok] .0 {ok|:ok ' lower}) .raw who text;
-    ;find ' call (casing_sensitive)
-    .text raw call (casing_sensitive) !*=* (""/,  ""/, ""=, ""/)
-    ;
-    direction call
-    ( .down
-        raw utf-8 +# (who juce-getCaretPos juce-getPosition) utf-8 count
-        repeat
-        { from
-        | ;hit text -# from =* find; :if hit > 0; :ok
-          ;hit ' + from;
-          list := (hit - (find count), hit);
-          hit
-        }
-      .up
-        raw utf-8 +# (who juce-getHighlightedRegionStart) utf-8 count
-        repeat
-        { from
-        | ;hit text +# from <=* find; :if hit > 0; :ok
-          ;hit from - hit;
-          list := (hit, hit + (find count));
-          hit
-        }
-    )
-    .:list
-    find
-    ( whole_words_only call: .0 [ok] .1
-      { hit
-      | hit find
-        { at
-        | :if
-            0 < text +# at <++# 1 -* " ,.;:?!""(){|}[]"<=>
-            < text -# at ++# 1 -* " ,.;:?!""(){|}[]"<=>
-          ;
-          :ok ()
-        }
-        or: :ok hit
-      }
-    )
-    or ()
-  }
-  { juce-codeDocumentEditorTextChanged: ? | :who ' changed .:try }
-  { juce-keyPressed: keypress
-  | :who :try @ keypress (.) .:need call:
-    who +++
-    { [key down]: .key [f4] .shift-key 0 .ctrl-key 0 .alt-key 1
-    | :ok who juce-getTopLevelComponent juce-closeButtonPressed and 1
-    }
-    { [key down]: .key [tab] .shift-key ? .ctrl-key 0 .alt-key 0
-    | tabs call [0:.] .:try
-    }
-  }
-  { juce-focusGained: ? | :who ' focused 1 .:try }
-  { juce-focusLost: ? | :who ' focused 0 .:try }
-  { focused: 1
-  | :who ' juce-getTopLevelComponent mind focused := who
-  }
-}
-><:[module:. platform qt parent codepane tokeniser .timestamp 2011-07-06T19:36:40.525+02 .language system]><;
-><:[module:. platform qt parent codepane tokeniser C++ .timestamp 2011-07-06T19:36:25.641+02 .language qt]><;
-;C++ juce-CPlusPlusCodeTokeniser ()
-><:[module:. platform qt parent codepane tokeniser pils .timestamp 2011-07-06T19:33:39.429+02 .language qt]><;
-;pils juce-PilsCodeTokeniser ()
-><:[module:. platform qt parent codepane tokeniser syntax .timestamp 2011-07-06T17:56:02.791+02 .language qt]><;
-;syntax [juce-CodeTokeniser]><:[module:. platform qt parent column .timestamp 2011-09-05T23:59:36.570+02 .language qt]><;
-{ parent: .; [column]
-| :ok
-  ;layout juce-StretchableLayoutManager ();
-  parent juce-new (juce-Component ())
-  when (@ offspring)
-  when
-  { juce-resized:
-  | :who :ok
-    ;children
-      0 up (who juce-getNumChildComponents - 1)
-      every {n|:ok who juce-getChildComponent: n}
-      every {ok|:ok ' mind juce-wrap or: ok}
-    ;
-    layout juce-clearAllItems() and:
-    children every
-    { ? | :ok 8, -1, -1 }
-    { child | ;height child mind height .:need; :ok height, height, height }
-    legs { n := hint | layout juce-setItemLayout: (n - 1) & hint }
-    and:
-    layout juce-layOutComponents:
-    children, 0, 0, who juce-getWidth, who juce-getHeight, 1, 1
-  }
-  { juce-new: ok juce-Component
-  | :who :ok who juce-addAndMakeVisible (ok) juce-resized and: ok
-  }
-}
-><:[module:. platform qt parent common .timestamp 2011-07-22T00:54:02.759+02 .language qt]><;
-;common
-{ at: . | :who :ok @ at:. .pane who }
-{ .refresh | :who :ok who juce-repaint }
-{ .focus | :who ' juce-grabKeyboardFocus .:ok }
-{ .focused | :who ' juce-hasKeyboardFocus 0 .:ok }
-{ .size | :who :ok who juce-getWidth, who juce-getHeight }
-{ size: size | :who ' juce-setSize (size) .:try }
-{ place: place | :who ' juce-setTopLeftPosition (place) .:try }
-{ (drag: .description .image) anyway [.image juce-Image]
-| :who
-  ;description ' .({} write:);
-  juce-DragAndDropContainer juce-findParentDragContainerFor (who) .:need
-  juce-startDragging (description, who, image, 1) .:need
-  and: :ok who
-}
-{ (drag: .description .image) anyway [.image juce-Image]
-| :who
-  ;description ' call {ok|:ok ' .({} write)} {$ ok|:ok};
-  juce-DragAndDropContainer juce-findParentDragContainerFor (who) .:need
-  juce-startDragging (description, who, image, 1) .:need
-  and: :ok who
-}
-{ juce-mouseDown: e
-| :who
-  ;at [juce-x juce-y] every (e);
-  [juce-isLeftButtonDown juce-isRightButtonDown] every (e juce-mods) call
-  { 1, 0 | :ok [mouse left down]: at }
-  { 0, 1 | :ok [mouse right down]: at }
-  { 1, 1 | :ok [mouse both down]: at }
-  call (who) .:try
-}
-{ juce-mouseDrag: e
-| :who
-  ;at [juce-x juce-y] every (e);
-  [juce-isLeftButtonDown juce-isRightButtonDown] every (e juce-mods) call
-  { 1, 0 | :ok [mouse left drag]: at }
-  { 0, 1 | :ok [mouse right drag]: at }
-  { 1, 1 | :ok [mouse both drag]: at }
-  call (who) .:try
-}
-{ juce-mouseUp: e | :who ' . ([mouse up]: [juce-x juce-y] every (e)) .:try }
-{ juce-mouseMove: e | :who ' . ([mouse move]: [juce-x juce-y] every (e)) .:try }
-{ juce-resized: | :who ' sized .:try }
-{ juce-keyPressed: keypress
-| :who :try @ keypress (.) .:need call:
-  { key | key call (who) .:need and: :ok 1 }
-  { [key down]: .key [f4] .shift-key 0 .ctrl-key 0 .alt-key 1
-  | :ok
-    who juce-getTopLevelComponent juce-closeButtonPressed
-    and: 1
-  }
-}
-{ juce-isInterestedInDragSource: description, component
-| :who ' dragging (. {} read (description) .:need .from component) .:try
-}
-{ juce-itemDropped: description, component, x, y
-| :who
-  ' dropped (. {} read (description) .:need .from component .at x, y) .:try
-}
-{ juce-focusGained: ? | :who ' focused 1 .:try }
-{ juce-focusLost: ? | :who ' focused 0 .:try }
-{ juce-keyPressed: keypress | :who ' .(@ keypress (.) call) .:try }
-{ focused: 1 | :who ' juce-getTopLevelComponent mind focused := who }
-><:[module:. platform qt parent find .timestamp 2011-07-21T01:05:28.835+02 .language system]><;
-{ parent: .; find: .host
-| :ok
-  ;channel (channel: search: parent repeat {::using?; ok|:ok});
-  channel close anyway:
-  ;dialog platform window (say [find]);
-  ;contents dialog column;
-  ;row contents row when {.escape|dialog close};
-  row mind height := 25;
-  ;[title: find] row label (say [find]);
-  title [find] mind width := 40;
-  ;find
-    row textfield text (host find or "")
-    when
-    { .return | :try host command: . [find_next] .panel dialog }
-    { .changed | :who host find := who text }
-    { .escape | :ok dialog close }
-  ;
-  and:
-  ;find_next
-    row button (say [find next])
-    when
-    { .clicked
-    | :try host command: . [find_next] .panel dialog
-    }
-  ;
-  find_next mind width := 100;
-  ;row contents row;
-  ;column row column;
-  ;whole_words_only column checkbox (say [whole words only])
-    checked (host whole_words_only)
-    when {.changed|:who host whole_words_only := who checked}
-  ;
-  ;casing_sensitive column checkbox (say [casing sensitive])
-    checked (host casing_sensitive)
-    when {.changed|:who host casing_sensitive := who checked}
-  ;
-  [whole_words_only casing_sensitive] every
-  { call
-  | :ok
-    ;checkbox (:call);
-    checkbox checked (call call (host) or 0)
-  }
-  and:
-  ;row ' groupbox (say [direction]) row;
-  ;[direction: up]
-    row checkbox (say [up])
-    when
-    { .changed
-    | :who ' mind direction [down] checked (who checked = 0) and:
-      host direction := who checked call [.1 up .0 .down]
-    }
-  ;
-  ;[direction: down]
-    row checkbox (say [down])
-    when
-    { .changed
-    | :who direction [up] checked (who checked = 0) and:
-      host direction := who checked call [.1 down .0 .up]
-    }
-  ;
-  direction [up] mind direction [down] := direction [down];
-  [up down, down up] every
-  { direction, other
-  | :ok
-    direction (direction) checked (direction = host direction or 0)
-  }
-  and:
-  find focus and:
-  dialog inner size (300, 75)
-}
-><:[module:. platform qt parent folder .timestamp 2011-09-28T16:55:53.647+02 .language qt]><;
-{ parent: .; folder: .
-| ;folder ' call {? folder: ok|:ok} {$ ok|folder (ok) .:need and: :ok} .:need;
-  :ok
-  juce-FileBrowserComponent
-  (2, juce-File (folder), [juce-FileFilter], [juce-FilePreviewComponent], 1, 1)
-  .(parent juce-new)
-  when (@ common)
-  when
-  { try | :who :try ' call: who: .; who mind juce-when or () }
-  { when: more
-  | :who :ok who mind juce-when := who mind juce-when or () +++ more; who
-  }
-  { tip: tip | :who :ok who mind tip := tip; who }
-  { focusing: focusing call [.0 .1]
-  | :who ' juce-setWantsKeyboardFocus (focusing) .:ok
-  }
-  { .hot
-  | :who
-    :if who juce-currentFileIsValid = 1; :ok
-    who juce-getCurrentFile juce-getFullPathName *=* ("\", "/") "/" .(folder)
-  }
-  { juce-paint: graphics | graphics juce-fillAll: juce-Colour [255, 255, 255] }
-  { juce-selectionChanged: | :who ' changed .:try }
-  try
-  { folder
-  | ;listener
-      juce-FileBrowserListener ()
-      when {juce-selectionChanged:|:try folder changed}
-    ;
-    folder mind juce-listener := listener;
-    folder juce-addListener (listener)
-  }
-}
-><:[module:. platform qt parent groupbox .timestamp 2011-07-21T00:20:27.730+02 .language qt]><;
-{ parent: .; groupbox: $ label
-| :ok
-  parent juce-new (juce-GroupComponent ("", label))
-  when (@ offspring)
-  when
-  { juce-resized:
-  | :who '
-    juce-getChildComponent
-    ( who juce-getNumChildComponents call {+ ok|:ok ' - 1} .:need )
-    juce-setBounds (8, 18, who juce-getWidth - 16, who juce-getHeight - 26)
-    .:possibly
-  }
-  { text: $ text | :who ' juce-setText (text) .:ok }
-  { .text | :who ' juce-getText .:ok }
-  { juce-new: new juce-Component
-  | :who :ok
-    who juce-addAndMakeVisible (new) and:
-    new juce-setBounds (8, 18, who juce-getWidth - 16, who juce-getHeight - 26)
-  }
-}
-><:[module:. platform qt parent image .timestamp 2011-07-21T00:09:00.695+02 .language qt]><;
-{ parent: .; [image]
-| :ok
-  parent juce-new (juce-Component ())
-  juce-setWantsKeyboardFocus 1
-  when (@ common)
-  when
-  { juce-new: ok juce-Component
-  | :who :ok who juce-addAndMakeVisible (ok) and: ok
-  }
-  { juce-paint: graphics
-  | :who :try who mind drawable .:need juce-draw (graphics)
-  }
-  { get: file file: filename
-  | :who ' mind drawable :=
-       juce-Drawable juce-createFromImageFile (juce-File (filename)) .:need
-     ;
-     :ok who refresh
-  }
-}
-><:[module:. platform qt parent label .timestamp 2011-07-21T00:01:31.232+02 .language qt]><;
-{ parent: .; label: $ text
-| :ok
-  parent juce-new (juce-Label ("", text))
-  when
-  { .text | :who ' juce-getText .:ok }
-  { text: $ text | :who ' juce-setText (text, 0) .:ok }
-}
-><:[module:. platform qt parent labeled .timestamp 2008-08-09T20:47:11.880+02 .language system]><;
-{ parent: .; labeled: label
-| :ok
-  ;pane parent column;
-  pane label (say (label)) mind height := 20;
-  pane
-}
-><:[module:. platform qt parent list .timestamp 2011-09-28T16:56:39.758+02 .language qt]><;
-{ parent: .; (list: .style) anyway [.style]
-| :ok
-  parent juce-new (juce-ListBox ())
-  call
-  { list
-  | :ok
-    list mind juce-items := ();
-    list mind juce-settings :=
-    ( settings:
-      .justification juce-Justification 1
-      .[colour: 0] juce-Colour [0 0 0]
-      .[colour: 1] juce-Colour [190 180 255]
-      .icons ()
-      .rectanglePlacement juce-RectanglePlacement 64
-    )
-    ;
-    list
-  }
-  when
-  { + n
-  | :who [list]; :if n <= who [list] mind juce-items count; :ok
-    {|:ok n}
-    { .text | :try who [list] mind juce-items .:need . n .:need text }
-    { text: text
-    | :who :possibly
-       who [list] mind juce-items :=
-       who [list] mind juce-items .:need legs
-       { n' := ok | :ok ' merge: :if n = n'; ;text }
-       ;
-       who [list] juce-repaintRow (n - 1) and:
-       who
-    }
-    { icon:. ' count
-    | :who :ok
-      ;items who [list] mind juce-items;
-      who [list] mind juce-items :=
-        (items +# (n - 1)) & (items . n merge (;icon)) & (items -# n)
-      ;
-      who [list] juce-repaintRow (n - 1) and:
-      who
-    }
-    { .list | :ok who [list] }
-    { .select | :who :ok who [list] juce-selectRow (n - 1) and: who }
-  }
-  { (icons:. .size) anyway [.size 16]
-  | :who
-    who mind juce-settings :=
-    ( who mind juce-settings merge:
-      ;icons ' every {ok juce-Image|:ok} .:need .size
-    );
-    :ok who
-  }
-  { (icons: .pairs .size) anyway [.size 16]
-  | :who
-    who mind juce-settings :=
-    ( who mind juce-settings merge:
-      ;icons pairs every {ok = (? juce-Image, ? juce-Image)|:ok} .:need .size
-    );
-    :ok who
-  }
-  { add: & items
-  | :who ;items ' every {$ text|:ok item: .text} .:need; :ok
-    who mind juce-items := who mind juce-items & items;
-    who juce-updateContent
-  }
-  { add: $ text
-  | :who :ok
-    who mind juce-items := who mind juce-items & (item: .text);
-    who juce-updateContent
-  }
-  { insert: $ text
-  | :who :ok
-    ;old who mind juce-items;
-    ;at (0, who juce-getLastRowSelected or 0, old count) order [ok] 2;
-    who mind juce-items := old +# at & (item: .text) & (old -# at);
-    who juce-updateContent
-  }
-  { hot: + n | :who ' juce-selectRow (n - 1) .:ok }
-  { .hot | :who (' juce-getLastRowSelected + 1) call (who) .:try }
-  { delete: + n
-  | :who
-    ;items who mind juce-items;
-    who mind juce-items := items +# n .:need <-# 1 & (items -# n);
-    :ok who juce-updateContent
-  }
-  { width: .column?; ? | :who ' .:ok }
-  { .count | :who ' mind juce-items count .:ok }
-  { text: + n | :who ' mind juce-items . n .:need text .:try }
-  { .clear | :who :ok who mind juce-items := (); who juce-updateContent }
-  { .focus | :who ' juce-grabKeyboardFocus .:ok }
-  { tip: tip | :who :ok who mind tip := tip; who }
-  { juce-getNumRows: | :who :possibly who mind juce-items .:need count }
-  { juce-paintListBoxItem:
-    row count, g juce-Graphics, + width, + height, selected call [.0 .1]
-  | :who
-    :use who mind juce-settings;
-    ( :if selected = 1; g juce-setColour (colour 1) juce-fillAll ) and:
-    :try
-    (row + 1) call (who mind juce-items) .:need call
-    { *;text
-    | g
-      juce-setColour (colour 0)
-      juce-drawText (text, 2, 0, width - 2, height, justification, 1)
-    }
-    { *;icon + ' .text
-    | :try icon call (icons) .:need call
-      { icon juce-Image
-      | :ok
-        g
-        juce-drawImageWithin (icon, 2, 2, 16, 16, rectanglePlacement, 0)
-        juce-setColour (colour 0)
-        juce-drawText (text, 20, 0, width - 20, height, justification, 1)
-      }
-      { icon 1 juce-Image, icon 2 juce-Image
-      | :ok
-        g
-        juce-drawImageWithin (icon 1, 2, 2, 16, 16, rectanglePlacement, 0)
-        juce-drawImageWithin (icon 2, 20, 2, 16, 16, rectanglePlacement, 0)
-        juce-setColour (colour 0)
-        juce-drawText (text, 38, 0, width - 38, height, justification, 1)
-      }
-    }
-  }
-  { juce-selectedRowsChanged: row count
-  | :who ' selected (. row + 1) .:try
-  }
-  { juce-keyPressed: keypress
-  | :who :try keypress juce-getKeyCode call
-    { 13
-    | who activated (. who juce-getLastRowSelected .:need + 1) .:need
-      and: :ok 1
-    }
-    { 27 | who escape .:need and: :ok 1 }
-  }
-  { juce-listBoxItemDoubleClicked: n count, ?
-  | :who ' activated (. n + 1) .:need and: :ok 1
-  }
-  { focusing: focusing call [.0 .1]
-  | :who ' juce-setWantsKeyboardFocus (focusing) .:ok
-  }
-}
-><:[module:. platform qt parent menu .timestamp 2011-07-21T00:25:22.988+02 .language qt]><;
-{ parent:. ' juce-DocumentWindow juce-MenuBarModel; menu:. & ' .action
-| ;standard @@ [pils standard menu] menu (.window parent) or ();
-  parent juce-setMenuBar (parent) and:
-  ;menu ' &
-  ( standard call {:where? .ruleset :ruleset try|:try ' every [call: match]}
-    or:
-  )
-  ;
-  :ok
-  parent mind juce-action := [ok] +++ [call: action] -> standard +++ action;
-  parent mind juce-menu-action :=
-    menu -> [ok] +++ [call: action] -> standard +++ action
-  ;
-  ;tree @ tree (.menu);
-  parent mind juce-menu-names :=
-    tree every {submenu: .name; ?|:ok say (name)}
-    first (juce-StringArray ()) fold {list := item|:ok list juce-add (item)}
-  ;
-  parent mind juce-menus :=
-    tree every {submenu: .name; ok|:ok}
-    every
-    { items
-    | :who :ok
-      juce-PopupMenu () & items fold
-      { menu := submenu: .name; items
-      | :ok menu juce-addSubMenu: saying (name), items call (who)
-      }
-      { menu := item:. .name .at
-      | :ok
-        menu juce-addItem:
-        at,
-        saying (name)
-        (item call {*;shortcut +$ '|:ok "">>"(" (shortcut) ")"} or ""),
-        1,
-        item call {*;check 1|:ok 1} or 0
-      }
-      { menu := item:. .name [-] .at | :ok menu juce-addSeparator }
-    }
-  ;
-  parent mind juce-shortcuts :=
-    menu firsts
-    { *;shortcut $ '
-    | ;shortcut ' lower split "+";
-      shortcut <+# 1 singlewise call
-      { $ ok | :ok ?:? // ' }
-      { ok call [."del" delete ."ins" insert ."esc" escape] | :ok }
-      { $ ok | :if ok utf-8 count = 1; :ok }
-      { ok $ 1 | :ok ' upper }
-      .([key down]: .ctrl-key 0 .alt-key 0 .shift-key 0 .key)
-      & (shortcut <-# 1) fold
-      { ok := modifier call [."ctrl" ctrl-key ."alt" alt-key ."shift" shift-key]
-      | :if modifier call (ok) = 0; :ok ' merge (modifier, 1)
-      }
-      .:try
-    }
-  ;
-  parent juce-menuItemsChanged and:
-  parent
-}
-><:[module:. platform qt parent menu tree .timestamp 2011-07-20T23:32:39.242+02 .language system]><;
-{ tree: .menu
-| :ok
-  menu legs
-  { at := item = *;menu path
-  | :ok
-    (item:. .at) & (path listwise reverse) fold
-    { chain := name | :ok name:. .at; chain }
-  }
-  call
-  { level
-  | :who :ok
-    level groups
-    { name:. .at; value | :ok :name (submenu: .name); value }
-    { name:. .at; value = item: .? .at | :ok :name (item: .name); value }
-    legs {group := values = (*;at) 1 |:ok group:. .at; values}
-    order [call: at]
-    every
-    { group: . (item: .name) .at; (item:. .at) 1 | :ok item:. .name .at }
-    { group: . (submenu: .name) .at?; level
-    | :ok submenu: .name; level call (who)
-    }
-  }
-}
-><:[module:. platform qt parent offspring .timestamp 2011-07-21T01:02:33.399+02 .language qt]><;
-;offspring
-{ (name = ?:? // ?) * node
-| :who :try (parent:. who; node) call:
-  :need @@ ([platform qt parent] & name)
-}
-{ name = ?:? // ?
-| :who :try (parent:. who; name) call:
-  :need @@ ([platform qt parent] & name)
-}
-><:[module:. platform qt parent row .timestamp 2011-09-06T00:06:59.337+02 .language qt]><;
-{ parent: .; [row]
-| :ok
-  ;layout juce-StretchableLayoutManager ();
-  parent juce-new (juce-Component ())
-  when (@ common)
-  when (@ offspring)
-  when
-  { juce-resized:
-  | :who :ok
-    ;children
-      0 up (who juce-getNumChildComponents - 1)
-      every {n|:ok who juce-getChildComponent: n}
-    ;
-    layout juce-clearAllItems() and:
-    children every
-    { ? | :ok 8, -1, -1 }
-    { child | ;width child mind width .:need; :ok width, width, width }
-    legs { n := hint | layout juce-setItemLayout: (n - 1) & hint }
-    and:
-    layout juce-layOutComponents:
-    children, 0, 0, who juce-getWidth, who juce-getHeight, 0, 1
-  }
-  { juce-new: ok juce-Component
-  | :who :ok who juce-addAndMakeVisible (ok) juce-resized and: ok
-  }
-}
-><:[module:. platform qt parent say .timestamp 2011-06-02T22:33:55.807+02 .language qt]><;
-{ parent: .; say: say
-| :ok
-  juce-AlertWindow juce-showMessageBox
-  ( 0,
-    say [note],
-    say (say),
-    "",
-    [juce-Component],
-  )
-  and: parent
-}
-><:[module:. platform qt parent scroller .timestamp 2011-07-21T00:19:19.932+02 .language qt]><;
-{ parent: .; [scroller] | :who :try who parent: .; scroller: [both] }
-{ parent: .; scroller:
-  directions call [.vertical 1 0 .horizontal 0 1 .both 1 1]
-| :ok
-  juce-Viewport ()
-  juce-setScrollBarsShown (directions)
-  juce-setInterceptsMouseClicks (1, 1)
-  .(parent juce-new)
-  when (@ common)
-  when (@ offspring)
-  when
-  { .inner
-  | :who :ok
-    { .width | :ok who juce-getMaximumVisibleWidth }
-    { .height | :ok who juce-getMaximumVisibleHeight }
-    { .size
-    | :ok who juce-getMaximumVisibleWidth, who juce-getMaximumVisibleHeight
-    }
-  }
-  { .scroll
-  | :who :ok
-    { .thickness | :ok who juce-getScrollBarThickness }
-  }
-  { juce-new: ok juce-Component
-  | :who :ok who juce-setViewedComponent (ok) and: ok
-  }
-  { juce-paint: graphics
-  | :who ' paint (@ graphics: .) .:try
-  }
-}
-><:[module:. platform qt parent splitter .timestamp 2011-09-29T12:59:46.693+02 .language qt]><;
-{ parent: .;
-  splitter: orientation call [.floor 1 .horizontal 1 .wall 0 .vertical 0]
-| :ok
-  ;[layout: 1]
-    juce-StretchableLayoutManager ()
-    juce-setItemLayout (0, -1, -1, -1)
-  .[layout: 2]
-    juce-StretchableLayoutManager ()
-    juce-setItemLayout (0, 10, -1, -1)
-    juce-setItemLayout (1, 8, 8, 8)
-    juce-setItemLayout (2, 10, -1, -1)
-  ;
-  ;sash
-    juce-StretchableLayoutResizerBar (layout 2, 1, 1 - orientation)
-    when {juce-paint: g|g juce-fillAll (juce-Colour [255 200 70])}
-  ;
-  parent juce-new (juce-Component ())
-  try
-  { splitter | splitter mind juce-panes := (); splitter mind juce-active := layout 1 }
-  juce-addChildComponent (sash)
-  when
-  { juce-resized: | :who lay-out (.splitter who) }
-  { juce-new: ok juce-Component
-  | :who :ok who juce-addChildComponent (ok) and: ok
-  }
-  { (name = ?:? // ?) * node
-  | :who :try (parent:. who; node) call:
-    :need @@ ([platform qt parent] & name)
-  }
-  { name = ?:? // ?
-  | :who :try (parent:. who; name) call:
-    :need @@ ([platform qt parent] & name)
-  }
-  { full: full juce-Component | :who :ok panes (.splitter who) := full,; who }
-  { split: panes & 2
-  | :who
-    panes (.splitter who) :=
-      panes every
-      { ok juce-Component
-      | :self ;parent ok juce-getParentComponent;
-        :if parent = who; (:ok) .else :try parent call (self)
-      }
-      .:need
-    ;
-    :ok who
-  }
-  { .unsplit
-  | :who :ok
-    panes (.splitter who) := who mind juce-panes ++# 1;
-    who
-  }
-  { .size | :who :ok who juce-getWidth, who juce-getHeight }
-  { .width | :who :ok who juce-getWidth }
-  { .height | :who :ok who juce-getHeight }
-  { juce-keyPressed: keypress
-  | :who :try keypress juce-getKeyCode call
-    { 27 | :try who escape }
-  }
-  ==='
-  { .panes (.splitter) := panes & (count call [.1 .2])
-  | :ok
-    ;panes ' try {p1, p2|:ok p1, sash, p2};
-    splitter mind juce-panes except (panes first [ok])
-    every [call: juce-setVisible: 0]
-    and:
-    splitter mind juce-panes := panes every [call: juce-setVisible: 1];
-    splitter mind juce-active := layout (count);
-    lay-out (.splitter)
-  }
-  ===
-  { .lay-out (.splitter)
-  | :ok
-    splitter mind juce-active juce-layOutComponents:
-    splitter mind juce-panes, 0, 0, splitter width, splitter height, orientation, 1
-  }
-}
-><:[module:. platform qt parent tabs .timestamp 2011-09-28T16:58:24.627+02 .language qt]><;
-{ parent: .; [tabs]
-| :ok
-  parent juce-new (juce-TabbedComponent 0)
-  when
-  { + n
-  | :who :ok
-    { icon: + i
-    | :self :possibly
-      who juce-getTabbedButtonBar juce-getTabButton (n - 1) .:need
-      juce-repaint mind juce-icon := i;
-      self
-    }
-
-    { .page
-    | :possibly who juce-getTabContentComponent (n - 1) .:need
-      try {try|:try ' mind juce-wrap}
-    }
-    { .close | :self who juce-removeTab (n - 1) .:need and: :ok self }
-    { .select | :self who juce-setCurrentTabIndex (n - 1) .:need and: :ok self }
-  }
-  { juce-new: ok juce-Component
-  | :who :ok who juce-addChildComponent (ok) and: ok
-  }
-  { (name = ?:? // ?) * node
-  | :who :try (parent:. who; node) call: :need name call (@@)
-  }
-  { name = ?:? // ?
-  | :who :try (parent:. who; name) call: :need name call (@@)
-  }
-  { .items | :who :ok who juce-getNumTabs up every (who) }
-  { .reverse | :who :ok who juce-getNumTabs down every (who) }
-  { .clear | :who :ok who juce-clearTabs }
-  { .hot | :who :try (who juce-getCurrentTabIndex .:need + 1) call (who) }
-  { .current
-  | :who :possibly who juce-getCurrentContentComponent .:need
-    try {try|:try ' mind juce-wrap}
-  }
-  { icons:. .size | :who :ok who mind juce-icons := icons; who }
-  { .count | :who :ok who juce-getNumTabs }
-  { (add: .page ' juce-Component .label $ ' .focus) anyway [.focus?]
-  | :who :ok
-    ;at who juce-getNumTabs;
-    who juce-addTab (label, juce-Colour [200 200 200], page, 1) and:
-    (:if focus = 1; who juce-setCurrentTabIndex: at) and:
-    who
-  }
-  { juce-currentTabChanged: ? | :who ' changed .:try }
-  { juce-createTabButton: name, index
-  | :who :ok @ flap (.tabs who .name .index)
-  }
-  { juce-keyPressed: keypress
-  | :who :try @ keypress (.) call:
-    who +++
-    { [key down]: .key [f6] .shift-key .ctrl-key 0 .alt-key 0
-    | :ok
-      who juce-setCurrentTabIndex:
-      (shift-key, who juce-getCurrentTabIndex, who juce-getNumTabs - 1) call
-      { 0, at, ? | :ok at + 1 }
-      { 0, at, at | :ok 0 }
-      { 1, at, ? | :ok at - 1 }
-      { 1, 0, at | :ok at }
-    }
-  }
-}
-><:[module:. platform qt parent tabs flap .edit source .timestamp 2010-12-31T00:26:03.498+01 .language qt]><;
-{ flap: .tabs .name .index
-| :ok
-  (
-    ;bar tabs juce-getTabbedButtonBar;
-    juce-TabBarButton (name, bar)
-  )
-  when
-  { juce-getBestTabLength: depth
-  | :who :ok
-    who juce-getLookAndFeel
-    juce-getTabButtonBestWidth (index, name, depth, who)
-    + 20
-  }
-  { juce-paintButton: g, isMouseOver, isDown
-  | :who :ok
-    ;lookAndFeel who juce-getLookAndFeel;
-    g juce-setOrigin (4, 4) and:
-    lookAndFeel juce-drawTabButton
-    ( g,
-      who juce-getWidth - 8,
-      who juce-getHeight - 4,
-      juce-Colour [210 230 210],
-      index,
-      "",
-      who,
-      0,
-      isMouseOver,
-      isDown,
-      who juce-getToggleState
-    )
-    and:
-    lookAndFeel juce-drawTabButtonText
-    ( g,
-      16, 0, who juce-getWidth - 20, who juce-getHeight - 4,
-      juce-Colour [200 200 200],
-      index, name, who, 0, isMouseOver, isDown, who juce-getToggleState
-    )
-    and:
-    who mind juce-icon or () call (tabs mind juce-icons or ()) or () try
-    { icon juce-Image
-    | g juce-drawImageWithin
-      (icon, 10, 4, 16, 16, juce-RectanglePlacement 64, 0)
-    }
-  }
-}
-><:[module:. platform qt parent textfield .timestamp 2011-07-21T00:11:32.206+02 .language qt]><;
-{ parent: .; [textfield]
-| :ok
-  parent juce-new (juce-TextEditor ()) juce-setSelectAllWhenFocused 1
-  when
-  { font: font | :who ' juce-setFont (font) .:try }
-  { text: $ text | :who ' juce-setText (text) .:ok }
-  { .text := $ text | :who ' juce-setText (text) .:ok }
-  { .text | :who ' juce-getText .:ok }
-  { (selection: % a, % b .scroll-to-center) anyway [.scroll-to-center 0]
-  | :who ' juce-setHighlightedRegion (a, b - a) .:ok
-  }
-  { .selection
-  | :who :ok [juce-getHighlightedRegionStart juce-getCaretPosition] every (who)
-  }
-  { .focus | :who ' juce-grabKeyboardFocus .:ok }
-  { .clear | :who ' juce-setText "" .:ok }
-  { juce-textEditorTextChanged: ? | :who ' changed .:try }
-  { juce-keyPressed: keypress
-  | :who :try @ keypress (.) .:need call:
-    { key | key call (who) .:need and: :ok 1 }
-    { [key down]: .key [f4] .shift-key 0 .ctrl-key 0 .alt-key 1
-    | :ok
-      who juce-getTopLevelComponent juce-closeButtonPressed
-      and: 1
-    }
-  }
-  { juce-keyPressed: keypress
-  | :who :try keypress juce-getKeyCode call
-    { code call [.13 return .27 escape]
-    | :ok code call (who) and 1 or 0
-    }
-  }
-}
-><:[module:. platform qt parent textpane .timestamp 2011-09-30T14:06:02.127+02 .language qt]><;
-{ parent: .; [textpane]
-| :ok
-  parent juce-new (juce-TextEditor ())
-  juce-setMultiLine 1
-  juce-setReturnKeyStartsNewLine 1
-  try {x|x juce-setFont (juce-Font 18 .:need)}
-  when
-  { zoom: zoom | :who :ok who } ! TODO
-  { text: $ text | :who :ok who juce-setText (text) and: who }
-  { .text := $ text | :who ' juce-setText (text) .:ok }
-  { text: text $ (? > 500000)
-  | :who :ok who bug {} juce-setText (text) and: who
-  }
-  { .text | :who :ok who juce-getText <-#$* ""~ }
-  { .focus | :who :ok who juce-grabKeyboardFocus and: who }
-  { show: show call [.0 .1] | :who :ok who juce-setVisible (show) }
-  { (selection: % a, % b .scroll-to-center) anyway [.scroll-to-center 0]
-  | :who :possibly
-    :use {$ ok +# -1 .:|:ok};
-    ;standin who juce-getText;
-    ;a standin +# a .:need
-      utf-8 count
-    .b standin +# b .:need
-      utf-8 count
-    ;
-    who juce-setHighlightedRegion (a, b) and:
-    ( :if scroll-to-center = 1;
-      who juce-scrollEditorToPositionCaret
-      ( who juce-getWidth, who juce-getHeight \ 2 )
-    )
-    and:
-    who
-  }
-  { .selection
-  | :who :ok
-    ;text who juce-getText;
-    [juce-getHighlightedRegionStart juce-getCaretPosition] every (who)
-    every {p|:ok text utf-8 +# p utf-8 count}
-  }
-  { .clear | :who :ok who juce-setText "" and: who }
-  { .wrap | :who :ok who call: @@ wrapped }
-  { tip: tip | :who :ok who mind tip := tip; who }
-  { (find:. .casing_sensitive .whole_words_only .direction)
-    anyway [.casing_sensitive 0 .whole_words_only 0 .direction [down]]
-  | :who :ok
-    ;casing_sensitive ' call (.1 [ok] .0 {ok|:ok ' lower}) .raw who juce-getText;
-    ;find ' call (casing_sensitive)
-    .text raw call (casing_sensitive) !*=* (""/,  ""/, ""=, ""/)
-    ;
-    direction call
-    ( .down
-        raw utf-8 +# (who juce-getCaretPosition) utf-8 count
-        repeat
-        { from
-        | ;hit text -# from =* find; :if hit <> 0; :ok
-          ;hit ' + from;
-          list := (hit - (find count), hit);
-          hit
-        }
-      .up
-        raw utf-8 +# (who juce-getHighlightedRegionStart) utf-8 count
-        repeat
-        { from
-        | ;hit text +# from <=* find; :if hit <> 0; :ok
-          ;hit from - hit;
-          list := (hit, hit + (find count));
-          hit
-        }
-    )
-    .:list
-    find
-    ( whole_words_only call: .0 [ok] .1
-      { hit
-      | hit find
-        { at
-        | :if
-          0 < text +# at <++# 1 -* " ,.;:?!""(){|}[]"<=>
-          < text -# at ++# 1 -* " ,.;:?!""(){|}[]"<=>
-          ;
-          :ok ()
-        }
-        or: :ok hit
-      }
-    )
-    or ()
-  }
-  { juce-textEditorTextChanged: ? | :who ' changed .:try }
-  { juce-keyPressed: keypress
-  | :who :try @ keypress (.) .:need call:
-    who +++
-    { [key down]: .key [f4] .shift-key 0 .ctrl-key 0 .alt-key 1
-    | :ok who juce-getTopLevelComponent juce-closeButtonPressed and 1
-    }
-  }
-  { juce-focusGained: ? | :who ' focused 1 .:try }
-  { juce-focusLost: ? | :who ' focused 0 .:try }
-  { focused: 1
-  | :who ' juce-getTopLevelComponent mind focused := who
-  }
-}
-><:[module:. platform qt parent tree .timestamp 2011-09-29T13:18:34.149+02 .language qt]><;
-{ parent: .; (tree: .root ' call [.0 .1]) anyway [.root 1]
-| :ok
-  parent juce-new (juce-TreeView ())
-  juce-setColour (0x1000500, juce-Colour [250 250 250])
-  call
-  { ok
-  | :ok ' mind juce-settings :=
-    ( settings:
-      .justification juce-Justification 1
-      .[colour: 0] juce-Colour [0 0 0]
-      .[colour: 1] juce-Colour [190 180 255]
-      .icons ()
-      .rectanglePlacement juce-RectanglePlacement 64
-    )
-    ;
-    ok juce-setRootItemVisible (root)
-  }
-  when
-  { id juce-pils.TreeViewItem
-  | :self [tree]; :who [tree]; :ok id +++
-    { (add: $ text .icon ' count .hot ' count) anyway [.icon 0 .hot 0]
-    | :ok id juce-addSubItem juce-setMind (item:. () .text .icon .hot)
-      call (who [tree])
-    }
-    { (icon:. ' count .hot ' count) anyway [.hot 0]
-    | :who :ok
-      id juce-setMind (id juce-getMind merge: ;icon .hot)
-      juce-treeHasChanged
-      and: who
-    }
-    { .tree | :ok who [tree] }
-    { .id | :ok id }
-    { .select
-    | :who :ok
-      id juce-setSelected [1 1]
-      repeat {item|list := item; :try item juce-getParentItem} .:list reverse
-      every [call: juce-setOpen: 1]
-      and: who [tree] juce-scrollToKeepItemVisible (id)
-      and: who
-    }
-    { .children
-    | :ok
-      0 up (id juce-getNumSubItems - 1) every
-      { n | :ok id juce-getSubItem (n) call (who [tree]) }
-    }
-    { children: children call [.0 .1]
-    | :who :ok
-      id juce-setMind (id juce-getMind merge: ;children) juce-treeHasChanged
-      and: who
-    }
-    { .visible
-    | :ok
-      1 ! TODO
-    }
-    { mind: item
-    | :who :ok id juce-setMind (id juce-getMind merge (item: .)) and: who
-    }
-    { .mind | :try id juce-getMind .:need item }
-  }
-  { (add: $ text .icon ' count .hot ' count) anyway [.icon 0 .hot 0]
-  | :who :ok
-    who juce-newRootItem juce-setMind (item: . () .text .icon .hot) call (who)
-  }
-  { (icons:. .size) anyway [.size 16]
-  | :who ' mind juce-settings :=
-    ( who mind juce-settings merge:
-      ;icons ' every {ok juce-Image|:ok} .:need .size
-    );
-    :ok who
-  }
-  { (icons: .pairs .size) anyway [.size 16]
-  | :who ' mind juce-settings :=
-    ( who mind juce-settings merge:
-      ;icons pairs every {ok = (? juce-Image, ? juce-Image)|:ok} .:need .size
-    );
-    :ok who
-  }
-  { .clear | :who :ok who juce-clear and: who }
-  { .root | :who :try who juce-getRootItem .:need call (who) }
-  { .hot
-  | :who :try
-    0 up (who juce-getNumSelectedItems - 1)
-    find ({n|:ok juce-getSelectedItem: n} -> who -> who)
-  }
-  { .focus | :who ' juce-grabKeyboardFocus .:ok }
-  { show: show call [.0 .1] | :who ' juce-setVisible (show) .:ok }
-  { tip: tip | :who :ok who mind tip := tip; who }
-  { juce-keyPressed: keypress
-  | :who :try keypress juce-getKeyCode call
-    { 13 | :try who activated:. who juce-getSelectedItem 0 .:need call (who) }
-    { 27 | :try who escape }
-  }
-  { juce-paintItem: item juce-TreeViewItem, g, width, height
-  | :who :ok
-    :use who mind juce-settings;
-    ( :if item juce-isSelected = 1;
-      g juce-setColour (colour 1) juce-fillAll
-    )
-    and:
-    item juce-getMind try
-    { *;text
-    | g
-      juce-setColour (colour (2 = item juce-isSelected <> 0))
-      juce-drawText (text, 2, 0, width - 2, height, justification, 1)
-    }
-    { mind = *;icon + ' .text
-    | :try icon call (icons) .:need call
-      { icon juce-Image
-      | :ok
-        g
-        juce-setColour (colour (:if 2 = item juce-isSelected; 1 .else 0))
-        juce-drawImageWithin (icon, 2, 2, 16, 16, rectanglePlacement, 0)
-        juce-drawText (text, 20, 0, width - 20, height, justification, 1)
-      }
-      { icon 1 juce-Image, icon 2 juce-Image
-      | :ok
-        g
-        juce-setColour (colour (2 = item juce-isSelected <> 0))
-        juce-drawImageWithin (icon 1, 2, 2, 16, 16, rectanglePlacement, 0)
-        juce-drawImageWithin (icon 2, 20, 2, 16, 16, rectanglePlacement, 0)
-        juce-drawText (text, 38, 0, width - 38, height, justification, 1)
-      }
-    }
-  }
-  { juce-itemDoubleClicked: item juce-TreeViewItem, e
-  | :who ' activated (. item try: who) .:try
-  }
-  { juce-itemSelectionChanged: item juce-TreeViewItem, 1
-  | :who ' selected (. item try: who) .:try
-  }
-  { juce-mightContainSubItems: item
-  | :try item juce-getMind .:need children
-  }
-  { juce-itemOpennessChanged: item, 1
-  | :who ' expand (. item call (who)) .:try
-  }
-}
-><:[module:. platform qt pils .timestamp 2008-06-21T23:43:24.393+02 .language system]><;
-><:[module:. platform qt pils language .timestamp 2008-06-21T23:43:29.112+02 .language system]><;
-><:[module:. platform qt pils language qt .timestamp 2009-02-04T14:02:35.939+01 .language system]><;
+><:[module:. platform qt pils .timestamp 2008-06-25T15:43:24.393+02 .language system]><;
+><:[module:. platform qt pils language .timestamp 2008-06-25T15:43:29.112+02 .language system]><;
+><:[module:. platform qt pils language qt .timestamp 2009-02-06T10:02:35.939+01 .language system]><;
 language: {}? merge:
 ;"q" ["pils.org/ns/qtmethod":]
 ."qs" ["pils.org/ns/qtsignal":]
 ."qe" ["pils.org/ns/qtevent":]
 ."Q" ["pils.org/ns/qtclass":]
-><:[module:. platform qt strap .timestamp 2009-01-15T02:44:21.050+01 .language qt]><;
+><:[module:. platform qt strap .timestamp 2009-01-16T22:44:21.050+01 .language qt]><;
 ;straps
   (strap: program: this program filename),
   (strap: mind: program: this program filename)
@@ -1608,7 +345,7 @@ language: {}? merge:
   window mind pinpointer := (pinpoint: .what .module where this module);
   window
 }
-><:[module:. platform qt window .timestamp 2011-07-21T01:01:26.842+02 .language qt]><;
+><:[module:. platform qt window .timestamp 2011-07-24T17:01:26.842+02 .language qt]><;
 ;straps
   (strap: program: this program filename),
   (strap: mind: program: this program filename)
@@ -1665,19 +402,4 @@ language: {}? merge:
 ->' (@@ wrapped)
 ===
 { ::error | :what (':. .window-wrap error) bug {} }
-><:[module:. platform qt wrapped .timestamp 2011-07-20T23:08:50.079+02 .language qt]><;
-{ ok | :ok ' mind juce-wrap := ok; ok }
-><:[module:. platform qt wrapper .timestamp 2008-08-20T18:12:46.466+02 .language system]><;
-@@><:[module:. platform qt wrapper image .timestamp 2011-07-21T00:03:52.965+02 .language qt]><;
-{ paint: painter
-| :who
-  @ graphics (. juce-Graphics (who) .:need) try (painter) and: :ok who
-}
-{ .height | :who ' juce-getHeight .:ok }
-{ .width | :who ' juce-getWidth .:ok }
-{ .png
-| :who
-  ;stream juce-MemoryOutputStream ();
-  juce-PNGImageFormat () juce-writeImageToStream (who, stream) .:need and:
-  :ok stream juce-getData
-}
+
