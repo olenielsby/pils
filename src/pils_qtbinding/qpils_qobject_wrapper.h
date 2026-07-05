@@ -31,11 +31,14 @@ public:
 
 private:
     const Any *invokeMethod(const QtMethodName &name, const Any *const *args, size_t argct) const;
+
+
     enum class State : uint8_t {
-        DetachedHidden,     // !visible, !parent
-        DetachedVisible,    // visible, !parent   (top-level window)
-        Attached,           // parent
-        Deleted             // special terminal
+        DetachedHidden,         // !visible, !parent
+        DetachedVisible,        // visible, !parent   (top-level window)
+        AttachedVisibleDialog,  // visible, parent   (window-modal dialog)
+        Attached,               // parent (buttons etc.)
+        Deleted                 // wrapper survives dead object
     };
 
     class StateChangeFilter : public QObject
@@ -70,6 +73,7 @@ private:
     // void checkDeletedState() const;
     void enableMind() const;
     void disableMind() const;
+    static int mindful(State s);
     static int retainCount(State s);
 };
 }

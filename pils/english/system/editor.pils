@@ -525,7 +525,7 @@
   { .paged | :try @ refresh: .window .tabs }
   { [pane: result] | :ok [result escape] find (editor-channel) anyway: }
 }
-><:[module:. pils editor operations new .timestamp 2026-07-05T19:32:16.614+02 .language system]><;
+><:[module:. pils editor operations new .timestamp 2026-07-05T22:37:29.808+02 .language system]><;
 { new: .page .window
 | :ok
   ;dialog window dialog
@@ -540,14 +540,14 @@
     { .title | :ok say [ok] }
     { .pressed | :try dialog channel ok }
   ;
-!  ;cancel-button button-row button
-!    { .title | :ok say [cancel] }
-!    { .pressed | :try window channel cancel }
-!  ;
-!  ;error-message main-column label ();
-!  dialog listen
-!  { .cancel | }
-!  { validate: | }
+  ;cancel-button button-row button
+    { .title | :ok say [cancel] }
+    { .pressed | :try window channel cancel }
+  ;
+  ;error-message main-column label (;text "nul putte");
+  dialog listen
+  { .cancel | }
+  { validate: | }
 }
 
 

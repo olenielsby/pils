@@ -124,7 +124,10 @@ QtObjectWrapper::State QtObjectWrapper::computeCurrentState() const
     if (!object)
         return State::Deleted;
     if (object->parent())
-        return State::Attached;
+    {
+        return isTopLevelVisible(object) ? State::AttachedVisibleDialog
+                                         : State::Attached;
+    }
     return isTopLevelVisible(object) ? State::DetachedVisible
                                      : State::DetachedHidden;
 }
@@ -143,30 +146,18 @@ void QtObjectWrapper::checkState() const
 {
     State oldState = state;
     state = computeCurrentState();
-
-// #ifndef NDEBUG
-//     switch (oldState)
-//     {
-//     case State::Attached: std::fputc('a', stderr); break;
-//     case State::Deleted: std::fputc('d', stderr); break;
-//     case State::DetachedHidden: std::fputc('h', stderr); break;
-//     case State::DetachedVisible: std::fputc('v', stderr); break;
-//     }
-//     std::fputc('-', stderr);
-//     switch (state)
-//     {
-//     case State::Attached: std::fputc('a', stderr); break;
-//     case State::Deleted: std::fputc('d', stderr); break;
-//     case State::DetachedHidden: std::fputc('h', stderr); break;
-//     case State::DetachedVisible: std::fputc('v', stderr); break;
-//     }
-//     className->writeToDebugOutput(10);
-// #endif
-
     if (state == oldState) return;
-    if (state == State::Deleted) removeWhen();
-    else if (state == State::DetachedVisible) enableMind();
-    else if (oldState == State::DetachedVisible) disableMind();
+
+    switch (mindful(state) - mindful(oldState))
+    {
+    case 1: enableMind();
+        break;
+    case -1: disableMind();
+    case 0:
+        break;
+    default:
+        assert(false && "bad mindfulness");
+    }
 
     switch (retainCount(state) - retainCount(oldState))
     {
@@ -176,29 +167,22 @@ void QtObjectWrapper::checkState() const
     case 0:
         break;
     default:
-        assert(false && state == State::Deleted);
+        assert(false && "bad retaincount");
     }
+
+    if (state == State::Deleted) removeWhen();
 }
 
-// void QtObjectWrapper::checkDeletedState() const
-// {
-//     retain();
-//     if (state != State::Deleted)
-//     {
-//         State oldState = state;
-//         state = State::Deleted;
-//         removeWhen();
-//         if (oldState == State::DetachedVisible) disableMind();
-//         if (retainCount(oldState) == 1) release();
-//     }
-//     release();
-// }
+int QtObjectWrapper::mindful(State s)
+{
+    if (s == State::DetachedVisible || s == State::AttachedVisibleDialog)
+        return 1;
+    else return 0;
+}
 
 int QtObjectWrapper::retainCount(State s)
 {
-    if (
-        // s == State::DetachedVisible ||
-        s == State::Attached)
+    if (s == State::Attached || s == State::AttachedVisibleDialog)
         return 1;
     else return 0;
 }

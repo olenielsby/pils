@@ -1,6 +1,6 @@
 ><:[module:. platform, .timestamp 2008-06-25T15:43:00.909+02 .language system]><;
 ><:[module:. platform qt .timestamp 2008-06-25T15:43:08.612+02 .language system]><;
-><:[module:. platform qt dialog .timestamp 2026-07-05T17:05:24.500+02 .language qt]><;
+><:[module:. platform qt dialog .timestamp 2026-07-06T00:09:55.253+02 .language qt]><;
 ;new plumcake .WA_DeleteOnClose 55 .WindowModal 1;
 { .dialog: .window .boss
 | :ok
@@ -14,11 +14,16 @@
   { .channel | :who :ok channel: who }
   { listen: handler
   | :who :ok
-    who mind listen := who channel listen (handler);
+    ;listener who channel listen (handler);
+    who q:show mind listener := listener;
     who
   } 
   { .bug | shit }
-  { .close | :who :ok who q:close }
+  { .close
+  | :who :ok
+    window mind dialog-listen := ();
+    who q:close
+  }
   { column: boss
   |:who  :ok
     @ lane: .layout  new Q:VBoxLayout .widget who .boss
@@ -341,7 +346,7 @@
   { .close | :who :ok who q:close }
   { qs:fileSelected: x | :try boss pick: x }
 }
-><:[module:. platform qt lane .timestamp 2026-07-05T17:09:00.730+02 .language qt]><;
+><:[module:. platform qt lane .timestamp 2026-07-05T22:36:06.287+02 .language qt]><;
 ;new plumcake;
 { lane: .layout .window .boss
 | :self
@@ -365,7 +370,7 @@
     layout q:addWidget(w) and:
     self lane: .layout new Q:HBoxLayout .widget w .boss
   }
-  { label: boss | :ok @ label: .boss .parent widget .layout }
+  { label: boss | :try @ label: .boss .parent widget .layout }
   { button: boss | :ok @ button: .boss .parent widget .layout }
   { line-edit: boss | :ok @ line-edit: .boss .parent widget .layout }
   { edit: boss | :ok @ edit: .boss .parent widget .layout }
@@ -373,7 +378,7 @@
   { tabs: boss | :ok @ tabs: .boss .parent widget .layout }
   { canvas: boss | :ok @ canvas: .boss .parent widget .layout }
 }
-><:[module:. platform qt lane button .timestamp 2026-07-05T19:39:31.714+02 .language qt]><;
+><:[module:. platform qt lane button .timestamp 2026-07-05T22:30:59.700+02 .language qt]><;
 ;new plumcake;
 { button: .boss .parent .layout
 | ;title boss title .:need call {$ ok|:ok} .:need;
@@ -382,21 +387,33 @@
     new Q:PushButton
     when
     { qs:clicked: args | :try boss pressed }
-    { title: title | :who :ok who q:setText "title"
-    }
+    { title: $ title | :who :ok who q:setText (title) }
     { .title | :who :ok who q:text }
     { enabled: enabled | :who :ok who q:setEnabled (enabled) }
     { .enabled | :who :ok who q:isEnabled }
     { .focus | :who :ok who q:setFocus }
   ;
   widget title (title) and:
-!  layout q:addWidget (widget) and:
-  0 or:
-  widgetz
+  layout q:addWidget (widget) and:
+  widget
 }
 ><:[module:. platform qt lane canvas .timestamp 2026-07-05T13:51:26.780+02 .language qt]><;
 ><:[module:. platform qt lane edit .timestamp 2026-07-05T13:51:26.780+02 .language qt]><;
-><:[module:. platform qt lane label .timestamp 2026-07-05T13:51:26.780+02 .language qt]><;
+><:[module:. platform qt lane label .timestamp 2026-07-05T22:34:23.304+02 .language qt]><;
+;new plumcake;
+{ label: .boss .parent .layout
+| ;text boss text .:need call {$ ok|:ok} .:need;
+  :ok
+  ;widget
+    new Q:Label
+    when
+    { text: $ text | :who :ok who q:setText (text) }
+    { .text | :who :ok who q:text }
+  ;
+  widget text (text) and:
+  layout q:addWidget (widget) and:
+  widget
+}
 ><:[module:. platform qt lane line-edit .timestamp 2026-07-05T17:18:34.619+02 .language qt]><;
 ;new plumcake;
 { line-edit: .boss .parent .layout
