@@ -373,24 +373,25 @@
   { tabs: boss | :ok @ tabs: .boss .parent widget .layout }
   { canvas: boss | :ok @ canvas: .boss .parent widget .layout }
 }
-><:[module:. platform qt lane button .timestamp 2026-07-05T17:29:06.966+02 .language qt]><;
+><:[module:. platform qt lane button .timestamp 2026-07-05T18:07:07.383+02 .language qt]><;
 ;new plumcake;
 { button: .boss .parent .layout
-| ;title boss title .:need call {$ ok|:ok} .:need;
+| ! ;title boss title .:need call {$ ok|:ok} .:need;
   :ok
-  ;widget
-    new Q:PushButton
-    when
-    { qs:clicked: args | :try boss pressed }
-    { title: title | :who :ok who q:setText (title) }
-    { .title | :who :ok who q:text }
-    { enabled: enabled | :who :ok who q:setEnabled (enabled) }
-    { .enabled | :who :ok who q:isEnabled }
-    { .focus | :who :ok who q:setFocus }
-  ;
-  widget title (title) and:
-  layout q:addWidget (widget) and:
-  widget
+!  ;widget
+!    new Q:PushButton
+!    when
+!    { qs:clicked: args | :try boss pressed }
+!    { title: title | :who :ok who q:setText (title) }
+!    { .title | :who :ok who q:text }
+!    { enabled: enabled | :who :ok who q:setEnabled (enabled) }
+!    { .enabled | :who :ok who q:isEnabled }
+!    { .focus | :who :ok who q:setFocus }
+!  ;
+!  widget title (title) and:
+!  layout q:addWidget (widget) and:
+!  widget
+  0
 }
 ><:[module:. platform qt lane canvas .timestamp 2026-07-05T13:51:26.780+02 .language qt]><;
 ><:[module:. platform qt lane edit .timestamp 2026-07-05T13:51:26.780+02 .language qt]><;

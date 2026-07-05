@@ -525,15 +525,19 @@
   { .paged | :try @ refresh: .window .tabs }
   { [pane: result] | :ok [result escape] find (editor-channel) anyway: }
 }
-><:[module:. pils editor operations new .timestamp 2026-07-05T17:30:58.458+02 .language system]><;
+><:[module:. pils editor operations new .timestamp 2026-07-05T18:10:27.943+02 .language system]><;
 { new: .page .window
 | :ok
   ;dialog window dialog
     {.title|:ok say [create new module]}
   ;
   ;main-column dialog column ();
-  ;new-name main-column line-edit { text: text | :try dialog channel validate (text) };
+  ;new-name main-column line-edit
+    { text: text | :try dialog channel validate (text) }
+  ;
   ;button-row main-column row ();
+ 0 or:
+
   ;ok-button button-row button
     { .title | :ok say [ok] }
     { .pressed | :try dialog channel ok }
@@ -542,10 +546,10 @@
     { .title | :ok say [cancel] }
     { .pressed | :try window channel cancel }
   ;
-  ;error-message main-column label ();
-  dialog listen
-  { .cancel | }
-  { validate: | }
+!  ;error-message main-column label ();
+!  dialog listen
+!  { .cancel | }
+!  { validate: | }
 }
 
 

@@ -67,7 +67,7 @@ private:
     State computeCurrentState() const;
     bool isTopLevelVisible(QObject *obj) const;
     void checkState() const;
-    void checkDeletedState() const;
+    // void checkDeletedState() const;
     void enableMind() const;
     void disableMind() const;
     static int retainCount(State s);

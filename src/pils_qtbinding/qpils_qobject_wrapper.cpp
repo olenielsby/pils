@@ -172,19 +172,19 @@ void QtObjectWrapper::checkState() const
     }
 }
 
-void QtObjectWrapper::checkDeletedState() const
-{
-    retain();
-    if (state != State::Deleted)
-    {
-        State oldState = state;
-        state = State::Deleted;
-        removeWhen();
-        if (oldState == State::DetachedVisible) disableMind();
-        if (retainCount(oldState) == 1) release();
-    }
-    release();
-}
+// void QtObjectWrapper::checkDeletedState() const
+// {
+//     retain();
+//     if (state != State::Deleted)
+//     {
+//         State oldState = state;
+//         state = State::Deleted;
+//         removeWhen();
+//         if (oldState == State::DetachedVisible) disableMind();
+//         if (retainCount(oldState) == 1) release();
+//     }
+//     release();
+// }
 
 int QtObjectWrapper::retainCount(State s)
 {
@@ -285,7 +285,7 @@ QtObjectWrapper::QtObjectWrapper(const Constant *&link, const QtObjectClassName 
     StateChangeFilter *filter = new StateChangeFilter(*this);
     filter->setParent(object);
     object->installEventFilter(filter);
-    QObject::connect(object, &QObject::destroyed, object, [this]() { checkDeletedState(); });
+//    QObject::connect(object, &QObject::destroyed, object, [this]() { checkDeletedState(); });
     if (QWindow *win = qobject_cast<QWindow*>(object))
         QObject::connect(win, &QWindow::visibleChanged, object, [this]() { checkState(); });
     checkState();
@@ -306,5 +306,8 @@ QtObjectWrapper::~QtObjectWrapper()
         eventFilterProxy->wrapper = nullptr;
         eventFilterProxy = nullptr;
     }
+    assert(when == nullptr);
+    assert(mind == nullptr);
+    assert(object == nullptr);
 }
 }
