@@ -47,8 +47,16 @@ const Any *QtObjectWrapper::invokeMethod(const QtMethodName &name, const Any *co
 
     for (auto impl = name.implementationChain; impl; impl = impl->next)
     {
-        if (!meta->inherits(impl->meta))
-            continue;
+        if (impl->exactClassName == nullptr)
+        {
+            if (!meta->inherits(impl->meta))
+                continue;
+        }
+        else
+        {
+            if (impl->exactClassName != this->className)
+                continue;
+        }
         const Any* result = nullptr;
         if (!impl->invoker(obj, args, argc, result))
             continue;
@@ -73,7 +81,7 @@ const QtObjectClassName *QtObjectLookup::getClassNameFromQObjectInsideLock(QObje
     const QMetaObject* meta = object->metaObject();
     QByteArray qtName(meta->className());
     const char* name = qtName.constData();
-    const PilsString* pilsName = PilsString::getInsideLock(name+(name[0] == 'Q'));
+    const PilsString* pilsName = PilsString::getInsideLock(QtClassName::withoutLeadingQ(name));
     Namespace_QtClass::singleton->retain();
     const ClicheShort *className = Namespace_QtClass::singleton->clichefyInsideLock(pilsName);
     const QtObjectClassName* typedClassName = static_cast<const QtObjectClassName*>(className);

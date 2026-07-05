@@ -446,28 +446,28 @@ void QtMethodName::initialize()
     IMPLEMENT(QStatusBar, clearMessage)
     IMPLEMENT(QStatusBar, currentMessage)
 
-    // QPilsTreeWidget
-
-    IMPLEMENT(QPilsTreeWidget, addRootNode)
-    IMPLEMENT(QPilsTreeWidget, currentNode)
-    IMPLEMENT(QPilsTreeWidget, clearTree)
-
-    // QPilsTreeNode
-
-    IMPLEMENT(QPilsTreeNode, text)
-    IMPLEMENT(QPilsTreeNode, setText)
-    IMPLEMENT(QPilsTreeNode, addChild)
-    IMPLEMENT(QPilsTreeNode, parentNode)
-    IMPLEMENT(QPilsTreeNode, childCount)
-    IMPLEMENT(QPilsTreeNode, child)
-    IMPLEMENT(QPilsTreeNode, expand)
-    IMPLEMENT(QPilsTreeNode, collapse)
-
     // ===== QFileDialog =====
     IMPLEMENT(QFileDialog, setFileMode)
     IMPLEMENT(QFileDialog, setNameFilter)
     IMPLEMENT_OVERLOAD(QFileDialog, setDirectory, void(QFileDialog::*)(const QString &))
     IMPLEMENT(QFileDialog, selectedFiles)
+
+    // QPilsTreeWidget
+
+    EXACT_IMPLEMENT(QPilsTreeWidget, addRootNode)
+    EXACT_IMPLEMENT(QPilsTreeWidget, currentNode)
+    EXACT_IMPLEMENT(QPilsTreeWidget, clearTree)
+
+    // QPilsTreeNode
+
+    EXACT_IMPLEMENT(QPilsTreeNode, text)
+    EXACT_IMPLEMENT(QPilsTreeNode, setText)
+    EXACT_IMPLEMENT(QPilsTreeNode, addChild)
+    EXACT_IMPLEMENT(QPilsTreeNode, parentNode)
+    EXACT_IMPLEMENT(QPilsTreeNode, childCount)
+    EXACT_IMPLEMENT(QPilsTreeNode, child)
+    EXACT_IMPLEMENT(QPilsTreeNode, expand)
+    EXACT_IMPLEMENT(QPilsTreeNode, collapse)
 }
 
 void QtSignalName::initialize()

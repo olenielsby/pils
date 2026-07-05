@@ -181,10 +181,56 @@ namespace PILS
         {}
     };
 
+    class QtClassName
+        : public ClicheShort
+    {
+    public:
+    static const char *withoutLeadingQ(const char *name)
+        {
+            return name+(name[0]=='Q');
+        }
+    protected:
+        QtClassName(const Constant *&link,
+                    const Namespace_QtClass *h,
+                    const PilsString *a)
+            : ClicheShort(link, h, a)
+        {}
+        QtClassName(const char *name)
+            : ClicheShort(Namespace_QtClass::singleton, PilsString::get(name))
+        {}
+    };
+
+    struct QtConstructorImplementation;
+
+    class QtObjectClassName
+        : public QtClassName
+    {
+    public:
+        QtObjectClassName(
+            const Constant *&link,
+            const Namespace_QtClass *h,
+            const PilsString *a,
+            const QMetaObject *meta):
+            QtClassName(link, h, a),
+            meta(meta),
+            constructors(nullptr)
+        {
+        }
+        const Any *specialCall(Runner &run, const ReallySpecial &special) const override;
+        const ClicheTiny *newCliche() const override;
+        mutable const QMetaObject *meta;
+        mutable const QtConstructorImplementation *constructors;
+    private:
+        friend class Plumcake;
+        static void initialize();
+        static const QtObjectClassName *registerQtClass(const char *name, const QMetaObject &meta);
+        QObject* createQObject(const Any *const argv[], size_t argc) const;
+    };
+
     class QtMethodName
 		: public ClicheShort
 	{
-	public:        
+    public:
         QtMethodName(const Constant *&link, const Namespace_QtMethod *h, const PilsString *a)
             : ClicheShort(link, h, a)
 		{}
@@ -195,14 +241,21 @@ namespace PILS
         using Invoker = std::function<bool(QObject*, const Any *const *, size_t, const Any*&)>;
         struct Implementation {
             const QMetaObject * meta;
+            const ClicheShort * exactClassName;
             Invoker invoker;
             Implementation * next;
         };
         // void compileTypecheck(Compiling &compiling, const CallWho &pattern) const override;
         mutable Implementation *implementationChain = nullptr;
-        const QtMethodName *implement(const QMetaObject *meta, Invoker invoker) const
+        const QtMethodName *implement(const QMetaObject *meta, Invoker invoker, const char *className) const
         {
-            implementationChain = new Implementation{meta, std::move(invoker), implementationChain};
+            const ClicheShort *pilsClassName = nullptr;
+            if (className != nullptr)
+            {
+                pilsClassName = Namespace_QtClass::singleton->clichefy(PilsString::get(QtClassName::withoutLeadingQ(className)));
+            }
+            implementationChain =
+                new Implementation{meta, pilsClassName, std::move(invoker), implementationChain};
             return this;
         }
 	};
@@ -217,20 +270,6 @@ namespace PILS
         static const QtSignalName *get(const char *name);
         const ClicheTiny *newCliche() const override;
         static void initialize();
-    };
-
-    class QtClassName
-        : public ClicheShort
-    {
-    protected:
-        QtClassName(const Constant *&link,
-                    const Namespace_QtClass *h,
-                    const PilsString *a)
-            : ClicheShort(link, h, a)
-        {}
-        QtClassName(const char *name)
-            : ClicheShort(Namespace_QtClass::singleton, PilsString::get(name))
-        {}
     };
 
     class QtValueClassName
@@ -258,64 +297,6 @@ namespace PILS
             double double_;
             QObject* obj;
         };
-    };
-
-    // class QtMethodCallFrame
-    // {
-    // public:
-    //     QtMethodCallFrame(const QMetaMethod& method)
-    //         : method(method),
-    //         returnType(method.returnMetaType()),
-    //         returnData(returnType.create()),
-    //         returnArgument(returnType.id() == QMetaType::Void
-    //                            ? QGenericReturnArgument()
-    //                            : QGenericReturnArgument(returnType.name(), returnData))
-    //     {
-    //     }
-
-    //     ~QtMethodCallFrame()
-    //     {
-    //         if (returnData)
-    //             returnType.destroy(returnData);
-    //     }
-
-    //     bool convertArguments(const Any* const* args, size_t argc);
-    //     bool invoke(QObject *object);
-    //     const Any *convertReturnValue() const;
-    // private:
-    //     bool convertArgument(const Any* arg, QMetaType target, QtGenericArgumentWithStorage &ga);
-    //     const QMetaMethod &method;
-    //     const QMetaType returnType;
-    //     void* const returnData;
-    //     QtGenericArgumentWithStorage gas[10];
-    //     QGenericReturnArgument returnArgument;
-    // };
-
-    struct QtConstructorImplementation;
-
-    class QtObjectClassName
-        : public QtClassName
-    {
-    public:
-        QtObjectClassName(
-            const Constant *&link,
-            const Namespace_QtClass *h,
-            const PilsString *a,
-            const QMetaObject *meta):
-            QtClassName(link, h, a),
-            meta(meta),
-            constructors(nullptr)
-        {
-        }
-        const Any *specialCall(Runner &run, const ReallySpecial &special) const override;
-        const ClicheTiny *newCliche() const override;
-        mutable const QMetaObject *meta;
-        mutable const QtConstructorImplementation *constructors;
-    private:
-        friend class Plumcake;
-        static void initialize();
-        static const QtObjectClassName *registerQtClass(const char *name, const QMetaObject &meta);
-        QObject* createQObject(const Any *const argv[], size_t argc) const;
     };
 
     class QtMethodCliche

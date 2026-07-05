@@ -143,14 +143,15 @@ QtMethodName::Invoker makeQtInvoker(Method method)
 template<typename Method>
 struct QtMethodRegistrar
 {
-    QtMethodRegistrar(const char* name, Method method)
+    QtMethodRegistrar(const char* name, Method method, const char *className = nullptr)
     {
         using Traits = MethodTraits<Method>;
         using Class = typename Traits::Class;
 
         QtMethodName::get(name)->implement(
             &Class::staticMetaObject,
-            makeQtInvoker(method));
+            makeQtInvoker(method),
+            className);
     }
 };
 
@@ -159,6 +160,12 @@ QtMethodRegistrar(#METHOD, &CLASS::METHOD);
 
 #define IMPLEMENT_OVERLOAD(CLASS, METHOD, SIGNATURE) \
 QtMethodRegistrar(#METHOD, static_cast<SIGNATURE>(&CLASS::METHOD));
+
+#define EXACT_IMPLEMENT(CLASS, METHOD) \
+QtMethodRegistrar(#METHOD, &CLASS::METHOD, #CLASS);
+
+#define EXACT_IMPLEMENT_OVERLOAD(CLASS, METHOD, SIGNATURE) \
+QtMethodRegistrar(#METHOD, static_cast<SIGNATURE>(&CLASS::METHOD), #CLASS);
 
 const QtObjectClassName *QtObjectClassName::registerQtClass(char const *qName, const QMetaObject &meta)
 {
