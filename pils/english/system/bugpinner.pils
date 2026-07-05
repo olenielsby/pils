@@ -38,7 +38,7 @@
   ;
   ;window platform window
   { .title | :ok error-title }
-  { .geometry | :ok [500 100 600 300] }
+  { .size | :ok [600 300] }
   { .icon | :ok @@ [pils icon horn hot large] }
   ;
   window mind suppress := channel listen {.disable|:ok [BAD ERROR] bug {}};

@@ -1,6 +1,6 @@
 ><:[module:. platform, .timestamp 2008-06-25T15:43:00.909+02 .language system]><;
 ><:[module:. platform qt .timestamp 2008-06-25T15:43:08.612+02 .language system]><;
-><:[module:. platform qt dialog .timestamp 2026-07-03T22:26:41.578+02 .language qt]><;
+><:[module:. platform qt dialog .timestamp 2026-07-05T17:05:24.500+02 .language qt]><;
 ;new plumcake .WA_DeleteOnClose 55 .WindowModal 1;
 { .dialog: .window .boss
 | :ok
@@ -8,10 +8,25 @@
   q:setAttribute (WA_DeleteOnClose, 1)
   q:setWindowTitle (boss title)
   q:setWindowModality (WindowModal)
+  q:resize (boss size or [300 200])
   q:show
   when
+  { .channel | :who :ok channel: who }
+  { listen: handler
+  | :who :ok
+    who mind listen := who channel listen (handler);
+    who
+  } 
   { .bug | shit }
   { .close | :who :ok who q:close }
+  { column: boss
+  |:who  :ok
+    @ lane: .layout  new Q:VBoxLayout .widget who .boss
+  }
+  { row: boss
+  |:who  :ok
+    @ lane: .layout  new Q:HBoxLayout .widget who .boss
+  }
   { tree: boss [tree]
   | :who :ok
     :use
@@ -111,7 +126,7 @@
 { .documents | :ok [pils-configuration:documents-directory] }
 ><:[module:. platform qt entry system .timestamp 2008-08-08T04:55:32.254+02 .language system]><;
 { .system | :try @@ [platform qt system [?:?|pils-configuration:system]] }
-><:[module:. platform qt entry window .timestamp 2026-07-04T16:59:01.534+02 .language qt]><;
+><:[module:. platform qt entry window .timestamp 2026-07-05T11:21:03.571+02 .language qt]><;
 ;new plumcake .WA_DeleteOnClose 55;
 { window: boss
 | :possibly
@@ -120,8 +135,14 @@
   q:setWindowTitle (boss title .:need)
   q:setWindowIcon (boss icon .:need)
   q:show
-  q:setGeometry (boss geometry .:need)
+  q:resize (boss size .:need)
   when
+  { .channel | :who :ok channel: who }
+  { listen: handler
+  | :who :ok
+    who mind listen := who channel listen (handler);
+    who
+  } 
   { filedialog: boss | :who :try @ filedialog: .window who .boss }
   { dialog: boss | :who :try @ dialog: .window who .boss }
   { ask: .; options = :where? .ruleset :' rules
@@ -154,7 +175,8 @@
   { title: $ title | :who ' q:setWindowTitle (title) .:try }
   { .pinpoint | :who :ok who mind pinpointer call: @@ [pils run pinpoint] }
   { .size | :who :possibly who juce-getWidth .:need, who juce-getHeight .:need }
-  { menubar: boss
+  { menubar: boss | :who :ok @ menubar: .window who .boss }
+  { old-menubar: boss
   | :who :ok who q:menuBar
     when
     { action: ..name
@@ -319,6 +341,75 @@
   { .close | :who :ok who q:close }
   { qs:fileSelected: x | :try boss pick: x }
 }
+><:[module:. platform qt lane .timestamp 2026-07-05T17:09:00.730+02 .language qt]><;
+;new plumcake;
+{ lane: .layout .window .boss
+| :self
+  ;widget new Q:Widget;
+  window q:setCentralWidget (widget) and:
+  :try self lane: .layout .boss .widget
+}
+{ lane: .layout .widget .boss
+| :self :ok
+  widget q:setLayout (layout) and:
+  { .bug | shit }
+  { column: boss
+  | :ok
+    ;w new Q:Widget;
+    layout q:addWidget (w) and:
+    self lane: .layout new Q:VBoxLayout .widget w .boss
+  }
+  { row: boss
+  | :ok
+    ;w new Q:Widget;
+    layout q:addWidget(w) and:
+    self lane: .layout new Q:HBoxLayout .widget w .boss
+  }
+  { label: boss | :ok @ label: .boss .parent widget .layout }
+  { button: boss | :ok @ button: .boss .parent widget .layout }
+  { line-edit: boss | :ok @ line-edit: .boss .parent widget .layout }
+  { edit: boss | :ok @ edit: .boss .parent widget .layout }
+  { tree: boss | :ok @ tree: .boss .parent widget .layout }
+  { tabs: boss | :ok @ tabs: .boss .parent widget .layout }
+  { canvas: boss | :ok @ canvas: .boss .parent widget .layout }
+}
+><:[module:. platform qt lane button .timestamp 2026-07-05T17:29:06.966+02 .language qt]><;
+;new plumcake;
+{ button: .boss .parent .layout
+| ;title boss title .:need call {$ ok|:ok} .:need;
+  :ok
+  ;widget
+    new Q:PushButton
+    when
+    { qs:clicked: args | :try boss pressed }
+    { title: title | :who :ok who q:setText (title) }
+    { .title | :who :ok who q:text }
+    { enabled: enabled | :who :ok who q:setEnabled (enabled) }
+    { .enabled | :who :ok who q:isEnabled }
+    { .focus | :who :ok who q:setFocus }
+  ;
+  widget title (title) and:
+  layout q:addWidget (widget) and:
+  widget
+}
+><:[module:. platform qt lane canvas .timestamp 2026-07-05T13:51:26.780+02 .language qt]><;
+><:[module:. platform qt lane edit .timestamp 2026-07-05T13:51:26.780+02 .language qt]><;
+><:[module:. platform qt lane label .timestamp 2026-07-05T13:51:26.780+02 .language qt]><;
+><:[module:. platform qt lane line-edit .timestamp 2026-07-05T17:18:34.619+02 .language qt]><;
+;new plumcake;
+{ line-edit: .boss .parent .layout
+| :ok
+  ;widget new Q:LineEdit when
+    { qs:textChanged: text | :try boss text: text }
+    { text: text | :who :ok who q:setText (text) }
+    { .text | :who :ok who q:text }
+    { .focus | :who :ok who q:setFocus }
+  ;
+  layout q:addWidget (widget) and:
+  widget
+}
+><:[module:. platform qt lane tabs .timestamp 2026-07-05T13:51:26.780+02 .language qt]><;
+><:[module:. platform qt lane tree .timestamp 2026-07-05T13:51:26.780+02 .language qt]><;
 ><:[module:. platform qt menubar .timestamp 2026-07-04T17:05:50.309+02 .language qt]><;
 { menubar: .window .boss
 | :ok window q:menuBar
@@ -365,61 +456,4 @@ language: {}? merge:
   window mind pinpointer := (pinpoint: .what .module where this module);
   window
 }
-><:[module:. platform qt window .timestamp 2011-07-24T17:01:26.842+02 .language qt]><;
-;straps
-  (strap: program: this program filename),
-  (strap: mind: program: this program filename)
-;
-{ window: .
-| :where :what :ok
-  straps each (window) and:
-  ( @ parent:. window +++
-    { juce-new: ok juce-Component
-    | :ok window juce-setContentComponent (ok) and: ok
-    }
-  )
-  +++
-  { icon: ' | :who window juce-setIcon (icon) .:need and: :ok who }
-  { .status
-  | :who :ok
-    { text: $ text
-    | :ok
-      ;status-bar
-        window mind juce-status-bar or
-        ( ;status-bar juce-Label ("snot", "splat");
-          window mind juce-status-bar := status-bar;
-          window juce-setBottomComponentHeight
-          juce-setBottomComponent (status-bar) and:
-          status-bar
-        )
-      ;
-      status-bar juce-setText (text, 0) and:
-      who
-    }
-  }
-  { .status-bar | :who :ok who status }
-  { .inner
-  | :who :ok
-    { size: '
-    | window juce-setContentComponentSize (size) .:need and: :ok who
-    }
-    { .size
-    | :try [juce-getWidth juce-getHeight] every:
-      window juce-getContentComponent .:need
-    }
-  }
-  { wenn: ' | :who :ok @ wenn: .; who }
-  { .pinpoint
-  | :ok @@ [pils run pinpoint] pinpoint: .what .module where this module
-  }
-  { .up | :who :ok window juce-toFront 1 anyway: who }
-  { size: ' | :who window juce-setSize (size) .:need and: :ok who }
-  { position: '
-  | :who window juce-setTopLeftPosition (position) .:need and: :ok who
-  }
-  { .close | :who :ok window juce-removeFromDesktop and: who }
-}
-->' (@@ wrapped)
-===
-{ ::error | :what (':. .window-wrap error) bug {} }
 
