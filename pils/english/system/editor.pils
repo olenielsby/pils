@@ -183,7 +183,7 @@
 !  & (@ libraries)
 }
 
-><:[module:. pils editor navigate .timestamp 2026-07-05T11:26:59.498+02 .language system]><;
+><:[module:. pils editor navigate .timestamp 2026-07-06T13:32:52.910+02 .language system]><;
 ;library-channel (channel: pils-library: this program filename)
 .language this program language
 ;
@@ -234,6 +234,60 @@
     }
   }
   populate (.view .tree)
+}
+
+{ navigate: .home .window .tabs
+| :who
+!  :if this program filename =* "test" <> 0;
+  :ok
+  ;modules 
+    library-channel node legs {+& ok := ?|:ok}
+    order {ok|:ok ' .(language write) <-##* ",]"}
+  ;
+  ;tree
+  ( level:. 1; modules) call
+  { level:.; items
+  | :self :ok
+    items groups { item | :ok item +# level }
+    legs
+    { branch := items
+    | :ok branch:.;
+      self level: . ' + 1;
+      items each {ok & n|:if n > level; :ok}
+    }
+    order {branch:.;?|:ok language write (branch)}
+  }   
+  ;
+  ;dialog
+  window dialog
+  { .title | :ok say [pick module] }
+  { .size | :ok [400 300] }
+  { .bug | bug }
+  ;
+  ;column dialog column ();
+  ;view column tree
+    { picked: node
+    | :ok
+      ;module-name node boss id;
+      dialog close and:
+      @ operations (.window .tabs) module (.module-name)
+    }
+  ;
+  { populate: .view .tree
+  | :self :ok
+    tree every
+    { branch: .; items
+    | :ok
+      self populate: .tree items .view ' node
+      { .text
+      | :ok language write (branch <+# 1 singlewise) -#$* "[" <-#$* "]"
+      }
+      { .id | :ok branch }
+    }
+  }
+  populate (.view .tree) and:
+  dialog listen
+  { .cancel | }
 }
 ><:[module:. pils editor operations .timestamp 2026-07-05T12:00:50.238+02 .language system]><;
 ;library-channel;

@@ -1,6 +1,6 @@
 ><:[module:. platform, .timestamp 2008-06-25T15:43:00.909+02 .language system]><;
 ><:[module:. platform qt .timestamp 2008-06-25T15:43:08.612+02 .language system]><;
-><:[module:. platform qt dialog .timestamp 2026-07-06T08:52:45.842+02 .language qt]><;
+><:[module:. platform qt dialog .timestamp 2026-07-06T13:14:31.947+02 .language qt]><;
 ;new plumcake .WA_DeleteOnClose 55 .WindowModal 1;
 { .dialog: .window .boss
 | :where :what :ok
@@ -64,7 +64,7 @@
   }
   try
   { who
-  | new bug {} Q:Shortcut ("Ctrl+Shift+F1", who)
+  | new Q:Shortcut ("Ctrl+Shift+F1", who)
     when
     { qs:activated: ?
     | :try @ [pils editor] pinpoint: .where .what
@@ -139,10 +139,10 @@
 { .documents | :ok [pils-configuration:documents-directory] }
 ><:[module:. platform qt entry system .timestamp 2008-08-08T04:55:32.254+02 .language system]><;
 { .system | :try @@ [platform qt system [?:?|pils-configuration:system]] }
-><:[module:. platform qt entry window .timestamp 2026-07-05T11:21:03.571+02 .language qt]><;
+><:[module:. platform qt entry window .timestamp 2026-07-06T15:26:42.354+02 .language qt]><;
 ;new plumcake .WA_DeleteOnClose 55;
 { window: boss
-| :possibly
+| :where :what :possibly
   new Q:MainWindow
   q:setAttribute (WA_DeleteOnClose, 1)
   q:setWindowTitle (boss title .:need)
@@ -155,7 +155,21 @@
   | :who :ok
     who mind listen := who channel listen (handler);
     who
-  } 
+  }
+  { column: boss
+  | :who  :ok
+    (cw1: who q:centralWidget or "nixen") bug {} and:
+    ;inner new Q:Widget;
+    who q:setCentralWidget (inner) and:
+    (cw2: who q:centralWidget or "nixen") bug {} and:
+    @ lane: .layout  new Q:VBoxLayout .widget inner .boss
+  }
+  { row: boss
+  | :who  :ok
+    ;inner new Q:Widget;
+    who q:setCentralWidget (inner) and:
+    @ lane: .layout  new Q:HBoxLayout .widget inner .boss
+  }
   { filedialog: boss | :who :try @ filedialog: .window who .boss }
   { dialog: boss | :who :try @ dialog: .window who .boss }
   { ask: .; options = :where? .ruleset :' rules
@@ -187,7 +201,9 @@
   { qe:mouseButtonRelease: ' | (': ') bug {}}
   { title: $ title | :who ' q:setWindowTitle (title) .:try }
   { .pinpoint | :who :ok who mind pinpointer call: @@ [pils run pinpoint] }
-  { .size | :who :possibly who juce-getWidth .:need, who juce-getHeight .:need }
+  { .size
+  | :who :possibly who juce-getWidth .:need, who juce-getHeight .:need
+  }
   { menubar: boss | :who :ok @ menubar: .window who .boss }
   { old-menubar: boss
   | :who :ok who q:menuBar
@@ -336,6 +352,14 @@
     who q:setCentralWidget (inner) and:
     inner
   }
+  try
+  { who
+  | new Q:Shortcut ("Ctrl+Shift+F1", who)
+    when
+    { qs:activated: ?
+    | :try @ [pils editor] pinpoint: .where .what
+    }
+  }
   .(@ strap) .:need
 }
 ><:[module:. platform qt filedialog .timestamp 2026-07-04T16:20:33.564+02 .language qt]><;
@@ -354,13 +378,13 @@
   { .close | :who :ok who q:close }
   { qs:fileSelected: x | :try boss pick: x }
 }
-><:[module:. platform qt lane .timestamp 2026-07-05T22:36:06.287+02 .language qt]><;
+><:[module:. platform qt lane .timestamp 2026-07-06T21:39:02.150+02 .language qt]><;
 ;new plumcake;
 { lane: .layout .window .boss
 | :self
   ;widget new Q:Widget;
   window q:setCentralWidget (widget) and:
-  :try self lane: .layout .boss .widget
+  :try self lane: .layout .widget .boss
 }
 { lane: .layout .widget .boss
 | :self :ok
@@ -406,7 +430,26 @@
   widget
 }
 ><:[module:. platform qt lane canvas .timestamp 2026-07-05T13:51:26.780+02 .language qt]><;
-><:[module:. platform qt lane edit .timestamp 2026-07-05T13:51:26.780+02 .language qt]><;
+><:[module:. platform qt lane edit .timestamp 2026-07-06T14:36:44.390+02 .language qt]><;
+;new plumcake;
+{ edit: .boss .parent .layout
+| :ok
+  ;widget Q:PilsPlainTextEdit (boss text or "") when
+    { qs:textChanged:
+    | :who :try boss text:. who q:toPlainText
+    }
+    { .text | :who :ok who q:toPlainText }
+    { text: ' | :who :ok who q:setPlainText: text }
+    { selection: a, b
+    | :who :ok who q:setSelection(a, b) q:ensureCursorVisible
+    }
+    { .selection | :who :ok who q:selection }
+    { .focus | :who :ok who q:setFocus }
+    { .pickup | :who :ok who }
+  ;
+  layout q:addWidget (widget) and:
+  widget
+}
 ><:[module:. platform qt lane label .timestamp 2026-07-05T22:34:23.304+02 .language qt]><;
 ;new plumcake;
 { label: .boss .parent .layout
@@ -436,7 +479,34 @@
   widget
 }
 ><:[module:. platform qt lane tabs .timestamp 2026-07-05T13:51:26.780+02 .language qt]><;
-><:[module:. platform qt lane tree .timestamp 2026-07-05T13:51:26.780+02 .language qt]><;
+><:[module:. platform qt lane tree .timestamp 2026-07-06T13:29:57.188+02 .language qt]><;
+;new plumcake;
+{ tree: .boss .parent .layout
+| :ok
+  ;tree new Q:PilsTreeWidget (parent) when
+  { qs:itemActivated: ? | :who :try boss picked: who q:currentNode }
+  { node: boss
+  | :who
+    ;text boss text .:need; :ok
+    who q:addRootNode (text)
+    when (when (.boss))
+  }
+  { .focus | :who :ok who q:setFocus }
+  ;
+  layout q:addWidget (tree) and:
+  tree
+}
+===
+{ when: .boss
+| :self :ok
+  { .bug | shit }
+  { node: boss
+  | :who
+    ;text boss text .:need; :ok
+    who q:addChild (text) when (self when: .boss)
+  }
+  { .boss | :ok boss }
+}
 ><:[module:. platform qt menubar .timestamp 2026-07-04T17:05:50.309+02 .language qt]><;
 { menubar: .window .boss
 | :ok window q:menuBar

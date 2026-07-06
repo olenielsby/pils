@@ -1,7 +1,15 @@
-><:[module:. test, .timestamp 2026-07-03T22:24:26.744+02 .language system]><;
+><:[module:. test, .timestamp 2026-07-06T20:36:27.920+02 .language system]><;
 { .test
 | :ok
-  :use {.a|:ok [b]};
-  ;time timestamp;
-  time, 2026-07-03T21:55:05.867+02
+  this program filename =* "test"
+}
+><:[module:. hest, .timestamp 2026-07-06T20:36:27.920+02 .language system]><;
+{ .hest
+| :ok
+  this program filename =* "test"
+}
+><:[module:. pest, .timestamp 2026-07-06T20:36:27.920+02 .language system]><;
+{ .pest
+| :ok
+  this program filename =* "test"
 }

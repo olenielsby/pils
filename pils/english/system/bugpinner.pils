@@ -1,6 +1,6 @@
 [pils: .use?]
-><:[module:. pils, .timestamp 2008-12-21T14:24:30.089-01 .language system]><;
-><:[module:. pils editor pinpoint .timestamp 2009-04-27T18:28:36.752-02 .language system]><;
+><:[module:. pils, .timestamp 2008-12-21T16:24:30.089+01 .language system]><;
+><:[module:. pils editor pinpoint .timestamp 2009-04-27T22:28:36.752+02 .language system]><;
 { pinpoint: .what .where
 | ;module where this .:need module .:need;
   :try
@@ -16,19 +16,19 @@
   .:need
   focus
 }
-><:[module:. pils run error .timestamp 2026-07-03T14:45:42.165-02 .language system]><;
+><:[module:. pils run error .timestamp 2026-07-06T20:31:56.999+02 .language system]><;
 ;channel this module channel;
 :use
   { ::error say: n | :ok {} write: n }
   { ::error saying: n | :ok {} write: n }
 ;
 { error:. .where .what .who .module
-| 
+| :ok
   (ERROR: . what .module where this module name) bug {} and:
   "in file: " (where this module filename) bug {} and:
-  channel disable or:
+  channel suppress or:
   ;error-title
-    ( say [error:] " " ! bug {}
+    ( say [error] ": " bug {}
       ( error call {+$ message . 1|:ok message <-#+* ""/~} or:
         saying
         (error try: [call: text] +++ [ok: .])
@@ -41,40 +41,26 @@
   { .size | :ok [600 300] }
   { .icon | :ok @@ [pils icon horn hot large] }
   ;
-  window mind suppress := channel listen {.disable|:ok [BAD ERROR] bug {}};
-  ;splitter window inner vertical splitter;
-  ;input splitter edit;
-  ;output splitter edit;
-  window mind? :=
-    channel listen {|:ok window},
-    (channel: error: this program filename) listen
-    {.close|window mind? := (); window close}
-    {.position|:ok window position}
-    {.size|:ok window size}
-    {.text|:ok input text}
+  window mind suppress := channel listen
+    { .suppress|:ok [SUPPRESSED ERROR] bug {} }
   ;
-  ( (channel: error: this program filename) hint or () try
-    { hint: .position .size .text
-    | :ok
-      window position (position) anyway:
-      window size (size) anyway:
-      input text (text) anyway:
-    }
-  )
-  and:
+  ;splitter window column {.split|:ok 1};
+  ;input splitter edit (); 
+  ;output splitter edit ();
   ;menuitems @ menuitems (.window);
   ;menubar
     window menubar
     { action: .
     | :ok
       action bug {} and:
-      action call (@ action (.window .module .error .what .where .who .input .output))
+      action call:
+      @ action (.window .module .error .what .where .who .input .output)
     }
   ;
-  @ menubuild (.menuitems .menubar)
+  @ menubuild (.menuitems .menubar) and:
+  window listen {|}
 }
-
-><:[module:. pils run error action .timestamp 2011-09-28T17:14:33.593-02 .language system]><;
+><:[module:. pils run error action .timestamp 2026-07-06T12:39:50.283+02 .language system]><;
 { action: .window .module .error .what .where .who .input .output
 | :ok
   { [edit find]
@@ -88,7 +74,7 @@
   { .locate
   | :ok
     module filename @@@ [pils editor] window
-    mind operations
+    mind operations operations
     module (.module-name module name)
     pickup
     selection
@@ -129,7 +115,7 @@
   }
 }
 
-><:[module:. pils run error hint .timestamp 2009-08-29T08:53:13.952-02 .language system]><;
+><:[module:. pils run error hint .timestamp 2009-08-29T12:53:13.952+02 .language system]><;
 ;error-channel (channel: error: this program filename);
 { .hint | :ok () }
 { .hint
@@ -142,7 +128,7 @@
   )
   call {hint|:ok error-channel close anyway: hint}
 }
-><:[module:. pils run error menubuild .timestamp 2009-08-29T08:53:13.952-02 .language system]><;
+><:[module:. pils run error menubuild .timestamp 2009-08-29T12:53:13.952+02 .language system]><;
 { menubuild: .menuitems .menubar
 | :ok
   menuitems legs
@@ -183,7 +169,7 @@
   }
 }
 
-><:[module:. pils run error menuitems .timestamp 2009-08-29T08:53:13.952-02 .language system]><;
+><:[module:. pils run error menuitems .timestamp 2009-08-29T12:53:13.952+02 .language system]><;
 { menuitems: .window
 | :ok
   ( [menu:. locate source .shortcut "Ctrl+L" .action locate],
@@ -234,7 +220,7 @@
   }
 }
 
-><:[module:. pils run log .timestamp 2026-07-03T14:42:44.323-02 .language system]><;
+><:[module:. pils run log .timestamp 2026-07-03T18:42:44.323+02 .language system]><;
 { .window
 | :ok
   this module channel window or:
@@ -258,7 +244,7 @@
   }
 }
 { [test test] | :self ' window }
-><:[module:. pils run pinpoint .timestamp 2011-07-21T00:58:18.180-02 .language system]><;
+><:[module:. pils run pinpoint .timestamp 2011-07-21T04:58:18.180+02 .language system]><;
 { pinpoint: .what .module * ;name .language .text .filename .expression
 | :who :try
   filename @@@ [pils editor]
