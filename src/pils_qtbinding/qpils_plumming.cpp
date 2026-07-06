@@ -34,8 +34,6 @@ namespace PILS
         QtEventCliche::initializeNamespace();
         QtValueClassName::initialize();
         QtObjectClassName::initialize();
-        QtMethodName::initialize();
-        QtSignalName::initialize();
         QtEventCliche::initialize();
     }
 

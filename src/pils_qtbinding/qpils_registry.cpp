@@ -5,24 +5,97 @@ namespace PILS
 {
 void QtObjectClassName::initialize()
 {
+    BEGIN_CLASS(QApplication)
+    SIGNAL_(QApplication, focusChanged)
+    SIGNAL_(QApplication, applicationStateChanged)
+    SIGNAL_(QApplication, aboutToQuit)
+    END_CLASS()
+
     // const QtObjectClassName* classEntry = nullptr;
 
     // ===== QWidget =====
     BEGIN_CLASS(QWidget)
     CONSTRUCTOR_NOARGS(QWidget)
     CONSTRUCTOR_ARGS(QWidget, QWidget*)
+    // QWidget basics
+    METHOD_(QWidget, show)
+    METHOD_(QWidget, hide)
+    METHOD_(QWidget, close)
+    METHOD_OVERLOAD(QWidget, update, void(QWidget::*)())
+    METHOD_OVERLOAD(QWidget, repaint, void(QWidget::*)())
+    METHOD_(QWidget, width)
+    METHOD_(QWidget, height)
+    METHOD_(QWidget, size)
+    METHOD_(QWidget, pos)
+    METHOD_(QWidget, setWindowTitle)
+    METHOD_(QWidget, setEnabled)
+    METHOD_(QWidget, isEnabled)
+    METHOD_(QWidget, setVisible)
+    METHOD_(QWidget, isVisible)
+    METHOD_(QWidget, setStyleSheet)
+    METHOD_(QWidget, setWindowIcon)
+    METHOD_OVERLOAD(QWidget, setFocus, void(QWidget::*)())
+    METHOD_OVERLOAD(QWidget, resize, void(QWidget::*)(int,int))
+    // METHOD_OVERLOAD(QWidget, resize, void(QWidget::*)(const QSize&))
+    METHOD_OVERLOAD(QWidget, move, void(QWidget::*)(int,int))
+    METHOD_OVERLOAD(QWidget, setGeometry, void(QWidget::*)(int,int,int,int))
+    METHOD_(QWidget, setAttribute)
+    // Layout-ish
+    METHOD_(QWidget, setLayout)
+    METHOD_(QWidget, layout)
+    // QWidget ekstra
+    METHOD_OVERLOAD(QWidget, setMinimumSize, void(QWidget::*)(int,int))
+    METHOD_OVERLOAD(QWidget, setMaximumSize, void(QWidget::*)(int,int))
+    METHOD_OVERLOAD(QWidget, setFixedSize, void(QWidget::*)(int,int))
+    METHOD_(QWidget, setToolTip)
+    // Layout helpers
+    METHOD_OVERLOAD(QWidget, setParent, void(QWidget::*)(QWidget*))
+    SIGNAL_(QWidget, customContextMenuRequested)
+    SIGNAL_(QWidget, windowTitleChanged)
+    SIGNAL_(QWidget, windowIconChanged)
+    SIGNAL_(QWidget, windowIconTextChanged)
+    SIGNAL_(QWidget, destroyed)
+    SIGNAL_(QWidget, customContextMenuRequested)
+    SIGNAL_(QWidget, windowTitleChanged)
+    SIGNAL_(QWidget, windowIconChanged)
+    SIGNAL_(QWidget, windowIconTextChanged)
+    SIGNAL_(QWidget, destroyed)
+    // visibility / lifecycle
+    SIGNAL_(QWidget, show)
+    SIGNAL_(QWidget, hide)
+    END_CLASS()
+
+    BEGIN_CLASS(QWindow)
+    SIGNAL_(QWindow, visibleChanged)
+    SIGNAL_(QWindow, widthChanged)
+    SIGNAL_(QWindow, heightChanged)
+    SIGNAL_(QWindow, xChanged)
+    SIGNAL_(QWindow, yChanged)
     END_CLASS()
 
     // ===== QMainWindow =====
     BEGIN_CLASS(QMainWindow)
     CONSTRUCTOR_NOARGS(QMainWindow)
     CONSTRUCTOR_ARGS(QMainWindow, QWidget*)
+    METHOD_(QMainWindow, setCentralWidget)
+    METHOD_(QMainWindow, centralWidget)
+    METHOD_(QMainWindow, menuBar)
+    METHOD_(QMainWindow, statusBar)
+    METHOD_OVERLOAD(QMainWindow, addToolBar, QToolBar*(QMainWindow::*)(const QString&))
+
+    SIGNAL_(QMainWindow, iconSizeChanged)
+    SIGNAL_(QMainWindow, toolButtonStyleChanged)
+    SIGNAL_(QMainWindow, tabifiedDockWidgetActivated)
     END_CLASS()
 
     // ===== QDialog =====
     BEGIN_CLASS(QDialog)
     CONSTRUCTOR_NOARGS(QDialog)
     CONSTRUCTOR_ARGS(QDialog, QWidget*)
+    METHOD_(QDialog, exec)
+    METHOD_(QDialog, accept)
+    METHOD_(QDialog, reject)
+    METHOD_(QDialog, setWindowModality)
     END_CLASS()
 
     // ===== QPushButton =====
@@ -31,6 +104,14 @@ void QtObjectClassName::initialize()
     CONSTRUCTOR_ARGS(QPushButton, QWidget*)
     CONSTRUCTOR_ARGS(QPushButton, const QString&, QWidget*)
     CONSTRUCTOR_ARGS(QPushButton, const QString&)
+    METHOD_(QPushButton, setText)
+    METHOD_(QPushButton, text)
+    METHOD_(QPushButton, setEnabled)
+    METHOD_(QPushButton, click)
+    SIGNAL_(QPushButton, clicked)
+    SIGNAL_(QPushButton, pressed)
+    SIGNAL_(QPushButton, released)
+    SIGNAL_(QPushButton, toggled)
     END_CLASS()
 
     // ===== QToolButton =====
@@ -45,6 +126,10 @@ void QtObjectClassName::initialize()
     CONSTRUCTOR_ARGS(QCheckBox, QWidget*)
     CONSTRUCTOR_ARGS(QCheckBox, const QString&, QWidget*)
     CONSTRUCTOR_ARGS(QCheckBox, const QString&)
+    METHOD_(QCheckBox, setChecked)
+    METHOD_(QCheckBox, isChecked)
+    SIGNAL_(QCheckBox, checkStateChanged)
+    SIGNAL_(QCheckBox, toggled)
     END_CLASS()
 
     // ===== QRadioButton =====
@@ -53,12 +138,24 @@ void QtObjectClassName::initialize()
     CONSTRUCTOR_ARGS(QRadioButton, QWidget*)
     CONSTRUCTOR_ARGS(QRadioButton, const QString&, QWidget*)
     CONSTRUCTOR_ARGS(QRadioButton, const QString&)
+    METHOD_(QRadioButton, setChecked)
+    METHOD_(QRadioButton, isChecked)
+    SIGNAL_(QRadioButton, toggled)
     END_CLASS()
 
     // ===== QComboBox =====
     BEGIN_CLASS(QComboBox)
     CONSTRUCTOR_NOARGS(QComboBox)
     CONSTRUCTOR_ARGS(QComboBox, QWidget*)
+    METHOD_OVERLOAD(QComboBox, addItem, void(QComboBox::*)(const QString&, const QVariant&))
+    METHOD_(QComboBox, currentText)
+    METHOD_(QComboBox, setCurrentIndex)
+    METHOD_(QComboBox, currentIndex)
+    SIGNAL_(QComboBox, currentIndexChanged)
+    SIGNAL_(QComboBox, currentTextChanged)
+    SIGNAL_(QComboBox, activated)
+    SIGNAL_(QComboBox, highlighted)
+    SIGNAL_(QComboBox, editTextChanged)
     END_CLASS()
 
     // ===== QLineEdit =====
@@ -67,6 +164,16 @@ void QtObjectClassName::initialize()
     CONSTRUCTOR_ARGS(QLineEdit, QWidget*)
     CONSTRUCTOR_ARGS(QLineEdit, const QString&, QWidget*)
     CONSTRUCTOR_ARGS(QLineEdit, const QString&)
+    METHOD_(QLineEdit, setText)
+    METHOD_(QLineEdit, text)
+    METHOD_(QLineEdit, clear)
+    METHOD_(QLineEdit, setPlaceholderText)
+    SIGNAL_(QLineEdit, textChanged)
+    SIGNAL_(QLineEdit, textEdited)
+    SIGNAL_(QLineEdit, returnPressed)
+    SIGNAL_(QLineEdit, editingFinished)
+    SIGNAL_(QLineEdit, cursorPositionChanged)
+    SIGNAL_(QLineEdit, selectionChanged)
     END_CLASS()
 
     // ===== QTextEdit =====
@@ -75,6 +182,14 @@ void QtObjectClassName::initialize()
     CONSTRUCTOR_ARGS(QTextEdit, QWidget*)
     CONSTRUCTOR_ARGS(QTextEdit, const QString&, QWidget*)
     CONSTRUCTOR_ARGS(QTextEdit, const QString&)
+    METHOD_(QTextEdit, setText)
+    METHOD_(QTextEdit, toPlainText)
+    METHOD_(QTextEdit, setHtml)
+    METHOD_(QTextEdit, toHtml)
+    METHOD_(QTextEdit, clear)
+    SIGNAL_(QTextEdit, textChanged)
+    SIGNAL_(QTextEdit, cursorPositionChanged)
+    SIGNAL_(QTextEdit, selectionChanged)
     END_CLASS()
 
     // ===== QPlainTextEdit =====
@@ -83,6 +198,20 @@ void QtObjectClassName::initialize()
     CONSTRUCTOR_ARGS(QPlainTextEdit, QWidget*)
     CONSTRUCTOR_ARGS(QPlainTextEdit, const QString&, QWidget*)
     CONSTRUCTOR_ARGS(QPlainTextEdit, const QString&)
+    METHOD_(QPlainTextEdit, setPlainText)
+    METHOD_(QPlainTextEdit, toPlainText)
+    METHOD_(QPlainTextEdit, appendPlainText)
+    METHOD_(QPlainTextEdit, clear)
+    METHOD_(QPlainTextEdit, setReadOnly)
+    METHOD_(QPlainTextEdit, centerCursor)
+    METHOD_(QPlainTextEdit, ensureCursorVisible)
+    // METHOD_(QPlainTextEdit, textCursor)
+    // METHOD_(QPlainTextEdit, setTextCursor)
+    SIGNAL_(QPlainTextEdit, textChanged)
+    SIGNAL_(QPlainTextEdit, cursorPositionChanged)
+    SIGNAL_(QPlainTextEdit, selectionChanged)
+    SIGNAL_(QPlainTextEdit, updateRequest)
+    SIGNAL_(QPlainTextEdit, blockCountChanged)
     END_CLASS()
 
     // ===== QPilsPlainTextEdit =====
@@ -91,6 +220,8 @@ void QtObjectClassName::initialize()
     // CONSTRUCTOR_ARGS(QPilsPlainTextEdit, QWidget*)
     // CONSTRUCTOR_ARGS(QPilsPlainTextEdit, const QString&, QWidget*)
     CONSTRUCTOR_ARGS(QPilsPlainTextEdit, const QString&)
+    EXACT_METHOD(QPilsPlainTextEdit, selection)
+    EXACT_METHOD(QPilsPlainTextEdit, setSelection)
     END_CLASS()
 
     // ===== QLabel =====
@@ -99,12 +230,18 @@ void QtObjectClassName::initialize()
     CONSTRUCTOR_ARGS(QLabel, QWidget*)
     CONSTRUCTOR_ARGS(QLabel, const QString&, QWidget*)
     CONSTRUCTOR_ARGS(QLabel, const QString&)
+    METHOD_(QLabel, setText)
+    METHOD_(QLabel, text)
+    METHOD_(QLabel, setPixmap)
     END_CLASS()
 
     // ===== QProgressBar =====
     BEGIN_CLASS(QProgressBar)
     CONSTRUCTOR_NOARGS(QProgressBar)
     CONSTRUCTOR_ARGS(QProgressBar, QWidget*)
+    METHOD_(QProgressBar, setValue)
+    METHOD_(QProgressBar, value)
+    METHOD_(QProgressBar, setRange)
     END_CLASS()
 
     // ===== QSlider =====
@@ -113,24 +250,45 @@ void QtObjectClassName::initialize()
     CONSTRUCTOR_ARGS(QSlider, QWidget*)
     CONSTRUCTOR_ARGS(QSlider, Qt::Orientation, QWidget*)
     CONSTRUCTOR_ARGS(QSlider, Qt::Orientation)
+    SIGNAL_(QSlider, valueChanged)
+    SIGNAL_(QSlider, sliderPressed)
+    SIGNAL_(QSlider, sliderReleased)
+    SIGNAL_(QSlider, sliderMoved)
     END_CLASS()
 
     // ===== QSpinBox =====
     BEGIN_CLASS(QSpinBox)
     CONSTRUCTOR_NOARGS(QSpinBox)
     CONSTRUCTOR_ARGS(QSpinBox, QWidget*)
+    SIGNAL_(QSpinBox, valueChanged)
     END_CLASS()
 
     // ===== QDoubleSpinBox =====
     BEGIN_CLASS(QDoubleSpinBox)
     CONSTRUCTOR_NOARGS(QDoubleSpinBox)
     CONSTRUCTOR_ARGS(QDoubleSpinBox, QWidget*)
+    SIGNAL_(QDoubleSpinBox, valueChanged)
     END_CLASS()
 
     // ===== QTabWidget =====
     BEGIN_CLASS(QTabWidget)
     CONSTRUCTOR_NOARGS(QTabWidget)
     CONSTRUCTOR_ARGS(QTabWidget, QWidget*)
+    METHOD_OVERLOAD(QTabWidget, addTab, int(QTabWidget::*)(QWidget*, const QString&))
+    METHOD_(QTabWidget, setCurrentIndex)
+    METHOD_(QTabWidget, currentIndex)
+    METHOD_(QTabWidget, count)
+    METHOD_(QTabWidget, widget)
+    METHOD_(QTabWidget, removeTab)
+    METHOD_(QTabWidget, setTabText)
+    METHOD_(QTabWidget, tabText)
+    METHOD_(QTabWidget, setTabsClosable)
+    METHOD_(QTabWidget, currentWidget)   // bekvemmelighed
+    METHOD_(QTabWidget, setCurrentWidget)   // bekvemmelighed
+    SIGNAL_(QTabWidget, currentChanged)
+    SIGNAL_(QTabWidget, tabCloseRequested)
+    SIGNAL_(QTabWidget, tabBarClicked)
+    SIGNAL_(QTabWidget, tabBarDoubleClicked)
     END_CLASS()
 
     // ===== QSplitter =====
@@ -139,6 +297,10 @@ void QtObjectClassName::initialize()
     CONSTRUCTOR_ARGS(QSplitter, QWidget*)
     CONSTRUCTOR_ARGS(QSplitter, Qt::Orientation, QWidget*)
     CONSTRUCTOR_ARGS(QSplitter, Qt::Orientation)
+    METHOD_(QSplitter, addWidget)
+    METHOD_(QSplitter, setOrientation)
+    METHOD_(QSplitter, setSizes)
+    SIGNAL_(QSplitter, splitterMoved)
     END_CLASS()
 
     // ===== QMenu =====
@@ -147,6 +309,14 @@ void QtObjectClassName::initialize()
     CONSTRUCTOR_ARGS(QMenu, QWidget*)
     CONSTRUCTOR_ARGS(QMenu, const QString&, QWidget*)
     CONSTRUCTOR_ARGS(QMenu, const QString&)
+    METHOD_OVERLOAD(QMenu, addAction, QAction*(QMenu::*)(const QString&))
+    METHOD_(QMenu, addSeparator)
+    METHOD_OVERLOAD(QMenu, addMenu, QMenu*(QMenu::*)(const QString&))
+    METHOD_(QMenu, clear)
+    SIGNAL_(QMenu, triggered)
+    SIGNAL_(QMenu, hovered)
+    SIGNAL_(QMenu, aboutToShow)
+    SIGNAL_(QMenu, aboutToHide)
     END_CLASS()
 
     // ===== QAction =====
@@ -155,6 +325,21 @@ void QtObjectClassName::initialize()
     CONSTRUCTOR_ARGS(QAction, QObject*)
     CONSTRUCTOR_ARGS(QAction, const QString&, QObject*)
     CONSTRUCTOR_ARGS(QAction, const QString&)
+    METHOD_(QAction, setEnabled)
+    METHOD_(QAction, isEnabled)
+    METHOD_(QAction, setVisible)
+    METHOD_(QAction, isVisible)
+    METHOD_(QAction, setText)
+    METHOD_(QAction, text)
+    METHOD_(QAction, setCheckable)
+    METHOD_(QAction, isCheckable)
+    METHOD_(QAction, setChecked)
+    METHOD_(QAction, isChecked)
+    METHOD_(QAction, setShortcut)
+    SIGNAL_(QAction, triggered)
+    SIGNAL_(QAction, toggled)
+    SIGNAL_(QAction, hovered)
+    SIGNAL_(QAction, changed)
     END_CLASS()
 
     // ===== QFileDialog =====
@@ -163,23 +348,37 @@ void QtObjectClassName::initialize()
     CONSTRUCTOR_ARGS(QFileDialog, QWidget*)
     CONSTRUCTOR_ARGS(QFileDialog, QWidget*, const QString&)
     CONSTRUCTOR_ARGS(QFileDialog, QWidget*, const QString&, const QString&)
+    METHOD_(QFileDialog, setFileMode)
+    METHOD_(QFileDialog, setNameFilter)
+    METHOD_OVERLOAD(QFileDialog, setDirectory, void(QFileDialog::*)(const QString &))
+    METHOD_(QFileDialog, selectedFiles)
+    SIGNAL_(QFileDialog, fileSelected)
     END_CLASS()
 
     // ===== QMessageBox =====
     BEGIN_CLASS(QMessageBox)
     CONSTRUCTOR_NOARGS(QMessageBox)
     CONSTRUCTOR_ARGS(QMessageBox, QWidget*)
+    METHOD_(QMessageBox, setText)
+    METHOD_(QMessageBox, exec)
     END_CLASS()
 
     // ===== Views =====
     BEGIN_CLASS(QListView)
     CONSTRUCTOR_NOARGS(QListView)
     CONSTRUCTOR_ARGS(QListView, QWidget*)
+    SIGNAL_(QListView, clicked)
+    SIGNAL_(QListView, doubleClicked)
+    SIGNAL_(QListView, activated)
     END_CLASS()
 
     BEGIN_CLASS(QTreeView)
     CONSTRUCTOR_NOARGS(QTreeView)
     CONSTRUCTOR_ARGS(QTreeView, QWidget*)
+    SIGNAL_(QTreeView, clicked)
+    SIGNAL_(QTreeView, doubleClicked)
+    SIGNAL_(QTreeView, expanded)
+    SIGNAL_(QTreeView, collapsed)
     END_CLASS()
 
     BEGIN_CLASS(QTableView)
@@ -188,14 +387,28 @@ void QtObjectClassName::initialize()
     END_CLASS()
 
     // ===== Layouts =====
+    BEGIN_CLASS(QLayout)
+    METHOD_(QLayout, addWidget)
+    METHOD_(QLayout, setSpacing)
+    METHOD_OVERLOAD(QLayout, setContentsMargins, void(QLayout::*)(int,int,int,int))
+    END_CLASS()
+
+    BEGIN_CLASS(QBoxLayout)
+    METHOD_OVERLOAD(QBoxLayout, addWidget, void(QBoxLayout::*)(QWidget*, int, Qt::Alignment))
+    END_CLASS()
+
     BEGIN_CLASS(QVBoxLayout)
     CONSTRUCTOR_NOARGS(QVBoxLayout)
     CONSTRUCTOR_ARGS(QVBoxLayout, QWidget*)
+    METHOD_(QVBoxLayout, addWidget)
+    METHOD_OVERLOAD(QVBoxLayout, addWidget, void(QVBoxLayout::*)(QWidget*, int, Qt::Alignment))
     END_CLASS()
 
     BEGIN_CLASS(QHBoxLayout)
     CONSTRUCTOR_NOARGS(QHBoxLayout)
     CONSTRUCTOR_ARGS(QHBoxLayout, QWidget*)
+    METHOD_(QHBoxLayout, addWidget)
+    METHOD_OVERLOAD(QHBoxLayout, addWidget, void(QHBoxLayout::*)(QWidget*, int, Qt::Alignment))
     END_CLASS()
 
     BEGIN_CLASS(QGridLayout)
@@ -206,16 +419,34 @@ void QtObjectClassName::initialize()
     BEGIN_CLASS(QMenuBar)
     CONSTRUCTOR_NOARGS(QMenuBar)
     CONSTRUCTOR_ARGS(QMenuBar, QWidget*)
+    METHOD_OVERLOAD(QMenuBar, addMenu, QMenu*(QMenuBar::*)(const QString&))
+    METHOD_OVERLOAD(QMenuBar, addAction, QAction*(QMenuBar::*)(const QString&))
+    METHOD_(QMenuBar, clear)
     END_CLASS()
 
     BEGIN_CLASS(QStatusBar)
     CONSTRUCTOR_NOARGS(QStatusBar)
     CONSTRUCTOR_ARGS(QStatusBar, QWidget*)
+    METHOD_OVERLOAD(QStatusBar, addWidget, void(QStatusBar::*)(QWidget*, int))
+    METHOD_OVERLOAD(QStatusBar, addPermanentWidget, void(QStatusBar::*)(QWidget*, int))
+    METHOD_(QStatusBar, removeWidget)
+    METHOD_OVERLOAD(QStatusBar, showMessage, void(QStatusBar::*)(const QString&, int))
+    METHOD_(QStatusBar, clearMessage)
+    METHOD_(QStatusBar, currentMessage)
     END_CLASS()
 
     BEGIN_CLASS(QScrollArea)
     CONSTRUCTOR_NOARGS(QScrollArea)
     CONSTRUCTOR_ARGS(QScrollArea, QWidget*)
+    METHOD_(QScrollArea, setWidget)
+    METHOD_(QScrollArea, widget)
+    METHOD_(QScrollArea, setWidgetResizable)
+    END_CLASS()
+
+    BEGIN_CLASS(QScrollBar)
+    SIGNAL_(QScrollBar, valueChanged)
+    SIGNAL_(QScrollBar, sliderMoved)
+    SIGNAL_(QScrollBar, rangeChanged)
     END_CLASS()
 
     BEGIN_CLASS(QFrame)
@@ -236,342 +467,49 @@ void QtObjectClassName::initialize()
     END_CLASS()
 
     BEGIN_CLASS(QPilsTreeWidget)
-    CONSTRUCTOR_NOARGS(QPilsTreeWidget)
-    CONSTRUCTOR_ARGS(QPilsTreeWidget, QWidget*)
+    SIGNAL_(QTreeWidget, itemActivated)
     END_CLASS()
 
-
-}
-
-void QtMethodName::initialize()
-{
-    // QWidget basics
-    IMPLEMENT(QWidget, show)
-    IMPLEMENT(QWidget, hide)
-    IMPLEMENT(QWidget, close)
-    IMPLEMENT_OVERLOAD(QWidget, update, void(QWidget::*)())
-    IMPLEMENT_OVERLOAD(QWidget, repaint, void(QWidget::*)())
-
-    IMPLEMENT(QWidget, width)
-    IMPLEMENT(QWidget, height)
-    IMPLEMENT(QWidget, size)
-    IMPLEMENT(QWidget, pos)
-
-    IMPLEMENT(QWidget, setWindowTitle)
-    IMPLEMENT(QWidget, windowTitle)
-
-    IMPLEMENT(QWidget, setEnabled)
-    IMPLEMENT(QWidget, isEnabled)
-
-    IMPLEMENT(QWidget, setVisible)
-    IMPLEMENT(QWidget, isVisible)
-
-    IMPLEMENT(QWidget, setStyleSheet)
-
-    IMPLEMENT(QWidget, setWindowIcon)
-
-    IMPLEMENT_OVERLOAD(QWidget, setFocus, void(QWidget::*)())
-
-    IMPLEMENT_OVERLOAD(QWidget, resize, void(QWidget::*)(int,int))
-    // IMPLEMENT_OVERLOAD(QWidget, resize, void(QWidget::*)(const QSize&))
-
-    IMPLEMENT_OVERLOAD(QWidget, move, void(QWidget::*)(int,int))
-
-    IMPLEMENT_OVERLOAD(QWidget, setGeometry, void(QWidget::*)(int,int,int,int))
-    IMPLEMENT(QWidget, setAttribute)
-
-
-    // Layout-ish
-    IMPLEMENT(QWidget, setLayout)
-    IMPLEMENT(QWidget, layout)
-
-    // QWidget ekstra
-    IMPLEMENT_OVERLOAD(QWidget, setMinimumSize, void(QWidget::*)(int,int))
-    IMPLEMENT_OVERLOAD(QWidget, setMaximumSize, void(QWidget::*)(int,int))
-    IMPLEMENT_OVERLOAD(QWidget, setFixedSize, void(QWidget::*)(int,int))
-    IMPLEMENT(QWidget, setToolTip)
-
-    // Layout helpers
-    IMPLEMENT_OVERLOAD(QWidget, setParent, void(QWidget::*)(QWidget*))
-
-    IMPLEMENT(QLayout, addWidget)
-    IMPLEMENT(QLayout, setSpacing)
-    IMPLEMENT_OVERLOAD(QLayout, setContentsMargins, void(QLayout::*)(int,int,int,int))
-
-    IMPLEMENT_OVERLOAD(QBoxLayout, addWidget, void(QBoxLayout::*)(QWidget*, int, Qt::Alignment))
-
-    // QMainWindow
-    IMPLEMENT(QMainWindow, setCentralWidget)
-    IMPLEMENT(QMainWindow, centralWidget)
-
-    IMPLEMENT(QMainWindow, menuBar)
-    IMPLEMENT(QMainWindow, statusBar)
-    IMPLEMENT_OVERLOAD(QMainWindow, addToolBar, QToolBar*(QMainWindow::*)(const QString&))
-
-    // QDialog
-    IMPLEMENT(QDialog, exec)
-    IMPLEMENT(QDialog, accept)
-    IMPLEMENT(QDialog, reject)
-    IMPLEMENT(QDialog, setWindowModality)
-
-    // QPlainTextEdit
-    IMPLEMENT(QPlainTextEdit, setPlainText)
-    IMPLEMENT(QPlainTextEdit, toPlainText)
-    IMPLEMENT(QPlainTextEdit, appendPlainText)
-    IMPLEMENT(QPlainTextEdit, clear)
-    IMPLEMENT(QPlainTextEdit, setReadOnly)
-    IMPLEMENT(QPlainTextEdit, centerCursor)
-    IMPLEMENT(QPlainTextEdit, ensureCursorVisible)
-    // IMPLEMENT(QPlainTextEdit, textCursor)
-    // IMPLEMENT(QPlainTextEdit, setTextCursor)
-
-    // QPilsPlainTextEdit
-    IMPLEMENT(QPilsPlainTextEdit, selection)
-    IMPLEMENT(QPilsPlainTextEdit, setSelection)
-
-    IMPLEMENT(QTextEdit, setText)
-    IMPLEMENT(QTextEdit, toPlainText)
-    IMPLEMENT(QTextEdit, setHtml)
-    IMPLEMENT(QTextEdit, toHtml)
-    IMPLEMENT(QTextEdit, clear)
-
-    // QLineEdit
-    IMPLEMENT(QLineEdit, setText)
-    IMPLEMENT(QLineEdit, text)
-    IMPLEMENT(QLineEdit, clear)
-    IMPLEMENT(QLineEdit, setPlaceholderText)
-
-    // QLabel
-    IMPLEMENT(QLabel, setText)
-    IMPLEMENT(QLabel, text)
-    IMPLEMENT(QLabel, setPixmap)
-
-    // QPushButton
-    IMPLEMENT(QPushButton, setText)
-    IMPLEMENT(QPushButton, text)
-    IMPLEMENT(QPushButton, setEnabled)
-    IMPLEMENT(QPushButton, click)
-
-    // QCheckBox / QRadioButton
-    IMPLEMENT(QCheckBox, setChecked)
-    IMPLEMENT(QCheckBox, isChecked)
-
-    IMPLEMENT(QRadioButton, setChecked)
-    IMPLEMENT(QRadioButton, isChecked)
-
-    // QComboBox
-    IMPLEMENT_OVERLOAD(QComboBox, addItem, void(QComboBox::*)(const QString&, const QVariant&))
-    IMPLEMENT(QComboBox, currentText)
-    IMPLEMENT(QComboBox, setCurrentIndex)
-    IMPLEMENT(QComboBox, currentIndex)
-
-    IMPLEMENT(QVBoxLayout, addWidget)
-    IMPLEMENT_OVERLOAD(QVBoxLayout, addWidget, void(QVBoxLayout::*)(QWidget*, int, Qt::Alignment))
-    IMPLEMENT(QHBoxLayout, addWidget)
-    IMPLEMENT_OVERLOAD(QHBoxLayout, addWidget, void(QHBoxLayout::*)(QWidget*, int, Qt::Alignment))
-    // QProgressBar
-    IMPLEMENT(QProgressBar, setValue)
-    IMPLEMENT(QProgressBar, value)
-    IMPLEMENT(QProgressBar, setRange)
-
-    // QFileDialog (statics er tricky – kun hvis du wrapper dem)
-    // IMPLEMENT(QFileDialog, getOpenFileName)
-
-    // QMessageBox
-    IMPLEMENT(QMessageBox, setText)
-    IMPLEMENT(QMessageBox, exec)
-
-    // QTimer
-    IMPLEMENT_OVERLOAD(QTimer, start, void(QTimer::*)(int))
-    IMPLEMENT(QTimer, stop)
-    IMPLEMENT_OVERLOAD(QTimer, setInterval, void(QTimer::*)(int))
-
-    // QSplitter
-    IMPLEMENT(QSplitter, addWidget)
-    IMPLEMENT(QSplitter, setOrientation)
-    IMPLEMENT(QSplitter, setSizes)
-
-    // QTabWidget
-    IMPLEMENT_OVERLOAD(QTabWidget, addTab, int(QTabWidget::*)(QWidget*, const QString&))
-    IMPLEMENT(QTabWidget, setCurrentIndex)
-    IMPLEMENT(QTabWidget, currentIndex)
-    IMPLEMENT(QTabWidget, count)
-    IMPLEMENT(QTabWidget, widget)
-    IMPLEMENT(QTabWidget, removeTab)
-    IMPLEMENT(QTabWidget, setTabText)
-    IMPLEMENT(QTabWidget, tabText)
-    IMPLEMENT(QTabWidget, setTabsClosable)
-    IMPLEMENT(QTabWidget, currentWidget)   // bekvemmelighed
-    IMPLEMENT(QTabWidget, setCurrentWidget)   // bekvemmelighed
-
-    // QStackedWidget
-    IMPLEMENT(QStackedWidget, addWidget)
-    IMPLEMENT(QStackedWidget, setCurrentIndex)
-    IMPLEMENT(QStackedWidget, currentIndex)
-
-    IMPLEMENT(QScrollArea, setWidget)
-    IMPLEMENT(QScrollArea, widget)
-    IMPLEMENT(QScrollArea, setWidgetResizable)
-
-
-    // QMenuBar
-    IMPLEMENT_OVERLOAD(QMenuBar, addMenu, QMenu*(QMenuBar::*)(const QString&))
-    IMPLEMENT_OVERLOAD(QMenuBar, addAction, QAction*(QMenuBar::*)(const QString&))
-    IMPLEMENT(QMenuBar, clear)
-
-    // QMenu
-    IMPLEMENT_OVERLOAD(QMenu, addAction, QAction*(QMenu::*)(const QString&))
-    IMPLEMENT(QMenu, addSeparator)
-    IMPLEMENT_OVERLOAD(QMenu, addMenu, QMenu*(QMenu::*)(const QString&))
-    IMPLEMENT(QMenu, clear)
-
-    // QAction
-    IMPLEMENT(QAction, setEnabled)
-    IMPLEMENT(QAction, isEnabled)
-    IMPLEMENT(QAction, setVisible)
-    IMPLEMENT(QAction, isVisible)
-    IMPLEMENT(QAction, setText)
-    IMPLEMENT(QAction, text)
-    IMPLEMENT(QAction, setCheckable)
-    IMPLEMENT(QAction, isCheckable)
-    IMPLEMENT(QAction, setChecked)
-    IMPLEMENT(QAction, isChecked)
-    IMPLEMENT(QAction, setShortcut)
-
-    // QStatusBar
-    IMPLEMENT_OVERLOAD(QStatusBar, addWidget, void(QStatusBar::*)(QWidget*, int))
-    IMPLEMENT_OVERLOAD(QStatusBar, addPermanentWidget, void(QStatusBar::*)(QWidget*, int))
-    IMPLEMENT(QStatusBar, removeWidget)
-    IMPLEMENT_OVERLOAD(QStatusBar, showMessage, void(QStatusBar::*)(const QString&, int))
-    IMPLEMENT(QStatusBar, clearMessage)
-    IMPLEMENT(QStatusBar, currentMessage)
-
-    // ===== QFileDialog =====
-    IMPLEMENT(QFileDialog, setFileMode)
-    IMPLEMENT(QFileDialog, setNameFilter)
-    IMPLEMENT_OVERLOAD(QFileDialog, setDirectory, void(QFileDialog::*)(const QString &))
-    IMPLEMENT(QFileDialog, selectedFiles)
-
-    // QPilsTreeWidget
-
-    EXACT_IMPLEMENT(QPilsTreeWidget, addRootNode)
-    EXACT_IMPLEMENT(QPilsTreeWidget, currentNode)
-    EXACT_IMPLEMENT(QPilsTreeWidget, clearTree)
-
-    // QPilsTreeNode
-
-    EXACT_IMPLEMENT(QPilsTreeNode, text)
-    EXACT_IMPLEMENT(QPilsTreeNode, setText)
-    EXACT_IMPLEMENT(QPilsTreeNode, addChild)
-    EXACT_IMPLEMENT(QPilsTreeNode, parentNode)
-    EXACT_IMPLEMENT(QPilsTreeNode, childCount)
-    EXACT_IMPLEMENT(QPilsTreeNode, child)
-    EXACT_IMPLEMENT(QPilsTreeNode, expand)
-    EXACT_IMPLEMENT(QPilsTreeNode, collapse)
-}
-
-void QtSignalName::initialize()
-{
-    // QWidget basis
-    SIGNAL_IMPLEMENT(QWidget, customContextMenuRequested)
-    SIGNAL_IMPLEMENT(QWidget, windowTitleChanged)
-    SIGNAL_IMPLEMENT(QWidget, windowIconChanged)
-    SIGNAL_IMPLEMENT(QWidget, windowIconTextChanged)
-    SIGNAL_IMPLEMENT(QWidget, destroyed)
-
-    // visibility / lifecycle
-    SIGNAL_IMPLEMENT(QWidget, show)
-    SIGNAL_IMPLEMENT(QWidget, hide)
-
-    SIGNAL_IMPLEMENT(QPushButton, clicked)
-    SIGNAL_IMPLEMENT(QPushButton, pressed)
-    SIGNAL_IMPLEMENT(QPushButton, released)
-    SIGNAL_IMPLEMENT(QPushButton, toggled)
-
-    SIGNAL_IMPLEMENT(QLineEdit, textChanged)
-    SIGNAL_IMPLEMENT(QLineEdit, textEdited)
-    SIGNAL_IMPLEMENT(QLineEdit, returnPressed)
-    SIGNAL_IMPLEMENT(QLineEdit, editingFinished)
-    SIGNAL_IMPLEMENT(QLineEdit, cursorPositionChanged)
-    SIGNAL_IMPLEMENT(QLineEdit, selectionChanged)
-
-    SIGNAL_IMPLEMENT(QTextEdit, textChanged)
-    SIGNAL_IMPLEMENT(QTextEdit, cursorPositionChanged)
-    SIGNAL_IMPLEMENT(QTextEdit, selectionChanged)
-
-    SIGNAL_IMPLEMENT(QPlainTextEdit, textChanged)
-    SIGNAL_IMPLEMENT(QPlainTextEdit, cursorPositionChanged)
-    SIGNAL_IMPLEMENT(QPlainTextEdit, selectionChanged)
-    SIGNAL_IMPLEMENT(QPlainTextEdit, updateRequest)
-    SIGNAL_IMPLEMENT(QPlainTextEdit, blockCountChanged)
-
-    SIGNAL_IMPLEMENT(QComboBox, currentIndexChanged)
-    SIGNAL_IMPLEMENT(QComboBox, currentTextChanged)
-
-    SIGNAL_IMPLEMENT(QComboBox, activated)
-    SIGNAL_IMPLEMENT(QComboBox, highlighted)
-    SIGNAL_IMPLEMENT(QComboBox, editTextChanged)
-
-    SIGNAL_IMPLEMENT(QCheckBox, checkStateChanged)
-    SIGNAL_IMPLEMENT(QCheckBox, toggled)
-
-    SIGNAL_IMPLEMENT(QRadioButton, toggled)
-
-    SIGNAL_IMPLEMENT(QSlider, valueChanged)
-    SIGNAL_IMPLEMENT(QSlider, sliderPressed)
-    SIGNAL_IMPLEMENT(QSlider, sliderReleased)
-    SIGNAL_IMPLEMENT(QSlider, sliderMoved)
-
-    SIGNAL_IMPLEMENT(QSpinBox, valueChanged)
-    SIGNAL_IMPLEMENT(QDoubleSpinBox, valueChanged)
-
-    SIGNAL_IMPLEMENT(QTabWidget, currentChanged)
-    SIGNAL_IMPLEMENT(QTabWidget, tabCloseRequested)
-    SIGNAL_IMPLEMENT(QTabWidget, tabBarClicked)
-    SIGNAL_IMPLEMENT(QTabWidget, tabBarDoubleClicked)
-
-    SIGNAL_IMPLEMENT(QSplitter, splitterMoved)
-
-    SIGNAL_IMPLEMENT(QMainWindow, iconSizeChanged)
-    SIGNAL_IMPLEMENT(QMainWindow, toolButtonStyleChanged)
-    SIGNAL_IMPLEMENT(QMainWindow, tabifiedDockWidgetActivated)
-
-    SIGNAL_IMPLEMENT(QAction, triggered)
-    SIGNAL_IMPLEMENT(QAction, toggled)
-    SIGNAL_IMPLEMENT(QAction, hovered)
-    SIGNAL_IMPLEMENT(QAction, changed)
-
-    SIGNAL_IMPLEMENT(QMenu, triggered)
-    SIGNAL_IMPLEMENT(QMenu, hovered)
-    SIGNAL_IMPLEMENT(QMenu, aboutToShow)
-    SIGNAL_IMPLEMENT(QMenu, aboutToHide)
-
-    SIGNAL_IMPLEMENT(QApplication, focusChanged)
-    SIGNAL_IMPLEMENT(QApplication, applicationStateChanged)
-    SIGNAL_IMPLEMENT(QApplication, aboutToQuit)
-
-    SIGNAL_IMPLEMENT(QScrollBar, valueChanged)
-    SIGNAL_IMPLEMENT(QScrollBar, sliderMoved)
-    SIGNAL_IMPLEMENT(QScrollBar, rangeChanged)
-
-    SIGNAL_IMPLEMENT(QListView, clicked)
-    SIGNAL_IMPLEMENT(QListView, doubleClicked)
-    SIGNAL_IMPLEMENT(QListView, activated)
-
-    SIGNAL_IMPLEMENT(QTreeView, clicked)
-    SIGNAL_IMPLEMENT(QTreeView, doubleClicked)
-    SIGNAL_IMPLEMENT(QTreeView, expanded)
-    SIGNAL_IMPLEMENT(QTreeView, collapsed)
-
-    SIGNAL_IMPLEMENT(QWindow, visibleChanged)
-    SIGNAL_IMPLEMENT(QWindow, widthChanged)
-    SIGNAL_IMPLEMENT(QWindow, heightChanged)
-    SIGNAL_IMPLEMENT(QWindow, xChanged)
-    SIGNAL_IMPLEMENT(QWindow, yChanged)
-
-    SIGNAL_IMPLEMENT(QTreeWidget, itemActivated)
-
-    SIGNAL_IMPLEMENT(QFileDialog, fileSelected)
+    BEGIN_CLASS(QPilsTreeWidget)
+    CONSTRUCTOR_NOARGS(QPilsTreeWidget)
+    CONSTRUCTOR_ARGS(QPilsTreeWidget, QWidget*)
+    EXACT_METHOD(QPilsTreeWidget, addRootNode)
+    EXACT_METHOD(QPilsTreeWidget, currentNode)
+    EXACT_METHOD(QPilsTreeWidget, clearTree)
+    END_CLASS()
+
+    BEGIN_CLASS(QPilsTreeNode)
+    EXACT_METHOD(QPilsTreeNode, text)
+    EXACT_METHOD(QPilsTreeNode, setText)
+    EXACT_METHOD(QPilsTreeNode, addChild)
+    EXACT_METHOD(QPilsTreeNode, parentNode)
+    EXACT_METHOD(QPilsTreeNode, childCount)
+    EXACT_METHOD(QPilsTreeNode, child)
+    EXACT_METHOD(QPilsTreeNode, expand)
+    EXACT_METHOD(QPilsTreeNode, collapse)
+    END_CLASS()
+
+    BEGIN_CLASS(QShortcut)
+    CONSTRUCTOR_ARGS(QShortcut, QKeySequence, QWidget*)
+    METHOD_(QShortcut, setEnabled)
+    METHOD_(QShortcut, isEnabled)
+    METHOD_(QShortcut, setKey)
+    METHOD_(QShortcut, key)
+    SIGNAL_(QShortcut, activated)
+    SIGNAL_(QShortcut, activatedAmbiguously)
+    END_CLASS()
+
+    BEGIN_CLASS(QTimer)
+    METHOD_OVERLOAD(QTimer, start, void(QTimer::*)(int))
+    METHOD_(QTimer, stop)
+    METHOD_OVERLOAD(QTimer, setInterval, void(QTimer::*)(int))
+    END_CLASS()
+
+    BEGIN_CLASS(QStackedWidget)
+    METHOD_(QStackedWidget, addWidget)
+    METHOD_(QStackedWidget, setCurrentIndex)
+    METHOD_(QStackedWidget, currentIndex)
+    END_CLASS()
 }
 
 template<typename EventT>

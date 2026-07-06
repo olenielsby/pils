@@ -36,6 +36,7 @@
 #include <QAction>
 #include <QToolBar>
 #include <QStatusBar>
+#include <QShortcut>
 
 #include <QListView>
 #include <QTreeView>
@@ -155,16 +156,16 @@ struct QtMethodRegistrar
     }
 };
 
-#define IMPLEMENT(CLASS, METHOD) \
+#define METHOD_(CLASS, METHOD) \
 QtMethodRegistrar(#METHOD, &CLASS::METHOD);
 
-#define IMPLEMENT_OVERLOAD(CLASS, METHOD, SIGNATURE) \
+#define METHOD_OVERLOAD(CLASS, METHOD, SIGNATURE) \
 QtMethodRegistrar(#METHOD, static_cast<SIGNATURE>(&CLASS::METHOD));
 
-#define EXACT_IMPLEMENT(CLASS, METHOD) \
+#define EXACT_METHOD(CLASS, METHOD) \
 QtMethodRegistrar(#METHOD, &CLASS::METHOD, #CLASS);
 
-#define EXACT_IMPLEMENT_OVERLOAD(CLASS, METHOD, SIGNATURE) \
+#define EXACT_METHOD_OVERLOAD(CLASS, METHOD, SIGNATURE) \
 QtMethodRegistrar(#METHOD, static_cast<SIGNATURE>(&CLASS::METHOD), #CLASS);
 
 const QtObjectClassName *QtObjectClassName::registerQtClass(char const *qName, const QMetaObject &meta)
@@ -191,14 +192,14 @@ const QtObjectClassName *QtObjectClassName::registerQtClass(char const *qName, c
     classEntry->constructors = \
         new QtConstructorImpl<CLASS, __VA_ARGS__>(classEntry->constructors);
 
-#define SIGNAL_IMPLEMENT(CLASS, SIGNAL_NAME) \
+#define SIGNAL_(CLASS, SIGNAL_NAME) \
 QtSignalCliche::get(#SIGNAL_NAME)->add( \
     new QtSignalImpl<CLASS, \
                      decltype(&CLASS::SIGNAL_NAME), \
                                                         &CLASS::SIGNAL_NAME>( \
                                                                                QtSignalCliche::get(#SIGNAL_NAME)->implementations));
 
-#define SIGNAL_IMPLEMENT_OVERLOAD(CLASS, SIGNAL_NAME, SIGNATURE) \
+#define SIGNAL_OVERLOAD(CLASS, SIGNAL_NAME, SIGNATURE) \
 QtSignalCliche::get(#SIGNAL_NAME)->add( \
     new QtSignalImpl<CLASS, SIGNATURE, \
                      static_cast<SIGNATURE>(&CLASS::SIGNAL_NAME)>( \

@@ -1,9 +1,9 @@
 ><:[module:. platform, .timestamp 2008-06-25T15:43:00.909+02 .language system]><;
 ><:[module:. platform qt .timestamp 2008-06-25T15:43:08.612+02 .language system]><;
-><:[module:. platform qt dialog .timestamp 2026-07-06T00:09:55.253+02 .language qt]><;
+><:[module:. platform qt dialog .timestamp 2026-07-06T08:52:45.842+02 .language qt]><;
 ;new plumcake .WA_DeleteOnClose 55 .WindowModal 1;
 { .dialog: .window .boss
-| :ok
+| :where :what :ok
   new Q:Dialog (window)
   q:setAttribute (WA_DeleteOnClose, 1)
   q:setWindowTitle (boss title)
@@ -61,6 +61,14 @@
     layout q:addWidget(tree) and:
     who q:setLayout(layout) and:
     tree
+  }
+  try
+  { who
+  | new bug {} Q:Shortcut ("Ctrl+Shift+F1", who)
+    when
+    { qs:activated: ?
+    | :try @ [pils editor] pinpoint: .where .what
+    }
   }
 }
 ><:[module:. platform qt edits .timestamp 2026-07-03T22:45:23.295+02 .language qt]><;

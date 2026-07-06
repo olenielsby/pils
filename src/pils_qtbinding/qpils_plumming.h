@@ -237,7 +237,6 @@ namespace PILS
         static const QtMethodName *get(const char *name);
         const ClicheTiny *newCliche() const override;
         const Any *specialCall(Runner &run, const ReallySpecial &special) const override;
-        static void initialize();
         using Invoker = std::function<bool(QObject*, const Any *const *, size_t, const Any*&)>;
         struct Implementation {
             const QMetaObject * meta;
@@ -269,7 +268,6 @@ namespace PILS
         {}
         static const QtSignalName *get(const char *name);
         const ClicheTiny *newCliche() const override;
-        static void initialize();
     };
 
     class QtValueClassName

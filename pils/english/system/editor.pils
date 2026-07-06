@@ -1,6 +1,6 @@
 [pils: .use?]
 ><:[module:. pils, .timestamp 2008-12-23T02:24:30.089+01 .language system]><;
-><:[module:. pils editor .timestamp 2026-07-05T11:35:49.418+02 .language system]><;
+><:[module:. pils editor .timestamp 2026-07-06T09:21:01.376+02 .language system]><;
 { .window
 | :ok
   this module channel window or:
@@ -30,7 +30,9 @@
   window mind splitter := splitter;
   window mind active := tabs;
   window mind tabs := tabs;
-  window mind operations := @ operations (.window .tabs);
+  window mind operations :=
+  { .operations | :ok @ operations (.window .tabs) }
+  ;
   window mind mode [edit] := [same];
   @ operations (.window .tabs) module (.module-name @ latest)
   and:
