@@ -1,8 +1,3 @@
-><:[module:. test, .timestamp 2026-07-06T20:36:27.920+02 .language system]><;
-{ .test
-| :ok
-  this program filename =* "test"
-}
 ><:[module:. hest, .timestamp 2026-07-06T20:36:27.920+02 .language system]><;
 { .hest
 | :ok
@@ -12,4 +7,9 @@
 { .pest
 | :ok
   this program filename =* "test"
+}
+><:[module:. test, .timestamp 2026-07-06T22:07:08.853+02 .language system]><;
+{ .test
+| :ok
+  this program filename =---* "test"
 }

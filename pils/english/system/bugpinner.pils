@@ -16,7 +16,7 @@
   .:need
   focus
 }
-><:[module:. pils run error .timestamp 2026-07-06T20:31:56.999+02 .language system]><;
+><:[module:. pils run error .timestamp 2026-07-06T22:47:49.995+02 .language system]><;
 ;channel this module channel;
 :use
   { ::error say: n | :ok {} write: n }
@@ -44,7 +44,7 @@
   window mind suppress := channel listen
     { .suppress|:ok [SUPPRESSED ERROR] bug {} }
   ;
-  ;splitter window column {.split|:ok 1};
+  ;splitter window splitter column ();
   ;input splitter edit (); 
   ;output splitter edit ();
   ;menuitems @ menuitems (.window);

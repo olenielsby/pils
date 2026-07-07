@@ -139,7 +139,7 @@
 { .documents | :ok [pils-configuration:documents-directory] }
 ><:[module:. platform qt entry system .timestamp 2008-08-08T04:55:32.254+02 .language system]><;
 { .system | :try @@ [platform qt system [?:?|pils-configuration:system]] }
-><:[module:. platform qt entry window .timestamp 2026-07-06T15:26:42.354+02 .language qt]><;
+><:[module:. platform qt entry window .timestamp 2026-07-06T22:41:32.289+02 .language qt]><;
 ;new plumcake .WA_DeleteOnClose 55;
 { window: boss
 | :where :what :possibly
@@ -158,17 +158,30 @@
   }
   { column: boss
   | :who  :ok
-    (cw1: who q:centralWidget or "nixen") bug {} and:
     ;inner new Q:Widget;
     who q:setCentralWidget (inner) and:
-    (cw2: who q:centralWidget or "nixen") bug {} and:
-    @ lane: .layout  new Q:VBoxLayout .widget inner .boss
+    @ lane: .layout new Q:VBoxLayout .widget inner .boss
   }
   { row: boss
   | :who  :ok
     ;inner new Q:Widget;
     who q:setCentralWidget (inner) and:
-    @ lane: .layout  new Q:HBoxLayout .widget inner .boss
+    @ lane: .layout new Q:HBoxLayout .widget inner .boss
+  }
+  { .splitter
+  | :who :ok
+    { column: boss
+    | :ok
+      ;splitter new Q:Splitter 2;
+      who q:setCentralWidget (splitter) and:
+      @ lane: .layout splitter .widget splitter .boss
+    }
+    { row: boss
+    | :ok
+      ;splitter new Q:Splitter 1;
+      who q:setCentralWidget (splitter) and:
+      @ lane: .layout splitter .widget splitter .boss
+    }
   }
   { filedialog: boss | :who :try @ filedialog: .window who .boss }
   { dialog: boss | :who :try @ dialog: .window who .boss }
@@ -378,7 +391,7 @@
   { .close | :who :ok who q:close }
   { qs:fileSelected: x | :try boss pick: x }
 }
-><:[module:. platform qt lane .timestamp 2026-07-06T21:39:02.150+02 .language qt]><;
+><:[module:. platform qt lane .timestamp 2026-07-06T22:46:56.602+02 .language qt]><;
 ;new plumcake;
 { lane: .layout .window .boss
 | :self
@@ -388,7 +401,7 @@
 }
 { lane: .layout .widget .boss
 | :self :ok
-  widget q:setLayout (layout) and:
+  widget q:setLayout (layout) anyway:
   { .bug | shit }
   { column: boss
   | :ok
@@ -478,7 +491,31 @@
   layout q:addWidget (widget) and:
   widget
 }
-><:[module:. platform qt lane tabs .timestamp 2026-07-05T13:51:26.780+02 .language qt]><;
+><:[module:. platform qt lane tabs .timestamp 2026-07-07T11:13:08.541+02 .language qt]><;
+;new plumcake;
+{ tabs: .boss .parent .layout
+| :ok
+  ;widget
+    new Q:TabWidget when
+    { qs:currentChanged: n | :who :try boss select: .tabs who }
+    { .current | :who :ok who q:currentWidget }
+    { .tabs
+    | :who :ok
+      who q:count up every
+      { n | :ok who q:widget: n - 1 }
+    }
+    { tab: boss
+    | :who :ok
+      ;layout new Q:VBoxLayout;
+      ;tab plumcake Q:Widget when {.bug|:ok shit} {.boss|:ok boss}
+      ;
+      tab q:setLayout (layout) and:
+      who q:addTab (tab, boss name)
+    }
+  ;
+  layout q:addWidget (widget) and:
+  widget
+}
 ><:[module:. platform qt lane tree .timestamp 2026-07-06T13:29:57.188+02 .language qt]><;
 ;new plumcake;
 { tree: .boss .parent .layout

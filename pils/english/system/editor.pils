@@ -1,6 +1,6 @@
 [pils: .use?]
 ><:[module:. pils, .timestamp 2008-12-23T02:24:30.089+01 .language system]><;
-><:[module:. pils editor .timestamp 2026-07-06T09:21:01.376+02 .language system]><;
+><:[module:. pils editor .timestamp 2026-07-07T10:28:39.196+02 .language system]><;
 { .window
 | :ok
   this module channel window or:
@@ -40,6 +40,48 @@
   and:
   window
 }
+
+! NY VERSION UNDER OPBYGNING
+
+{ .window
+| :if this program filename =* "test" <> 0;
+  :ok
+  this module channel window or:
+  ;window
+    platform window
+    { .title  | :ok @@ title }
+    { .channel | :ok this module channel }
+    { .size | :ok [500 600] }
+    { .icon
+    | :ok 
+      :call @@:
+      [pils icon opener] &
+      (:if this program filename = bootfilename; [horizontal] .else [vertical])
+      & [cold large]
+    }
+  ;
+  window mind module-listener := this module channel listen
+  { .window | :ok window  }
+  ;
+  ;splitter window splitter column ();
+  ;tabs splitter tabs
+     { select: .tabs | @ menu (.window .tabs .page tabs current) }
+  ;
+  ;result splitter edit "(Test output will be shown here)";
+  window mind state := [new];
+  window mind result := result;
+  window mind splitter := splitter;
+  window mind active := tabs;
+  window mind tabs := tabs;
+  window mind operations :=
+  { .operations | :ok @ operations (.window .tabs) }
+  ;
+!  @ operations (.window .tabs) module (.module-name @ latest) and:
+  @ menu (.window .tabs .page tabs current)
+  and:
+  window listen
+  {|}
+}
 ><:[module:. pils editor === .timestamp 2008-12-23T02:25:18.339+01 .language system]><;
 { .library-channel | :ok channel: pils-library: this program filename }
 { .editor-channel | :ok this module channel }
@@ -56,7 +98,7 @@
   @ new
 }
 
-><:[module:. pils editor menu .timestamp 2011-10-03T01:03:36.568+02 .language system]><;
+><:[module:. pils editor menu .timestamp 2026-07-07T11:56:14.690+02 .language system]><;
 ;library-channel;
 { menu: .page .window .tabs
 | :who :ok
@@ -70,7 +112,7 @@
 !    +++ @ operations (.window .tabs)
 !    +++ {action:. .who|:try action call (who)}
   ;
-  ;text page text;
+  ;text page text or (page boss editing text);
   ;state 
     ( text = home call (library-channel) module module )
 ! TODO: check against change of module language
@@ -120,6 +162,74 @@
     }
   }
 }
+
+
+
+
+
+
+! Special menu when no tabs have been added
+
+{ menu: .page () .window .tabs
+| :who :ok
+  ;menubar window menubar
+  { action: .
+  | :ok
+    action call (@ operations (.window .tabs)) or:
+!    action bug {}
+  }
+!    +++ @ operations (.window .tabs)
+!    +++ {action:. .who|:try action call (who)}
+  ;
+  ;items who items (.page () .window .tabs);
+  items legs
+  { at := item = *;menu path
+  | :ok
+    (item:. .at) & (path listwise reverse) fold
+    { chain := name | :ok name:. .at; chain }
+  }
+  call
+  { level
+  | :who :ok
+    level groups
+    { name:. .at; value | :ok :name (submenu: .name); value }
+    { name:. .at; value = item: .? .at | :ok :name (item: .name); value }
+    legs {group := values = (*;at) 1 |:ok group:. .at; values}
+    order [call: at]
+    every
+    { group: . (item: .name) .at; (item:. .at) 1 | :ok item:. .name .at }
+    { group: . (submenu: .name) .at?; level
+    | :ok submenu: .name; level call (who)
+    }
+  }
+  first (menubar) fold
+  { menu := submenu: .name; items
+  | :self :ok 
+    items first (menu menu (.name saying (name)))
+    fold (self)
+    and: menu
+  }
+  { menu := item:. .at .name
+  | :ok item call
+    { menu:.? .shortcut .action
+    | :ok menu action (. .name saying (name) .shortcut)
+    }
+    { menu:.? .action
+    | :ok menu action (. .name saying (name))
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
 
 { items: .page .window .tabs
 | :ok
@@ -183,6 +293,18 @@
 !  & (@ libraries)
 }
 
+! Items when no tabs have been added
+
+{ items: .page ' = ()  .window .tabs
+| :ok
+  ( ( menu: . [file open] .shortcut "Ctrl+O" .action [open] ),
+    ( menu: . [file explorer] .shortcut "Ctrl+E" .action [explorer] ),
+    ( menu: . [module create] .shortcut "Ctrl+N" .action new: .page ),
+    ( menu: . [module navigate] .shortcut "Ctrl+M"
+      .action navigate: .page ),
+    ( menu: . [edit detective] .shortcut "Ctrl+D" .action [detective] ),
+  )
+}
 ><:[module:. pils editor navigate .timestamp 2026-07-06T13:32:52.910+02 .language system]><;
 ;library-channel (channel: pils-library: this program filename)
 .language this program language
@@ -289,7 +411,7 @@
   dialog listen
   { .cancel | }
 }
-><:[module:. pils editor operations .timestamp 2026-07-05T12:00:50.238+02 .language system]><;
+><:[module:. pils editor operations .timestamp 2026-07-07T12:10:51.212+02 .language system]><;
 ;library-channel;
 { operations: .window .tabs
 | :ok
@@ -305,6 +427,11 @@
   { navigate: .page
   | @ navigate: .window .tabs .home page boss id
   }
+! test rule with no page
+  { navigate: .page ()
+  | :ok @ navigate: .window .tabs .home ()
+  }
+! end test rule
   { .detective | :ok @ detective: .window .tabs }
   { [test open] | :try @@ [pils run command open] open }
   { new: .page | :ok @ new: .page .window  }
@@ -458,12 +585,36 @@
     { .name | :ok {} write (module-name singlewise) -#$* "[" <-#$* "]" }
     { .text | :ok module-name call (library-channel node) module }
     { text:.
-    | :who :ok (text = who text) and [same] or [changed] bug {}
-      and:
+    | :who :ok
       ;page tabs current;
       @ menu (.window .tabs .page)
     }
   }
+
+! rule for testing new editor
+
+  { module: .module-name
+  | :if this program filename =* "test" <> 0;
+    :ok
+    tabs tab
+    { .id | :ok module-name }
+    { .bug | :ok shit }
+    { .name
+    | :ok this program language write (module-name singlewise)
+      -#$* "[" <-#$* "]"
+    }
+    { .text | :ok module-name call (library-channel node) module }
+    { text:.
+    | ;page tabs current;
+      @ menu (.window .tabs .page)
+    }
+
+  }
+
+
+
+
+
   { language:. .page
   | page mind language := language;
     paged
