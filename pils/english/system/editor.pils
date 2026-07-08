@@ -1,6 +1,6 @@
 [pils: .use?]
 ><:[module:. pils, .timestamp 2008-12-23T02:24:30.089+01 .language system]><;
-><:[module:. pils editor .timestamp 2026-07-08T19:00:07.637+02 .language system]><;
+><:[module:. pils editor .timestamp 2026-07-08T21:12:17.094+02 .language system]><;
 { .window
 | :ok
   this module channel window or:
@@ -16,48 +16,9 @@
       (:if this program filename = bootfilename; [horizontal] .else [vertical])
       & [cold large]
     }
-  ;
-  window mind module-listener := this module channel listen
-  { .window | :ok window  }
-  ;
-  ;splitter window inner vertical splitter;
-  ;tabs splitter tabs
-     { select: .tabs | @ menu (.window .tabs .page tabs current) }
-  ;
-  ;result splitter edit "(Test output will be shown here)";
-  window mind state := [new];
-  window mind result := result;
-  window mind splitter := splitter;
-  window mind active := tabs;
-  window mind tabs := tabs;
-  window mind operations :=
-  { .operations | :ok @ operations (.window .tabs) }
-  ;
-  window mind mode [edit] := [same];
-  @ operations (.window .tabs) module (.module-name @ latest)
-  and:
-  @ menu (.window .tabs .page tabs current)
-  and:
-  window
-}
-
-! NY VERSION UNDER OPBYGNING
-
-{ .window
-| :if this program filename =* "test" <> 0;
-  :ok
-  this module channel window or:
-  ;window
-    platform window
-    { .title  | :ok @@ title }
-    { .channel | :ok this module channel }
-    { .size | :ok [500 600] }
-    { .icon
-    | :ok 
-      :call @@:
-      [pils icon opener] &
-      (:if this program filename = bootfilename; [horizontal] .else [vertical])
-      & [cold large]
+    { operations: .window
+    | :ok
+      @ operations (.window .tabs window channel own [tabs])
     }
   ;
   window mind module-listener := this module channel listen
@@ -138,7 +99,7 @@
   @ new
 }
 
-><:[module:. pils editor menu .timestamp 2026-07-08T18:40:51.001+02 .language system]><;
+><:[module:. pils editor menu .timestamp 2026-07-08T19:24:24.043+02 .language system]><;
 ;library-channel;
 { menu: .page .window .tabs
 | :who :ok
@@ -408,7 +369,6 @@
 
 { navigate: .home .window .tabs
 | :who
-!  :if this program filename =* "test" <> 0;
   :ok
   ;modules 
     library-channel node legs {+& ok := ?|:ok}
@@ -645,8 +605,7 @@
 ! rule for testing new editor
 
   { module: .module-name
-  | :if this program filename =* "test" <> 0;
-    :ok
+  | :ok
     tabs boss module: .module-name .tabs
   }
   { language:. .page

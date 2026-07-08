@@ -139,7 +139,7 @@
 { .documents | :ok [pils-configuration:documents-directory] }
 ><:[module:. platform qt entry system .timestamp 2008-08-08T04:55:32.254+02 .language system]><;
 { .system | :try @@ [platform qt system [?:?|pils-configuration:system]] }
-><:[module:. platform qt entry window .timestamp 2026-07-06T22:41:32.289+02 .language qt]><;
+><:[module:. platform qt entry window .timestamp 2026-07-08T19:39:44.241+02 .language qt]><;
 ;new plumcake .WA_DeleteOnClose 55;
 { window: boss
 | :where :what :possibly
@@ -188,10 +188,10 @@
   { ask: .; options = :where? .ruleset :' rules
   | :who :ok
     ;buttons rules every [call: match];
-    ;dialog plumcake Q:Dialog (who) when
+    ;dialog new Q:Dialog (who) when
     {|}
     ;
-    ;hbox plumcake Q:HBoxLayout;
+    ;hbox new Q:HBoxLayout;
     dialog q:setWindowTitle (say (ask) "?")
     q:setWindowModality 1 ! WindowModal
     q:setLayout (hbox)
@@ -199,7 +199,7 @@
     rules every
     { ;match .action?
     | :ok hbox q:addWidget:
-      plumcake Q:PushButton (say (match))
+      new Q:PushButton (say (match))
       when
       { qs:clicked: ?
       | :ok
@@ -210,160 +210,17 @@
     dialog q:show
   }
   { icon: ' | :who :try who q:setWindowIcon (icon) }
-  { qe:mouseButtonPress: ' | (': ') bug {}}
-  { qe:mouseButtonRelease: ' | (': ') bug {}}
   { title: $ title | :who ' q:setWindowTitle (title) .:try }
   { .pinpoint | :who :ok who mind pinpointer call: @@ [pils run pinpoint] }
   { .size
   | :who :possibly who juce-getWidth .:need, who juce-getHeight .:need
   }
   { menubar: boss | :who :ok @ menubar: .window who .boss }
-  { old-menubar: boss
-  | :who :ok who q:menuBar
-    when
-    { action: ..name
-    | :who :ok
-      who q:addAction (name)
-      when
-      { qs:triggered: args | :try boss action (.) }
-      and: who
-    }
-    { action: ..name .shortcut
-    | :who :ok
-      who q:addAction (name)
-      when
-      { qs:triggered: args | :try boss action (.) }
-      q:setShortcut (shortcut)
-      anyway: who
-    }
-    { menu: .name
-    | :who :self :ok
-      who q:addMenu (name) when (self)
-    }
-    or: who q:menuBar q:clear
-  }
   { .statusbar
   | :who :ok
     ;statusbar who q:statusBar;
     { say: $ say | :ok statusbar q:showMessage (say, 0) }
     { .says | :ok statusbar q:currentMessage }
-  }
-  { .inner
-  | :who :ok
-    who mind inner or:
-    ;inner plumcake Q:Widget when
-    { .vertical
-    | :who :ok
-      ;layout
-        plumcake Q:VBoxLayout when
-        { .splitter
-        | :who :ok
-          ;splitter
-            plumcake Q:Splitter 2 when
-            { label: text
-            | :who :ok
-              ;label plumcake Q:Label (text) when {|};
-              who q:addWidget (label) and:
-              label
-            }
-            { edit: text
-            | :who :ok
-              ;edit plumcake Q:PilsPlainTextEdit (text) when
-              { .text | :who :ok who q:toPlainText }
-              { text: ' | :who :ok who q:setPlainText: text }
-                  { selection: a, b
-                  | :who :ok who q:setSelection(a, b) q:ensureCursorVisible
-                  }
-                  { .selection | :who :ok who q:selection }
-                  { .focus | :who :ok who q:setFocus }
-                  { .pickup | :who :ok who }
-              ;
-              who q:addWidget (edit) and:
-              edit
-            }
-            { .edit
-            | :who :ok
-              ;edit plumcake Q:PilsPlainTextEdit "" when
-              { .text | :who :ok who q:toPlainText }
-              { text: ' | :who :ok who q:setPlainText: text }
-                  { selection: a, b
-                  | :who :ok who q:setSelection(a, b) q:ensureCursorVisible
-                  }
-                  { .selection | :who :ok who q:selection }
-                  { .focus | :who :ok who q:setFocus }
-                  { .pickup | :who :ok who }
-              ;
-              who q:addWidget (edit) and:
-              edit
-            }
-            { tabs: boss
-            | :who :ok
-              plumcake Q:TabWidget
-              when
-              { qs:currentChanged: n | :who :try boss select: .tabs who }
-              { .tabs
-              | :who :ok
-                who q:count up every
-                { n | :ok who q:widget: n - 1 }
-              }
-              { edit: boss
-              | :who :ok
-                ;tabber who .id boss id;
-                ! Search for existing tab with same id
-                tabber tabs find
-                { tab
-                | :if id = tab id; :ok
-                  (found-tab: .id) bug {} and:
-                  tab edit
-                }
-                or:
-                ;edit
-                  plumcake Q:PilsPlainTextEdit (boss text)
-                  when
-                  { qs:textChanged:
-                  | :who boss text:. who q:toPlainText
-                  }
-                  { .boss | :ok boss }
-                  { .text | :who :ok who q:toPlainText }
-                  { selection: a, b
-                  | :who :ok who q:setSelection(a, b) q:ensureCursorVisible
-                  }
-                  { .selection | :who :ok who q:selection }
-                  { .focus | :who :ok who q:setFocus }
-                  { .pickup
-                  | :who :ok
-                    ;widget tabber tabs find { tab | :if tab id = id; :ok tab };
-                    tabber q:setCurrentWidget (widget) or ((bad: tapper:.) bug {})
-                    and:
-                    who
-                  }
-                ;
-                ;layout plumcake Q:VBoxLayout;
-                ;tab plumcake Q:Widget when
-                { .edit | :ok edit }
-                { .id | :ok boss id }
-                ;
-                tab q:setLayout (layout) and:
-                who q:addTab (tab, boss name) and:
-                layout q:addWidget(edit, 1, 0) and:
-                edit
-              }
-              { .current
-              | :who :ok who q:currentWidget edit
-              }
-              try {tabs|who q:addWidget (tabs)}
-            }
-          ;
-          who q:addWidget (splitter, 1, 0) and:
-          splitter
-        }
-      ;
-      who q:setLayout (layout) and:
-      layout
-    }
-    ;
-    who q:setCentralWidget (inner) and:
-    inner
   }
   try
   { who
@@ -437,37 +294,34 @@
   { tabs: boss | :ok @ tabs: .boss .parent widget .layout }
   { canvas: boss | :ok @ canvas: .boss .parent widget .layout }
 }
-><:[module:. platform qt lane button .timestamp 2026-07-05T22:30:59.700+02 .language qt]><;
+><:[module:. platform qt lane button .timestamp 2026-07-08T20:56:50.087+02 .language qt]><;
 ;new plumcake;
 { button: .boss .parent .layout
 | ;title boss title .:need call {$ ok|:ok} .:need;
   :ok
-  ;widget
-    new Q:PushButton
-    when
-    { qs:clicked: args | :try boss pressed }
-    { title: $ title | :who :ok who q:setText (title) }
-    { .title | :who :ok who q:text }
-    { enabled: enabled | :who :ok who q:setEnabled (enabled) }
-    { .enabled | :who :ok who q:isEnabled }
-    { .focus | :who :ok who q:setFocus }
-  ;
-  widget title (title) and:
-  layout q:addWidget (widget) and:
-  widget
+  new Q:PushButton
+  try {widget|layout q:addWidget (widget)}
+  title (title)
+  call (@ ownership: .boss) when
+  { qs:clicked: args | :try boss pressed }
+  { title: $ title | :who :ok who q:setText (title) }
+  { .title | :who :ok who q:text }
+  { enabled: enabled | :who :ok who q:setEnabled (enabled) }
+  { .enabled | :who :ok who q:isEnabled }
+  { .focus | :who :ok who q:setFocus }
 }
 ><:[module:. platform qt lane canvas .timestamp 2026-07-05T13:51:26.780+02 .language qt]><;
-><:[module:. platform qt lane edit .timestamp 2026-07-08T17:25:57.116+02 .language qt]><;
+><:[module:. platform qt lane edit .timestamp 2026-07-08T20:56:56.792+02 .language qt]><;
 ;new plumcake;
 { edit: .boss .parent .layout
 | :ok
   Q:PilsPlainTextEdit (boss text or "")
   try {widget|layout q:addWidget: widget}
-  call (@ ownership: .boss)
-  when
+  call (@ ownership: .boss) when
   { qs:textChanged:
   | :who :try boss text:. who q:toPlainText
   }
+  { .channel | :who :ok channel: who }
   { .text | :who :ok who q:toPlainText }
   { text: ' | :who :ok who q:setPlainText: text }
   { selection: a, b
@@ -627,7 +481,6 @@
 
 { ownership: .boss
 | :who
-  :if this program filename =* "test" <> 0;
   ;channel boss owner .:need call { = owner | :ok channel: owner } .:need
   .id boss id .:need call { = ok | :ok } .:need
   ;

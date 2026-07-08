@@ -3,11 +3,10 @@
 | :ok
   this program filename =* "test"
 }
-><:[module:. test, .timestamp 2026-07-08T19:03:16.385+02 .language system]><;
+><:[module:. test, .timestamp 2026-07-08T20:36:36.057+02 .language system]><;
 { .test
 | :ok
-! gron
-  this program filename =---* "test"
+ gron
 }
 ><:[module:. vild hest .timestamp 2026-07-06T20:36:27.920+02 .language system]><;
 { .hest
