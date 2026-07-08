@@ -1,6 +1,6 @@
 [pils: .use?]
 ><:[module:. pils, .timestamp 2008-12-23T02:24:30.089+01 .language system]><;
-><:[module:. pils editor .timestamp 2026-07-07T10:28:39.196+02 .language system]><;
+><:[module:. pils editor .timestamp 2026-07-08T19:00:07.637+02 .language system]><;
 { .window
 | :ok
   this module channel window or:
@@ -65,9 +65,49 @@
   ;
   ;splitter window splitter column ();
   ;tabs splitter tabs
-     { select: .tabs | @ menu (.window .tabs .page tabs current) }
+    { select: .tabs | @ menu (.window .tabs .page tabs current) }
+    { module: .module-name .tabs
+    | :ok
+      tabs tabs find
+      {  tab
+      | :if tab boss id = module-name; :ok tab select
+      }
+      or:
+      ;tab tabs tab
+        { .id | :ok module-name }
+        { .editor | :ok (channel: tabs) own (edit: module-name) }
+        { .bug | :ok shit }
+        { .name
+        | :ok
+          this program language write (module-name <+# 1 1)
+          -#$* "[" <-#$* "]"
+        }
+        { .text
+        | :ok "placeholder for edit pane text"
+        }
+      ;
+      ;tab-column tab column ();
+      tab-column label
+      { .text
+      | :ok this program language write (module-name)
+          -#$* "[" <-##* ",]"
+      }
+      and:
+      tab-column edit
+        { .text
+        | :ok module-name call (library-channel node) module
+        }
+        { text: .
+        | @ menu: .window .tabs .page tabs current
+        }
+        { .owner | :ok tabs }
+        { .id | :ok edit: module-name }
+      and:
+      tab select
+    }
   ;
-  ;result splitter edit "(Test output will be shown here)";
+!      { .text | :ok module-name call (library-channel node) module }
+  ;result splitter edit {.text | :ok "(Test output will be shown here)"};
   window mind state := [new];
   window mind result := result;
   window mind splitter := splitter;
@@ -76,7 +116,7 @@
   window mind operations :=
   { .operations | :ok @ operations (.window .tabs) }
   ;
-!  @ operations (.window .tabs) module (.module-name @ latest) and:
+  @ operations (.window .tabs) module (.module-name @ latest) and:
   @ menu (.window .tabs .page tabs current)
   and:
   window listen
@@ -98,11 +138,11 @@
   @ new
 }
 
-><:[module:. pils editor menu .timestamp 2026-07-07T11:56:14.690+02 .language system]><;
+><:[module:. pils editor menu .timestamp 2026-07-08T18:40:51.001+02 .language system]><;
 ;library-channel;
 { menu: .page .window .tabs
 | :who :ok
-  ;home page boss id;
+  ;home page boss id or (page boss module-name);
   ;menubar window menubar
   { action: .
   | :ok
@@ -112,7 +152,12 @@
 !    +++ @ operations (.window .tabs)
 !    +++ {action:. .who|:try action call (who)}
   ;
-  ;text page text or (page boss editing text);
+  ;text page text
+
+! temporarily assume text is unchanged
+    or (home call (library-channel) module module)
+
+  ;
   ;state 
     ( text = home call (library-channel) module module )
 ! TODO: check against change of module language
@@ -244,7 +289,10 @@
 !  &
 !  ( page mind extra menu (.window) or () )
   &
-  ( ;text page text;
+  ( ;text (page text)
+! Refactoring
+      or ((channel: tabs) own (edit: page boss id) text)
+    ;
     :if
       ( text = home call (library-channel) module module )
 !      and
@@ -411,7 +459,7 @@
   dialog listen
   { .cancel | }
 }
-><:[module:. pils editor operations .timestamp 2026-07-07T12:10:51.212+02 .language system]><;
+><:[module:. pils editor operations .timestamp 2026-07-08T18:56:44.666+02 .language system]><;
 ;library-channel;
 { operations: .window .tabs
 | :ok
@@ -426,6 +474,9 @@
   { open: .library | library @@@ [pils editor] window }
   { navigate: .page
   | @ navigate: .window .tabs .home page boss id
+!refactoring:
+    or (page boss module-name)
+
   }
 ! test rule with no page
   { navigate: .page ()
@@ -596,25 +647,8 @@
   { module: .module-name
   | :if this program filename =* "test" <> 0;
     :ok
-    tabs tab
-    { .id | :ok module-name }
-    { .bug | :ok shit }
-    { .name
-    | :ok this program language write (module-name singlewise)
-      -#$* "[" <-#$* "]"
-    }
-    { .text | :ok module-name call (library-channel node) module }
-    { text:.
-    | ;page tabs current;
-      @ menu (.window .tabs .page)
-    }
-
+    tabs boss module: .module-name .tabs
   }
-
-
-
-
-
   { language:. .page
   | page mind language := language;
     paged
@@ -654,7 +688,7 @@
   ==='
   { valid: .page
   | :tag [valid];
-    ;text page text;
+    ;text (page text) or (page boss editor text);
     ( language (.library this program filename .module-name page boss id) .:need
       read (text)
       ===
@@ -793,11 +827,11 @@
   tabs open (.module-name new) and:
   editor-channel restructure anyway:
 }
-><:[module:. pils editor refresh .timestamp 2011-10-02T22:09:18.880+02 .language system]><;
+><:[module:. pils editor refresh .timestamp 2026-07-08T19:02:30.576+02 .language system]><;
 ;library-channel (channel: pils-library: this program filename);
 { refresh: .tabs .window
 | ;page tabs current .:need; :ok
-  page focus and:
+  (page focus) or (page select) and:
   window statusbar say
   ( this program language write (page boss id)
     -#$* "[" <-#$* "]"

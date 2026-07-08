@@ -375,6 +375,20 @@
   }
   .(@ strap) .:need
 }
+><:[module:. platform qt entry window strap .timestamp 2009-01-16T22:44:21.050+01 .language qt]><;
+;straps
+  (strap: program: this program filename),
+  (strap: mind: program: this program filename)
+;
+{ strap: window
+| :where :what :ok
+  straps
+  every (window)
+  and:
+  window mind pinpointer := (pinpoint: .what .module where this module);
+  window
+}
+
 ><:[module:. platform qt filedialog .timestamp 2026-07-04T16:20:33.564+02 .language qt]><;
 ;new plumcake .WA_DeleteOnClose 55;
 { .filedialog: .window .boss
@@ -443,25 +457,25 @@
   widget
 }
 ><:[module:. platform qt lane canvas .timestamp 2026-07-05T13:51:26.780+02 .language qt]><;
-><:[module:. platform qt lane edit .timestamp 2026-07-06T14:36:44.390+02 .language qt]><;
+><:[module:. platform qt lane edit .timestamp 2026-07-08T17:25:57.116+02 .language qt]><;
 ;new plumcake;
 { edit: .boss .parent .layout
 | :ok
-  ;widget Q:PilsPlainTextEdit (boss text or "") when
-    { qs:textChanged:
-    | :who :try boss text:. who q:toPlainText
-    }
-    { .text | :who :ok who q:toPlainText }
-    { text: ' | :who :ok who q:setPlainText: text }
-    { selection: a, b
-    | :who :ok who q:setSelection(a, b) q:ensureCursorVisible
-    }
-    { .selection | :who :ok who q:selection }
-    { .focus | :who :ok who q:setFocus }
-    { .pickup | :who :ok who }
-  ;
-  layout q:addWidget (widget) and:
-  widget
+  Q:PilsPlainTextEdit (boss text or "")
+  try {widget|layout q:addWidget: widget}
+  call (@ ownership: .boss)
+  when
+  { qs:textChanged:
+  | :who :try boss text:. who q:toPlainText
+  }
+  { .text | :who :ok who q:toPlainText }
+  { text: ' | :who :ok who q:setPlainText: text }
+  { selection: a, b
+  | :who :ok who q:setSelection(a, b) q:ensureCursorVisible
+  }
+  { .selection | :who :ok who q:selection }
+  { .focus | :who :ok who q:setFocus }
+  { .pickup | :who :ok who }
 }
 ><:[module:. platform qt lane label .timestamp 2026-07-05T22:34:23.304+02 .language qt]><;
 ;new plumcake;
@@ -491,30 +505,52 @@
   layout q:addWidget (widget) and:
   widget
 }
-><:[module:. platform qt lane tabs .timestamp 2026-07-07T11:13:08.541+02 .language qt]><;
+><:[module:. platform qt lane tabs .timestamp 2026-07-08T17:57:56.543+02 .language qt]><;
 ;new plumcake;
 { tabs: .boss .parent .layout
 | :ok
-  ;widget
-    new Q:TabWidget when
-    { qs:currentChanged: n | :who :try boss select: .tabs who }
-    { .current | :who :ok who q:currentWidget }
-    { .tabs
-    | :who :ok
-      who q:count up every
-      { n | :ok who q:widget: n - 1 }
-    }
-    { tab: boss
-    | :who :ok
-      ;layout new Q:VBoxLayout;
-      ;tab plumcake Q:Widget when {.bug|:ok shit} {.boss|:ok boss}
-      ;
-      tab q:setLayout (layout) and:
-      who q:addTab (tab, boss name)
-    }
-  ;
+  ;widget new Q:TabWidget;
   layout q:addWidget (widget) and:
-  widget
+  widget when
+  { .bug | :ok shit }
+  { .boss | :ok boss }
+  { qs:currentChanged: n | :who :try boss select: .tabs who }
+  { own: (= id) | :who :try (channel: who) own (id) }
+  { .current | :who :ok who q:currentWidget }
+  { .tabs
+  | :who :ok
+    who q:count up every
+    { n | :ok who q:widget: n - 1 }
+  }	
+  { tab: boss
+  | :who :ok
+    ;layout new Q:VBoxLayout;
+    ;tab new Q:Widget when
+      { .bug | :ok shit }
+      { .boss | :ok boss }
+    ;
+    tab q:setLayout (layout) and:
+    who q:addTab (tab, boss name) and:
+    tab
+  }
+  { tab: boss
+  | :who :ok
+    ;tab new Q:Widget when
+      { .bug | :ok shit }
+      { .boss | :ok boss }
+      { column: boss
+      | :who :ok
+        @ lane: .layout new Q:VBoxLayout .widget who .boss
+      }
+      { row: boss
+      | :who :ok
+        @ lane: .layout new Q:HBoxLayout .widget who .boss
+      }
+      { .select | ;tabs who; :who :ok tabs q:setCurrentWidget (who) and: who }
+    ;
+    who q:addTab (tab, boss name) and:
+    tab
+  }
 }
 ><:[module:. platform qt lane tree .timestamp 2026-07-06T13:29:57.188+02 .language qt]><;
 ;new plumcake;
@@ -569,6 +605,44 @@
   }
   or: window q:menuBar q:clear
 }
+><:[module:. platform qt ownership .timestamp 2026-07-08T18:24:36.205+02 .language qt]><;
+! Dummy ownership does nothing
+
+{ ownership: .boss
+| :ok [ok]
+}
+
+! If the component boss has an id and an owner,
+! a listener must be installed in the owner's channel,
+! to allow the component to be found by its id.
+
+! This is done in a slightly obscure way, by wrapping
+! the newly created and parented component in an
+! object that intercepts the following when-clause,
+! keeping the listener in a dummy variable.
+
+! This is for use only in the lane component modules,
+! assuming the form:
+!   widget call (@ ownership: .boss) when {...|...}...
+
+{ ownership: .boss
+| :who
+  :if this program filename =* "test" <> 0;
+  ;channel boss owner .:need call { = owner | :ok channel: owner } .:need
+  .id boss id .:need call { = ok | :ok } .:need
+  ;
+  :ok
+  { widget
+  | :ok
+     ;trap () merge ((own: id), widget);
+     ;listener channel listen (trap);
+     { when:  ::ruleset .where
+     | :ok
+       widget when:
+       ::ruleset .where :;[dummy variable] listener; where
+     }
+  }
+}
 ><:[module:. platform qt pils .timestamp 2008-06-25T15:43:24.393+02 .language system]><;
 ><:[module:. platform qt pils language .timestamp 2008-06-25T15:43:29.112+02 .language system]><;
 ><:[module:. platform qt pils language qt .timestamp 2009-02-06T10:02:35.939+01 .language system]><;
@@ -577,17 +651,3 @@ language: {}? merge:
 ."qs" ["pils.org/ns/qtsignal":]
 ."qe" ["pils.org/ns/qtevent":]
 ."Q" ["pils.org/ns/qtclass":]
-><:[module:. platform qt strap .timestamp 2009-01-16T22:44:21.050+01 .language qt]><;
-;straps
-  (strap: program: this program filename),
-  (strap: mind: program: this program filename)
-;
-{ strap: window
-| :where :what :ok
-  straps
-  every (window)
-  and:
-  window mind pinpointer := (pinpoint: .what .module where this module);
-  window
-}
-

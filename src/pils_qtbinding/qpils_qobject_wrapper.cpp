@@ -211,7 +211,10 @@ const Any *QtObjectWrapper::specialCalling(Runner &run, const Strap &strap) cons
 
 const Any *QtObjectWrapper::specialWhen(Runner &run, const Any &argument) const
 {
-    if (object.get() == nullptr || when != nullptr || refcount.isMultipleReferenced(retainCount(state)))
+    if (object.get() == nullptr || when != nullptr)
+        return nullptr;
+    // TODO: isMultipleReferenced can be simplified since it only applies to parentless objects
+    if (object->parent() == nullptr && refcount.isMultipleReferenced(retainCount(state)))
         return nullptr;
     assert(eventFilterProxy == nullptr);
     argument.retain();

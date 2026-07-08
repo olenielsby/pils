@@ -1,15 +1,16 @@
-><:[module:. hest, .timestamp 2026-07-06T20:36:27.920+02 .language system]><;
-{ .hest
-| :ok
-  this program filename =* "test"
-}
 ><:[module:. pest, .timestamp 2026-07-06T20:36:27.920+02 .language system]><;
 { .pest
 | :ok
   this program filename =* "test"
 }
-><:[module:. test, .timestamp 2026-07-06T22:07:08.853+02 .language system]><;
+><:[module:. test, .timestamp 2026-07-08T19:03:16.385+02 .language system]><;
 { .test
 | :ok
+! gron
   this program filename =---* "test"
+}
+><:[module:. vild hest .timestamp 2026-07-06T20:36:27.920+02 .language system]><;
+{ .hest
+| :ok
+  this program filename =* "test"
 }
