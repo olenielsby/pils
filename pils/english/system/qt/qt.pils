@@ -71,65 +71,7 @@
     }
   }
 }
-><:[module:. platform qt edits .timestamp 2026-07-03T22:45:23.295+02 .language qt]><;
-;new plumcake;
-{ edits: .window .boss
-| :possibly
-  new Q:TabWidget
-  when
-  { qs:currentChanged: n | :who :try boss select: .tabs who }
-  { .tabs
-  | :who :ok
-     who q:count up every
-    { n | :ok who q:widget: n - 1 }
-  }
-  { edit: boss
-  | :who :ok
-    ;tabber who .id boss id;
-    ! Search for existing tab with same id
-    tabber tabs find
-    { tab
-    | :if id = tab id; :ok
-      (found-tab: .id) bug {} and:
-      tab edit
-    }
-    or:
-    ;edit
-      new Q:PilsPlainTextEdit (boss text)
-      when
-      { qs:textChanged:
-      | :who boss text:. who q:toPlainText
-      }
-      { .boss | :ok boss }
-      { .text | :who :ok who q:toPlainText }
-      { selection: a, b
-      | :who :ok who q:setSelection(a, b) q:ensureCursorVisible
-      }
-      { .selection | :who :ok who q:selection }
-      { .focus | :who :ok who q:setFocus }
-      { .pickup
-      | :who :ok
-        ;widget tabber tabs find { tab | :if tab id = id; :ok tab };
-        tabber q:setCurrentWidget (widget) or ((bad: tapper:.) bug {})
-        and:
-        who
-      }
-    ;
-    ;layout new Q:VBoxLayout;
-    ;tab new Q:Widget when
-      { .edit | :ok edit }
-      { .id | :ok boss id }
-    ;
-    tab q:setLayout (layout) and:
-    who q:addTab (tab, boss name) and:
-    layout q:addWidget(edit, 1, 0) and:
-    edit
-  }
-  { .current
-  | :who :ok who q:currentWidget edit
-  }
-  try {tabs|who q:addWidget (tabs)}
-}
+><:[module:. platform qt edits .timestamp 2026-07-08T22:02:56.187+02 .language qt]><;
 ><:[module:. platform qt entry .timestamp 2008-07-23T09:38:47.465+02 .language system]><;
 @
 ><:[module:. platform qt entry icon .timestamp 2010-02-28T14:55:28.627+01 .language qt]><;

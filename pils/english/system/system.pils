@@ -324,8 +324,7 @@ that allows the system modules to reference each other
   "********************************ERROR*******************************" bug {} and:
   (what: .; error) bug {}
 }
-><:[module:. pils system changed .timestamp 2011-07-20T23:10:44.932+02 .language system]><;
-"INSTANTIATING MODULE: pils system changed" bug {} and:
+><:[module:. pils system changed .timestamp 2026-07-08T22:10:49.771+02 .language system]><;
 !!
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
@@ -530,6 +529,7 @@ PILS should be restarted and tested after each edit.
   :ok
   ( ( system: @@ [pils system path] editor-filename &: bootfilename or: ),
     ( system: @@ [pils system path] bugpinner-filename &: bootfilename or: ),
+    ( system: @@ [pils system path] icons-filename &: bootfilename or: ),
     ( platform:
       [platform-filename platform-program-filename]
       every: @@ [pils system path]
@@ -630,6 +630,9 @@ PILS should be restarted and tested after each edit.
   }
   { .editor-filename
   | :ok bootfilename <-#^* "/" . "editor." [pils-configuration:pils-filetype]
+  }
+  { .icons-filename
+  | :ok bootfilename <-#^* "/" . "icons." [pils-configuration:pils-filetype]
   }
   { .bugpinner-filename
   | :ok bootfilename <-#^* "/" . "bugpinner." [pils-configuration:pils-filetype]
@@ -935,11 +938,9 @@ PILS should be restarted and tested after each edit.
   command: .
 }
 ><:[module:. pils talk .timestamp 2009-04-28T16:25:35.234+02 .language system]><;
-><:[module:. pils talk english .timestamp 2009-04-28T17:15:49.806+02 .language system]><;
-"INSTANTIATING MODULE: pils talk english" bug {} and:
+><:[module:. pils talk english .timestamp 2026-07-08T22:11:01.492+02 .language system]><;
 @@ [pils talk system]
-><:[module:. pils talk system .timestamp 2011-07-21T00:21:45.841+02 .language system]><;
-"INSTANTIATING MODULE: pils talk system" bug {} and:
+><:[module:. pils talk system .timestamp 2026-07-08T22:11:19.245+02 .language system]><;
 { say: say
 | :who ' saying (say) .:need title .:try }
 { saying: try
@@ -959,8 +960,7 @@ PILS should be restarted and tested after each edit.
     .:try
   }
 }
-><:[module:. pils user .timestamp 2009-06-14T04:15:06.467+02 .language system]><;
-"INSTANTIATING MODULE: pils user" bug {} and:
+><:[module:. pils user .timestamp 2026-07-08T22:11:32.992+02 .language system]><;
 ;language {}
 .language-module [pils language system]
 .talk @@ [pils talk system]
