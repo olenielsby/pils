@@ -1,6 +1,6 @@
 [pils: .use?]
 ><:[module:. pils, .timestamp 2008-12-23T02:24:30.089+01 .language system]><;
-><:[module:. pils editor .timestamp 2026-07-08T21:12:17.094+02 .language system]><;
+><:[module:. pils editor .timestamp 2026-07-09T16:04:51.647+02 .language system]><;
 { .window
 | :ok
   this module channel window or:
@@ -47,14 +47,37 @@
         | :ok "placeholder for edit pane text"
         }
       ;
-      ;tab-column tab column ();
-      tab-column label
+      :use { .edit | :ok (channel: tabs) own (edit: module-name) };
+      ;tab-column tab column {.spacing|:ok 0};
+      ;top-row tab-column row {.spacing|:ok 15};
+      top-row label
       { .text
       | :ok this program language write (module-name)
-          -#$* "[" <-##* ",]"
       }
       and:
-      tab-column edit
+      ;search-row top-row row {.spacing|:ok 2};
+      search-row label {.text|:ok say [search]} and:
+      ;search search-row line-edit ();
+      search-row button
+      { .title | :ok say [next] }
+      { .pressed
+      | ;text edit text .search search text .from edit selection largest;
+        ;at text -# from =* search;
+        :if at > 0;
+        ;to from + at;
+        edit selection (to - search count, to)
+      }
+      and:
+      search-row button
+      { .title | :ok say [previous] }
+      { .pressed
+      | ;text edit text .search search text .from edit selection smallest;
+        ;at text +# from <=* search;
+        :if at > 0;
+        ;to from - at; edit selection (to, to + search count)
+      }
+      and:
+      ;edit tab-column edit
         { .text
         | :ok module-name call (library-channel node) module
         }
@@ -63,8 +86,8 @@
         }
         { .owner | :ok tabs }
         { .id | :ok edit: module-name }
-      and:
-      tab select
+      ;
+      tab select and: edit focus
     }
   ;
 !      { .text | :ok module-name call (library-channel node) module }

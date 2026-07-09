@@ -125,6 +125,7 @@ public:
     static const Constant *wrap(const Qt::MouseButton &e);
     static const Constant *wrap(const Qt::KeyboardModifier &e);
     static const Constant *wrap(const QTextCursor &e);
+    static const Constant *wrap(const QList<int> &e);
     template<typename Enum>
     static const Constant *wrap(QFlags<Enum> flags)
     {

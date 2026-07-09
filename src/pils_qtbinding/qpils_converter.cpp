@@ -319,6 +319,17 @@ const Constant *QtWrap::wrap(const QTextCursor &e)
     return ListConstant::get(argv, 2);
 }
 
+const Constant *QtWrap::wrap(const QList<int> &e)
+{
+    QList<const Constant *> list;
+    list.reserve(e.size());
+
+    for (int value : e)
+        list.append(wrap(value));
+
+    return ListConstant::get(list.constData(), e.size());
+}
+
 bool QtImageConverter::converting(const NeQImage &argument)
 {
     out = argument.qValue();

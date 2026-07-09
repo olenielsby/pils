@@ -1,18 +1,55 @@
 #include "qpils_supplement.h"
+#include <QPainter>
+#include <QPaintEvent>
+#include <QFontMetrics>
+#include <QStylePainter>
 
-QList<int> QPilsPlainTextEdit::selection() const
+QList<int> QPilsPlainTextEdit::selection_utf16() const
 {
     QTextCursor c = textCursor();
     return { c.anchor(), c.position() };
 }
 
-void QPilsPlainTextEdit::setSelection(int anchor, int position)
+void QPilsPlainTextEdit::setSelection_utf16(int anchor, int position)
 {
     QTextCursor c = textCursor();
     c.setPosition(anchor);
     c.setPosition(position, QTextCursor::KeepAnchor);
     setTextCursor(c);
 }
+
+QList<int> QPilsPlainTextEdit::selection() const
+{
+    PositionConverter conv(*this);
+    QTextCursor c = textCursor();
+    return { conv.utf16ToUtf8(c.anchor()), conv.utf16ToUtf8(c.position()) };
+}
+
+void QPilsPlainTextEdit::setSelection(int anchor, int position)
+{
+    PositionConverter conv(*this);
+    QTextCursor c = textCursor();
+    c.setPosition(conv.utf8ToUtf16(anchor));
+    c.setPosition(conv.utf8ToUtf16(position), QTextCursor::KeepAnchor);
+    setTextCursor(c);
+}
+
+QPilsPlainTextEdit::PositionConverter::PositionConverter(
+    const QPilsPlainTextEdit &editor)
+    : text(editor.toPlainText())
+{
+}
+
+int QPilsPlainTextEdit::PositionConverter::utf16ToUtf8(int utf16Pos) const
+{
+    return text.left(utf16Pos).toUtf8().length();
+}
+
+int QPilsPlainTextEdit::PositionConverter::utf8ToUtf16(int utf8Pos) const
+{
+    return QString::fromUtf8(text.toUtf8().left(utf8Pos)).length();
+}
+
 
 QPilsTreeWidget::QPilsTreeWidget(QWidget *parent)
     : QTreeWidget(parent)
@@ -128,3 +165,65 @@ const PILS::QtObjectClassName *QPilsTreeNode::getClassName()
 }
 
 const PILS::QtObjectClassName *QPilsTreeNode::className = nullptr;
+
+void QPilsGroupBox::paintEvent(QPaintEvent *)
+{
+    QStylePainter p(this);
+    QStyleOptionGroupBox opt;
+
+    initStyleOption(&opt);
+
+    // eksperimentér med opt her
+
+    p.drawComplexControl(QStyle::CC_GroupBox, opt);
+}
+
+// void QPilsGroupBox::paintEvent(QPaintEvent *)
+// {
+//     QPainter p(this);
+//     p.setRenderHint(QPainter::Antialiasing, false);
+
+//     const QFontMetrics fm(font());
+
+//     const QString t = title();
+
+//     int textWidth  = fm.horizontalAdvance(t);
+//     int textHeight = fm.height();
+//     int ascent     = fm.ascent();
+
+//     constexpr int margin = 8;
+//     constexpr int gap    = 6;
+
+//     QRect r = rect();
+
+//     // Rammen begynder midt gennem teksten.
+//     int top = textHeight / 2;
+
+//     p.setPen(QPen(palette().mid().color(), 2));
+
+//     // Venstre side
+//     p.drawLine(r.left(), top, r.left(), r.bottom());
+
+//     // Bund
+//     p.drawLine(r.left(), r.bottom(), r.right(), r.bottom());
+
+//     // Højre side
+//     p.drawLine(r.right(), r.bottom(), r.right(), top);
+
+//     // Øverste kant, delt i to omkring teksten.
+//     int textLeft  = margin;
+//     int textRight = textLeft + textWidth + 2 * gap;
+
+//     p.drawLine(r.left(), top, textLeft - gap, top);
+//     p.drawLine(textRight + gap, top, r.right(), top);
+
+//     // Tegn teksten med baggrund i widgetens farve.
+//     QRect tr(textLeft, 0, textWidth + 2 * gap, textHeight);
+
+//     p.fillRect(tr, palette().window());
+
+//     p.setPen(palette().windowText().color());
+//     p.drawText(tr.adjusted(gap, 0, -gap, 0),
+//                Qt::AlignLeft | Qt::AlignVCenter,
+//                t);
+// }

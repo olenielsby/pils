@@ -204,7 +204,7 @@
   { .close | :who :ok who q:close }
   { qs:fileSelected: x | :try boss pick: x }
 }
-><:[module:. platform qt lane .timestamp 2026-07-06T22:46:56.602+02 .language qt]><;
+><:[module:. platform qt lane .timestamp 2026-07-09T14:22:11.461+02 .language qt]><;
 ;new plumcake;
 { lane: .layout .window .boss
 | :self
@@ -214,19 +214,25 @@
 }
 { lane: .layout .widget .boss
 | :self :ok
+  layout q:setContentsMargin [0 0 0 0] anyway:
+  layout q:setSpacing (boss spacing or 4) anyway:
   widget q:setLayout (layout) anyway:
   { .bug | shit }
   { column: boss
   | :ok
-    ;w new Q:Widget;
+    ;w lane-widget (.boss);
     layout q:addWidget (w) and:
-    self lane: .layout new Q:VBoxLayout .widget w .boss
+    self lane:
+    .layout new Q:VBoxLayout
+    .widget w .boss
   }
   { row: boss
   | :ok
-    ;w new Q:Widget;
+    ;w lane-widget (.boss);
     layout q:addWidget(w) and:
-    self lane: .layout new Q:HBoxLayout .widget w .boss
+    self lane:
+    .layout new Q:HBoxLayout
+    .widget w .boss
   }
   { label: boss | :try @ label: .boss .parent widget .layout }
   { button: boss | :ok @ button: .boss .parent widget .layout }
@@ -236,14 +242,20 @@
   { tabs: boss | :ok @ tabs: .boss .parent widget .layout }
   { canvas: boss | :ok @ canvas: .boss .parent widget .layout }
 }
-><:[module:. platform qt lane button .timestamp 2026-07-08T20:56:50.087+02 .language qt]><;
+===
+{ lane-widget: .boss | :ok new Q:Widget }
+{ lane-widget: .boss
+| ;title boss title .:need call {$ ok|:ok} .:need;
+  :ok new Q:PilsGroupBox (title) q:setFlat 1
+}
+
+><:[module:. platform qt lane button .timestamp 2026-07-09T11:55:32.695+02 .language qt]><;
 ;new plumcake;
 { button: .boss .parent .layout
 | ;title boss title .:need call {$ ok|:ok} .:need;
   :ok
   new Q:PushButton
   try {widget|layout q:addWidget (widget)}
-  title (title)
   call (@ ownership: .boss) when
   { qs:clicked: args | :try boss pressed }
   { title: $ title | :who :ok who q:setText (title) }
@@ -251,6 +263,7 @@
   { enabled: enabled | :who :ok who q:setEnabled (enabled) }
   { .enabled | :who :ok who q:isEnabled }
   { .focus | :who :ok who q:setFocus }
+  title (title)
 }
 ><:[module:. platform qt lane canvas .timestamp 2026-07-05T13:51:26.780+02 .language qt]><;
 ><:[module:. platform qt lane edit .timestamp 2026-07-08T20:56:56.792+02 .language qt]><;

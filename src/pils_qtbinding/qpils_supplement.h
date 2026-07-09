@@ -3,6 +3,7 @@
 #include <QWidget>
 #include <QPlainTextEdit>
 #include <QTreeWidget>
+#include <QGroupBox>
 #include "qpils_plumming.h"
 
 class QPilsPlainTextEdit : public QPlainTextEdit
@@ -11,7 +12,20 @@ public:
     using QPlainTextEdit::QPlainTextEdit;
 
     QList<int> selection() const;
+    QList<int> selection_utf16() const;
     void setSelection(int anchor, int position);
+    void setSelection_utf16(int anchor, int position);
+
+private:
+    class PositionConverter
+    {
+    public:
+        explicit PositionConverter(const QPilsPlainTextEdit &editor);
+        int utf8ToUtf16(int utf8Pos) const;
+        int utf16ToUtf8(int utf16Pos) const;
+    private:
+        QString text;
+    };
 };
 
 class QPilsTreeNode;
@@ -50,4 +64,13 @@ private:
     QPilsTreeWidget *tree_;
     QTreeWidgetItem *item_;
     static const PILS::QtObjectClassName *className;
+};
+
+
+class QPilsGroupBox : public QGroupBox
+{
+public:
+    using QGroupBox::QGroupBox;
+protected:
+    void paintEvent(QPaintEvent *event) override;
 };
