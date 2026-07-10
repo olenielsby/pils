@@ -266,11 +266,11 @@
   title (title)
 }
 ><:[module:. platform qt lane canvas .timestamp 2026-07-05T13:51:26.780+02 .language qt]><;
-><:[module:. platform qt lane edit .timestamp 2026-07-08T20:56:56.792+02 .language qt]><;
+><:[module:. platform qt lane edit .timestamp 2026-07-10T16:16:15.528+02 .language qt]><;
 ;new plumcake;
 { edit: .boss .parent .layout
 | :ok
-  Q:PilsPlainTextEdit (boss text or "")
+  Q:PilsPlainTextEdit
   try {widget|layout q:addWidget: widget}
   call (@ ownership: .boss) when
   { qs:textChanged:
@@ -414,13 +414,7 @@
   }
   or: window q:menuBar q:clear
 }
-><:[module:. platform qt ownership .timestamp 2026-07-08T18:24:36.205+02 .language qt]><;
-! Dummy ownership does nothing
-
-{ ownership: .boss
-| :ok [ok]
-}
-
+><:[module:. platform qt ownership .timestamp 2026-07-10T16:07:28.172+02 .language qt]><;
 ! If the component boss has an id and an owner,
 ! a listener must be installed in the owner's channel,
 ! to allow the component to be found by its id.
@@ -434,6 +428,9 @@
 ! assuming the form:
 !   widget call (@ ownership: .boss) when {...|...}...
 
+! Dummy ownership does nothing
+
+{ ownership: .boss | :ok [ok] }
 { ownership: .boss
 | :who
   ;channel boss owner .:need call { = owner | :ok channel: owner } .:need
@@ -444,11 +441,7 @@
   | :ok
      ;trap () merge ((own: id), widget);
      ;listener channel listen (trap);
-     { when:  ::ruleset .where
-     | :ok
-       widget when:
-       ::ruleset .where :;[dummy variable] listener; where
-     }
+     { when: rules | :ok widget when: rules +++ listener }
   }
 }
 ><:[module:. platform qt pils .timestamp 2008-06-25T15:43:24.393+02 .language system]><;

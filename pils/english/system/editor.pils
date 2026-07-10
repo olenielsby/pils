@@ -1,6 +1,6 @@
 [pils: .use?]
 ><:[module:. pils, .timestamp 2008-12-23T02:24:30.089+01 .language system]><;
-><:[module:. pils editor .timestamp 2026-07-09T16:04:51.647+02 .language system]><;
+><:[module:. pils editor .timestamp 2026-07-10T16:14:39.679+02 .language system]><;
 { .window
 | :ok
   this module channel window or:
@@ -10,7 +10,7 @@
     { .channel | :ok this module channel }
     { .size | :ok [500 600] }
     { .icon
-    | :ok 
+    | :ok
       :call @@:
       [pils icon opener] &
       (:if this program filename = bootfilename; [horizontal] .else [vertical])
@@ -78,19 +78,16 @@
       }
       and:
       ;edit tab-column edit
-        { .text
-        | :ok module-name call (library-channel node) module
-        }
         { text: .
         | @ menu: .window .tabs .page tabs current
         }
         { .owner | :ok tabs }
         { .id | :ok edit: module-name }
       ;
+      edit text (module-name call (library-channel node) module) and:
       tab select and: edit focus
     }
   ;
-!      { .text | :ok module-name call (library-channel node) module }
   ;result splitter edit {.text | :ok "(Test output will be shown here)"};
   window mind state := [new];
   window mind result := result;
