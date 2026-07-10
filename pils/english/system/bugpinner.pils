@@ -1,13 +1,14 @@
 [pils: .use?]
 ><:[module:. pils, .timestamp 2008-12-21T16:24:30.089+01 .language system]><;
-><:[module:. pils editor pinpoint .timestamp 2026-07-10T18:28:05.750+02 .language system]><;
+><:[module:. pils editor pinpoint .timestamp 2026-07-10T22:47:36.960+02 .language system]><;
 { pinpoint: .what .where
 | ;module where this .:need module .:need;
-  :try
-  module filename @@@ [pils editor] window mind operations operations
-  module (.module-name module name) .:need
-  editor selection
-  ( :need @@ . [run pinpoint] pinpoint:
+  ;window module filename @@@ [pils editor] window;
+  ;operations window mind operations operations;
+  ;tab operations module (.module-name module name);
+  ;editor tab editor;
+  :ok editor selection
+  ( @@ . [run pinpoint] pinpoint:
     .what
     .expression module expression
     .source module text
