@@ -343,7 +343,7 @@
   layout q:addWidget (widget) and:
   widget
 }
-><:[module:. platform qt lane tabs .timestamp 2026-07-10T17:22:56.198+02 .language qt]><;
+><:[module:. platform qt lane tabs .timestamp 2026-07-10T17:33:07.478+02 .language qt]><;
 ;new plumcake;
 { tabs: .boss .parent .layout
 | :ok
@@ -374,7 +374,7 @@
     { tab: boss
     | :who :ok
       ;tab new Q:Widget when
-        { .bug | :ok shit }
+      ( { .bug | :ok shit }
         { .boss | :ok boss }
         { column: boss
         | :who :ok
@@ -385,6 +385,8 @@
           @ lane: .layout new Q:HBoxLayout .widget who .boss
         }
         { .select | ;tabs who; :who :ok tabs q:setCurrentWidget (who) and: who }
+        +++ boss
+      )
       ;
       who q:addTab (tab, boss name) and:
       tab

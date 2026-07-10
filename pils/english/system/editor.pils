@@ -1,6 +1,6 @@
 [pils: .use?]
 ><:[module:. pils, .timestamp 2008-12-23T02:24:30.089+01 .language system]><;
-><:[module:. pils editor .timestamp 2026-07-10T16:40:35.676+02 .language system]><;
+><:[module:. pils editor .timestamp 2026-07-10T17:34:10.344+02 .language system]><;
 { .window
 | :ok
   this module channel window or:
@@ -31,7 +31,7 @@
     | :ok
       tabs tabs find
       {  tab
-      | :if tab boss id = module-name; :ok tab select
+      | :if tab id = module-name; :ok tab select
       }
       or:
       ;tab tabs tab
@@ -43,9 +43,9 @@
           this program language write (module-name <+# 1 1)
           -#$* "[" <-#$* "]"
         }
-        { .text
-        | :ok "placeholder for edit pane text"
-        }
+!        { .text
+!        | :ok "placeholder for edit pane text"
+!        }
       ;
       :use { .edit | :ok (channel: tabs) own (edit: module-name) };
       ;tab-column tab column {.spacing|:ok 0};
@@ -116,7 +116,7 @@
   @ new
 }
 
-><:[module:. pils editor menu .timestamp 2026-07-08T23:04:24.120+02 .language system]><;
+><:[module:. pils editor menu .timestamp 2026-07-10T17:35:57.668+02 .language system]><;
 ;library-channel;
 { menu: .page .window .tabs
 | :who :ok
