@@ -266,13 +266,13 @@
   title (title)
 }
 ><:[module:. platform qt lane canvas .timestamp 2026-07-05T13:51:26.780+02 .language qt]><;
-><:[module:. platform qt lane edit .timestamp 2026-07-10T16:16:15.528+02 .language qt]><;
+><:[module:. platform qt lane edit .timestamp 2026-07-10T16:23:04.421+02 .language qt]><;
 ;new plumcake;
 { edit: .boss .parent .layout
 | :ok
   Q:PilsPlainTextEdit
   try {widget|layout q:addWidget: widget}
-  call (@ ownership: .boss) when
+  call (@ ownership: .boss) when:
   { qs:textChanged:
   | :who :try boss text:. who q:toPlainText
   }
@@ -285,6 +285,7 @@
   { .selection | :who :ok who q:selection }
   { .focus | :who :ok who q:setFocus }
   { .pickup | :who :ok who }
+  +++ boss
 }
 ><:[module:. platform qt lane label .timestamp 2026-07-05T22:34:23.304+02 .language qt]><;
 ;new plumcake;
