@@ -1,12 +1,12 @@
 [pils: .use?]
 ><:[module:. pils, .timestamp 2008-12-21T16:24:30.089+01 .language system]><;
-><:[module:. pils editor pinpoint .timestamp 2026-07-08T21:50:23.811+02 .language system]><;
+><:[module:. pils editor pinpoint .timestamp 2026-07-10T18:28:05.750+02 .language system]><;
 { pinpoint: .what .where
 | ;module where this .:need module .:need;
   :try
   module filename @@@ [pils editor] window mind operations operations
   module (.module-name module name) .:need
-  boss editor selection
+  editor selection
   ( :need @@ . [run pinpoint] pinpoint:
     .what
     .expression module expression
@@ -59,7 +59,7 @@
   @ menubuild (.menuitems .menubar) and:
   window listen {|}
 }
-><:[module:. pils run error action .timestamp 2026-07-08T21:57:51.089+02 .language system]><;
+><:[module:. pils run error action .timestamp 2026-07-10T18:22:40.448+02 .language system]><;
 { action: .window .module .error .what .where .who .input .output
 | :ok
   { [edit find]
@@ -76,13 +76,13 @@
     mind operations operations
     module (.module-name module name)
     select
-    boss editor selection
-    (( @ pinpoint:
+    editor selection
+    ( @ pinpoint:
       .what
       .expression module expression
       .source module text
       .language module language
-    ) bug {})
+    )
     focus
   }
   { .test

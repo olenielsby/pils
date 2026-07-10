@@ -120,16 +120,16 @@
 ;library-channel;
 { menu: .page .window .tabs
 | :who :ok
-  ;home page boss id or (page boss module-name);
+  ;home page id;
   ;menubar window menubar
     { action: . | :try action call: @ operations: .window .tabs }
   ;
-  ;text page boss editor text;
-  ;state 
+  ;text page editor text;
+  ;state
     ( text = home call (library-channel) module module )
 ! TODO: check against change of module language
 !      and
-!      ( page boss language or [system]
+!      ( page language or [system]
 !        = home call (library-channel) module language or [system]
 !      )
     and [unchanged]
@@ -176,7 +176,7 @@
 
 { items: .page .window .tabs
 | :ok
-  ;home page boss id;
+  ;home page id;
   ( ( menu: . [file open] .shortcut "Ctrl+O" .action [open] ),
     ( menu: . [file explorer] .shortcut "Ctrl+E" .action [explorer] ),
     ( menu: . [module create] .shortcut "Ctrl+N" .action new: .page ),
@@ -187,10 +187,7 @@
 !  &
 !  ( page mind extra menu (.window) or () )
   &
-  ( ;text (page text)
-! Refactoring
-      or ((channel: tabs) own (edit: page boss id) text)
-    ;
+  ( ;text (channel: tabs) own (edit: page id) text;
     :if
       ( text = home call (library-channel) module module )
 !      and
@@ -238,59 +235,10 @@
 !  & (@ languages: .page)
 !  & (@ libraries)
 }
-><:[module:. pils editor navigate .timestamp 2026-07-06T13:32:52.910+02 .language system]><;
+><:[module:. pils editor navigate .timestamp 2026-07-10T18:32:23.467+02 .language system]><;
 ;library-channel (channel: pils-library: this program filename)
 .language this program language
 ;
-{ navigate: .home .window .tabs
-| :who :ok
-  ;modules 
-    library-channel node legs {+& ok := ?|:ok}
-    order {ok|:ok ' .(language write) <-##* ",]"}
-  ;
-  ;tree
-  ( level:. 1; modules) call
-  { level:.; items
-  | :self :ok
-    items groups { item | :ok item +# level }
-    legs
-    { branch := items
-    | :ok branch:.;
-      self level: . ' + 1;
-      items each {ok & n|:if n > level; :ok}
-    }
-    order {branch:.;?|:ok language write (branch)}
-  }   
-  ;
-  ;dialog
-  window dialog
-  { .title | :ok say [pick module] }
-  { .size | :ok [400 300] }
-  { .bug | bug }
-  ;
-  ;view dialog tree
-    { picked: node
-    | :ok
-      ;module-name node boss id;
-      dialog close and:
-      @ operations (.window .tabs) module (.module-name)
-    }
-  ;
-  { populate: .view .tree
-  | :self :ok
-    tree every
-    { branch: .; items
-    | :ok
-      self populate: .tree items .view ' node
-      { .text
-      | :ok language write (branch <+# 1 singlewise) -#$* "[" <-#$* "]"
-      }
-      { .id | :ok branch }
-    }
-  }
-  populate (.view .tree)
-}
-
 { navigate: .home .window .tabs
 | :who
   :ok
@@ -322,7 +270,7 @@
   ;view column tree
     { picked: node
     | :ok
-      ;module-name node boss id;
+      ;module-name node id;
       dialog close and:
       @ operations (.window .tabs) module (.module-name)
     }
@@ -357,10 +305,7 @@
   { [library import] | :ok @@ libraries import }
   { open: .library | library @@@ [pils editor] window }
   { navigate: .page
-  | @ navigate: .window .tabs .home page boss id
-!refactoring:
-    or (page boss module-name)
-
+  | @ navigate: .window .tabs .home page id
   }
 ! test rule with no page
   { navigate: .page ()
@@ -439,7 +384,7 @@
     editor-channel restructure anyway:
   }
   { save: .page
-  | ;module-name page boss id;
+  | ;module-name page id;
     ;module
       module-name call (library-channel) .:need
       call {* module: . ok|:ok} .:need
@@ -515,22 +460,7 @@
   }
   { module: .module-name
   | :ok
-    tabs edit
-    { .id | :ok module-name }
-    { .name | :ok {} write (module-name singlewise) -#$* "[" <-#$* "]" }
-    { .text | :ok module-name call (library-channel node) module }
-    { text:.
-    | :who :ok
-      ;page tabs current;
-      @ menu (.window .tabs .page)
-    }
-  }
-
-! rule for testing new editor
-
-  { module: .module-name
-  | :ok
-    tabs boss module: .module-name .tabs
+    tabs module: .module-name .tabs
   }
   { language:. .page
   | page mind language := language;
@@ -571,8 +501,8 @@
   ==='
   { valid: .page
   | :tag [valid];
-    ;text (page text) or (page boss editor text);
-    ( language (.library this program filename .module-name page boss id) .:need
+    ;text page editor text;
+    ( language (.library this program filename .module-name page id) .:need
       read (text)
       ===
       { :error = error:. ' try
@@ -716,12 +646,12 @@
 | ;page tabs current .:need; :ok
   (page focus) or (page select) and:
   window statusbar say
-  ( this program language write (page boss id)
+  ( this program language write (page id)
     -#$* "[" <-#$* "]"
   )
   anyway:
   :quote
-  ;module-name page boss id;
+  ;module-name page id;
   ;module module-name call (library-channel) module;
   ( window mind state,
     state:

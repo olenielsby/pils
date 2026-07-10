@@ -43,7 +43,7 @@
         ;text boss text .:need; :ok
         who q:addChild (text) when (self when: .boss)
       }
-      { .boss | :ok boss }
+      { .boss | :where :what shit and: :ok boss }
     }
     ;
     ;layout new Q:VBoxLayout(who);
@@ -71,7 +71,6 @@
     }
   }
 }
-><:[module:. platform qt edits .timestamp 2026-07-08T22:02:56.187+02 .language qt]><;
 ><:[module:. platform qt entry .timestamp 2008-07-23T09:38:47.465+02 .language system]><;
 @
 ><:[module:. platform qt entry icon .timestamp 2010-02-28T14:55:28.627+01 .language qt]><;
@@ -200,7 +199,7 @@
   q:show
   when
   { .bug | shit }
-  { .boss | :ok boss }
+  { .boss | :where :what shit and: :ok boss }
   { .close | :who :ok who q:close }
   { qs:fileSelected: x | :try boss pick: x }
 }
@@ -266,33 +265,6 @@
   title (title)
 }
 ><:[module:. platform qt lane canvas .timestamp 2026-07-10T17:13:43.393+02 .language qt]><;
-;new plumcake;
-{ tree: .boss .parent .layout
-| :ok
-  new Q:PilsTreeWidget (parent)
-  try {widget|layout q:addWidget (widget)}
-  when:
-  { qs:itemActivated: ? | :who :try who picked: who q:currentNode }
-  { node: boss
-  | :who
-    ;text boss text .:need; :ok
-    who q:addRootNode (text)
-    when (when (.boss))
-  }
-  { .focus | :who :ok who q:setFocus }
-  +++ boss
-}
-===
-{ when: .boss
-| :self :ok
-  { .bug | shit }
-  { node: boss
-  | :who
-    ;text boss text .:need; :ok
-    who q:addChild (text) when (self when: .boss)
-  }
-  { .boss | :ok boss }
-}
 ><:[module:. platform qt lane edit .timestamp 2026-07-10T16:23:04.421+02 .language qt]><;
 ;new plumcake;
 { edit: .boss .parent .layout
@@ -351,7 +323,7 @@
   layout q:addWidget (widget) and:
   widget when
   ( { .bug | :ok shit }
-    { .boss | :ok boss }
+    { .boss | :where :what shit and: :ok boss }
     { qs:currentChanged: n | :who :try boss select: .tabs who }
     { own: (= id) | :who :try (channel: who) own (id) }
     { .current | :who :ok who q:currentWidget }
@@ -375,7 +347,7 @@
     | :who :ok
       ;tab new Q:Widget when
       ( { .bug | :ok shit }
-        { .boss | :ok boss }
+        { .boss | :where :what shit and: :ok boss }
         { column: boss
         | :who :ok
           @ lane: .layout new Q:VBoxLayout .widget who .boss
@@ -394,7 +366,7 @@
     +++ boss
   )
 }
-><:[module:. platform qt lane tree .timestamp 2026-07-10T17:15:07.002+02 .language qt]><;
+><:[module:. platform qt lane tree .timestamp 2026-07-10T18:31:31.401+02 .language qt]><;
 ;new plumcake;
 { tree: .boss .parent .layout
 | :ok
@@ -420,7 +392,8 @@
     ;text boss text .:need; :ok
     who q:addChild (text) when (self when: .boss)
   }
-  { .boss | :ok boss }
+  { .boss | 0 or: :where :what shit and: :ok boss }
+  +++ boss
 }
 ><:[module:. platform qt menubar .timestamp 2026-07-04T17:05:50.309+02 .language qt]><;
 { menubar: .window .boss
