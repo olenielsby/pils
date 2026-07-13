@@ -5,6 +5,9 @@
 #include <QTreeWidget>
 #include <QGroupBox>
 #include "qpils_plumming.h"
+#include <QPointer>
+#include <QCloseEvent>
+#include <QCoreApplication>
 
 class QPilsPlainTextEdit : public QPlainTextEdit
 {
@@ -66,6 +69,23 @@ private:
     static const PILS::QtObjectClassName *className;
 };
 
+class QPilsDelayedDestroy : public QObject
+{
+public:
+    QPilsDelayedDestroy();
+};
+
+#include <QObject>
+#include <QPointer>
+#include <QCloseEvent>
+#include <QCoreApplication>
+
+class QPilsCloseChildren : public QObject
+{
+public:
+    using QObject::QObject;
+    ~QPilsCloseChildren() override;
+};
 
 class QPilsGroupBox : public QGroupBox
 {

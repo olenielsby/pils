@@ -75,27 +75,56 @@
 @
 ><:[module:. platform qt entry icon .timestamp 2010-02-28T14:55:28.627+01 .language qt]><;
 { icon: .size .png | :ok Q:Image: png }
-><:[module:. platform qt entry path .timestamp 2009-01-27T20:31:04.937+01 .language system]><;
+><:[module:. platform qt entry lifetime .timestamp 2026-07-11T22:36:22.215+02 .language qt]><;
+;new plumcake;
+{ lifetime: thing
+| :ok
+  (created: thing) bug {} and:
+  ;when { qe:close: ?|(destroyed: thing) bug {} };
+  ;parent new Q:PilsCloseChildren;
+  new Q:Object (parent) when (when) and:
+  parent
+}
+  ><:[module:. platform qt entry path .timestamp 2009-01-27T20:31:04.937+01 .language system]><;
 ;path
 { .documents | :ok [pils-configuration:documents-directory] }
 ><:[module:. platform qt entry system .timestamp 2008-08-08T04:55:32.254+02 .language system]><;
 { .system | :try @@ [platform qt system [?:?|pils-configuration:system]] }
-><:[module:. platform qt entry window .timestamp 2026-07-08T19:39:44.241+02 .language qt]><;
+><:[module:. platform qt entry window .timestamp 2026-07-12T10:30:11.049+02 .language qt]><;
 ;new plumcake .WA_DeleteOnClose 55;
 { window: boss
-| :where :what :possibly
+| :where :what
+  :possibly
   new Q:MainWindow
   q:setAttribute (WA_DeleteOnClose, 1)
   q:setWindowTitle (boss title .:need)
-  q:setWindowIcon (boss icon .:need)
+!  q:setWindowIcon (boss icon .:need)
   q:show
   q:resize (boss size .:need)
   when
+  { .activate
+  | :who :possibly who q:raise .:need q:activateWindow
+  }
   { .channel | :who :ok channel: who }
   { listen: handler
   | :who :ok
     who mind listen := who channel listen (handler);
     who
+  }
+  { statusbar: boss
+  | :who  :ok
+    ;statusbar who q:statusBar;
+    @ lane:
+    .widget
+      { (?) | :who :ok who }
+    .layout
+      { (?) | :who :ok who }
+      { q:addWidget: w
+      |  :who :ok
+        statusbar q:addPermanentWidget (w, boss stretch or 0) and:
+        who
+      }
+    .boss
   }
   { column: boss
   | :who  :ok
@@ -157,12 +186,6 @@
   | :who :possibly who juce-getWidth .:need, who juce-getHeight .:need
   }
   { menubar: boss | :who :ok @ menubar: .window who .boss }
-  { .statusbar
-  | :who :ok
-    ;statusbar who q:statusBar;
-    { say: $ say | :ok statusbar q:showMessage (say, 0) }
-    { .says | :ok statusbar q:currentMessage }
-  }
   try
   { who
   | new Q:Shortcut ("Ctrl+Shift+F1", who)
@@ -203,7 +226,7 @@
   { .close | :who :ok who q:close }
   { qs:fileSelected: x | :try boss pick: x }
 }
-><:[module:. platform qt lane .timestamp 2026-07-09T14:22:11.461+02 .language qt]><;
+><:[module:. platform qt lane .timestamp 2026-07-11T10:16:26.500+02 .language qt]><;
 ;new plumcake;
 { lane: .layout .window .boss
 | :self
@@ -233,7 +256,7 @@
     .layout new Q:HBoxLayout
     .widget w .boss
   }
-  { label: boss | :try @ label: .boss .parent widget .layout }
+  { label: boss | :ok @ label: .boss .parent widget .layout }
   { button: boss | :ok @ button: .boss .parent widget .layout }
   { line-edit: boss | :ok @ line-edit: .boss .parent widget .layout }
   { edit: boss | :ok @ edit: .boss .parent widget .layout }
@@ -265,11 +288,11 @@
   title (title)
 }
 ><:[module:. platform qt lane canvas .timestamp 2026-07-10T17:13:43.393+02 .language qt]><;
-><:[module:. platform qt lane edit .timestamp 2026-07-10T16:23:04.421+02 .language qt]><;
+><:[module:. platform qt lane edit .timestamp 2026-07-11T21:56:49.380+02 .language qt]><;
 ;new plumcake;
 { edit: .boss .parent .layout
 | :ok
-  Q:PilsPlainTextEdit
+  new Q:PilsPlainTextEdit
   try {widget|layout q:addWidget: widget}
   call (@ ownership: .boss) when:
   { qs:textChanged:
@@ -279,26 +302,24 @@
   { .text | :who :ok who q:toPlainText }
   { text: ' | :who :ok who q:setPlainText: text }
   { selection: a, b
-  | :who :ok who q:setSelection(a, b) q:ensureCursorVisible
+  | :who :ok who q:setSelection(a, b) and:
+      who q:ensureCursorVisible and: who
   }
   { .selection | :who :ok who q:selection }
   { .focus | :who :ok who q:setFocus }
   { .pickup | :who :ok who }
   +++ boss
 }
-><:[module:. platform qt lane label .timestamp 2026-07-10T16:42:55.309+02 .language qt]><;
+><:[module:. platform qt lane label .timestamp 2026-07-11T09:53:22.496+02 .language qt]><;
 ;new plumcake;
 { label: .boss .parent .layout
 | :ok
-  ;widget
-    new Q:Label when
-    ( { text: $ text | :who :ok who q:setText (text) }
-      { .text | :who :ok who q:text }
-      +++ boss
-    )
-  ;
-  layout q:addWidget (widget) and:
-  widget
+  new Q:Label
+  try {widget|layout q:addWidget: widget}
+  call (@ ownership: .boss) when:
+  { text: $ text | :who :ok who q:setText (text) }
+  { .text | :who :ok who q:text }
+  +++ boss
 }
 ><:[module:. platform qt lane line-edit .timestamp 2026-07-10T16:45:29.030+02 .language qt]><;
 ;new plumcake;

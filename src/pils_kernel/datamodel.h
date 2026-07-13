@@ -161,11 +161,15 @@ namespace PILS
         mutable RefcountOrScrap<Any> refcount;
     public:
         void unduplicateReference() const;
+        inline bool releaseIfMultipleReferenced() const {return refcount.releaseIfMultipleReferenced();}
         void retain() const;
         void release() const;
-        void releaseReferenceInsideLock() const;
-        void releaseFrom(Any &scrap) const;
-        virtual void unlink() = 0;
+        void releaseReferenceInsideLock() const; // DEPRECATED
+        void releaseFrom(Any &scrap) const; // DEPRECATED
+        void releaseFromScrap(const Any &scrap) const;
+        virtual void unlink() = 0; // DEPRECATED
+        virtual void removeFromHashTable() const = 0;
+        virtual void releaseChildren() const {}
         virtual bool write(Writing &writing, WriteState state, long level, const Constant *dot) const = 0;
         virtual const Any *labeling(Writing &writing) const;
         virtual const Call *callHere() const;
@@ -247,6 +251,7 @@ namespace PILS
         virtual const ClicheShort *newCliche(const Constant *&link, const Constant *a) const;
         virtual const ClicheLong *newCliche(const Constant *&link, const Constant *const *a, size_t c) const;
         virtual const NodeConstantShort *newSpecializeNode(const Constant *&link, const ClicheShort &cliche) const = 0;
+        void removeFromHashTable() const override;
         const Call *callHere() const override;
         const Step *caller(Runner &run, const Any &where_) const override;
         void compilePattern(Compiling &compiling) const override;
@@ -551,7 +556,8 @@ namespace PILS
 	protected:
         CountedConstant(const Constant *&link, size_t c);
 	public:
-		const Integer *const count;
+        void releaseChildren() const override;
+        const Integer *const count;
 	};
 
     /* Strings of any length - a limit must be set elsewhere */
@@ -644,6 +650,7 @@ namespace PILS
         const Constant *head;
         const Constant *attributes[1];
         const NodeConstantShort *newSpecializeNode(const Constant *&link, const ClicheShort &cliche) const override;
+        void releaseChildren() const override;
         bool write (Writing &writing, WriteState state, long level, const Constant *dot) const override;
         const Any *labeling(Writing &writing) const override;
         const NodeConstant *nodeConstant(const Constant *const *attributes) const;
@@ -658,7 +665,7 @@ namespace PILS
         const Constant *lookupNonempty(const NodeConstant *node, size_t start, const Constant *key) const;
         const Any *lookupNonempty(const NodeExpress *node, size_t start, const Constant *key) const;
         void writingToDebugOutput(int level) const override;
-	protected:
+    protected:
         Cliche(const Constant *&link, const Constant *h, const Constant *const *a, size_t c);
         Cliche(const Constant *h, const Constant *a1, const Constant *a2);
         Cliche(const Constant *h, const Constant *a1, const Constant *a2, const Constant *a3);
@@ -676,6 +683,7 @@ namespace PILS
 	public:
         const Constant *element[1];
         void unlink() override;
+        void releaseChildren() const override;
         const ListConstant *as_ListConstant() const override;
         const NodeConstantShort *newSpecializeNode(const Constant *&link, const ClicheShort &cliche) const override;
         const ListConstant *hashLookup(const Constant *const *a, size_t c, bool copying) const override;
@@ -720,7 +728,8 @@ namespace PILS
 	};
 
 	class NodeExpressShort;
-	class ClicheShort
+
+    class ClicheShort
 		: public Cliche
 	{
 	public:
@@ -1063,6 +1072,7 @@ namespace PILS
 	public:
 		const Cliche *cliche;
         const Constant *element[1];
+        void releaseChildren() const override;
         const NodeConstantShort *newSpecializeNode(const Constant *&link, const ClicheShort &cliche) const override;
         bool write (Writing &writing, WriteState state, long level, const Constant *dot) const override;
         const Any *labeling(Writing &writing) const override;
@@ -1170,6 +1180,8 @@ namespace PILS
 	class Express
 		: public Any
 	{
+    public:
+        void removeFromHashTable() const override {}
 	};
 
 	class TypecheckPropertyCount;
@@ -1264,6 +1276,7 @@ namespace PILS
 		const Integer *count;
 		const Any *element[1];
         void unlink() override;
+        void releaseChildren() const override;
         bool write (Writing &writing, WriteState state, long level, const Constant *dot) const override;
         const Any *labeling(Writing &writing) const override;
         bool isList(const Any *const *&element, const Integer *&count) const override;
@@ -1286,7 +1299,8 @@ namespace PILS
 		: public Express
 	{
 	public:
-		const Cliche *cliche;
+        void releaseChildren() const override;
+        const Cliche *cliche;
 		const Any *element[1];
         bool write (Writing &writing, WriteState state, long level, const Constant *dot) const override;
         const Any *labeling(Writing &writing) const override;

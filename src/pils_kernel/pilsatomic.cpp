@@ -41,14 +41,14 @@ namespace PILS
 
 	bool Any::duplicateReference() const
 	{
-        if (refcount.refCount++ >= 0)
+        if (refcount.count()++ >= 0)
 		{
 			unduplicateChildren();
 			return true;
 		}
 		else
 		{
-            refcount.refCount--;
+            refcount.count()--;
 			return false;
 		}
 	}
@@ -57,31 +57,45 @@ namespace PILS
 
 	bool Any::duplicateReferenceNoChildren() const
 	{
-        if (++refcount.refCount != 0)
+        if (++refcount.count() != 0)
 		{
 			return true;
 		}
 		else
 		{
-            refcount.refCount--;
+            refcount.count()--;
 			return false;
 		}
 	}
 
-	void Any::releaseFrom(Any &scrap) const
+    //old method for use inside lock
+    void Any::releaseFrom(Any &scrap) const
 	{
         if (refcount.release())
 		{
-            refcount.becomeScrap(scrap.refcount.scrapLink);
-            scrap.refcount.scrapLink = (Any*)this;
+            refcount.becomeScrap(scrap.refcount.link());
+            scrap.refcount.link() = (Any*)this;
 		}
 	}
 
-	bool Any::duplicateReference(bool copying) const
+    //new method for use without lock
+    void Any::releaseFromScrap(const Any &scrap) const
+    {
+        if (refcount.release())
+        {
+            // Unhash before invalidating refcount,
+            // or other threads might grab it.
+            removeFromHashTable();
+            refcount.becomeScrap(scrap.refcount.queue());
+            scrap.refcount.queue() = const_cast<Any*>(this);
+        }
+    }
+
+    bool Any::duplicateReference(bool copying) const
 	{
-        if (++refcount.refCount == 0)
+        if (++refcount.count() == 0)
 		{
-            refcount.refCount--;
+            refcount.count()--;
 			return false;
 		}
 		else

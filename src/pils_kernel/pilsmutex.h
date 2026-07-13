@@ -13,6 +13,7 @@
 
 namespace PILS
 {
+#ifdef NDEBUG
     class Mutex : public QMutex
     {
     public:
@@ -26,4 +27,28 @@ namespace PILS
             {}
         };
     };
+#else
+    class Mutex
+    {
+    public:
+        static Mutex singleMutex;
+        bool locked = false;
+        class Lock
+        {
+            Mutex &mutex;
+        public:
+            explicit Lock(Mutex &mutex)
+                : mutex(mutex)
+            {
+                assert(!mutex.locked);
+                mutex.locked = true;
+            }
+            ~Lock()
+            {
+                assert(mutex.locked);
+                mutex.locked = false;
+            }
+        };
+    };
+#endif
 }

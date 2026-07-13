@@ -199,6 +199,14 @@ QtSignalCliche::get(#SIGNAL_NAME)->add( \
                                                         &CLASS::SIGNAL_NAME>( \
                                                                                QtSignalCliche::get(#SIGNAL_NAME)->implementations));
 
+#define BLIND_SIGNAL(CLASS, SIGNAL_NAME) \
+QtSignalCliche::get(#SIGNAL_NAME)->add( \
+    new QtSignalImpl<CLASS, \
+                     decltype(&CLASS::SIGNAL_NAME), \
+                                                        &CLASS::SIGNAL_NAME, true>( \
+                                                                               QtSignalCliche::get(#SIGNAL_NAME)->implementations));
+
+
 #define SIGNAL_OVERLOAD(CLASS, SIGNAL_NAME, SIGNATURE) \
 QtSignalCliche::get(#SIGNAL_NAME)->add( \
     new QtSignalImpl<CLASS, SIGNATURE, \

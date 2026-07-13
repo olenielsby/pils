@@ -59,7 +59,44 @@ public:
     static const QtSignalCliche *get(const char *name);
 };
 
-template<typename Obj, typename Signal, Signal signal>
+// template<typename Obj, typename Signal, Signal signal>
+// struct QtSignalImpl : QtSignalImplementation
+// {
+//     QtSignalImpl(const QtSignalImplementation* next)
+//         : QtSignalImplementation(&Obj::staticMetaObject, next) {}
+
+//     bool connectIfCompatible(QObject* obj,
+//                              QtObjectWrapper* wrapper,
+//                              const QtSignalCliche* cliche) const override
+//     {
+//         if (!obj->metaObject()->inherits(meta))
+//             return false;
+//         auto* casted = static_cast<Obj*>(obj);
+//         QObject::connect(casted, signal,
+//                          qApp,
+//                          [wrapper, cliche](auto&&... args)
+//                          {
+//                              wrapper->retain();
+//                              auto args_copy = std::make_tuple(args...);
+//                              QMetaObject::invokeMethod(qApp,
+//                                                        [wrapper, cliche, args_copy]() mutable
+//                                                        {
+//                                                            std::apply([&](auto&&... unpacked)
+//                                                                       {
+//                                                                           const Constant* argv[] = {
+//                                                                               QtWrap::wrap(unpacked)...
+//                                                                           };
+//                                                                           wrapper->pilsSignalCallback(cliche, argv, sizeof...(unpacked));
+//                                                                       }, args_copy);
+//                                                            wrapper->release();
+//                                                        },
+//                                                        Qt::QueuedConnection);
+//                          });
+//         return true;
+//     }
+// };
+
+template<typename Obj, typename Signal, Signal signal, bool Blind = false>
 struct QtSignalImpl : QtSignalImplementation
 {
     QtSignalImpl(const QtSignalImplementation* next)
@@ -71,27 +108,56 @@ struct QtSignalImpl : QtSignalImplementation
     {
         if (!obj->metaObject()->inherits(meta))
             return false;
+
         auto* casted = static_cast<Obj*>(obj);
+
         QObject::connect(casted, signal,
                          qApp,
                          [wrapper, cliche](auto&&... args)
                          {
                              wrapper->retain();
-                             auto args_copy = std::make_tuple(args...);
-                             QMetaObject::invokeMethod(qApp,
-                                                       [wrapper, cliche, args_copy]() mutable
-                                                       {
-                                                           std::apply([&](auto&&... unpacked)
-                                                                      {
-                                                                          const Constant* argv[] = {
-                                                                              QtWrap::wrap(unpacked)...
-                                                                          };
-                                                                          wrapper->pilsSignalCallback(cliche, argv, sizeof...(unpacked));
-                                                                      }, args_copy);
-                                                           wrapper->release();
-                                                       },
-                                                       Qt::QueuedConnection);
+
+                             if constexpr (Blind)
+                             {
+                                 QMetaObject::invokeMethod(
+                                     qApp,
+                                     [wrapper, cliche]()
+                                     {
+                                         wrapper->pilsSignalCallback(
+                                             cliche, nullptr, 0);
+
+                                         wrapper->release();
+                                     },
+                                     Qt::QueuedConnection);
+                             }
+                             else
+                             {
+                                 auto args_copy = std::make_tuple(args...);
+
+                                 QMetaObject::invokeMethod(
+                                     qApp,
+                                     [wrapper, cliche, args_copy]() mutable
+                                     {
+                                         std::apply(
+                                             [&](auto&&... unpacked)
+                                             {
+                                                 const Constant* argv[] = {
+                                                     QtWrap::wrap(unpacked)...
+                                                 };
+
+                                                 wrapper->pilsSignalCallback(
+                                                     cliche,
+                                                     argv,
+                                                     sizeof...(unpacked));
+                                             },
+                                             args_copy);
+
+                                         wrapper->release();
+                                     },
+                                     Qt::QueuedConnection);
+                             }
                          });
+
         return true;
     }
 };

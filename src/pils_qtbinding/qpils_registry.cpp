@@ -5,12 +5,21 @@ namespace PILS
 {
 void QtObjectClassName::initialize()
 {
+    BEGIN_CLASS(QObject)
+    CONSTRUCTOR_NOARGS(QObject)
+    CONSTRUCTOR_ARGS(QObject, QObject*)
+    BLIND_SIGNAL(QObject, destroyed)
+    END_CLASS()
+
+    BEGIN_CLASS(QPilsCloseChildren)
+    CONSTRUCTOR_NOARGS(QPilsCloseChildren)
+    END_CLASS()
+
     BEGIN_CLASS(QApplication)
     SIGNAL_(QApplication, focusChanged)
     SIGNAL_(QApplication, applicationStateChanged)
     SIGNAL_(QApplication, aboutToQuit)
     END_CLASS()
-
     // const QtObjectClassName* classEntry = nullptr;
 
     // ===== QWidget =====
@@ -44,6 +53,9 @@ void QtObjectClassName::initialize()
     METHOD_(QWidget, setLayout)
     METHOD_(QWidget, layout)
     // QWidget ekstra
+    METHOD_(QWidget, raise)
+    METHOD_(QWidget, lower)
+    METHOD_(QWidget, activateWindow)
     METHOD_OVERLOAD(QWidget, setMinimumSize, void(QWidget::*)(int,int))
     METHOD_OVERLOAD(QWidget, setMaximumSize, void(QWidget::*)(int,int))
     METHOD_OVERLOAD(QWidget, setFixedSize, void(QWidget::*)(int,int))
@@ -63,6 +75,9 @@ void QtObjectClassName::initialize()
     // visibility / lifecycle
     SIGNAL_(QWidget, show)
     SIGNAL_(QWidget, hide)
+    METHOD_(QWidget, raise)
+    METHOD_(QWidget, lower)
+    METHOD_(QWidget, activateWindow)
     END_CLASS()
 
     BEGIN_CLASS(QWindow)
@@ -540,6 +555,10 @@ void QtObjectClassName::initialize()
     METHOD_(QStackedWidget, setCurrentIndex)
     METHOD_(QStackedWidget, currentIndex)
     END_CLASS()
+
+    BEGIN_CLASS(QPilsDelayedDestroy)
+    CONSTRUCTOR_NOARGS(QPilsDelayedDestroy)
+    END_CLASS()
 }
 
 template<typename EventT>
@@ -567,5 +586,6 @@ void qtEventDispatch(QEvent *event,
         REGISTER_QT_EVENT(FocusOut, QFocusEvent)
         REGISTER_QT_EVENT(Enter, QEvent)
         REGISTER_QT_EVENT(Leave, QEvent)
+        REGISTER_QT_EVENT(Close, QCloseEvent)
     }
 }

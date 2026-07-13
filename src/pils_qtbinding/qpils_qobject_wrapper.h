@@ -31,7 +31,12 @@ public:
 
 private:
     const Any *invokeMethod(const QtMethodName &name, const Any *const *args, size_t argct) const;
-
+    class QtPassingMind : public QObject, public PassingMind
+    {
+    public:
+        QtPassingMind(const Any &owner) : PassingMind(owner)
+        {}
+    };
 
     enum class State : uint8_t {
         DetachedHidden,         // !visible, !parent
@@ -45,6 +50,8 @@ private:
     {
     public:
         StateChangeFilter(QtObjectWrapper &wrapper): wrapper(wrapper) {}
+        // ~StateChangeFilter() override {wrapper.removeWhen();}
+
         QtObjectWrapper &wrapper;
         bool eventFilter(QObject *watched, QEvent *event) override
         {
@@ -66,7 +73,7 @@ private:
         }
     };
     mutable State state;
-    mutable PassingMind *mind;
+    mutable QtPassingMind *mind;
     State computeCurrentState() const;
     bool isTopLevelVisible(QObject *obj) const;
     void checkState() const;

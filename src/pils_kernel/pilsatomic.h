@@ -14,17 +14,25 @@ public:
 template<class T>
 class RefcountOrScrap
 {
-public:
+private:
     union
     {
         std::atomic<long> refCount;
         T* scrapLink;
+        T** scrapQueueAddress;
     };
 
 #ifndef NDEBUG
-    bool isScrap = false;
+    enum class ScrapState
+    {
+        Count,
+        Link,
+        Queue
+    };
+    ScrapState scrapState = ScrapState::Count;
 #endif
 
+public:
     RefcountOrScrap() noexcept
     {
         new (&refCount) std::atomic<long>(0);
@@ -32,24 +40,75 @@ public:
 
     ~RefcountOrScrap() noexcept
     {
-        assert(Terminator::terminated || isScrap && "RefcountOrScrap destroyed before becomeScrap()");
+        assert(Terminator::terminated || scrapState != ScrapState::Count && "RefcountOrScrap destroyed before becomeScrap()");
+    }
+
+    std::atomic<long>& count() noexcept
+    {
+#ifndef NDEBUG
+        assert(scrapState == ScrapState::Count);
+#endif
+        return refCount;
+    }
+
+    T*& link() noexcept
+    {
+#ifndef NDEBUG
+        assert(scrapState == ScrapState::Link);
+#endif
+        return scrapLink;
+    }
+
+    T**& queueAddress() noexcept
+    {
+#ifndef NDEBUG
+        assert(scrapState == ScrapState::Queue);
+#endif
+        return scrapQueueAddress;
+    }
+
+    T*& queue() noexcept
+    {
+#ifndef NDEBUG
+        assert(scrapState == ScrapState::Queue);
+#endif
+        return *scrapQueueAddress;
     }
 
     void retain() noexcept
     {
-        assert(!isScrap && "RefcountOrScrap::retaion after becomeScrap()");
+        assert(scrapState == ScrapState::Count && "RefcountOrScrap::retaion after becomeScrap()");
         refCount.fetch_add(1, std::memory_order_relaxed);
     }
 
     bool release() noexcept
     {
-        assert(!isScrap && "RefcountOrScrap::release after becomeScrap()");
+        assert(scrapState == ScrapState::Count && "RefcountOrScrap::release after becomeScrap()");
         return refCount.fetch_sub(1, std::memory_order_release) == 0;
     }
+
     bool isMultipleReferenced(int extraAllowed = 0) const
     {
-        assert(!isScrap && "RefcountOrScrap::isMultipleReferenced after becomeScrap()");
+        assert(scrapState == ScrapState::Count && "RefcountOrScrap::isMultipleReferenced after becomeScrap()");
         return refCount > extraAllowed;
+    }
+
+    bool releaseIfMultipleReferenced() noexcept
+    {
+        assert(scrapState == ScrapState::Count && "RefcountOrScrap::releaseIfMultipleReferenced after becomeScrap()");
+
+        long count = refCount.load(std::memory_order_relaxed);
+
+        while (count > 0) {
+            if (refCount.compare_exchange_weak(
+                    count,
+                    count - 1,
+                    std::memory_order_release,
+                    std::memory_order_relaxed))
+                return true;
+        }
+
+        return false;
     }
 
     static void acquireFence() noexcept
@@ -60,7 +119,8 @@ public:
     void becomeScrap(T* next) noexcept
     {
 #ifndef NDEBUG
-        isScrap = true;
+        assert (scrapState == ScrapState::Count);
+        scrapState = ScrapState::Link;
 #endif
         refCount.~atomic<long>();
         scrapLink = next;

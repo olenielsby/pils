@@ -170,7 +170,8 @@ void QtObjectWrapper::checkState() const
         assert(false && "bad retaincount");
     }
 
-    if (state == State::Deleted) removeWhen();
+    if (state == State::Deleted)
+        removeWhen();
 }
 
 int QtObjectWrapper::mindful(State s)
@@ -190,7 +191,7 @@ int QtObjectWrapper::retainCount(State s)
 void QtObjectWrapper::enableMind() const
 {
     assert(mind == nullptr);
-    mind = new PassingMind(*this);
+    mind = new QtPassingMind(*this);
 }
 
 void QtObjectWrapper::disableMind() const
@@ -198,7 +199,7 @@ void QtObjectWrapper::disableMind() const
     assert(mind != nullptr);
     auto gone = mind;
     mind = nullptr;
-    delete gone;
+    gone->deleteLater();
 }
 
 const Any *QtObjectWrapper::specialCalling(Runner &run, const Strap &strap) const
@@ -238,11 +239,29 @@ const Any *QtObjectWrapper::specialWhen(Runner &run, const Any &argument) const
 
 void QtObjectWrapper::removeWhen() const
 {
-    assert(state == State::Deleted);
-    if (!when) return;
-    auto w = when;
+    class QDeferredAnyRelease final : public QObject
+    {
+    public:
+        explicit QDeferredAnyRelease(const Any* value)
+            : value(value)
+        {
+            deleteLater();
+        }
+
+        ~QDeferredAnyRelease() override
+        {
+            value->release();
+        }
+
+    private:
+        const Any* value;
+    };
+    const Any* w = when;
     when = nullptr;
-    w->release();
+    if (!w)
+        return;
+    if (!w->releaseIfMultipleReferenced())
+        new QDeferredAnyRelease(w);
 }
 
 void QtObjectWrapper::write(Writing &writing) const
@@ -259,15 +278,11 @@ void QtObjectWrapper::write(Writing &writing) const
 
 void QtObjectWrapper::unlink()
 {
-    unhash();
-    className->releaseFrom(*this);
-    if (when)
-    {
-        auto w = when;
-        when = nullptr;
-        w->releaseFrom(*this);
-    }
+    // Note: QObject can be queue for deleteLater()
     assert(mind == nullptr);
+    unhash();
+    removeWhen();
+    className->releaseFrom(*this);
     QObject* o = object.data();
     object = nullptr;
     if (o && o->parent() == nullptr)
@@ -280,7 +295,7 @@ QtObjectWrapper::QtObjectWrapper(const Constant *&link, const QtObjectClassName 
     StateChangeFilter *filter = new StateChangeFilter(*this);
     filter->setParent(object);
     object->installEventFilter(filter);
-//    QObject::connect(object, &QObject::destroyed, object, [this]() { checkDeletedState(); });
+    QObject::connect(object, &QObject::destroyed, object, [this]() { removeWhen(); });
     if (QWindow *win = qobject_cast<QWindow*>(object))
         QObject::connect(win, &QWindow::visibleChanged, object, [this]() { checkState(); });
     checkState();

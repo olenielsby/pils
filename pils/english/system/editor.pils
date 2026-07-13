@@ -1,8 +1,9 @@
 [pils: .use?]
 ><:[module:. pils, .timestamp 2008-12-23T02:24:30.089+01 .language system]><;
-><:[module:. pils editor .timestamp 2026-07-10T17:34:10.344+02 .language system]><;
+><:[module:. pils editor .timestamp 2026-07-12T13:43:28.264+02 .language system]><;
 { .window
 | :ok
+  ;lifetime platform lifetime (this module name);
   this module channel window or:
   ;window
     platform window
@@ -21,12 +22,32 @@
       @ operations (.window .tabs window channel own [tabs])
     }
   ;
-  window mind module-listener := this module channel listen
-  { .window | :ok window  }
+ ! ;module-listener
+  window mind module-listener :=
+   this module channel listen
+  { .window
+  | (window: ' .program this program filename) bug {}
+  }
+  { .window
+  | :try window activate
+  }
   ;
   ;splitter window splitter column ();
   ;tabs splitter tabs
-    { select: .tabs | @ menu (.window .tabs .page tabs current) }
+    { .module-label | :who :ok (channel: who) own [module-label] }
+    { select: .tabs
+    | ;page tabs current;
+      @ menu (.window .tabs .page)
+      and:
+!      :if this program filename =* "test" <> 0;
+!      "OPENED TEST" bug {} and: !shit
+!      this 
+!      tabs module-label text (this program language write: page id)
+    }
+    { .bug
+    | :who
+      who module-label text (this program language write: who current id)
+    }
     { module: .module-name .tabs
     | :ok
       tabs tabs find
@@ -43,36 +64,10 @@
           this program language write (module-name <+# 1 1)
           -#$* "[" <-#$* "]"
         }
-!        { .text
-!        | :ok "placeholder for edit pane text"
-!        }
       ;
       :use { .edit | :ok (channel: tabs) own (edit: module-name) };
-      ;tab-column tab column {.spacing|:ok 0};
-      ;top-row tab-column row {.spacing|:ok 15};
-      top-row label () text (this program language write (module-name))
-      and:
-      ;search-row top-row row {.spacing|:ok 4};
-      search-row label () text (say [search] ":") and:
-      ;search search-row line-edit ();
-      search-row button
-      { .title | :ok say [next] }
-      { .pressed
-      | ;text edit text .search search text .from edit selection largest;
-        ;at text -# from =* search;
-        :if at > 0;
-        ;to from + at;
-        edit selection (to - search count, to)
-      }
-      and:
-      search-row button
-      { .title | :ok say [previous] }
-      { .pressed
-      | ;text edit text .search search text .from edit selection smallest;
-        ;at text +# from <=* search;
-        :if at > 0;
-        ;to from - at; edit selection (to, to + search count)
-      }
+      ;tab-column tab column {.spacing|:ok 2};
+      tab-column label [tr1] text (this program language write (module-name))
       and:
       ;edit tab-column edit
         { text: .
@@ -94,6 +89,39 @@
   window mind operations :=
   { .operations | :ok @ operations (.window .tabs) }
   ;
+  ;statusbar window statusbar ();
+  statusbar label [status] text (say [search] ":") and:
+  ;search statusbar line-edit ();
+  statusbar button
+    { .title | :ok say [next] }
+    { .pressed
+    | ;edit tabs current editor;
+      ;text edit text .search search text .from edit selection largest;
+      ;at text -# from =* search;
+      :if at > 0;
+      ;to from + at;
+      edit selection (to - search count, to)
+    }
+  and:
+  statusbar button
+    { .title | :ok say [previous] }
+    { .pressed
+    | ;edit tabs current editor;
+      ;text edit text .search search text .from edit selection largest;
+      ;at text +# from <=* search;
+      :if at > 0;
+      ;to from - at;
+      edit selection (to, to + search count)
+    }
+    { .pressed
+    |  ;edit tabs current editor;
+      ;text edit text .search search text .from edit selection smallest;
+      ;at text +# from <=* search;
+      :if at > 0;
+      ;to from - at;
+      edit selection (to, to + search count)
+    }
+  and:
   @ operations (.window .tabs) module (.module-name @ latest) and:
   @ menu (.window .tabs .page tabs current)
   and:
@@ -291,7 +319,7 @@
   dialog listen
   { .cancel | }
 }
-><:[module:. pils editor operations .timestamp 2026-07-08T18:56:44.666+02 .language system]><;
+><:[module:. pils editor operations .timestamp 2026-07-11T21:59:12.214+02 .language system]><;
 ;library-channel;
 { operations: .window .tabs
 | :ok
@@ -527,7 +555,7 @@
         .start
         .end
       | ( window ask: . error;
-          { .show | :ok page selection (start, end) }
+          { .show | :ok page editor or (page) selection (start, end) }
           { .cancel | :ok }
         )
         and:
@@ -645,11 +673,6 @@
 { refresh: .tabs .window
 | ;page tabs current .:need; :ok
   (page focus) or (page select) and:
-  window statusbar say
-  ( this program language write (page id)
-    -#$* "[" <-#$* "]"
-  )
-  anyway:
   :quote
   ;module-name page id;
   ;module module-name call (library-channel) module;

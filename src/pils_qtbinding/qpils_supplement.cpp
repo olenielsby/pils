@@ -178,52 +178,22 @@ void QPilsGroupBox::paintEvent(QPaintEvent *)
     p.drawComplexControl(QStyle::CC_GroupBox, opt);
 }
 
-// void QPilsGroupBox::paintEvent(QPaintEvent *)
-// {
-//     QPainter p(this);
-//     p.setRenderHint(QPainter::Antialiasing, false);
+QPilsDelayedDestroy::QPilsDelayedDestroy()
+{
+    auto *dummy = new QObject;
+    setParent(dummy);
+    dummy->deleteLater();
+}
 
-//     const QFontMetrics fm(font());
+QPilsCloseChildren::~QPilsCloseChildren()
+{
+    while (!children().isEmpty()) {
+        QPointer<QObject> child = children().first();
+        QCloseEvent event;
+        QCoreApplication::sendEvent(child.data(), &event);
+        // Eventet kan have destrueret eller reparenteret child.
+        if (child && child->parent() == this)
+            delete child;
+    }
+}
 
-//     const QString t = title();
-
-//     int textWidth  = fm.horizontalAdvance(t);
-//     int textHeight = fm.height();
-//     int ascent     = fm.ascent();
-
-//     constexpr int margin = 8;
-//     constexpr int gap    = 6;
-
-//     QRect r = rect();
-
-//     // Rammen begynder midt gennem teksten.
-//     int top = textHeight / 2;
-
-//     p.setPen(QPen(palette().mid().color(), 2));
-
-//     // Venstre side
-//     p.drawLine(r.left(), top, r.left(), r.bottom());
-
-//     // Bund
-//     p.drawLine(r.left(), r.bottom(), r.right(), r.bottom());
-
-//     // Højre side
-//     p.drawLine(r.right(), r.bottom(), r.right(), top);
-
-//     // Øverste kant, delt i to omkring teksten.
-//     int textLeft  = margin;
-//     int textRight = textLeft + textWidth + 2 * gap;
-
-//     p.drawLine(r.left(), top, textLeft - gap, top);
-//     p.drawLine(textRight + gap, top, r.right(), top);
-
-//     // Tegn teksten med baggrund i widgetens farve.
-//     QRect tr(textLeft, 0, textWidth + 2 * gap, textHeight);
-
-//     p.fillRect(tr, palette().window());
-
-//     p.setPen(palette().windowText().color());
-//     p.drawText(tr.adjusted(gap, 0, -gap, 0),
-//                Qt::AlignLeft | Qt::AlignVCenter,
-//                t);
-// }

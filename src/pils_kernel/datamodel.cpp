@@ -25,7 +25,7 @@ namespace PILS
 	Any *Any::destroy()
 	{
         unlink();
-        Any *link = refcount.scrapLink;
+        Any *link = refcount.link();
         delete this;
         return link;
 	}
@@ -162,6 +162,19 @@ namespace PILS
 		hashLink = this;
 	}
 
+    void Constant::removeFromHashTable() const
+    {
+        if (hashLink == nullptr)
+            return;
+        Mutex::Lock lock(Mutex::singleMutex);
+        assert(this->refcount.count()==-1);
+        const Constant **link = &hashLink->hashLink;
+        while (*link != this)
+            link = &(*link)->hashLink;
+        *link = hashLink;
+        hashLink = nullptr;
+    }
+
     void Constant::unlink()
     {
         unhash();
@@ -211,6 +224,7 @@ namespace PILS
 		while (*link != this)
 			link = &(*link)->hashLink;
 		*link = hashLink;
+        hashLink == nullptr;
 	}
 
 	const ClicheShort *Empty::newCliche(const Constant *&link, const Constant *a) const
@@ -654,6 +668,10 @@ namespace PILS
 		}
 	}
 
+    void CountedConstant::releaseChildren() const
+    {
+        count->releaseFromScrap(*this);
+    }
     void PilsString::unlink()
 	{
 		count->releaseFrom(*this);
@@ -737,7 +755,7 @@ namespace PILS
 		return this;
 	}
 
-	const Constant *Cliche::lookupNonempty(const NodeConstant *node, size_t start, const Constant *key) const
+    const Constant *Cliche::lookupNonempty(const NodeConstant *node, size_t start, const Constant *key) const
 	{
 		const Constant *const *end = attributes + count;
 		const Constant *const *at = std::upper_bound(attributes + start, end, key);
@@ -755,7 +773,22 @@ namespace PILS
         else return nullptr;
 	}
 
-	const Constant *NodeConstant::getAttribute(const Constant &name) const
+    void Cliche::releaseChildren() const
+    {
+        head->releaseFromScrap(*this);
+        for (size_t i = 0; i < count; i++)
+            attributes[i]->releaseFromScrap(*this);
+    }
+
+    void NodeConstant::releaseChildren() const
+    {
+        size_t count = cliche->count;
+        cliche->releaseFromScrap(*this);
+        for (size_t i = 0; i < count; i++)
+            element[i]->releaseFromScrap(*this);
+    }
+
+    const Constant *NodeConstant::getAttribute(const Constant &name) const
 	{
 		return cliche->lookupNonempty(this, 0, &name);
 	}
@@ -1442,7 +1475,15 @@ namespace PILS
 			element[i]->releaseFrom(*this);
 	}
 
-	const ListConstant *ListConstant::hashLookup(const Constant *const *a, size_t c, bool copying) const
+    void NodeExpress::releaseChildren() const
+    {
+        size_t count = cliche->count;
+        cliche->releaseFromScrap(*this);
+        for (size_t i = 0; i < count; i++)
+            element[i]->releaseFromScrap(*this);
+    }
+
+    const ListConstant *ListConstant::hashLookup(const Constant *const *a, size_t c, bool copying) const
 	{
         if (c == (size_t)count->value && memcmp(a, &element, c * sizeof(Constant*)) == 0 && duplicateReference(copying))
 			return this;
@@ -1549,7 +1590,15 @@ namespace PILS
 			element[i]->releaseFrom(*this);
 	}
 
-	ListExpress::ListExpress(const Any *const *e, size_t c)
+    void ListConstant::releaseChildren() const
+    {
+        size_t c = count->value;
+        count->releaseFromScrap(*this);
+        for (size_t i = 0; i < c; i++)
+            element[i]->releaseFromScrap(*this);
+    }
+
+    ListExpress::ListExpress(const Any *const *e, size_t c)
 		: count(Integer::get((long)c))
 	{
 		for (size_t i = 0; i < c; i++)
@@ -1564,7 +1613,15 @@ namespace PILS
 			element[i]->releaseFrom(*this);
 	}
 
-	bool ListExpress::isList(const Any *const *&element, const Integer *&count) const
+    void ListExpress::releaseChildren() const
+    {
+        size_t c = count->value;
+        count->releaseFromScrap(*this);
+        for (size_t i = 0; i < c; i++)
+            element[i]->releaseFromScrap(*this);
+    }
+
+    bool ListExpress::isList(const Any *const *&element, const Integer *&count) const
 	{
 		element = this->element;
 		count = this->count;
