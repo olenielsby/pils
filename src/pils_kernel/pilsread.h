@@ -170,8 +170,8 @@ namespace PILS
 		class AnyNodeBuilderChain : public NodeBuilder<const Any>
 		{
 		public:
-			AnyNodeBuilderChain(const Constant *head, const unsigned char *from, AnyNodeBuilderChain *next)
-				: NodeBuilder<const Any>(head), next(next), from(from)
+            AnyNodeBuilderChain(Runner &run, const Constant *head, const unsigned char *from, AnyNodeBuilderChain *next)
+                : NodeBuilder<const Any>(run, head), next(next), from(from)
 			{}
 			AnyNodeBuilderChain *const next;
 			const unsigned char *const from;
@@ -179,8 +179,8 @@ namespace PILS
 		class ConstantNodeBuilderChain : public NodeBuilder<const Constant>
 		{
 		public:
-			ConstantNodeBuilderChain(const Constant *head, const unsigned char *from, ConstantNodeBuilderChain *next)
-				: NodeBuilder<const Constant>(head), next(next), from(from)
+            ConstantNodeBuilderChain(Runner &run, const Constant *head, const unsigned char *from, ConstantNodeBuilderChain *next)
+                : NodeBuilder<const Constant>(run, head), next(next), from(from)
 			{}
 			ConstantNodeBuilderChain *const next;
 			const unsigned char *const from;
@@ -350,8 +350,8 @@ namespace PILS
 		: public Parse
 	{
 	public:
-		ParseList(const unsigned char *at, const Any *element)
-			: Parse(at)
+        ParseList(Runner &run, const unsigned char *at, const Any *element)
+            : Parse(at), builder(run)
 		{
 			builder.add(element);
 		}
@@ -451,8 +451,8 @@ namespace PILS
 		: public Parse
 	{
 	public:
-		ParseRuleset(const unsigned char *at)
-			: Parse(at)
+        ParseRuleset(Runner &run, const unsigned char *at)
+            : Parse(at), builder(run)
 		{}
 		Sink *kick(Runner &run);
 		void close(Runner &run, Parsing &parsing, ParseLevel level);
@@ -682,8 +682,8 @@ namespace PILS
 		: public ParseConstant
 	{
 	public:
-		ParseConstantList(const unsigned char *at)
-			: ParseConstant(at)
+        ParseConstantList(Runner &run, const unsigned char *at)
+            : ParseConstant(at), builder(run)
 		{}
 		Sink *kick(Runner &run);
 	protected:
@@ -694,8 +694,8 @@ namespace PILS
 		: public ParseConstantList
 	{
 	public:
-		ParseConstantCommaList(const unsigned char *at, const Constant *element)
-			: ParseConstantList(at)
+        ParseConstantCommaList(Runner &run, const unsigned char *at, const Constant *element)
+            : ParseConstantList(run, at)
 		{
 			builder.add(element);
 		}
@@ -708,8 +708,8 @@ namespace PILS
 		: public ParseConstantList
 	{
 	public:
-		ParseConstantShortList(const unsigned char *at, const Constant *first, const Constant *second)
-			: ParseConstantList(at)
+        ParseConstantShortList(Runner &run, const unsigned char *at, const Constant *first, const Constant *second)
+            : ParseConstantList(run, at)
 		{
 			builder.add(first);
 			builder.add(second);

@@ -93,7 +93,7 @@ namespace PILS
 	{
 		run.sinkTagChain = chain;
 		run.where_ = ((const NodeExpress&)tag).element[0];
-		tag.release();
+        run.release(&tag);
 		return this + 1;
 	}
 
@@ -111,7 +111,7 @@ namespace PILS
 
 	Sink *PipesourceHold::kick(Runner &run)
 	{
-		hold->release();
+        run.release(hold);
 		return this + 1;
 	}
 
@@ -126,7 +126,7 @@ namespace PILS
 	{
 		run.sinkTagChain = chain;
 		run.where_ = ((const NodeExpress&)tag).element[0];
-		tag.release();
+        run.release(&tag);
 		return ((Pipe*)(run.sink = this + 1))->pipeEnd(run);
 	}
 
@@ -162,7 +162,7 @@ namespace PILS
 			}
 			else
 			{
-				name->release();
+                run.release(name);
 				return (run.sink = this + 1)->called(run, Empty::singleton);
 			}
 		}
@@ -175,7 +175,7 @@ namespace PILS
 		const Any *value;
         if (key && (value = mind->get(*key)))
 		{
-			what->release();
+            run.release(what);
 			run.sink = kick(run);
 			return value->passCounted(run);
 		}
@@ -193,7 +193,7 @@ namespace PILS
 	{
 		run.sinkTagChain = chain;
 		run.where_ = ((const NodeExpress&)tag).element[0];
-		tag.release();
+        run.release(&tag);
 		return this + 1;
 	}
 
@@ -243,8 +243,8 @@ namespace PILS
 
 	Sink *MissPassingMindCall::kick(Runner &run)
 	{
-		call->release();
-		what->release();
+        run.release(call);
+        run.release(what);
 		return this + 1;
 	}
 

@@ -158,12 +158,13 @@ namespace PILS
         bool duplicateReference(bool copying) const;
         virtual void unduplicateChildren() const;
         friend class Writing;
+        friend class Runner;
         mutable RefcountOrScrap<Any> refcount;
     public:
         void unduplicateReference() const;
         inline bool releaseIfMultipleReferenced() const {return refcount.releaseIfMultipleReferenced();}
         void retain() const;
-        void release() const;
+        // void release() const;
         void releaseReferenceInsideLock() const; // DEPRECATED
         void releaseFrom(Any &scrap) const; // DEPRECATED
         void releaseFromScrap(const Any &scrap) const;
@@ -1196,8 +1197,11 @@ namespace PILS
 		{
 		public:
 			~Sticker();
-			void stick(const Strap &strap);
+            Sticker(Runner &run) : run(run) {} //TODO: make threadsafe and use current thread runner
+            void stick(const Strap &strap);
             void clear();
+        protected:
+            Runner &run;
 		private:
 			std::set<const Strap*> stuck;
 		};
@@ -1210,7 +1214,7 @@ namespace PILS
         const Step *calling(Runner &run, const ListExpress &call) const override;
         const Step *calling(Runner &run, const NodeExpress &call) const override;
         const Step *calling(Runner &run, const Any &call, const Any *assignValue) const override;
-        void unstick() const;
+        void unstick(Runner &run) const;
         const Any *specialCall(Runner &run, const ReallySpecial &special) const override;
 		mutable size_t stickCount;
 		mutable const Any *mind;
@@ -1675,140 +1679,6 @@ namespace PILS
         BuiltinPokerClicheShort(const Constant *name)
 			: PokerClicheShort(name)
 		{}
-	};
-
-	/* Template for node constructor maps
-	 *
-	 * If present, the joker value is stored outside the map
-	 * and placed in front when attribute names and values
-	 * are extracted.
-	 */
-
-	template<class Value> class NodeBuilder
-	{
-	public:
-        typedef std::map<const Constant*, const Value*> map; // Value* won't compile
-        bool aim(const Constant *key)
-		{
-			if (aimed) goto bad;
-            if (key == (const Constant *)&Empty::singleton)
-			{
-				if (joker)
-					goto bad;
-			}
-			else
-			{
-				if (mapping.count(key))
-					goto bad;
-			}
-			aimed = key;
-			return true;
-		bad:
-            key->release();
-			return false;
-		}
-
-		void set(Value* value)
-		{
-            if (aimed == (const Constant *)&Empty::singleton) joker = value;
-			else mapping[aimed] = value;
-            aimed = nullptr;
-		}
-
-		size_t count()
-		{
-			return mapping.size() + (joker ? 1 : 0);
-		}
-
-		const Any *build();
-
-        NodeBuilder(const Constant *head)
-            : head(head), aimed(nullptr), joker(nullptr), alive(true)
-		{}
-
-		~NodeBuilder()
-		{
-            if (aimed) aimed->release();
-			if (alive)
-			{
-                head->release();
-				if (joker)
-				{
-                    joker->release();
-                    Empty::singleton.release();
-				}
-				for (typename map::iterator run = mapping.begin();
-					run != mapping.end();
-					run++)
-				{
-                    run->first->release();
-                    run->second->release();
-				}
-			}
-		}
-        const Constant *head;
-	private:
-		map mapping;
-        const Constant *aimed;
-		Value* joker;
-		bool alive;
-	};
-
-	class ClicheBuilder
-	{
-	public:
-        bool add(const Constant *key);
-        bool add(const Constant &key);
-		const Cliche *build();
-        ClicheBuilder(const Constant *head)
-			: head(head), joker(false), alive(true)
-		{}
-		~ClicheBuilder();
-	private:
-        std::set<const Constant*> setting;
-        const Constant *head;
-		bool joker;
-		bool alive;
-	};
-
-	template <class Element, class Result> class ListBuilder
-	{
-	public:
-        typedef std::vector<Element*> vector;
-		void add(Element* element)
-		{
-			listing.insert(listing.end(), element);
-		}
-		Result *build()
-		{
-			size_t count = listing.size();
-			Element **element = new Element*[count];
-			Element **e = element;
-			for (typename vector::iterator run = listing.begin(); run != listing.end(); run++)
-				*e++ = (Element*)*run;
-			Result *list = building(element, count);
-			alive = false;
-			delete [] element;
-			return list;
-		}
-		ListBuilder() : alive(true)
-		{
-		}
-		~ListBuilder()
-		{
-			if (alive)
-			{
-				for (typename vector::iterator run = listing.begin(); run != listing.end(); run++)
-				{
-                    (*run)->release();
-				}
-			}
-		}
-
-	private:
-		static Result* building(Element *const *element, size_t count);
-		vector listing;
-		bool alive;
 	};
 }
 

@@ -65,13 +65,13 @@ namespace PILS
 	Strap::Sticker::~Sticker()
 	{
         for (auto i = stuck.begin(); i != stuck.end(); i++)
-			(*i)->unstick();
+            (*i)->unstick(run);
 	}
 
     void Strap::Sticker::clear()
     {
         for (auto i = stuck.begin(); i != stuck.end(); i++)
-            (*i)->unstick();
+            (*i)->unstick(run);
         stuck.clear();
     }
 
@@ -85,7 +85,7 @@ namespace PILS
 		}
 	}
 
-	void Strap::unstick() const
+    void Strap::unstick(Runner &run) const
 	{
 		const Any *drop = nullptr;
 		{
@@ -96,8 +96,8 @@ namespace PILS
                 mind = Empty::get();
 			}
 		}
-		if (drop) drop->release();
-		release();
+        if (drop) run.release(drop);
+        run.release(this);
 	}
 
 	const Any *Strap::get() const

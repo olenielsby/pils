@@ -35,7 +35,7 @@ namespace PILS
 		if (&string->value[0] != range || (size_t)string->count->value != count)
 		{
 			string = PilsString::get(range, count);
-			anchor->release();
+            run.release(anchor);
 		}
 		return pass(run, string);
 	}
@@ -48,20 +48,20 @@ namespace PILS
 			{
 				for (size_t j = 0; j < count; j++) element[j]->retain();
                 const ListExpress *listExpress = new ((count - 1) * sizeof(Any*)) const ListExpress(element, count);
-				anchor->release();
-				return pass(run, listExpress);
+                run.release(anchor);
+                return pass(run, listExpress);
 			}
 		}
 		const ListConstant *listConstant = ListConstant::get((const Constant* const*)element, count, true);
-		anchor->release();
-		return pass(run, listConstant);
+        run.release(anchor);
+        return pass(run, listConstant);
 	}
 
 	const Step *Sink::pass(Runner &run, const Any *anchor, const Constant *const *element, size_t count)
 	{
 		const ListConstant *listConstant = ListConstant::get(element, count, true);
-		anchor->release();
-		return pass(run, listConstant);
+        run.release(anchor);
+        return pass(run, listConstant);
 	}
 
 	const Step *SinkArgument::pass(Runner &run, long value)
@@ -120,7 +120,7 @@ namespace PILS
 
 	Sink *SinkIndex::kick(Runner &run)
 	{
-		if (indexInteger) indexInteger->release();
+        if (indexInteger) run.release(indexInteger);
 		return this + 1;
 	}
 
@@ -129,7 +129,7 @@ namespace PILS
 		if (index <= value.count->value)
 		{
 			long result = value.value[index - 1];
-			if (indexInteger) indexInteger->release();
+            if (indexInteger) run.release(indexInteger);
 			return (run.sink = this + 1)->pass(run, result);
 		}
 		else
@@ -144,7 +144,7 @@ namespace PILS
 		if (index <= value.count->value)
 		{
 			const Constant &result = *value.element[index - 1];
-			if (indexInteger) indexInteger->release();
+            if (indexInteger) run.release(indexInteger);
 			run.sink = this + 1;
 			return result.passUncounted(run);
 		}
@@ -160,7 +160,7 @@ namespace PILS
 		if (index <= value.count->value)
 		{
 			const Any &result = *value.element[index - 1];
-			if (indexInteger) indexInteger->release();
+            if (indexInteger) run.release(indexInteger);
 			run.sink = this + 1;
 			return result.passUncounted(run);
 		}
@@ -176,8 +176,8 @@ namespace PILS
 		if (index <= value->count->value)
 		{
 			long result = value->value[index - 1];
-			value->release();
-			if (indexInteger) indexInteger->release();
+            run.release(value);
+            if (indexInteger) run.release(indexInteger);
 			return (run.sink = this + 1)->pass(run, result);
 		}
 		else
@@ -192,8 +192,8 @@ namespace PILS
 		{
 			const Constant *result = value->element[index - 1];
 			result->retain();
-			value->release();
-			if (indexInteger) indexInteger->release();
+            run.release(value);
+            if (indexInteger) run.release(indexInteger);
 			run.sink = this + 1;
 			return result->passCounted(run);
 		}
@@ -209,8 +209,8 @@ namespace PILS
 		{
 			const Any *result = value->element[index - 1];
 			result->retain();
-			value->release();
-			if (indexInteger) indexInteger->release();
+            run.release(value);
+            if (indexInteger) run.release(indexInteger);
 			run.sink = this + 1;
 			return result->passCounted(run);
 		}
@@ -224,8 +224,8 @@ namespace PILS
 	{
 		if ((size_t)index > count) return Sink::pass(run, anchor, range, count);
 		long result = range[index - 1];
-		anchor->release();
-		if (indexInteger) indexInteger->release();
+        run.release(anchor);
+        if (indexInteger) run.release(indexInteger);
 		return (run.sink = this + 1)->pass(run, result);
 	}
 
@@ -234,8 +234,8 @@ namespace PILS
 		if ((size_t)index > count) return Sink::pass(run, anchor, range, count);
 		const Constant *result = range[index - 1];
 		result->retain();
-		anchor->release();
-		if (indexInteger) indexInteger->release();
+        run.release(anchor);
+        if (indexInteger) run.release(indexInteger);
 		run.sink = this + 1;
 		return result->passCounted(run);
 	}
@@ -245,8 +245,8 @@ namespace PILS
 		if ((size_t)index > count) return Sink::pass(run, anchor, range, count);
 		const Any* result = range[index - 1];
 		result->retain();
-		anchor->release();
-		if (indexInteger) indexInteger->release();
+        run.release(anchor);
+        if (indexInteger) run.release(indexInteger);
 		run.sink = this + 1;
 		return result->passCounted(run);
 	}
@@ -297,7 +297,7 @@ namespace PILS
 		PILS_CHAR *at = text;
 		for (size_t i = 0; i < (size_t)string->count->value; i++)
 			*(at++) = string->value[i];
-		string->release();
+        run.release(string);
 		return concatenateBuild(run, text, at);
 	}
 
@@ -308,13 +308,13 @@ namespace PILS
 		PILS_CHAR *at = text;
 		for (size_t i = 0; i < rangeCount; i++)
 			*(at++) = range[i];
-		anchor->release();
+        run.release(anchor);
 		return concatenateBuild(run, text, at);
 	}
 
 	Sink *SinkConcatenatingString::kick(Runner &run)
 	{
-		string->release();
+        run.release(string);
 		return this + 1;
 	}
 
@@ -344,21 +344,21 @@ namespace PILS
 	{
 		for (size_t i = 0; i < (size_t)string->count->value; i++)
 			*(at++) = string->value[i];
-		string->release();
+        run.release(string);
 		return (run.sink = this + 1)->concatenateBuild(run, text, at);
 	}
 
 	Sink *SinkConcatenatingRange::kick(Runner &run)
 	{
-		anchor->release();
+        run.release(anchor);
 		return this + 1;
 	}
 
 	const Step *SinkConcatenatingRange::pass(Runner &run, const Any *value)
 	{
 		const PilsString *string = PilsString::get(text, count);
-		anchor->release();
-		const CallWho &what = this->what;
+        run.release(anchor);
+        const CallWho &what = this->what;
 		run.sink = this + 1;
 		return (new (run.allocate(sizeof(SinkWho))) SinkWho(what, string))->pass(run, value);
 	}
@@ -366,8 +366,8 @@ namespace PILS
 	const Step *SinkConcatenatingRange::pass(Runner &run, SinkTaggedNodeBuilding &nodeBuilding)
 	{
 		const PilsString *string = PilsString::get(text, count);
-		anchor->release();
-		const CallWho &what = this->what;
+        run.release(anchor);
+        const CallWho &what = this->what;
 		run.sink = this + 1;
 		return (new (run.allocate(sizeof(SinkWho))) SinkWho(what, string))->pass(run, nodeBuilding);
 	}
@@ -376,8 +376,8 @@ namespace PILS
 	{
 		for (size_t i = 0; i < count; i++)
 			*(at++) = this->text[i];
-		anchor->release();
-		return (run.sink = this + 1)->concatenateBuild(run, text, at);
+        run.release(anchor);
+        return (run.sink = this + 1)->concatenateBuild(run, text, at);
 	}
 
 	size_t SinkConcatenatingRange::concatenateCount()
@@ -465,8 +465,8 @@ namespace PILS
 			const WhoRangeExpress &what = this->what;
 			run.sink = this + 1;
 			((BuiltinClicheRange*)call->cliche)->rangeSink(run, value->value, what);
-			value->release();
-			return what.whoAttribute();
+            run.release(value);
+            return what.whoAttribute();
 		}
 		else return pass(run, (const Any*)value);
 	}
@@ -1015,7 +1015,7 @@ namespace PILS
 			else
 			{
 				// Zero items required - this first one is irrelevant
-				item->release();
+                run.release(item);
 				return next.pipeEnd(run);
 			}
 		}
@@ -1033,7 +1033,7 @@ namespace PILS
 		{
 			// Still counting down - first items are thrashed
 			range--;
-			item->release();
+            run.release(item);
 			return (Pipesource*)run.sink;
 		}
 		else
@@ -1421,7 +1421,7 @@ namespace PILS
 
 	Sink *SinkSearchString::kick(Runner &run)
 	{
-		string->release();
+        run.release(string);
 		return this + 1;
 	}
 
@@ -1446,38 +1446,38 @@ namespace PILS
 
 	const Step *SinkSearchString::searched(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count, size_t hit)
 	{
-		string->release();
-		anchor->release();
+        run.release(string);
+        run.release(anchor);
 		return (run.sink = this + 1)->pass(run, (long)hit);
 	}
 
 	const Step *SinkSearchStringPlusRange::searched(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count, size_t hit)
 	{
-		string->release();
+        run.release(string);
 		return (run.sink = this + 1)->pass(run, anchor, range, hit);
 	}
 
 	const Step *SinkSearchStringPlusRangeReverse::searched(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count, size_t hit)
 	{
-		string->release();
+        run.release(string);
 		return (run.sink = this + 1)->pass(run, anchor, range + count - hit, hit);
 	}
 
 	const Step *SinkSearchStringMinusRange::searched(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count, size_t hit)
 	{
-		string->release();
+        run.release(string);
 		return (run.sink = this + 1)->pass(run, anchor, range + hit, count - hit);
 	}
 
 	const Step *SinkSearchStringMinusRangeReverse::searched(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count, size_t hit)
 	{
-		string->release();
+        run.release(string);
 		return (run.sink = this + 1)->pass(run, anchor, range, count - hit);
 	}
 
 	Sink *SinkSearchListConstant::kick(Runner &run)
 	{
-		list->release();
+        run.release(list);
 		return this + 1;
 	}
 
@@ -1514,69 +1514,69 @@ namespace PILS
 
 	const Step *SinkSearchListConstant::searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit)
 	{
-		list->release();
-		anchor->release();
+        run.release(list);
+        run.release(anchor);
 		return (run.sink = this + 1)->pass(run, (long)hit);
 	}
 
 	const Step *SinkSearchListConstant::searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit)
 	{
-		list->release();
-		anchor->release();
+        run.release(list);
+        run.release(anchor);
 		return (run.sink = this + 1)->pass(run, (long)hit);
 	}
 
 	const Step *SinkSearchListConstantPlusRange::searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit)
 	{
-		list->release();
+        run.release(list);
 		return (run.sink = this + 1)->pass(run, anchor, range, hit);
 	}
 
 	const Step *SinkSearchListConstantPlusRange::searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit)
 	{
-		list->release();
+        run.release(list);
 		return (run.sink = this + 1)->pass(run, anchor, range, hit);
 	}
 
 	const Step *SinkSearchListConstantPlusRangeReverse::searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit)
 	{
-		list->release();
+        run.release(list);
 		return (run.sink = this + 1)->pass(run, anchor, range + count - hit, hit);
 	}
 
 	const Step *SinkSearchListConstantPlusRangeReverse::searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit)
 	{
-		list->release();
+        run.release(list);
 		return (run.sink = this + 1)->pass(run, anchor, range + count - hit, hit);
 	}
 
 	const Step *SinkSearchListConstantMinusRange::searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit)
 	{
-		list->release();
+        run.release(list);
 		return (run.sink = this + 1)->pass(run, anchor, range + hit, count - hit);
 	}
 
 	const Step *SinkSearchListConstantMinusRange::searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit)
 	{
-		list->release();
+        run.release(list);
 		return (run.sink = this + 1)->pass(run, anchor, range + hit, count - hit);
 	}
 
 	const Step *SinkSearchListConstantMinusRangeReverse::searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit)
 	{
-		list->release();
+        run.release(list);
 		return (run.sink = this + 1)->pass(run, anchor, range, count - hit);
 	}
 
 	const Step *SinkSearchListConstantMinusRangeReverse::searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit)
 	{
-		list->release();
+        run.release(list);
 		return (run.sink = this + 1)->pass(run, anchor, range, count - hit);
 	}
 
 	Sink *SinkSearchListExpress::kick(Runner &run)
 	{
-		list->release();
+        run.release(list);
 		return this + 1;
 	}
 
@@ -1613,63 +1613,63 @@ namespace PILS
 
 	const Step *SinkSearchListExpress::searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit)
 	{
-		list->release();
-		anchor->release();
+        run.release(list);
+        run.release(anchor);
 		return (run.sink = this + 1)->pass(run, (long)hit);
 	}
 
 	const Step *SinkSearchListExpress::searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit)
 	{
-		list->release();
-		anchor->release();
+        run.release(list);
+        run.release(anchor);
 		return (run.sink = this + 1)->pass(run, (long)hit);
 	}
 
 	const Step *SinkSearchListExpressPlusRange::searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit)
 	{
-		list->release();
+        run.release(list);
 		return (run.sink = this + 1)->pass(run, anchor, range, hit);
 	}
 
 	const Step *SinkSearchListExpressPlusRange::searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit)
 	{
-		list->release();
+        run.release(list);
 		return (run.sink = this + 1)->pass(run, anchor, range, hit);
 	}
 
 	const Step *SinkSearchListExpressPlusRangeReverse::searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit)
 	{
-		list->release();
+        run.release(list);
 		return (run.sink = this + 1)->pass(run, anchor, range + count - hit, hit);
 	}
 
 	const Step *SinkSearchListExpressPlusRangeReverse::searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit)
 	{
-		list->release();
+        run.release(list);
 		return (run.sink = this + 1)->pass(run, anchor, range + count - hit, hit);
 	}
 
 	const Step *SinkSearchListExpressMinusRange::searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit)
 	{
-		list->release();
+        run.release(list);
 		return (run.sink = this + 1)->pass(run, anchor, range + hit, count - hit);
 	}
 
 	const Step *SinkSearchListExpressMinusRange::searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit)
 	{
-		list->release();
+        run.release(list);
 		return (run.sink = this + 1)->pass(run, anchor, range + hit, count - hit);
 	}
 
 	const Step *SinkSearchListExpressMinusRangeReverse::searched(Runner &run, const Any *anchor, const Constant *const *range, size_t count, size_t hit)
 	{
-		list->release();
+        run.release(list);
 		return (run.sink = this + 1)->pass(run, anchor, range, count - hit);
 	}
 
 	const Step *SinkSearchListExpressMinusRangeReverse::searched(Runner &run, const Any *anchor, const Any *const *range, size_t count, size_t hit)
 	{
-		list->release();
+        run.release(list);
 		return (run.sink = this + 1)->pass(run, anchor, range, count - hit);
 	}
 
@@ -2137,7 +2137,7 @@ namespace PILS
 	const Step *SinkCasing::pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count)
 	{
 		const PilsString *transformed = ((PropertyCasing*)what.callAttribute())->transform(range, count, PilsString::defaultLocale);
-		anchor->release();
+        run.release(anchor);
 		return (run.sink = this + 1)->pass(run, transformed);
 	}
 
@@ -2169,7 +2169,7 @@ namespace PILS
 		{
 			const Constant *item = value->element[0];
 			item->retain();
-			value->release();
+            run.release(value);
 			run.sink = this + 1;
 			return item->passCounted(run);
 		}
@@ -2182,7 +2182,7 @@ namespace PILS
 		{
 			const Any *item = value->element[0];
 			item->retain();
-			value->release();
+            run.release(value);
 			run.sink = this + 1;
 			return item->passCounted(run);
 		}
@@ -2253,7 +2253,7 @@ namespace PILS
         delete[] element;
 		const ListConstant *result = ListConstant::get(list, listSize);
         delete[] list;
-		value->release();
+        run.release(value);
 		return (run.sink = this + 1)->pass(run, result);
 	}
 
@@ -2319,7 +2319,7 @@ namespace PILS
 
 	Sink *SinkStringOperation::kick(Runner &run)
 	{
-		operand->release();
+        run.release(operand);
 		return this + 1;
 	}
 
@@ -2337,7 +2337,7 @@ namespace PILS
 	{
 		if (list == &Empty::singleton)
 		{
-			list->release();
+            run.release(list);
 			const PilsString *separator = operand;
 			return (run.sink = this + 1)->pass(run, separator, separator->value, (size_t)0);
 		}
@@ -2361,8 +2361,8 @@ namespace PILS
 		}
 		const PilsString *result = PilsString::get(spliceText, spliceCount);
         delete[] spliceText;
-		list->release();
-		operand->release();
+        run.release(list);
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, result);
 	}
 
@@ -2376,7 +2376,7 @@ namespace PILS
 		else if ((integer = value->as_Integer()) && integer->value > 0 && integer->value <= 1000)
 		{
 			new (run.allocate(sizeof(SinkSplitSize))) SinkSplitSize(what, integer->value);
-			integer->release();
+            run.release(integer);
 		}
 		else
 		{
@@ -2398,14 +2398,14 @@ namespace PILS
 		else
 		{
 			new (run.allocate(sizeof(PipesourceSplitEmptySeparator))) PipesourceSplitEmptySeparator(string);
-			separator->release();
+            run.release(separator);
 		}
 		return pipe->pipeBegin(run);
 	}
 
 	Sink *PipesourceSplitEmptySeparator::kick(Runner &run)
 	{
-		string->release();
+        run.release(string);
 		return this + 1;
 	}
 
@@ -2415,7 +2415,7 @@ namespace PILS
 		if (at < end) return pipe->pipeItem(run, PilsString::get(((PipesourceSplitEmptySeparator *)this)->at++, 1));
 		else
 		{
-			string->release();
+            run.release(string);
 			run.sink = pipe;
 			return pipe->pipeEnd(run);
 		}
@@ -2423,8 +2423,8 @@ namespace PILS
 
 	Sink *PipesourceSplit::kick(Runner &run)
 	{
-		string->release();
-		separator->release();
+        run.release(string);
+        run.release(separator);
 		return this + 1;
 	}
 
@@ -2456,8 +2456,8 @@ namespace PILS
 		}
 		else
 		{
-			string->release();
-			separator->release();
+            run.release(string);
+            run.release(separator);
 			run.sink = pipe;
 			return pipe->pipeEnd(run);
 		}
@@ -2504,7 +2504,7 @@ namespace PILS
 
 	Sink *PipesourceSplitStringSize::kick(Runner &run)
 	{
-		anchor->release();
+        run.release(anchor);
 		return this + 1;
 	}
 
@@ -2521,7 +2521,7 @@ namespace PILS
 		}
 		else
 		{
-			anchor->release();
+            run.release(anchor);
 			run.sink = &pipe;
 			return pipe.pipeEnd(run);
 		}
@@ -2538,7 +2538,7 @@ namespace PILS
 	Sink *PipeSplitSize::kick(Runner &run)
 	{
 		for (const Any **trash = begin(); trash != at; trash++)
-			(*trash)->release();
+            run.release(*trash);
 		return &pipe;
 	}
 
@@ -2666,7 +2666,7 @@ namespace PILS
 
 	Sink *SinkReplaceStringPairs::kick(Runner &run)
 	{
-		pairs->release();
+        run.release(pairs);
 		return this + 1;
 	}
 
@@ -2688,8 +2688,8 @@ namespace PILS
 		PILS_CHAR *text = new PILS_CHAR[countBag.count];
 		TextBag bag(text);
 		traveller.travel(bag);
-		value->release();
-		pairs->release();
+        run.release(value);
+        run.release(pairs);
 		const PilsString *result = PilsString::get(text, countBag.count);
         delete[] text;
 		return (run.sink = this + 1)->pass(run, result);
@@ -2718,8 +2718,8 @@ namespace PILS
 				}
 			}
 		}
-		if (result) original->release(); else result = original;
-		pairs->release();
+        if (result) run.release(original); else result = original;
+        run.release(pairs);
 		return (run.sink = this + 1)->pass(run, result);
 	}
 
@@ -2746,8 +2746,8 @@ namespace PILS
 				}
 			}
 		}
-		if (result) original->release(); else result = original;
-		pairs->release();
+        if (result) run.release(original); else result = original;
+        run.release(pairs);
 		return (run.sink = this + 1)->pass(run, result);
 	}
 
@@ -2949,7 +2949,7 @@ namespace PILS
 
 	Sink *PipesourceCharacterDecoder::kick(Runner &run)
 	{
-		anchor->release();
+        run.release(anchor);
 		return this + 1;
 	}
 
@@ -2976,7 +2976,7 @@ namespace PILS
 	{
 		if (item->convert(*this))
 		{
-			item->release();
+            run.release(item);
 			return (Pipesource*)(run.sink);
 		}
 		else

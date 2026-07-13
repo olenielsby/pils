@@ -121,11 +121,11 @@ namespace PILS
 
 	Sink *PipeOrder::kick(Runner &run)
 	{
-		keypicker->release();
-		for(Bag::iterator iterator = bag.begin(); iterator != bag.end(); iterator++)
+        run.release(keypicker);
+        for(Bag::iterator iterator = bag.begin(); iterator != bag.end(); iterator++)
 		{
-			iterator->first->release();
-			iterator->second->release();
+            run.release(iterator->first);
+            run.release(iterator->second);
 		}
 		bag.~vector();
 		return this + 1;
@@ -183,7 +183,7 @@ namespace PILS
 
 	Sink *PipeOrder::SinkOrderKey::kick(Runner &run)
 	{
-		item->release();
+        run.release(item);
 		return this + 1;
 	}
 
@@ -244,7 +244,7 @@ namespace PILS
 
 	const Step *PipeOrder::SinkOrderKey::pass(Runner &run, const Any *value)
 	{
-		value->release();
+        run.release(value);
         return pass(run, (const Constant*) Empty::get());
 	}
 

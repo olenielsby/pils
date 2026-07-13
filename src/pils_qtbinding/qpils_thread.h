@@ -36,8 +36,8 @@ namespace PILS
 			{
 				if (thread.runLevels == 1)
 					thread.runLevelTouchDown();
-				--thread.runLevels;
-				thread.release();
+                --thread.runLevels;
+                thread.Runner::release(&thread);
 			}
 			Runner &run() {return thread;}
 			static PilsThread *getCurrent(PilsThread *candidate = nullptr);

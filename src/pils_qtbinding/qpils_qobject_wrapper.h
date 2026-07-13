@@ -8,7 +8,7 @@ class QtObjectWrapper
     : public ReallySpecial
 {
 public:
-    QtObjectWrapper(const Constant *&link, const QtObjectClassName *className, QObject *object);
+    QtObjectWrapper(Runner &run, const Constant *&link, const QtObjectClassName *className, QObject *object);
     ~QtObjectWrapper();
     const QtObjectClassName *className;
     QPointer<QObject> object;
@@ -30,11 +30,14 @@ public:
     bool converting(PlatformSpecificConverter &converter) const override;
 
 private:
+    template<typename Obj, typename Signal, Signal signal, bool Blind>
+    friend struct QtSignalImpl;
+    Runner &run;
     const Any *invokeMethod(const QtMethodName &name, const Any *const *args, size_t argct) const;
     class QtPassingMind : public QObject, public PassingMind
     {
     public:
-        QtPassingMind(const Any &owner) : PassingMind(owner)
+        QtPassingMind(Runner &run, const Any &owner) : PassingMind(run, owner)
         {}
     };
 

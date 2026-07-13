@@ -15,7 +15,7 @@ const Any *Plumcake::specialCalling(Runner &run, const QtObjectClassName &classN
     if (object == nullptr)
         return nullptr;
     // No existing wrapper, but search anyway, for consistency with pils constant hashing
-    QtObjectLookup lookup(object, &className);
+    QtObjectLookup lookup(run, object, &className);
     return lookup.lookup();
 }
 
@@ -73,7 +73,7 @@ const ReallySpecial *QtObjectLookup::newSpecial(const Constant *&link)
     if (className)
         className->retain();
     else className = getClassNameFromQObjectInsideLock(object);
-    return new const QtObjectWrapper(link, className, object);
+    return new const QtObjectWrapper(run, link, className, object);
 }
 
 const QtObjectClassName *QtObjectLookup::getClassNameFromQObjectInsideLock(QObject* object)
@@ -163,7 +163,7 @@ void QtObjectWrapper::checkState() const
     {
     case 1: retain();
         break;
-    case -1: release();
+    case -1: run.release(this);
     case 0:
         break;
     default:
@@ -191,7 +191,7 @@ int QtObjectWrapper::retainCount(State s)
 void QtObjectWrapper::enableMind() const
 {
     assert(mind == nullptr);
-    mind = new QtPassingMind(*this);
+    mind = new QtPassingMind(run, *this);
 }
 
 void QtObjectWrapper::disableMind() const
@@ -250,7 +250,7 @@ void QtObjectWrapper::removeWhen() const
 
         ~QDeferredAnyRelease() override
         {
-            value->release();
+            Runner::main().release(value); //TODO: verify main thread
         }
 
     private:
@@ -289,8 +289,8 @@ void QtObjectWrapper::unlink()
         o->deleteLater();
 }
 
-QtObjectWrapper::QtObjectWrapper(const Constant *&link, const QtObjectClassName *className, QObject *object)
-    : ReallySpecial (link), className(className), object(object), state(State::Deleted), mind(nullptr)
+QtObjectWrapper::QtObjectWrapper(Runner &run, const Constant *&link, const QtObjectClassName *className, QObject *object)
+    : ReallySpecial (link), className(className), object(object), state(State::Deleted), mind(nullptr), run(run)
 {
     StateChangeFilter *filter = new StateChangeFilter(*this);
     filter->setParent(object);

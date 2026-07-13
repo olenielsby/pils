@@ -375,7 +375,7 @@ namespace PILS
         value->write(writing, WRITING_EXPRESSION, bugLevels, nullptr);
 		const PilsString *string = writing.getString();
 		bug(run, *string);
-		string->release();
+        run.release(string);
 		run.sink = kick(run);
         return value->passCounted(run);
 	}

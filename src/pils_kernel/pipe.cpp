@@ -46,7 +46,7 @@ namespace PILS
 	Sink *PipeToList::kick(Runner &run)
 	{
 		for (std::vector<const Any*>::iterator i = elements.begin(); i != elements.end(); i++)
-			(*i)->release();
+            run.release(*i);
 		elements.~vector();
 		return this + 1;
 	}
@@ -76,7 +76,7 @@ namespace PILS
 
 	const Step *PipeToNowhere::pipeItem(Runner &run, const Any *thing)
 	{
-		thing->release();
+        run.release(thing);
 		return (Pipesource*)run.sink;
 	}
 
@@ -140,17 +140,17 @@ namespace PILS
 
 	Sink *PipeHoldTail::kick(Runner &run)
 	{
-		thing->release();
-		run.where_->release();
+        run.release(thing);
+        run.release(run.where_);
 		run.where_ = whence;
 		return this + 1;
 	}
 
 	const Step *PipeHoldTail::pass(Runner &run, const Any *value)
 	{
-		thing->release();
-		run.where_->release();
-		run.where_ = whence;
+        run.release(thing);
+        run.release(run.where_);
+        run.where_ = whence;
 		run.sink = this + 1;
 		return value->passCounted(run);
 	}
@@ -158,16 +158,16 @@ namespace PILS
 	const Step *PipeHoldTail::tailStep(Runner &run, const Any *thing, const Any *where_)
 	{
 		//reuse sink
-		run.where_->release();
-		run.where_ = where_;
-		this->thing->release();
+        run.release(run.where_);
+        run.where_ = where_;
+        run.release(this->thing);
 		return this->thing = thing;
 	}
 
 	const Step *PipeHoldTail::tailStep(Runner &run, const Any *thing)
 	{
 		//reuse sink
-		this->thing->release();
+        run.release(this->thing);
 		return this->thing = thing;
 	}
 
@@ -192,8 +192,8 @@ namespace PILS
 	const Step *PipeHoldTail::pipeEnd(Runner &run)
 	{
 		Pipe &next = this[1];
-		thing->release();
-		run.where_->release();
+        run.release(thing);
+        run.release(run.where_);
 		run.where_ = whence;
 		run.sink = &next;
 		return next.pipeEnd(run);
@@ -201,8 +201,8 @@ namespace PILS
 
 	Sink *PipeHoldTail::pushWhere(Runner &run, const Any *where_)
 	{
-		run.where_->release();
-		run.where_ = where_;
+        run.release(run.where_);
+        run.where_ = where_;
 		return run.sink;
 	}
 
@@ -215,15 +215,15 @@ namespace PILS
 
 	Sink *PipeWhereabout::kick(Runner &run)
 	{
-		run.where_->release();
-		run.where_ = where_;
+        run.release(run.where_);
+        run.where_ = where_;
 		return this + 1;
 	}
 
 	const Step *PipeWhereabout::pass(Runner &run, const Any *value)
 	{
-		run.where_->release();
-		run.where_ = where_;
+        run.release(run.where_);
+        run.where_ = where_;
 		run.sink = this + 1;
 		return value->passCounted(run);
 	}
@@ -248,8 +248,8 @@ namespace PILS
 
 	Sink *PipeWhereabout::pushWhere(Runner &run, const Any *where_)
 	{
-		run.where_->release();
-		run.where_ = where_;
+        run.release(run.where_);
+        run.where_ = where_;
 		return this;
 	}
 
@@ -268,8 +268,8 @@ namespace PILS
 	const Step *PipeWhereabout::pipeEnd(Runner &run)
 	{
 		Pipe &next = this[1];
-		run.where_->release();
-		run.where_ = where_;
+        run.release(run.where_);
+        run.where_ = where_;
 		run.sink = &next;
 		return next.pipeEnd(run);
 	}
@@ -345,14 +345,14 @@ namespace PILS
 
 	Sink *PipeHold::kick(Runner &run)
 	{
-		hold->release();
-		return this + 1;
+        run.release(hold);
+        return this + 1;
 	}
 
 	const Step *PipeHold::pass(Runner &run, const Any *thing)
 	{
-		hold->release();
-		return thing->passCounted(run);
+        run.release(hold);
+        return thing->passCounted(run);
 	}
 
 	const Step *PipeHold::pipeItem(Runner &run, const Any *thing)
@@ -370,8 +370,8 @@ namespace PILS
 	const Step *PipeHold::pipeEnd(Runner &run)
 	{
 		Pipe &next = this[1];
-		hold->release();
-		run.sink = &next;
+        run.release(hold);
+        run.sink = &next;
 		return next.pipeEnd(run);
 	}
 
@@ -428,8 +428,8 @@ namespace PILS
 
 	Sink *PipeEach::kick(Runner &run)
 	{
-		filter->release();
-		return this + 1;
+        run.release(filter);
+        return this + 1;
 	}
 
 	const Step *PipeEach::pass(Runner &run, const Any *thing)
@@ -509,15 +509,15 @@ namespace PILS
 
 	Sink *PipeFold::kick(Runner &run)
 	{
-		fold->release();
-		if (value) value->release();
+        run.release(fold);
+        if (value) run.release(value);
 		return this + 1;
 	}
 
 	const Step *PipeFold::pass(Runner &run, const Any *thing)
 	{
 		/*Piping not applicable - perform standard method call*/
-		if (value) value->release(); /* not supposed to happen */
+        if (value) run.release(value); /* not supposed to happen */
 		const Any *const *dummy;
 		const ClicheShort *c;
 		what.callAttribute()->isNode(dummy, (const Cliche*&)c);
@@ -536,7 +536,7 @@ namespace PILS
 	{
 		if (value)
 		{
-			fold->release();
+            run.release(fold);
 			const Any *value = this->value;
 			run.sink = this + 1;
 			return value->passCounted(run);
@@ -570,7 +570,7 @@ namespace PILS
 
 	Sink *PipingEvery::kick(Runner &run)
 	{
-		item->release();
+        run.release(item);
 		return this + 1;
 	}
 
@@ -582,8 +582,8 @@ namespace PILS
 
 	const Step *PipingEvery::tailStep(Runner &run, const Any *thing, const Any *where_)
 	{
-		item->release();
-		Pipe &pipe = this->pipe;
+        run.release(item);
+        Pipe &pipe = this->pipe;
 		run.sink = this + 1;
 		new (run.allocate(sizeof(PipingEveryTail))) PipingEveryTail(pipe, thing, run.where_);
 		run.where_ = where_;
@@ -592,17 +592,17 @@ namespace PILS
 
 	Sink *PipingEveryTail::kick(Runner &run)
 	{
-		run.where_->release();
+        run.release(run.where_);
 		run.where_ = whence;
-		thing->release();
+        run.release(thing);
 		return this + 1;
 	}
 
 	const Step *PipingEveryTail::pass(Runner &run, const Any *value)
 	{
-		run.where_->release();
+        run.release(run.where_);
 		run.where_ = whence;
-		thing->release();
+        run.release(thing);
 		Pipe &pipe = this->pipe;
 		run.sink = this + 1;
 		return pipe.pipeItem(run, value);
@@ -610,15 +610,15 @@ namespace PILS
 
 	const Step *PipingEveryTail::tailStep(Runner &run, const Any *thing)
 	{
-		this->thing->release();
+        run.release(this->thing);
 		return this->thing = thing;
 	}
 
 	const Step *PipingEveryTail::tailStep(Runner &run, const Any *thing, const Any *where_)
 	{
-		run.where_->release();
+        run.release(run.where_);
 		run.where_ = where_;
-		this->thing->release();
+        run.release(this->thing);
 		return this->thing = thing;
 	}
 
@@ -657,7 +657,7 @@ namespace PILS
 
 	Sink *PipingExcept::kick(Runner &run)
 	{
-		item->release();
+        run.release(item);
 		return this + 1;
 	}
 
@@ -712,7 +712,7 @@ namespace PILS
 
 	const Step *PipingEach::called(Runner &run, const Any &call, const Any *assignValue)
 	{
-		assignValue->release();
+        run.release(assignValue);
 		return (Pipesource*)(run.sink = kick(run));
 	}
 
@@ -773,7 +773,7 @@ namespace PILS
 
 	const Step *PipingWhile::called(Runner &run, const Any &call, const Any *assignValue)
 	{
-		assignValue->release();
+        run.release(assignValue);
 		Pipe *pipe = &this->pipe;
 		while (run.sink != pipe) run.sink = run.sink->kick(run);
 		return pipe->pipeEnd(run);
@@ -816,8 +816,8 @@ namespace PILS
 	const Step *PipingFold::called(Runner &run, const Any &call, const Any *assignValue)
 	{
 		Pipe &pipe = this->pipe;
-		assignValue->release();
-		run.calling.who = &Empty::singleton; //must avoid dangling reference
+        run.release(assignValue);
+        run.calling.who = &Empty::singleton; //must avoid dangling reference
 		while (run.sink != &pipe) run.sink = run.sink->kick(run);
 		return (run.sink = run.sink->kick(run))->called(run, Empty::singleton);
 	}
@@ -825,8 +825,8 @@ namespace PILS
 	const Step *PipingFold::pass(Runner &run, const Any *thing)
 	{
 		const Any *&value = ((PipeFold&)pipe).value;
-		value->release();
-		value = thing;
+        run.release(value);
+        value = thing;
 		return (Pipesource*)(run.sink = this + 1);
 	}
 
@@ -868,7 +868,7 @@ namespace PILS
 	{
 		const Integer *count = value->count;
 		count->retain();
-		value->release();
+        run.release(value);
 		return (run.sink = this + 1)->pass(run, count);
 	}
 
@@ -876,7 +876,7 @@ namespace PILS
 	{
 		const Integer *count = value->count;
 		count->retain();
-		value->release();
+        run.release(value);
 		return (run.sink = this + 1)->pass(run, count);
 	}
 
@@ -884,26 +884,26 @@ namespace PILS
 	{
 		const Integer *count = value->count;
 		count->retain();
-		value->release();
+        run.release(value);
 		return (run.sink = this + 1)->pass(run, count);
 	}
 
 	const Step *PipeCount::pass(Runner &run, const Any *anchor, const PILS_CHAR *range, size_t count)
 	{
-		anchor->release();
+        run.release(anchor);
 		return (run.sink = this + 1)->pass(run, (long)count);
 	}
 
 	const Step *PipeCount::pass(Runner &run, const Any *anchor, const Any *const *range, size_t count)
 	{
-		anchor->release();
-		return (run.sink = this + 1)->pass(run, (long)count);
+        run.release(anchor);
+        return (run.sink = this + 1)->pass(run, (long)count);
 	}
 
 	const Step *PipeCount::pass(Runner &run, const Any *anchor, const Constant *const *range, size_t count)
 	{
-		anchor->release();
-		return (run.sink = this + 1)->pass(run, (long)count);
+        run.release(anchor);
+        return (run.sink = this + 1)->pass(run, (long)count);
 	}
 
 	const Step *PipeProperty::pass(Runner &run, SinkTaggedNodeBuilding &nodeBuilding)
@@ -922,8 +922,8 @@ namespace PILS
 
 	const Step *PipeCount::pipeItem(Runner &run, const Any *item)
 	{
-		item->release();
-		count++;
+        run.release(item);
+        count++;
 		return (Pipesource*)run.sink;
 	}
 
@@ -993,8 +993,8 @@ namespace PILS
 	{
 		long v = value->value;
 		if (v < 0) return pass(run, (const Any*)value);
-		value->release();
-		return pass(run, v);
+        run.release(value);
+        return pass(run, v);
 	}
 
 	const Step *SinkPropertyIncrementRange::pass(Runner &run, long value)
@@ -1124,7 +1124,7 @@ namespace PILS
 		const CallWho &what = this->what;
 		run.sink = this + 1;
 		long v = value->value;
-		value->release();
+        run.release(value);
 		new (run.allocate(sizeof(SinkUp))) SinkUp(what, v);
 		return what.whoAttribute();
 	}
@@ -1160,7 +1160,7 @@ namespace PILS
 		const CallWho &what = this->what;
 		run.sink = this + 1;
 		long v = value->value;
-		value->release();
+        run.release(value);
 		new (run.allocate(sizeof(SinkUp))) SinkDown(what, v);
 		return what.whoAttribute();
 	}
@@ -1213,7 +1213,7 @@ namespace PILS
 	const Step *SinkUp::pass(Runner &run, const Integer *value)
 	{
 		long begin = value->value;
-		value->release();
+        run.release(value);
 		long count = begin <= end ? end - begin + 1 : 0;
 		Pipe &pipe = *(run.sink = this + 1)->connectPipe(run);
 		new (run.allocate(sizeof(PipesourceIntegerStep))) PipesourceIntegerStep(begin, count, 1);
@@ -1249,7 +1249,7 @@ namespace PILS
 	const Step *SinkDown::pass(Runner &run, const Integer *value)
 	{
 		long begin = value->value;
-		value->release();
+        run.release(value);
 		long count = begin >= end ? begin - end + 1 : 0;
 		Pipe &pipe = *(run.sink = this + 1)->connectPipe(run);
 		new (run.allocate(sizeof(PipesourceIntegerStep))) PipesourceIntegerStep(begin, count, -1);
@@ -1299,7 +1299,7 @@ namespace PILS
 		for (size_t i = 0; i < count; i++) buffer[i] = range[count - i - 1];
 		const PilsString *result = PilsString::get(buffer, count);
         delete[] buffer;
-		anchor->release();
+        run.release(anchor);
 		return (run.sink = this + 1)->pass(run, result);
 	}
 
@@ -1377,7 +1377,7 @@ namespace PILS
 
 	Sink *PipingSplice::kick(Runner &run)
 	{
-		anchor->release();
+        run.release(anchor);
 		return this + 1;
 	}
 
@@ -1393,8 +1393,8 @@ namespace PILS
 
 	const Step *PipingSplice::pass(Runner &run, const Any *thing)
 	{
-		anchor->release();
-		Pipe &pipe = this->pipe;
+        run.release(anchor);
+        Pipe &pipe = this->pipe;
 		run.sink = this + 1;
 		return pipe.pipeItem(run, thing);
 	}
@@ -1406,8 +1406,8 @@ namespace PILS
 
 	const Step *PipingSplice::pipeEnd(Runner &run)
 	{
-		anchor->release();
-		return (Pipesource*)(run.sink = this + 1);
+        run.release(anchor);
+        return (Pipesource*)(run.sink = this + 1);
 	}
 
 	const Step *PipingSplice::pipeItem(Runner &run, const Any *thing)
@@ -1422,7 +1422,7 @@ namespace PILS
 
 	Sink *PipeListSeparator::kick(Runner &run)
 	{
-		separator->release();
+        run.release(separator);
 		return this + 1;
 	}
 
@@ -1441,8 +1441,8 @@ namespace PILS
 	const Step *PipeListSeparator::pipeEnd(Runner &run)
 	{
 		Pipe &next = this[1];
-		separator->release();
-		run.sink = &next;
+        run.release(separator);
+        run.sink = &next;
 		return next.pipeEnd(run);
 	}
 
@@ -1463,8 +1463,8 @@ namespace PILS
 
 	Sink *PipesourceInsert::kick(Runner &run)
 	{
-		item->release();
-		return this + 1;
+        run.release(item);
+        return this + 1;
 	}
 
 	const Step *PipesourceInsert::step_(Runner &run) const
@@ -1498,7 +1498,7 @@ namespace PILS
 	/*Copied from PipeEach - size is implied in: this + 1*/
 	Sink *PipeCounting::kick(Runner &run)
 	{
-		filter->release();
+        run.release(filter);
 		return this + 1;
 	}
 
@@ -1560,11 +1560,11 @@ namespace PILS
 
 	Sink *PipeMinMax::kick(Runner &run)
 	{
-		filter->release();
+        run.release(filter);
 		if(key)
 		{
-			key->release();
-			value->release();
+            run.release(key);
+            run.release(value);
 		}
 		return this + 1;
 	}
@@ -1582,8 +1582,8 @@ namespace PILS
 		const Any *value = this->value;
 		if (value)
 		{
-			key->release();
-			filter->release();
+            run.release(key);
+            run.release(filter);
 			run.sink = this + 1;
 			return value->passCounted(run);
 		}
@@ -1602,7 +1602,7 @@ namespace PILS
 
 	Sink *PipingMinMax::kick(Runner &run)
 	{
-		item->release();
+        run.release(item);
 		return this + 1;
 	}
 
@@ -1618,24 +1618,24 @@ namespace PILS
 		{
 			if (pipe.value)
 			{
-				pipe.key->release();
-				pipe.value->release();
+                run.release(pipe.key);
+                run.release(pipe.value);
 			}
 			pipe.key = value;
 			pipe.value = item;
 		}
 		else
 		{
-			value->release();
-			item->release();
+            run.release(value);
+            run.release(item);
 		}
 		return (Pipesource *)(run.sink = this + 1);
 	}
 
 	const Step *PipingMinMax::pass(Runner &run, const Any *value)
 	{
-		value->release();
-		item->release();
+        run.release(value);
+        run.release(item);
 		return (Pipesource *)(run.sink = this + 1);
 	}
 
@@ -1647,7 +1647,7 @@ namespace PILS
 
 	Sink *PipeSum::kick(Runner &run)
 	{
-		filter->release();
+        run.release(filter);
 		return this + 1;
 	}
 
@@ -1662,13 +1662,13 @@ namespace PILS
 	const Step *PipeSum::pipeEnd(Runner &run)
 	{
 		const double sum = this->sum;
-		filter->release();
+        run.release(filter);
 		return (run.sink = this + 1)->pass(run, sum);
 	}
 
 	Sink *PipingSum::kick(Runner &run)
 	{
-		item->release();
+        run.release(item);
 		return this + 1;
 	}
 
@@ -1705,24 +1705,24 @@ namespace PILS
 	const Step *PipingSum::pass(Runner &run, const Integer *value)
 	{
 		pipe.sum += value->value;
-		value->release();
-		item->release();
+        run.release(value);
+        run.release(item);
 		return (Pipesource *)(run.sink = this + 1);
 	}
 
 	const Step *PipingSum::pass(Runner &run, const Float *value)
 	{
 		pipe.sum += value->value;
-		value->release();
-		item->release();
-		return (Pipesource *)(run.sink = this + 1);
+        run.release(value);
+        run.release(item);
+        return (Pipesource *)(run.sink = this + 1);
 	}
 
 	const Step *PipingSum::pass(Runner &run, const Any *value)
 	{
-		value->release();
-		item->release();
-		return (Pipesource *)(run.sink = this + 1);
+        run.release(value);
+        run.release(item);
+        return (Pipesource *)(run.sink = this + 1);
 	}
 
 	bool Special::enumerate(Runner &run) const
@@ -1734,7 +1734,7 @@ namespace PILS
 	{
 		if (value->enumerate(run))
 		{
-			value->release();
+            run.release(value);
 			return pipeBegin(run);
 		}
 		else return ((Sink *)this)->pass(run, (const Any *)value);
@@ -1788,7 +1788,7 @@ namespace PILS
 		if (item->isNumber(value))
 		{
 			sum += value;
-			item->release();
+            run.release(item);
 			return run.sink;
 		}
 		Sink &next = this[1];
@@ -1804,7 +1804,7 @@ namespace PILS
 
 	Sink *PipeAggregateMinMax::kick(Runner &run)
 	{
-		if (item) item->release();
+        if (item) run.release(item);
 		return this + 1;
 	}
 
@@ -1828,10 +1828,10 @@ namespace PILS
 				item = constantCandidate;
 			else if (constantCandidate->order(item) < 0)
 			{
-				item->release();
+                run.release(item);
 					item = constantCandidate;
 			}
-			else constantCandidate->release();
+            else run.release(constantCandidate);
 			return run.sink;
 		}
 		Sink &next = this[1];
@@ -1847,10 +1847,10 @@ namespace PILS
 				item = constantCandidate;
 			else if (constantCandidate->order(item) > 0)
 			{
-				item->release();
+                run.release(item);
 					item = constantCandidate;
 			}
-			else constantCandidate->release();
+            else run.release(constantCandidate);
 			return run.sink;
 		}
 		Sink &next = this[1];

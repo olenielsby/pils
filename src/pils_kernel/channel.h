@@ -76,7 +76,7 @@ private:
 		}
 		Sink *kick(Runner &run)
 		{
-			listener->release();
+            run.release(listener);
 			run.calling.who = &oldWho;
 			return this + 1;
 		}
@@ -96,7 +96,7 @@ private:
 		const Step *error(Runner &run, const Any *error, const Express *what, const Any *who)
 		{
 			oldWho.retain();
-			who->release();
+            run.release(who);
 			return (run.sink = kick(run))->error(run, error, what, &oldWho);
 		}
 		const Step *miss(Runner &run)
@@ -119,7 +119,7 @@ private:
 		{}
 		Sink *kick(Runner &run)
 		{
-			listener->release();
+            run.release(listener);
 			run.calling.who = &oldWho;
 			return this + 1;
 		}

@@ -38,6 +38,7 @@ namespace PILS
 		virtual const Step *callingKnot(const Any &who, const Any &call);
 		virtual const Step *callingKnot(const Any &who, const Any &call, const Any *assignValue);
 		virtual const Step *thread(const Any &what);
+        void release(const Any *thing);
         // Bridge &bridge;
 		char *stackLimit;
 		char *pessimistStackLimit;
@@ -64,18 +65,210 @@ namespace PILS
         bool stackOverflow() const;
 		const Step *callingStackOverflow();
 		bool oldTimer;
+        static Runner &main();
 	};
 
     class PassingMind : public Strap::Sticker
 	{
     public:
-        explicit PassingMind(const Any &owner) : owner(owner) {}
+        PassingMind(Runner &run, const Any &owner) : owner(owner), Strap::Sticker (run) {}
         ~PassingMind();
         const Any *set(const Constant *key, const Any *value);
         const Any *get(const Constant &key) const;
         const Any &owner;
 	private:
         std::unordered_map<const Constant*, const Any*> map;
+    };
+
+    /* Template for node constructor maps
+     *
+     * If present, the joker value is stored outside the map
+     * and placed in front when attribute names and values
+     * are extracted.
+     */
+
+    template<class Value> class NodeBuilder
+    {
+    public:
+        typedef std::map<const Constant*, const Value*> map; // Value* won't compile
+        bool aim(const Constant *key)
+        {
+            if (aimed) goto bad;
+            if (key == (const Constant *)&Empty::singleton)
+            {
+                if (joker)
+                    goto bad;
+            }
+            else
+            {
+                if (mapping.count(key))
+                    goto bad;
+            }
+            aimed = key;
+            return true;
+        bad:
+            key->unduplicateReference();
+            return false;
+        }
+
+        void set(Value* value)
+        {
+            if (aimed == (const Constant *)&Empty::singleton) joker = value;
+            else mapping[aimed] = value;
+            aimed = nullptr;
+        }
+
+        size_t count()
+        {
+            return mapping.size() + (joker ? 1 : 0);
+        }
+
+        const Any *build();
+        // {
+        //     size_t count = this->count();
+        //     const Any *node;
+        //     switch (count)
+        //     {
+        //     case 0:
+        //         return nullptr;
+        //     case 1:
+        //         if (joker)
+        //         {
+        //             const ClicheTiny *cliche = head->clichefy();
+        //             node = cliche->ClicheShort::node(joker);
+        //             cliche->unduplicateReference();
+        //         }
+        //         else
+        //         {
+        //             typename map::iterator r = mapping.begin();
+        //             const ClicheShort *cliche = head->clichefy(r->first);
+        //             node = cliche->node(r->second);
+        //             cliche->unduplicateReference();
+        //         }
+        //         break;
+        //     default:
+        //     {
+        //         const Constant** attributes = new const Constant*[count];
+        //         const Constant** values = new const Constant*[count];
+        //         const Constant** a = attributes;
+        //         const Constant** v = values;
+        //         if (joker)
+        //         {
+        //             *a++ = &Empty::singleton;
+        //             *v++ = joker;
+        //         }
+        //         for (typename map::iterator r = mapping.begin(); r != mapping.end(); r++)
+        //         {
+        //             *a++ = r->first;
+        //             *v++ = (const Constant*)r->second;
+        //         }
+        //         const Cliche *cliche = head->clichefy(attributes, count);
+        //         delete[] attributes;
+        //         node = cliche->node(values);
+        //         delete[] values;
+        //         cliche->unduplicateReference();
+        //     }
+        //     }
+        //     alive = false;
+        //     return node;
+        // }
+        NodeBuilder(Runner &run, const Constant *head)
+            : run(run), head(head), aimed(nullptr), joker(nullptr), alive(true)
+        {}
+
+        ~NodeBuilder()
+        {
+            if (aimed) aimed->unduplicateReference();
+            if (alive)
+            {
+                head->unduplicateReference();
+                if (joker)
+                {
+                    joker->unduplicateReference();
+                    Empty::singleton.unduplicateReference();
+                }
+                for (typename map::iterator r = mapping.begin();
+                     r != mapping.end();
+                     r++)
+                {
+                    run.release(r->first);
+                    run.release(r->second);
+                }
+            }
+        }
+        const Constant *head;
+    protected:
+        Runner &run;
+    private:
+        map mapping;
+        const Constant *aimed;
+        Value* joker;
+        bool alive;
+    };
+
+    template<>
+    const Any *NodeBuilder<const Constant>::build();
+
+    template<>
+    const Any *NodeBuilder<const Any>::build();
+
+    class ClicheBuilder
+    {
+    public:
+        bool add(const Constant *key);
+        bool add(const Constant &key);
+        const Cliche *build();
+        ClicheBuilder(const Constant *head)
+            : head(head), joker(false), alive(true)
+        {}
+        ~ClicheBuilder();
+    private:
+        std::set<const Constant*> setting;
+        const Constant *head;
+        bool joker;
+        bool alive;
+    };
+
+    template <class Element, class Result> class ListBuilder
+    {
+    public:
+        typedef std::vector<Element*> vector;
+        void add(Element* element)
+        {
+            listing.insert(listing.end(), element);
+        }
+        Result *build()
+        {
+            size_t count = listing.size();
+            Element **element = new Element*[count];
+            Element **e = element;
+            for (typename vector::iterator r = listing.begin(); r != listing.end(); r++)
+                *e++ = (Element*)*r;
+            Result *list = building(element, count);
+            alive = false;
+            delete [] element;
+            return list;
+        }
+        explicit ListBuilder(Runner &run) : run(run), alive(true)
+        {
+        }
+        ~ListBuilder()
+        {
+            if (alive)
+            {
+                for (typename vector::iterator r = listing.begin(); r != listing.end(); r++)
+                {
+                    run.release(*r);
+                }
+            }
+        }
+
+    protected:
+        Runner &run;
+    private:
+        static Result* building(Element *const *element, size_t count);
+        vector listing;
+        bool alive;
     };
 
     class Kickable

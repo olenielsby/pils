@@ -105,7 +105,7 @@ namespace PILS
 	Sink *CatchConstant::kick(Runner &run)
 	{
 		run.sinkTagChain = chain;
-		run.where_->release();
+        run.release(run.where_);
 		run.where_ = &where_;
 		run.calling.what = &what;
 		return this + 1;
@@ -114,8 +114,8 @@ namespace PILS
 	Sink *CatchNodeConstant::kick(Runner &run)
 	{
 		run.sinkTagChain = chain;
-		run.where_->release();
-		run.where_ = &where_;
+        run.release(run.where_);
+        run.where_ = &where_;
 		run.calling.what = &what;
 		return this + 1;
 	}
@@ -123,8 +123,8 @@ namespace PILS
 	Sink *CatchListConstant::kick(Runner &run)
 	{
 		run.sinkTagChain = chain;
-		run.where_->release();
-		run.where_ = &where_;
+        run.release(run.where_);
+        run.where_ = &where_;
 		run.calling.what = &what;
 		return this + 1;
 	}
@@ -132,8 +132,8 @@ namespace PILS
 	Sink *CatchEmpty::kick(Runner &run)
 	{
 		run.sinkTagChain = chain;
-		run.where_->release();
-		run.where_ = &where_;
+        run.release(run.where_);
+        run.where_ = &where_;
 		run.calling.what = &what;
 		return this + 1;
 	}
@@ -141,8 +141,8 @@ namespace PILS
 	Sink *CatchNodeExpress::kick(Runner &run)
 	{
 		run.sinkTagChain = chain;
-		run.where_->release();
-		run.where_ = &where_;
+        run.release(run.where_);
+        run.where_ = &where_;
 		run.calling.what = &what;
 		return this + 1;
 	}
@@ -150,8 +150,8 @@ namespace PILS
 	Sink *CatchListExpress::kick(Runner &run)
 	{
 		run.sinkTagChain = chain;
-		run.where_->release();
-		run.where_ = &where_;
+        run.release(run.where_);
+        run.where_ = &where_;
 		run.calling.what = &what;
 		return this + 1;
 	}
@@ -159,9 +159,9 @@ namespace PILS
 	Sink *CatchAssign::kick(Runner &run)
 	{
 		run.sinkTagChain = chain;
-		run.where_->release();
-		run.where_ = &where_;
-		assignValue->release();
+        run.release(run.where_);
+        run.where_ = &where_;
+        run.release(assignValue);
 		run.calling.what = &what;
 		return this + 1;
 	}
@@ -444,8 +444,8 @@ namespace PILS
 
 	const Step *SinkTrying::error(Runner &run, const Any *error, const Express *what, const Any *who)
 	{
-		what->release();
-		who->release();
+        run.release(what);
+        run.release(who);
 		what = &catching.what;
 		who = &catching.who;
 		what->retain();
@@ -563,7 +563,7 @@ namespace PILS
 	Sink *SinkTryCalling::kick(Runner &run)
 	{
 		run.where_ = where_;
-		call->release();
+        run.release(call);
 		return this + 1;
 	}
 
@@ -590,8 +590,8 @@ namespace PILS
 	Sink *SinkTryCallingAround::kick(Runner &run)
 	{
 		run.where_ = where_;
-		call->release();
-		who->release();
+        run.release(call);
+        run.release(who);
 		return this + 1;
 	}
 

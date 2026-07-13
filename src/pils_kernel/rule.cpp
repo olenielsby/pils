@@ -197,7 +197,7 @@ namespace PILS
 	{
 		if (run.stackOverflow())
 		{
-			assignValue->release();
+            run.release(assignValue);
 			return run.callingStackOverflow();
 		}
 		run.calling.closure = this;
@@ -223,7 +223,7 @@ namespace PILS
 		const Constant &call = this->call;
 		const void *key = &call;
 		run.sinkTagChain = chain;
-		run.where_->release();
+        run.release(run.where_);
 		run.where_ = &where_;
 		run.calling.closure = &closure;
 		run.calling.who = &who;
@@ -239,8 +239,8 @@ namespace PILS
 		const ListConstant &call = this->call;
 		const void *key = (const char*)call.count + 1;
 		run.sinkTagChain = chain;
-		run.where_->release();
-		run.where_ = &where_;
+        run.release(run.where_);
+        run.where_ = &where_;
 		run.calling.closure = &closure;
 		run.calling.who = &who;
 		run.calling.what = &what;
@@ -255,8 +255,8 @@ namespace PILS
 		const NodeConstant &call = this->call;
 		const void *key = (const char*)call.cliche + 1;
 		run.sinkTagChain = chain;
-		run.where_->release();
-		run.where_ = &where_;
+        run.release(run.where_);
+        run.where_ = &where_;
 		run.calling.closure = &closure;
 		run.calling.who = &who;
 		run.calling.what = &what;
@@ -271,8 +271,8 @@ namespace PILS
 		const Empty &call = this->call;
 		const void *key = (const char*)call.count + 1;
 		run.sinkTagChain = chain;
-		run.where_->release();
-		run.where_ = &where_;
+        run.release(run.where_);
+        run.where_ = &where_;
 		run.calling.closure = &closure;
 		run.calling.who = &who;
 		run.calling.what = &what;
@@ -287,8 +287,8 @@ namespace PILS
 		const ListExpress &call = this->call;
 		const void *key = (const char*)call.count + 1;
 		run.sinkTagChain = chain;
-		run.where_->release();
-		run.where_ = &where_;
+        run.release(run.where_);
+        run.where_ = &where_;
 		run.calling.closure = &closure;
 		run.calling.who = &who;
 		run.calling.what = &what;
@@ -303,8 +303,8 @@ namespace PILS
 		const NodeExpress &call = this->call;
 		const void *key = (const char*)call.cliche + 1;
 		run.sinkTagChain = chain;
-		run.where_->release();
-		run.where_ = &where_;
+        run.release(run.where_);
+        run.where_ = &where_;
 		run.calling.closure = &closure;
 		run.calling.who = &who;
 		run.calling.what = &what;
@@ -319,8 +319,8 @@ namespace PILS
 		const Any &call = this->call;
 		const Any *assignValue = this->assignValue;
 		run.sinkTagChain = chain;
-		run.where_->release();
-		run.where_ = &where_;
+        run.release(run.where_);
+        run.where_ = &where_;
 		run.calling.closure = &closure;
 		run.calling.who = &who;
 		run.calling.what = &what;
@@ -336,8 +336,8 @@ namespace PILS
 		while (run.sink != this) run.sink = run.sink->kick(run);
 		const Constant &call = this->call;
 		run.sinkTagChain = chain;
-		run.where_->release();
-		run.where_ = &where_;
+        run.release(run.where_);
+        run.where_ = &where_;
 		run.calling.closure = &closure;
 		run.calling.who = &who;
 		run.calling.what = &what;
@@ -350,8 +350,8 @@ namespace PILS
 		while (run.sink != this) run.sink = run.sink->kick(run);
 		const ListConstant &call = this->call;
 		run.sinkTagChain = chain;
-		run.where_->release();
-		run.where_ = &where_;
+        run.release(run.where_);
+        run.where_ = &where_;
 		run.calling.closure = &closure;
 		run.calling.who = &who;
 		run.calling.what = &what;
@@ -364,8 +364,8 @@ namespace PILS
 		while (run.sink != this) run.sink = run.sink->kick(run);
 		const NodeConstant &call = this->call;
 		run.sinkTagChain = chain;
-		run.where_->release();
-		run.where_ = &where_;
+        run.release(run.where_);
+        run.where_ = &where_;
 		run.calling.closure = &closure;
 		run.calling.who = &who;
 		run.calling.what = &what;
@@ -378,8 +378,8 @@ namespace PILS
 		while (run.sink != this) run.sink = run.sink->kick(run);
 		const Empty &call = this->call;
 		run.sinkTagChain = chain;
-		run.where_->release();
-		run.where_ = &where_;
+        run.release(run.where_);
+        run.where_ = &where_;
 		run.calling.closure = &closure;
 		run.calling.who = &who;
 		run.calling.what = &what;
@@ -392,8 +392,8 @@ namespace PILS
 		while (run.sink != this) run.sink = run.sink->kick(run);
 		const ListExpress &call = this->call;
 		run.sinkTagChain = chain;
-		run.where_->release();
-		run.where_ = &where_;
+        run.release(run.where_);
+        run.where_ = &where_;
 		run.calling.closure = &closure;
 		run.calling.who = &who;
 		run.calling.what = &what;
@@ -406,8 +406,8 @@ namespace PILS
 		while (run.sink != this) run.sink = run.sink->kick(run);
 		const NodeExpress &call = this->call;
 		run.sinkTagChain = chain;
-		run.where_->release();
-		run.where_ = &where_;
+        run.release(run.where_);
+        run.where_ = &where_;
 		run.calling.closure = &closure;
 		run.calling.who = &who;
 		run.calling.what = &what;
@@ -421,8 +421,8 @@ namespace PILS
 		const Any &call = this->call;
 		const Any *assignValue = this->assignValue;
 		run.sinkTagChain = chain;
-		run.where_->release();
-		run.where_ = &where_;
+        run.release(run.where_);
+        run.where_ = &where_;
 		run.calling.closure = &closure;
 		run.calling.who = &who;
 		run.calling.what = &what;

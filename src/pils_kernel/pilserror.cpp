@@ -25,9 +25,9 @@ namespace PILS
 
 	Sink *SinkErrorCall::kick(Runner &run)
 	{
-		error->release();
-		what->release();
-		who->release();
+        run.release(error);
+        run.release(what);
+        run.release(who);
 		return this + 1;
 	}
 

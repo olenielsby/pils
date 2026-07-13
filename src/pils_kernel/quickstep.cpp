@@ -534,7 +534,7 @@ namespace PILS
 
 	const Step *SinkCompiledStep::called(Runner &run, const Any &call, const Any *assignValue)
 	{
-		assignValue->release();
+        run.release(assignValue);
 		return this;
 	}
 
@@ -623,7 +623,7 @@ namespace PILS
 
 	const Step *SinkCompiledOk::called(Runner &run, const Any &call, const Any *assignValue)
 	{
-		assignValue->release();
+        run.release(assignValue);
 		const Any *thing = this->thing;
 		const Any *whereabout = this->whereabout;
 		return (run.sink = this + 1)->tailStep(run, thing, whereabout);
@@ -712,7 +712,7 @@ namespace PILS
 
 	Sink *SinkCompiledAny::kick(Runner &run)
 	{
-		run.where_->release();
+        run.release(run.where_);
 		run.where_ = where_;
 		return this + 1;
 	}
@@ -2379,7 +2379,7 @@ namespace PILS
 		{
 			*--stack = (void*)&value;
 			const QuickCalling *next = thing->matching(run, stack, this[1]);
-			thing->release();
+            run.release(thing);
 			return next;
 		}
 		else return fail.target;

@@ -4,7 +4,7 @@
 namespace PILS
 {
     Runner::Runner(size_t stackSize)
-        : oldTimer(true)
+    : oldTimer(true), threadStrapSticker(*this)
 	{
 		stackLimit = new char[stackSize];
 		pessimistStackLimit = stackLimit + sizeof(void*) * 0x1000;
@@ -18,7 +18,7 @@ namespace PILS
 	Runner::~Runner()
 	{
 		while(sink) sink = sink->kick(*this);
-		where_->release();
+        release(where_);
 	}
 
 	void Runner::run(const Step *step_)
@@ -27,7 +27,17 @@ namespace PILS
 			step_ = step_->step_(*this);
 	}
 
-	bool Runner::isMainThread() const
+    void Runner::release(const Any *thing)
+    {
+        assert(thing);
+        if(thing->refcount.release())
+        {
+            Mutex::Lock lock(Mutex::singleMutex);
+            const_cast<Any*>(thing)->disposeRoot();
+        }
+    }
+
+    bool Runner::isMainThread() const
 	{
 		return true;
 	}
@@ -100,7 +110,7 @@ namespace PILS
 
 	Sink *SinkWhereabout::pushWhere(Runner &run, const Any *where_)
 	{
-		run.where_->release();
+        run.release(run.where_);
 		run.where_ = where_;
 		return run.sink;
 	}
@@ -112,8 +122,8 @@ namespace PILS
 
 	Sink *SinkHoldTail::pushWhere(Runner &run, const Any *where_)
 	{
-		run.where_->release();
-		run.where_ = where_;
+        run.release(run.where_);
+        run.where_ = where_;
 		return run.sink;
 	}
 
@@ -390,8 +400,8 @@ namespace PILS
 
 	const Step *SinkFinal::pass(Runner &run, const Any *value)
 	{
-		run.where_->release();
-		run.where_ = value;
+        run.release(run.where_);
+        run.where_ = value;
 		return &Runner::Done::singleton;
 	}
 
@@ -838,7 +848,7 @@ namespace PILS
 
 	Sink *SinkWho::kick(Runner &run)
 	{
-		argument->release();
+        run.release(argument);
 		return this + 1;
 	}
 
@@ -871,7 +881,7 @@ namespace PILS
 
 	Sink *SinkWhoOperationAny::kick(Runner &run)
 	{
-		operand->release();
+        run.release(operand);
 		return this + 1;
 	}
 
@@ -989,7 +999,7 @@ namespace PILS
 	}
 	const Step *SinkForget::pass(Runner &run, const Any *value)
 	{
-		value->release();
+        run.release(value);
 		return pass(run, 0L);
 	}
 
@@ -1000,7 +1010,7 @@ namespace PILS
 
 	Sink *SinkWhereabout::kick(Runner &run)
 	{
-		run.where_->release();
+        run.release(run.where_);
 		run.where_ = where_;
 		return this + 1;
 	}
@@ -1045,7 +1055,7 @@ namespace PILS
 
 	Sink *SinkHolding::kick(Runner &run)
 	{
-		thing->release();
+        run.release(thing);
 		return this + 1;
 	}
 
@@ -1057,122 +1067,122 @@ namespace PILS
 
 	const Step *SinkHoldCalling::pass(Runner &run, long value)
 	{
-		thing->release();
+        run.release(thing);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldCalling::pass(Runner &run, double value)
 	{
-		thing->release();
+        run.release(thing);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldCalling::pass(Runner &run, const Integer *value)
 	{
-		thing->release();
+        run.release(thing);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldCalling::pass(Runner &run, const Float *value)
 	{
-		thing->release();
+        run.release(thing);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldCalling::pass(Runner &run, const Timestamp *value)
 	{
-		thing->release();
+        run.release(thing);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldCalling::pass(Runner &run, const Duration *value)
 	{
-		thing->release();
+        run.release(thing);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldCalling::pass(Runner &run, const PilsDate *value)
 	{
-		thing->release();
+        run.release(thing);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldCalling::pass(Runner &run, const PilsString *value)
 	{
-		thing->release();
+        run.release(thing);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldCalling::pass(Runner &run, const Cliche *value)
 	{
-		thing->release();
+        run.release(thing);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldCalling::pass(Runner &run, const Special *value)
 	{
-		thing->release();
+        run.release(thing);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldCalling::pass(Runner &run, const ListConstant *value)
 	{
-		thing->release();
+        run.release(thing);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldCalling::pass(Runner &run, const ListExpress *value)
 	{
-		thing->release();
+        run.release(thing);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldCalling::pass(Runner &run, const NodeConstantLong *value)
 	{
-		thing->release();
+        run.release(thing);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldCalling::pass(Runner &run, const NodeConstantShort *value)
 	{
-		thing->release();
+        run.release(thing);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldCalling::pass(Runner &run, const NodeExpressLong *value)
 	{
-		thing->release();
+        run.release(thing);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldCalling::pass(Runner &run, const NodeExpressShort *value)
 	{
-		thing->release();
+        run.release(thing);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldCalling::pass(Runner &run, const Any *value)
 	{
-		thing->release();
+        run.release(thing);
 		run.sink = this + 1;
 		return value->passCounted(run);
 	}
 
 	const Step *SinkHoldCalling::pass(Runner &run, PassingMind *mind, const Express *what)
 	{
-		thing->release();
+        run.release(thing);
 		return (run.sink = this + 1)->pass(run, mind, what);
 	}
 
 	const Step *SinkHoldCalling::tailStep(Runner &run, const Any *thing, const Any *where_)
 	{
-		this->thing->release();
+        run.release(this->thing);
 		return (run.sink = this + 1)->tailStep(run, thing, where_);
 	}
 
 	const Step *SinkHoldCalling::tailStep(Runner &run, const Any *thing)
 	{
-		this->thing->release();
+        run.release(this->thing);
 		return (run.sink = this + 1)->tailStep(run, thing);
 	}
 
@@ -1189,161 +1199,161 @@ namespace PILS
 
 	Pipe *SinkHoldCalling::connectPipe(Runner &run)
 	{
-		this->thing->release();
+        run.release(this->thing);
 		return (run.sink = this + 1)->connectPipe(run);
 	}
 
 	const Step *SinkHoldTail::pass(Runner &run, long value)
 	{
-		thing->release();
-		run.where_->release();
+        run.release(thing);
+        run.release(run.where_);
 		run.where_ = whence;
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldTail::pass(Runner &run, double value)
 	{
-		thing->release();
-		run.where_->release();
+        run.release(thing);
+        run.release(run.where_);;
 		run.where_ = whence;
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldTail::pass(Runner &run, const Integer *value)
 	{
-		thing->release();
-		run.where_->release();
+        run.release(thing);
+        run.release(run.where_);;
 		run.where_ = whence;
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldTail::pass(Runner &run, const Float *value)
 	{
-		thing->release();
-		run.where_->release();
+        run.release(thing);
+        run.release(run.where_);;
 		run.where_ = whence;
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldTail::pass(Runner &run, const Timestamp *value)
 	{
-		thing->release();
-		run.where_->release();
+        run.release(thing);
+        run.release(run.where_);;
 		run.where_ = whence;
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldTail::pass(Runner &run, const Duration *value)
 	{
-		thing->release();
-		run.where_->release();
+        run.release(thing);
+        run.release(run.where_);;
 		run.where_ = whence;
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldTail::pass(Runner &run, const PilsDate *value)
 	{
-		thing->release();
-		run.where_->release();
+        run.release(thing);
+        run.release(run.where_);;
 		run.where_ = whence;
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldTail::pass(Runner &run, const PilsString *value)
 	{
-		thing->release();
-		run.where_->release();
+        run.release(thing);
+        run.release(run.where_);;
 		run.where_ = whence;
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldTail::pass(Runner &run, const Cliche *value)
 	{
-		thing->release();
-		run.where_->release();
+        run.release(thing);
+        run.release(run.where_);;
 		run.where_ = whence;
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldTail::pass(Runner &run, const ListConstant *value)
 	{
-		thing->release();
-		run.where_->release();
+        run.release(thing);
+        run.release(run.where_);
 		run.where_ = whence;
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldTail::pass(Runner &run, const ListExpress *value)
 	{
-		thing->release();
-		run.where_->release();
-		run.where_ = whence;
+        run.release(thing);
+        run.release(run.where_);
+        run.where_ = whence;
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldTail::pass(Runner &run, const NodeConstantLong *value)
 	{
-		thing->release();
-		run.where_->release();
-		run.where_ = whence;
+        run.release(thing);
+        run.release(run.where_);
+        run.where_ = whence;
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldTail::pass(Runner &run, const NodeConstantShort *value)
 	{
-		thing->release();
-		run.where_->release();
-		run.where_ = whence;
+        run.release(thing);
+        run.release(run.where_);
+        run.where_ = whence;
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldTail::pass(Runner &run, const NodeExpressLong *value)
 	{
-		thing->release();
-		run.where_->release();
-		run.where_ = whence;
+        run.release(thing);
+        run.release(run.where_);
+        run.where_ = whence;
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldTail::pass(Runner &run, const NodeExpressShort *value)
 	{
-		thing->release();
-		run.where_->release();
-		run.where_ = whence;
+        run.release(thing);
+        run.release(run.where_);
+        run.where_ = whence;
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkHoldTail::pass(Runner &run, const Any *value)
 	{
-		thing->release();
-		run.where_->release();
-		run.where_ = whence;
+        run.release(thing);
+        run.release(run.where_);
+        run.where_ = whence;
 		run.sink = this + 1;
 		return value->passCounted(run);
 	}
 
 	Sink *SinkHoldTail::kick(Runner &run)
 	{
-		thing->release();
-		run.where_->release();
-		run.where_ = whence;
+        run.release(thing);
+        run.release(run.where_);
+        run.where_ = whence;
 		return this + 1;
 	}
 
 	const Step *SinkHoldTail::tailStep(Runner &run, const Any *thing, const Any *where_)
 	{
 		//reuse sink
-		run.where_->release();
-		run.where_ = where_;
-		this->thing->release();
-		return this->thing = thing;
+        run.release(run.where_);
+        run.where_ = where_;
+        run.release(this->thing);
+        return this->thing = thing;
 	}
 
 	const Step *SinkHoldTail::tailStep(Runner &run, const Any *thing)
 	{
 		//reuse sink
-		this->thing->release();
-		return this->thing = thing;
+        run.release(this->thing);
+        return this->thing = thing;
 	}
 
 	bool SinkHoldTail::needsResult()
@@ -1489,7 +1499,7 @@ namespace PILS
 	{
 		const Any *const *end = (const Any *const*)(this + 1) + node.cliche->count;
 		for (const Any *const* finger = done; finger < end; finger++)
-			(*finger)->release();
+            run.release(*finger);
 		return (Sink*)end;
 	}
 
@@ -1546,7 +1556,7 @@ namespace PILS
 
 	const Step *MissSpecial::called(Runner &run, const Any &call, const Any *assignValue)
 	{
-		assignValue->release();
+        run.release(assignValue);
 		return miss(run);
 	}
 
@@ -1564,8 +1574,8 @@ namespace PILS
     PassingMind::~PassingMind()
 	{
         for (auto& [k, v] : map) {
-            k->release();
-            v->release();
+            run.release(k);
+            run.release(v);
         }
 	}
 
@@ -1593,4 +1603,104 @@ namespace PILS
         }
         else return nullptr;
 	}
+
+    template <> const Any *NodeBuilder<const Constant>::build()
+    {
+        size_t count = this->count();
+        const Any *node;
+        switch (count)
+        {
+        case 0:
+            return nullptr;
+        case 1:
+            if (joker)
+            {
+                const ClicheTiny *cliche = head->clichefy();
+                node = cliche->ClicheShort::node(joker);
+                cliche->unduplicateReference();
+            }
+            else
+            {
+                map::iterator run = mapping.begin();
+                const ClicheShort *cliche = head->clichefy(run->first);
+                node = cliche->node(run->second);
+                cliche->unduplicateReference();
+            }
+            break;
+        default:
+        {
+            const Constant** attributes = new const Constant*[count];
+            const Constant** values = new const Constant*[count];
+            const Constant** a = attributes;
+            const Constant** v = values;
+            if (joker)
+            {
+                *a++ = &Empty::singleton;
+                *v++ = joker;
+            }
+            for (map::iterator run = mapping.begin(); run != mapping.end(); run++)
+            {
+                *a++ = run->first;
+                *v++ = (const Constant*)run->second;
+            }
+            const Cliche *cliche = head->clichefy(attributes, count);
+            delete[] attributes;
+            node = cliche->node(values);
+            delete[] values;
+            cliche->unduplicateReference();
+        }
+        }
+        alive = false;
+        return node;
+    }
+
+    template <> const Any *NodeBuilder<const Any>::build()
+    {
+        size_t count = this->count();
+        const Any *node;
+        switch (count)
+        {
+        case 0:
+            return nullptr;
+        case 1:
+            if (joker)
+            {
+                const ClicheTiny *cliche = head->clichefy();
+                node = cliche->ClicheShort::node(joker);
+                run.release(cliche);
+            }
+            else
+            {
+                map::iterator r = mapping.begin();
+                const ClicheShort *cliche = head->clichefy(r->first);
+                node = cliche->node(r->second);
+                run.release(cliche);
+            }
+            break;
+        default:
+            {
+                const Constant** attributes = new const Constant*[count];
+                const Any** values = new const Any*[count];
+                const Constant** a = attributes;
+                const Any** v = values;
+                if (joker)
+                {
+                    *a++ = &Empty::singleton;
+                    *v++ = joker;
+                }
+                for (map::iterator r = mapping.begin(); r != mapping.end(); r++)
+                {
+                    *a++ = r->first;
+                    *v++ = r->second;
+                }
+                const Cliche *cliche = head->clichefy(attributes, count);
+                delete[] attributes;
+                node = cliche->node(values);
+                delete[] values;
+                run.release(cliche);
+            }
+        }
+        alive = false;
+        return node;
+    }
 }

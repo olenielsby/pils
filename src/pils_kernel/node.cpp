@@ -37,7 +37,7 @@ namespace PILS
 	{
 		const Cliche *cliche = node->cliche;
 		cliche->retain();
-		node->release();
+        run.release(node);
 		return (run.sink = this + 1)->pass(run, cliche);
 	}
 
@@ -45,7 +45,7 @@ namespace PILS
 	{
 		const Cliche *cliche = node->cliche;
 		cliche->retain();
-		node->release();
+        run.release(node);
 		return (run.sink = this + 1)->pass(run, cliche);
 	}
 
@@ -53,7 +53,7 @@ namespace PILS
 	{
 		const Cliche *cliche = node->cliche;
 		cliche->retain();
-		node->release();
+        run.release(node);
 		return (run.sink = this + 1)->pass(run, cliche);
 	}
 
@@ -61,7 +61,7 @@ namespace PILS
 	{
 		const Cliche *cliche = node->cliche;
 		cliche->retain();
-		node->release();
+        run.release(node);
 		return (run.sink = this + 1)->pass(run, cliche);
 	}
 
@@ -121,7 +121,7 @@ namespace PILS
 	{
 		const Constant *head = cliche->head;
 		head->retain();
-		cliche->release();
+        run.release(cliche);
 		run.sink = this + 1;
 		return head->passCounted(run);
 	}
@@ -130,7 +130,7 @@ namespace PILS
 	{
 		const Constant *head = node->cliche->head;
 		head->retain();
-		node->release();
+        run.release(node);
 		run.sink = this + 1;
 		return head->passCounted(run);
 	}
@@ -139,7 +139,7 @@ namespace PILS
 	{
 		const Constant *head = node->cliche->head;
 		head->retain();
-		node->release();
+        run.release(node);
 		run.sink = this + 1;
 		return head->passCounted(run);
 	}
@@ -148,7 +148,7 @@ namespace PILS
 	{
 		const Constant *head = node->cliche->head;
 		head->retain();
-		node->release();
+        run.release(node);
 		run.sink = this + 1;
 		return head->passCounted(run);
 	}
@@ -157,7 +157,7 @@ namespace PILS
 	{
 		const Constant *head = node->cliche->head;
 		head->retain();
-		node->release();
+        run.release(node);
 		run.sink = this + 1;
 		return head->passCounted(run);
 	}
@@ -187,7 +187,7 @@ namespace PILS
 
 	Sink *SinkHeadset::kick(Runner &run)
 	{
-		name->release();
+        run.release(name);
 		return this + 1;
 	}
 
@@ -197,7 +197,7 @@ namespace PILS
 		if (cliche->count == 1) result = name->clichefy(cliche->attributes[0]);
 		else result = name->clichefy(cliche->attributes, cliche->count);
 		for (size_t i = 0; i < cliche->count; i++) result->attributes[i]->retain();
-		cliche->release();
+        run.release(cliche);
 		return (run.sink = this + 1)->pass(run, result);
 	}
 
@@ -209,7 +209,7 @@ namespace PILS
 		const ClicheShort *cliche = name->clichefy(attribute);
 		const Any *result = cliche->node(node->element[0]);
 		cliche->unduplicateReference();
-		node->release();
+        run.release(node);
 		run.sink = this + 1;
 		return result->passCounted(run);
 	}
@@ -222,7 +222,7 @@ namespace PILS
 		for (size_t i = 0; i < count; i++) node->element[i]->retain();
 		const Any *result = cliche->node(node->element);
 		cliche->unduplicateReference();
-		node->release();
+        run.release(node);
 		run.sink = this + 1;
 		return result->passCounted(run);
 	}
@@ -235,7 +235,7 @@ namespace PILS
 		const ClicheShort *cliche = name->clichefy(attribute);
 		const Any *result = cliche->node(node->element[0]);
 		cliche->unduplicateReference();
-		node->release();
+        run.release(node);
 		run.sink = this + 1;
 		return result->passCounted(run);
 	}
@@ -248,7 +248,7 @@ namespace PILS
 		for (size_t i = 0; i < count; i++) node->element[i]->retain();
 		const Any *result = cliche->node(node->element);
 		cliche->unduplicateReference();
-		node->release();
+        run.release(node);
 		run.sink = this + 1;
 		return result->passCounted(run);
 	}
@@ -308,8 +308,8 @@ namespace PILS
 
 	Sink *PipesourceLegs::kick(Runner &run)
 	{
-		who->release();
-		node->release();
+        run.release(who);
+        run.release(node);
 		return this + 1;
 	}
 
@@ -327,15 +327,15 @@ namespace PILS
 		else
 		{
 			run.sink = &pipe;
-			who->release();
-			node->release();
+            run.release(who);
+            run.release(node);
 			return pipe.pipeEnd(run);
 		}
 	}
 
 	const Step *PipingLegs::called(Runner &run, const Any &call, const Any *assignValue)
 	{
-		assignValue->release();
+        run.release(assignValue);
 		return (Pipesource*)(run.sink = this + 1);
 	}
 
@@ -348,7 +348,7 @@ namespace PILS
 
 	Sink *SinkBindMerge::kick(Runner &run)
 	{
-		operand->release();
+        run.release(operand);
 		return this + 1;
 	}
 
@@ -361,10 +361,10 @@ namespace PILS
 		{
 			if (b->head == &Empty::singleton)
 			{
-				b->release();
+                run.release(b);
 				b = a;
 			}
-			else a->release();
+            else run.release(a);
 		}
 		else
 		{
@@ -373,8 +373,8 @@ namespace PILS
 			const Constant *name = b->head;
 			if (name == &Empty::singleton) name = a->head;
 			name->retain();
-			a->release();
-			b->release();
+            run.release(a);
+            run.release(b);
 			b = name->clichefy(names, count);
             delete[] names;
 		}
@@ -418,7 +418,7 @@ namespace PILS
 					const Any *value = elements[1];
 					name->retain();
 					value->retain();
-					operand->release();
+                    run.release(operand);
 					Builtin::name.anyway.retain();
 					const ClicheShort &cliche = *Builtin::name.anyway.clichefy(name);
 					const Any *result = cliche.node(value);
@@ -508,8 +508,8 @@ namespace PILS
 		if (result)
 		{
             delete[] scratch;
-			node->release();
-			operand->release();
+            run.release(node);
+            run.release(operand);
 			run.sink = this + 1;
 			return result->passCounted(run);
 		}
@@ -645,7 +645,7 @@ namespace PILS
             const ClicheLong *cliche = Empty::get()->clichefy(attributes, 2);
 			const NodeExpressLong *result = (const NodeExpressLong *)cliche->node(values);
 			cliche->unduplicateReference();
-			operand->release();
+            run.release(operand);
 			return (run.sink = this + 1)->pass(run, result);
 		}
 		else
@@ -712,8 +712,8 @@ namespace PILS
 				result = (NodeExpressLong *)oldCliche.node(scratch);
 			}
             delete[] scratch;
-			who->release();
-			operand->release();
+            run.release(who);
+            run.release(operand);
 			return (run.sink = this + 1)->pass(run, result);
 		}
 		else return pass(run, (const Any *)who);
@@ -732,7 +732,7 @@ namespace PILS
 
 	Sink *SinkUntypedConstantOperation::kick(Runner &run)
 	{
-		operand->release();
+        run.release(operand);
 		return this + 1;
 	}
 
@@ -767,7 +767,7 @@ namespace PILS
 			cliche->head->retain();
             delete[] attributeBuffer;
 			operand->unduplicateReference();
-			cliche->release();
+            run.release(cliche);
 			return (run.sink = this + 1)->pass(run, newCliche);
 		}
 		else return (run.sink = kick(run))->pass(run, cliche);
@@ -808,7 +808,7 @@ namespace PILS
             delete[] valueBuffer;
             delete[] attributeBuffer;
 			operand->unduplicateReference();
-			node->release();
+            run.release(node);
 			run.sink = this + 1;
 			return result->passCounted(run);
 		}
@@ -850,7 +850,7 @@ namespace PILS
             delete[] valueBuffer;
             delete[] attributeBuffer;
 			operand->unduplicateReference();
-			node->release();
+            run.release(node);
 			run.sink = this + 1;
 			return result->passCounted(run);
 		}
@@ -876,7 +876,7 @@ namespace PILS
 			ClicheBuilder build(operand);
 			for (size_t i = 0; i < count; i++)
 				build.add(*list->element[i]);
-			list->release();
+            run.release(list);
 			const Cliche *result = build.build();
 			return (run.sink = this + 1)->pass(run, result);
 		}

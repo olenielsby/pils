@@ -433,7 +433,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -444,20 +444,20 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
 
 	const Step *SinkWhoEqualRawInteger::pass(Runner &run, const PilsString *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualRawInteger::pass(Runner &run, const Any *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
@@ -500,7 +500,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -511,20 +511,20 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
 
 	const Step *SinkWhoEqualRawFloat::pass(Runner &run, const PilsString *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualRawFloat::pass(Runner &run, const Any *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
@@ -595,91 +595,91 @@ namespace PILS
 
 	const Step *SinkWhoEqualUncountedBad::pass(Runner &run, const Integer *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualUncountedBad::pass(Runner &run, const Float *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualUncountedBad::pass(Runner &run, const PilsString *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualUncountedBad::pass(Runner &run, const Timestamp *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualUncountedBad::pass(Runner &run, const Duration *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualUncountedBad::pass(Runner &run, const PilsDate *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualUncountedBad::pass(Runner &run, const Cliche *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualUncountedBad::pass(Runner &run, const ListConstant *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualUncountedBad::pass(Runner &run, const NodeConstantShort *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualUncountedBad::pass(Runner &run, const NodeConstantLong *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualUncountedBad::pass(Runner &run, const Special *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualUncountedBad::pass(Runner &run, const ListExpress *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualUncountedBad::pass(Runner &run, const NodeExpressShort *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualUncountedBad::pass(Runner &run, const NodeExpressLong *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualUncountedBad::pass(Runner &run, const Any *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
@@ -724,7 +724,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -735,7 +735,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -746,7 +746,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -757,7 +757,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -768,7 +768,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -779,7 +779,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -790,7 +790,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -801,7 +801,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -833,7 +833,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -858,7 +858,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -876,7 +876,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -908,7 +908,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -919,7 +919,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -930,7 +930,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -1003,91 +1003,91 @@ namespace PILS
 
 	const Step *SinkWhoEqualBad::pass(Runner &run, const Integer *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualBad::pass(Runner &run, const Float *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualBad::pass(Runner &run, const PilsString *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualBad::pass(Runner &run, const Timestamp *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualBad::pass(Runner &run, const Duration *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualBad::pass(Runner &run, const PilsDate *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualBad::pass(Runner &run, const Any *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualBad::pass(Runner &run, const Cliche *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualBad::pass(Runner &run, const ListConstant *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualBad::pass(Runner &run, const NodeConstantShort *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualBad::pass(Runner &run, const NodeConstantLong *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualBad::pass(Runner &run, const Special *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualBad::pass(Runner &run, const ListExpress *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualBad::pass(Runner &run, const NodeExpressShort *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
 	const Step *SinkWhoEqualBad::pass(Runner &run, const NodeExpressLong *value)
 	{
-		value->release();
+        run.release(value);
 		return falseCompare(run, what, this[1]);
 	}
 
@@ -1162,7 +1162,7 @@ namespace PILS
 		}
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -1211,7 +1211,7 @@ namespace PILS
 		}
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -1225,7 +1225,7 @@ namespace PILS
 		}
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -1239,7 +1239,7 @@ namespace PILS
 		}
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -1253,7 +1253,7 @@ namespace PILS
 		}
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -1267,7 +1267,7 @@ namespace PILS
 		}
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -1281,7 +1281,7 @@ namespace PILS
 		}
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -1295,7 +1295,7 @@ namespace PILS
 		}
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -1309,7 +1309,7 @@ namespace PILS
 		}
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -1327,7 +1327,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, &value);
 		else
 		{
-			operand->release();
+            run.release(operand);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -1348,7 +1348,7 @@ namespace PILS
 		}
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -1362,7 +1362,7 @@ namespace PILS
 		}
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -1376,7 +1376,7 @@ namespace PILS
 		}
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -1750,7 +1750,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -1761,7 +1761,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -1816,7 +1816,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -1827,7 +1827,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -2024,7 +2024,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -2035,7 +2035,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -2046,7 +2046,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -2057,7 +2057,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -2068,7 +2068,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -2079,7 +2079,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -2090,7 +2090,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -2101,7 +2101,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -2133,7 +2133,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -2158,7 +2158,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -2176,7 +2176,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -2205,7 +2205,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -2216,7 +2216,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -2227,7 +2227,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -2235,176 +2235,176 @@ namespace PILS
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, long value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, double value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, const Integer &value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, const Float &value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, const PilsString &value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, const Cliche &value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, const ListConstant &value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, const NodeConstantShort &value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, const NodeConstantLong &value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, const Special &value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, const ListExpress &value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, const NodeExpressShort &value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, const NodeExpressLong &value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, const Integer *value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, const Float *value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, const PilsString *value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, const Timestamp *value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, const Duration *value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, const PilsDate *value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, const Any *value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, const Cliche *value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, const ListConstant *value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, const NodeConstantShort *value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, const NodeConstantLong *value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, const Special *value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, const ListExpress *value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, const NodeExpressShort *value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 
 	const Step *SinkWhoNotEqualBad::pass(Runner &run, const NodeExpressLong *value)
 	{
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, value);
 	}
 	const Step *SinkWhoNotEqualInteger::pass(Runner &run, long value)
 	{
 		if (((const Integer*)operand)->value != value)
 		{
-			operand->release();
+            run.release(operand);
 			return (run.sink = this + 1)->pass(run, value);
 		}
 		else return falseCompare(run, what, this[1]);
@@ -2414,7 +2414,7 @@ namespace PILS
 	{
 		if (((const Integer*)operand)->value != value)
 		{
-			operand->release();
+            run.release(operand);
 			return (run.sink = this + 1)->pass(run, value);
 		}
 		else return falseCompare(run, what, this[1]);
@@ -2424,7 +2424,7 @@ namespace PILS
 	{
 		if (operand != &value)
 		{
-			operand->release();
+            run.release(operand);
 			return (run.sink = this + 1)->pass(run, value);
 		}
 		else return falseCompare(run, what, this[1]);
@@ -2432,7 +2432,7 @@ namespace PILS
 
 	const Step *SinkWhoNotEqualInteger::pass(Runner &run, const Integer *value)
 	{
-		operand->release();
+        run.release(operand);
 		if (operand != value)
 			return (run.sink = this + 1)->pass(run, value);
 		else
@@ -2442,20 +2442,20 @@ namespace PILS
 	const Step *SinkWhoNotEqualFloat::pass(Runner &run, double value)
 	{
 		long result = (long)(((const Float*)operand)->value != value);
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, result);
 	}
 
 	const Step *SinkWhoNotEqualFloat::pass(Runner &run, const Float &value)
 	{
 		long result = (long)(operand != &value);
-		operand->release();
+        run.release(operand);
 		return (run.sink = this + 1)->pass(run, result);
 	}
 
 	const Step *SinkWhoNotEqualFloat::pass(Runner &run, const Float *value)
 	{
-		operand->release();
+        run.release(operand);
 		if (operand != value)
 			return (run.sink = this + 1)->pass(run, value);
 		else
@@ -2466,7 +2466,7 @@ namespace PILS
 	{
 		if (operand != &value)
 		{
-			operand->release();
+            run.release(operand);
 			return (run.sink = this + 1)->pass(run, value);
 		}
 		else return falseCompare(run, what, this[1]);
@@ -2474,7 +2474,7 @@ namespace PILS
 
 	const Step *SinkWhoNotEqualString::pass(Runner &run, const PilsString *value)
 	{
-		operand->release();
+        run.release(operand);
 		if (operand != value)
 			return (run.sink = this + 1)->pass(run, value);
 		else
@@ -2485,7 +2485,7 @@ namespace PILS
 	{
 		if (operand != &value)
 		{
-			operand->release();
+            run.release(operand);
 			return (run.sink = this + 1)->pass(run, value);
 		}
 		else return falseCompare(run, what, this[1]);
@@ -2495,7 +2495,7 @@ namespace PILS
 	{
 		if (operand != &value)
 		{
-			operand->release();
+            run.release(operand);
 			return (run.sink = this + 1)->pass(run, value);
 		}
 		else return falseCompare(run, what, this[1]);
@@ -2505,7 +2505,7 @@ namespace PILS
 	{
 		if (operand != &value)
 		{
-			operand->release();
+            run.release(operand);
 			return (run.sink = this + 1)->pass(run, value);
 		}
 		else return falseCompare(run, what, this[1]);
@@ -2515,7 +2515,7 @@ namespace PILS
 	{
 		if (operand != &value)
 		{
-			operand->release();
+            run.release(operand);
 			return (run.sink = this + 1)->pass(run, value);
 		}
 		else return falseCompare(run, what, this[1]);
@@ -2525,7 +2525,7 @@ namespace PILS
 	{
 		if (operand != &value)
 		{
-			operand->release();
+            run.release(operand);
 			return (run.sink = this + 1)->pass(run, value);
 		}
 		else return falseCompare(run, what, this[1]);
@@ -2533,7 +2533,7 @@ namespace PILS
 
 	const Step *SinkWhoNotEqualConstant::pass(Runner &run, const Timestamp *value)
 	{
-		operand->release();
+        run.release(operand);
 		if (operand != value)
 			return (run.sink = this + 1)->pass(run, value);
 		else
@@ -2542,7 +2542,7 @@ namespace PILS
 
 	const Step *SinkWhoNotEqualConstant::pass(Runner &run, const Duration *value)
 	{
-		operand->release();
+        run.release(operand);
 		if (operand != value)
 			return (run.sink = this + 1)->pass(run, value);
 		else
@@ -2551,7 +2551,7 @@ namespace PILS
 
 	const Step *SinkWhoNotEqualConstant::pass(Runner &run, const PilsDate *value)
 	{
-		operand->release();
+        run.release(operand);
 		if (operand != value)
 			return (run.sink = this + 1)->pass(run, value);
 		else
@@ -2560,7 +2560,7 @@ namespace PILS
 
 	const Step *SinkWhoNotEqualConstant::pass(Runner &run, const Cliche *value)
 	{
-		operand->release();
+        run.release(operand);
 		if (operand != value)
 			return (run.sink = this + 1)->pass(run, value);
 		else
@@ -2569,7 +2569,7 @@ namespace PILS
 
 	const Step *SinkWhoNotEqualConstant::pass(Runner &run, const ListConstant *value)
 	{
-		operand->release();
+        run.release(operand);
 		if (operand != value)
 			return (run.sink = this + 1)->pass(run, value);
 		else
@@ -2578,7 +2578,7 @@ namespace PILS
 
 	const Step *SinkWhoNotEqualConstant::pass(Runner &run, const NodeConstantShort *value)
 	{
-		operand->release();
+        run.release(operand);
 		if (operand != value)
 			return (run.sink = this + 1)->pass(run, value);
 		else
@@ -2587,7 +2587,7 @@ namespace PILS
 
 	const Step *SinkWhoNotEqualConstant::pass(Runner &run, const NodeConstantLong *value)
 	{
-		operand->release();
+        run.release(operand);
 		if (operand != value)
 			return (run.sink = this + 1)->pass(run, value);
 		else
@@ -2596,7 +2596,7 @@ namespace PILS
 
 	const Step *SinkWhoNotEqualConstant::pass(Runner &run, const Special *value)
 	{
-		operand->release();
+        run.release(operand);
 		if (operand != value)
 			return (run.sink = this + 1)->pass(run, value);
 		else
@@ -2607,7 +2607,7 @@ namespace PILS
 	{
 		if (operand != &value)
 		{
-			operand->release();
+            run.release(operand);
 			return (run.sink = this + 1)->pass(run, value);
 		}
 		else return falseCompare(run, what, this[1]);
@@ -2617,7 +2617,7 @@ namespace PILS
 	{
 		if (operand != &value)
 		{
-			operand->release();
+            run.release(operand);
 			return (run.sink = this + 1)->pass(run, value);
 		}
 		else return falseCompare(run, what, this[1]);
@@ -2627,7 +2627,7 @@ namespace PILS
 	{
 		if (operand != &value)
 		{
-			operand->release();
+            run.release(operand);
 			return (run.sink = this + 1)->pass(run, value);
 		}
 		else return falseCompare(run, what, this[1]);
@@ -2635,7 +2635,7 @@ namespace PILS
 
 	const Step *SinkWhoNotEqualExpress::pass(Runner &run, const ListExpress *value)
 	{
-		operand->release();
+        run.release(operand);
 		if (operand != value)
 			return (run.sink = this + 1)->pass(run, value);
 		else
@@ -2644,7 +2644,7 @@ namespace PILS
 
 	const Step *SinkWhoNotEqualExpress::pass(Runner &run, const NodeExpressShort *value)
 	{
-		operand->release();
+        run.release(operand);
 		if (operand != value)
 			return (run.sink = this + 1)->pass(run, value);
 		else
@@ -2653,7 +2653,7 @@ namespace PILS
 
 	const Step *SinkWhoNotEqualExpress::pass(Runner &run, const NodeExpressLong *value)
 	{
-		operand->release();
+        run.release(operand);
 		if (operand != value)
 			return (run.sink = this + 1)->pass(run, value);
 		else
@@ -2979,14 +2979,14 @@ namespace PILS
 	const Step *SinkCompareOperand::pass(Runner &run, const Integer *value)
 	{
 		long v = value->value;
-		value->release();
+        run.release(value);
 		return pass(run, v);
 	}
 
 	const Step *SinkCompareOperand::pass(Runner &run, const Float *value)
 	{
 		double v = value->value;
-		value->release();
+        run.release(value);
 		return pass(run, v);
 	}
 
@@ -3038,14 +3038,14 @@ namespace PILS
 		else
 		{
 			call->retain();
-			value->release();
+            run.release(value);
 		}
 		return (run.sink = this + 1)->call(run, what, call, who);
 	}
 
 	Sink *SinkCompareConstant::kick(Runner &run)
 	{
-		value->release();
+        run.release(value);
 		return this + 1;
 	}
 
@@ -3275,7 +3275,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3286,7 +3286,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3325,7 +3325,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3336,7 +3336,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3375,7 +3375,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3386,7 +3386,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3425,7 +3425,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3436,7 +3436,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3475,7 +3475,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3486,7 +3486,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3525,7 +3525,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3536,7 +3536,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3575,7 +3575,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3586,7 +3586,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3625,7 +3625,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3636,7 +3636,7 @@ namespace PILS
 			return (run.sink = this + 1)->pass(run, value);
 		else
 		{
-			value->release();
+            run.release(value);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3645,12 +3645,12 @@ namespace PILS
 	{
 		if (that->less((const PilsString&)*value))
 		{
-			value->release();
+            run.release(value);
 			return (run.sink = this + 1)->pass(run, that);
 		}
 		else
 		{
-			that->release();
+            run.release(that);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3659,12 +3659,12 @@ namespace PILS
 	{
 		if (!((const PilsString*)value)->less(*that))
 		{
-			value->release();
+            run.release(value);
 			return (run.sink = this + 1)->pass(run, that);
 		}
 		else
 		{
-			that->release();
+            run.release(that);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3673,12 +3673,12 @@ namespace PILS
 	{
 		if(((const PilsString*)value)->less(*that))
 		{
-			value->release();
+            run.release(value);
 			return (run.sink = this + 1)->pass(run, that);
 		}
 		else
 		{
-			that->release();
+            run.release(that);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3687,12 +3687,12 @@ namespace PILS
 	{
 		if (!that->less((const PilsString&)*value))
 		{
-			value->release();
+            run.release(value);
 			return (run.sink = this + 1)->pass(run, that);
 		}
 		else
 		{
-			that->release();
+            run.release(that);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3708,12 +3708,12 @@ namespace PILS
 	{
 		if (that->value < ((const Timevalue&)*value).value)
 		{
-			value->release();
+            run.release(value);
 			return (run.sink = this + 1)->pass(run, that);
 		}
 		else
 		{
-			that->release();
+            run.release(that);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3722,12 +3722,12 @@ namespace PILS
 	{
 		if (that->value <= ((const Timevalue&)*value).value)
 		{
-			value->release();
+            run.release(value);
 			return (run.sink = this + 1)->pass(run, that);
 		}
 		else
 		{
-			that->release();
+            run.release(that);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3736,12 +3736,12 @@ namespace PILS
 	{
 		if (that->value > ((const Timevalue&)*value).value)
 		{
-			value->release();
+            run.release(value);
 			return (run.sink = this + 1)->pass(run, that);
 		}
 		else
 		{
-			that->release();
+            run.release(that);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3750,12 +3750,12 @@ namespace PILS
 	{
 		if (that->value >= ((const Timevalue&)*value).value)
 		{
-			value->release();
+            run.release(value);
 			return (run.sink = this + 1)->pass(run, that);
 		}
 		else
 		{
-			that->release();
+            run.release(that);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3764,12 +3764,12 @@ namespace PILS
 	{
 		if (that->value < ((const Timevalue&)*value).value)
 		{
-			value->release();
+            run.release(value);
 			return (run.sink = this + 1)->pass(run, that);
 		}
 		else
 		{
-			that->release();
+            run.release(that);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3778,12 +3778,12 @@ namespace PILS
 	{
 		if (that->value <= ((const Timevalue&)*value).value)
 		{
-			value->release();
+            run.release(value);
 			return (run.sink = this + 1)->pass(run, that);
 		}
 		else
 		{
-			that->release();
+            run.release(that);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3792,12 +3792,12 @@ namespace PILS
 	{
 		if (that->value > ((const Timevalue&)*value).value)
 		{
-			value->release();
+            run.release(value);
 			return (run.sink = this + 1)->pass(run, that);
 		}
 		else
 		{
-			that->release();
+            run.release(that);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3806,12 +3806,12 @@ namespace PILS
 	{
 		if (that->value >= ((const Timevalue&)*value).value)
 		{
-			value->release();
+            run.release(value);
 			return (run.sink = this + 1)->pass(run, that);
 		}
 		else
 		{
-			that->release();
+            run.release(that);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3821,12 +3821,12 @@ namespace PILS
 	{
 		if (that->value < ((const Timevalue&)*value).value)
 		{
-			value->release();
+            run.release(value);
 			return (run.sink = this + 1)->pass(run, that);
 		}
 		else
 		{
-			that->release();
+            run.release(that);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3835,12 +3835,12 @@ namespace PILS
 	{
 		if (that->value <= ((const Timevalue&)*value).value)
 		{
-			value->release();
+            run.release(value);
 			return (run.sink = this + 1)->pass(run, that);
 		}
 		else
 		{
-			that->release();
+            run.release(that);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3849,12 +3849,12 @@ namespace PILS
 	{
 		if (that->value > ((const Timevalue&)*value).value)
 		{
-			value->release();
+            run.release(value);
 			return (run.sink = this + 1)->pass(run, that);
 		}
 		else
 		{
-			that->release();
+            run.release(that);
 			return falseCompare(run, what, this[1]);
 		}
 	}
@@ -3863,12 +3863,12 @@ namespace PILS
 	{
 		if (that->value >= ((const Timevalue&)*value).value)
 		{
-			value->release();
+            run.release(value);
 			return (run.sink = this + 1)->pass(run, that);
 		}
 		else
 		{
-			that->release();
+            run.release(that);
 			return falseCompare(run, what, this[1]);
 		}
 	}

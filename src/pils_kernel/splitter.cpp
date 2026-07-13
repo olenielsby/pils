@@ -41,8 +41,8 @@ namespace PILS
 
 	Sink *PipesourceSplitter::kick(Runner &run)
 	{
-		anchor->release();
-		splitter->release();
+        run.release(anchor);;
+        run.release(splitter);;
 		return this + 1;
 	}
 
@@ -60,7 +60,7 @@ namespace PILS
 
 	const Step *Splitsink::pass(Runner &run, const Any *thing)
 	{
-		thing->release();
+        run.release(thing);
 		return back(run);
 	}
 

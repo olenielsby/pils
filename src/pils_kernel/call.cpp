@@ -662,7 +662,7 @@ namespace PILS
 
 	Sink *MissAssignCall::kick(Runner &run)
 	{
-		assignValue->release();
+        run.release(assignValue);
 		return this + 1;
 	}
 
@@ -1058,7 +1058,7 @@ namespace PILS
 		const Any *thing = call.specialCall(run, *(const ReallySpecial*)this, *assignValue);
 		if (thing)
 		{
-			assignValue->release();
+            run.release(assignValue);
 			return thing->passCounted(run);
 		}
         if (thing = getWhen())
@@ -1818,7 +1818,7 @@ namespace PILS
 
 	Sink *SinkWhoCalling::kick(Runner &run)
 	{
-		who->release();
+        run.release(who);
 		return this + 1;
 	}
 
@@ -1847,45 +1847,45 @@ namespace PILS
 
 	Sink *SinkCalling::kick(Runner &run)
 	{
-		call->release();
-		who->release();
+        run.release(call);
+        run.release(who);
 		return this + 1;
 	}
 
 	const Step *SinkCalling::pass(Runner &run, const Any *value)
 	{
-		call->release();
-		who->release();
-		run.sink = this + 1;
+        run.release(call);
+        run.release(who);
+        run.sink = this + 1;
 		return value->passCounted(run);
 	}
 
 	const Step *SinkCalling::error(Runner &run, const Any *error, const Express *what, const Any *who)
 	{
-		call->release();
-		who->release();
-		return (run.sink = this + 1)->error(run, error, what, who);
+        run.release(call);
+        run.release(who);
+        return (run.sink = this + 1)->error(run, error, what, who);
 	}
 
 	const Step *SinkCalling::tailStep(Runner &run, const Any *thing)
 	{
-		call->release();
-		who->release();
-		return (run.sink = this + 1)->tailStep(run, thing);
+        run.release(call);
+        run.release(who);
+        return (run.sink = this + 1)->tailStep(run, thing);
 	}
 
 	const Step *SinkCalling::tailStep(Runner &run, const Any *thing, const Any *who)
 	{
-		call->release();
-		this->who->release();
-		return (run.sink = this + 1)->tailStep(run, thing, who);
+        run.release(call);
+        run.release(this->who);
+        return (run.sink = this + 1)->tailStep(run, thing, who);
 	}
 
 	Pipe *SinkCalling::connectPipe(Runner &run)
 	{
-		call->release();
-		this->who->release();
-		return (run.sink = this + 1)->connectPipe(run);
+        run.release(call);
+        run.release(this->who);
+        return (run.sink = this + 1)->connectPipe(run);
 	}
 
 	const Step *BuiltinClicheCalling::gotOperand(Runner &run, const WhoAssign &what, const Any *value, const Any *assignValue) const
@@ -1897,8 +1897,8 @@ namespace PILS
 
 	Sink *SinkWhoCallingAssign::kick(Runner &run)
 	{
-		who->release();
-		assignValue->release();
+        run.release(who);
+        run.release(assignValue);
 		return this + 1;
 	}
 
@@ -2302,12 +2302,12 @@ namespace PILS
 
 	Sink *SinkRecall::kick(Runner &run)
 	{
-		tag.release();
-		call->release();
+        run.release(&tag);
+        run.release(call);
 		for (std::map<const Constant*, const Any*>::iterator i=map.begin(); i != map.end(); i++)
 		{
-			i->first->release();
-			if(i->second) i->second->release();
+            run.release(i->first);
+            if(i->second) run.release(i->second);
 		}
 		map.~map();
 		return run.sinkTagChain = this + 1;
@@ -2592,7 +2592,7 @@ namespace PILS
 
 	const Step *SinkCallingNot::called(PILS::Runner &run, const PILS::Any &, const PILS::Any *assignValue)
 	{
-		assignValue->release();
+        run.release(assignValue);
 		const Any &call = this->call;
 		run.sink = this + 1;
 		return call.passUncounted(run);

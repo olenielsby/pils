@@ -81,20 +81,20 @@ namespace PILS{
         new (run.allocate(sizeof(SinkQtSignalCallback))) SinkQtSignalCallback(run.where_);
         run.where_ = when;
         run.run(call->caller(*thread, *when));
-        call->release();
-        release();
+        run.release(call);
+        run.release(this);
     }
 
     Sink *SinkQtSignalCallback::kick(Runner &run)
     {
-        run.where_->release();
+        run.release(run.where_);
         run.where_ = whence;
         return this + 1;
     }
 
     const Step *SinkQtSignalCallback::pass(Runner &run, const Any *value)
     {
-        value->release();
+        run.release(value);
         run.sink = kick(run);
         return nullptr;
     }

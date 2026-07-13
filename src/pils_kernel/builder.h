@@ -59,7 +59,7 @@ namespace PILS
 			const ClicheTiny *nameCliche = kind->clichefy();
 			name = (const NodeConstantTiny *)nameCliche->nodeConstant(tag);
 			tag->retain();
-			nameCliche->release();
+            nameCliche->unduplicateReference();
 		}
         void unlink() override;
         const Step *step_(Runner &run) const override;

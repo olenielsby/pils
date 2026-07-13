@@ -138,7 +138,7 @@ namespace PILS
 
 	Sink *SinkAssigning::kick(Runner &run)
 	{
-		assignValue->release();
+        run.release(assignValue);
 		return this + 1;
 	}
 
@@ -152,8 +152,8 @@ namespace PILS
 
 	Sink *SinkAssigningWho::kick(Runner &run)
 	{
-		assignValue->release();
-		argument->release();
+        run.release(assignValue);
+        run.release(argument);
 		return this + 1;
 	}
 
@@ -188,8 +188,8 @@ namespace PILS
 			{
 				if (nodeBuilding.joker)
 				{
-					nodeBuilding.joker->release();
-					attributeName->release();
+                    run.release(nodeBuilding.joker);
+                    run.release(attributeName);
 				}
 				nodeBuilding.joker = assignValue;
 			}
@@ -199,9 +199,9 @@ namespace PILS
 					= nodeBuilding.building.insert(std::pair<const Constant*, const Any*>(attributeName, assignValue));
 				if (!insertion.second)
 				{
-					insertion.first->second->release();
+                    run.release(insertion.first->second);
 					insertion.first->second = assignValue;
-					attributeName->release();
+                    run.release(attributeName);
 				}
 			}
 			return assignValue->passUncounted(run);
@@ -218,7 +218,7 @@ namespace PILS
 
 	const Step *SinkAssigningWho::pass(Runner &run, PassingMind *mind, const Express *what)
 	{
-		what->release();
+        run.release(what);
 		run.calling.what = &this->what;
 		const Any *assignValue = this->assignValue;
 		const Any *argument = this->argument;
@@ -256,7 +256,7 @@ namespace PILS
 	Sink *SinkBind::kick(Runner &run)
 	{
 		const Any *const *end = (const Any *const *)(this + 1) + what.cliche->count - 1;
-		while (done < end) (*(done++))->release();
+        while (done < end) run.release(*(done++));
 		return (Sink*)done;
 	}
 
@@ -455,7 +455,7 @@ namespace PILS
 
 	Sink *SinkUntypedOperandAssign::kick(Runner &run)
 	{
-		assignValue->release();
+        run.release(assignValue);
 		return this + 1;
 	}
 
@@ -632,7 +632,7 @@ namespace PILS
 	const Step *BuiltinClicheBut::gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const
 	{
 		if (value == &Empty::singleton)
-			value->release();
+            run.release(value);
 		else
 			new (run.allocate(sizeof(SinkBut))) SinkBut(value);
 		return what.whoAttribute();
@@ -640,7 +640,7 @@ namespace PILS
 
 	Sink *SinkBut::kick(Runner &run)
 	{
-		but->release();
+        run.release(but);
 		return this + 1;
 	}
 
@@ -653,7 +653,7 @@ namespace PILS
 	const Step *BuiltinClicheThroughOperation::gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const
 	{
 		if (value == &Empty::singleton)
-			value->release();
+            run.release(value);
 		else
 			new (run.allocate(sizeof(SinkThrough))) SinkThrough(value);
 		return what.whoAttribute();
@@ -685,7 +685,7 @@ namespace PILS
 
 	Sink *SinkRepeat::kick(Runner &run)
 	{
-		who->release();
+        run.release(who);
 		return this + 1;
 	}
 
@@ -702,14 +702,14 @@ namespace PILS
 
 	Sink *SinkRepeating::kick(Runner &run)
 	{
-		who->release();
-		item->release();
+        run.release(who);
+        run.release(item);
 		return this + 1;
 	}
 
 	const Step *SinkRepeating::pass(Runner &run, const Any *value)
 	{
-		item->release();
+        run.release(item);
 		item = value;
 		run.calling.who = who;
 		run.calling.what = &what;
@@ -719,7 +719,7 @@ namespace PILS
 	const Step *SinkRepeating::called(Runner &run, const Constant &call)
 	{
 		const Any *item = this->item;
-		who->release();
+        run.release(who);
 		run.sink = this + 1;
 		return item->passCounted(run);
 	}
@@ -727,7 +727,7 @@ namespace PILS
 	const Step *SinkRepeating::called(Runner &run, const Integer &call)
 	{
 		const Any *item = this->item;
-		who->release();
+        run.release(who);
 		run.sink = this + 1;
 		return item->passCounted(run);
 	}
@@ -735,7 +735,7 @@ namespace PILS
 	const Step *SinkRepeating::called(Runner &run, const Empty &call)
 	{
 		const Any *item = this->item;
-		who->release();
+        run.release(who);
 		run.sink = this + 1;
 		return item->passCounted(run);
 	}
@@ -743,7 +743,7 @@ namespace PILS
 	const Step *SinkRepeating::called(Runner &run, const ListConstant &call)
 	{
 		const Any *item = this->item;
-		who->release();
+        run.release(who);
 		run.sink = this + 1;
 		return item->passCounted(run);
 	}
@@ -751,7 +751,7 @@ namespace PILS
 	const Step *SinkRepeating::called(Runner &run, const NodeConstant &call)
 	{
 		const Any *item = this->item;
-		who->release();
+        run.release(who);
 		run.sink = this + 1;
 		return item->passCounted(run);
 	}
@@ -759,7 +759,7 @@ namespace PILS
 	const Step *SinkRepeating::called(Runner &run, const ListExpress &call)
 	{
 		const Any *item = this->item;
-		who->release();
+        run.release(who);
 		run.sink = this + 1;
 		return item->passCounted(run);
 	}
@@ -767,7 +767,7 @@ namespace PILS
 	const Step *SinkRepeating::called(Runner &run, const NodeExpress &call)
 	{
 		const Any *item = this->item;
-		who->release();
+        run.release(who);
 		run.sink = this + 1;
 		return item->passCounted(run);
 	}
@@ -780,9 +780,9 @@ namespace PILS
 
 	Sink *SinkAgain::kick(Runner &run)
 	{
-		if (old) old->release();
-		if (antique) antique->release();
-		who->release();
+        if (old) run.release(old);
+        if (antique) run.release(antique);
+        run.release(who);
 		return this + 1;
 	}
 
@@ -809,13 +809,13 @@ namespace PILS
 		if (antique == value)
 			return pass(run, (const Any *)value); // reject - cycle detected
 		if (old)
-			old->release();
+            run.release(old);
 		old = value;
 		if (--antiqueCountdown == 0)
 		{
 			antiqueCountdown = antiqueNumber;
 			antiqueNumber *= 2;
-			if (antique) antique->release();
+            if (antique) run.release(antique);
 			value->retain();
 			antique = value;
 		}
@@ -871,23 +871,23 @@ namespace PILS
 
 	const Step *SinkTrialing::pass(Runner &run, const Any *item)
 	{
-		this->item->release();
-		who->release();
+        run.release(this->item);
+        run.release(who);
 		run.sink = this + 1;
 		return item->passCounted(run);
 	}
 
 	const Step *SinkTrialing::tailStep(Runner &run, const Any *thing)
 	{
-		item->release();
-		who->release();
+        run.release(item);
+        run.release(who);
 		return (run.sink = this + 1)->tailStep(run, thing);
 	}
 
 	const Step *SinkTrialing::tailStep(Runner &run, const Any *thing, const Any *where_)
 	{
-		item->release();
-		who->release();
+        run.release(item);
+        run.release(who);
 		return (run.sink = this + 1)->tailStep(run, thing, where_);
 	}
 
@@ -986,13 +986,13 @@ namespace PILS
 
 	const Step *SinkCondition::pass(Runner &run, const Integer *value)
 	{
-		value->release();
+        run.release(value);
 		return succeed(run);
 	}
 
 	const Step *SinkCondition::pass(Runner &run, const Any *value)
 	{
-		value->release();
+        run.release(value);
 		return succeed(run);
 	}
 
@@ -1001,7 +1001,7 @@ namespace PILS
 		if (&where_ != run.where_)
 		{
 			where_.retain();
-			run.where_->release();
+            run.release(run.where_);
 			run.where_ = &where_;
 		}
 		return this + 1;
@@ -1012,7 +1012,7 @@ namespace PILS
 		if (&where_ != run.where_)
 		{
 			where_.retain();
-			run.where_->release();
+            run.release(run.where_);
 			run.where_ = &where_;
 		}
 		const Any &elseClause = this->elseClause;
@@ -1053,8 +1053,8 @@ namespace PILS
 
 	Sink *SinkTransformSaveBase::kick(Runner &run)
 	{
-		who->release();
-		original->release();
+        run.release(who);
+        run.release(original);
 		return this + 1;
 	}
 
@@ -1137,10 +1137,10 @@ namespace PILS
 			const Integer *count;
 			original->isList(element, count);
 			end -= count->value;
-			while (altered > end) (*--altered)->release();
+            while (altered > end) run.release(*--altered);
 			delete altered;
 		}
-		counting->release();
+        run.release(counting);
 		return this + 1;
 	}
 
@@ -1196,7 +1196,7 @@ namespace PILS
 		if (element != end)
 		{
 			long c = counting->value;
-			counting->release();
+            run.release(counting);
 			counting = Integer::get(c + 1);
 			run.calling.who = who;
 			run.calling.what = &what;
@@ -1242,7 +1242,7 @@ namespace PILS
 			const Cliche *cliche;
 			original->isNode(element, cliche);
 			end -= cliche->count;
-			while (altered > end) (*--altered)->release();
+            while (altered > end) run.release(*--altered);
 			delete altered;
 		}
 		return this + 1;
@@ -1332,8 +1332,8 @@ namespace PILS
 
 	Sink *SinkTransformForgetBase::kick(Runner &run)
 	{
-		original->release();
-		who->release();
+        run.release(original);
+        run.release(who);
 		return this + 1;
 	}
 
@@ -1354,7 +1354,7 @@ namespace PILS
 
 	Sink *SinkTransformForgetListElement::kick(Runner &run)
 	{
-		counting->release();
+        run.release(counting);
 		return this + 1;
 	}
 
@@ -1376,7 +1376,7 @@ namespace PILS
 		else
 		{
 			long c = counting->value;
-			counting->release();
+            run.release(counting);
 			counting = Integer::get(c + 1);
 			run.calling.who = who;
 			run.calling.what = &what;
@@ -1723,9 +1723,9 @@ namespace PILS
 
 	const Step *SinkWhoOrConstant::error(Runner &run, const Any *error, const Express *what, const Any *who)
 	{
-		error->release();
-		what->release();
-		who->release();
+        run.release(error);
+        run.release(what);
+        run.release(who);
 		const Constant *result = ((const OrConstant*)this->what.callAttribute())->element[0];
 		run.sink = this + 1;
 		return result->passUncounted(run);
@@ -1741,9 +1741,9 @@ namespace PILS
 
 	const Step *SinkWhoOrExpress::error(Runner &run, const Any *error, const Express *what, const Any *who)
 	{
-		error->release();
-		what->release();
-		who->release();
+        run.release(error);
+        run.release(what);
+        run.release(who);
 		const Express *result = (const Express *)((const OrExpress*)this->what.callAttribute())->element[0];
 		run.sink = this + 1;
 		return result;
@@ -1776,10 +1776,10 @@ namespace PILS
 
 	const Step *SinkWhoAnywayConstant::error(Runner &run, const Any *error, const Express *what, const Any *who)
 	{
-		error->release();
-		what->release();
-		who->release();
-		const Constant *result = ((const AnywayConstant*)this->what.callAttribute())->element[0];
+        run.release(error);
+        run.release(what);
+        run.release(who);
+        const Constant *result = ((const AnywayConstant*)this->what.callAttribute())->element[0];
 		run.sink = this + 1;
 		return result->passUncounted(run);
 	}
@@ -1802,10 +1802,10 @@ namespace PILS
 
 	const Step *SinkWhoAnywayExpress::error(Runner &run, const Any *error, const Express *what, const Any *who)
 	{
-		error->release();
-		what->release();
-		who->release();
-		const Express *result = (const Express *)((const AnywayExpress*)this->what.callAttribute())->element[0];
+        run.release(error);
+        run.release(what);
+        run.release(who);
+        const Express *result = (const Express *)((const AnywayExpress*)this->what.callAttribute())->element[0];
 		run.sink = this + 1;
 		return result;
 	}
@@ -1825,11 +1825,11 @@ namespace PILS
 
 	Sink *PipeToGroups::kick(Runner &run)
 	{
-		filter->release();
+        run.release(filter);
 		for (std::multimap<const Constant *, const Any *>::iterator i = multimap.begin(); i != multimap.end(); i++)
 		{
-			i->first->release();
-			i->second->release();
+            run.release(i->first);
+            run.release(i->second);
 		}
 		multimap.~multimap();
 		return this + 1;
@@ -1865,7 +1865,7 @@ namespace PILS
 
 	const Step *PipeToGroups::pipeEnd(Runner &run)
 	{
-		filter->release();
+        run.release(filter);
 		const Any *result;
 		if (multimap.empty())
 			(result = &Empty::singleton)->retain();
@@ -1897,7 +1897,7 @@ namespace PILS
 				std::vector<const Any *> vector;
 				bool constant;
 			} list;
-			NodeBuilder<const Any> build(&Builtin::name.groups);
+            NodeBuilder<const Any> build(run, &Builtin::name.groups);
 			for (std::multimap<const Constant *, const Any *>::iterator i = multimap.begin(); i != multimap.end();)
 			{
 				const Constant *currentName = i->first;
@@ -1919,7 +1919,7 @@ namespace PILS
 
 	Sink *PipingToGroups::kick(Runner &run)
 	{
-		item->release();
+        run.release(item);
 		return this + 1;
 	}
 
@@ -1947,8 +1947,8 @@ namespace PILS
 			return pass(run, (const Any*)pair);
 		name->retain();
 		value->retain();
-		pair->release();
-		item->release();
+        run.release(pair);
+        run.release(item);
 		pipe.multimap.insert(std::pair<const Constant *, const Any *>(name, value));
 		return (Pipesource *)(run.sink = this + 1);
 	}
@@ -1968,11 +1968,11 @@ namespace PILS
 
 	Sink *PipeToFirsts::kick(Runner &run)
 	{
-		filter->release();
+        run.release(filter);
 		for (std::map<const Constant *, const Any *>::iterator i = map.begin(); i != map.end(); i++)
 		{
-			i->first->release();
-			i->second->release();
+            run.release(i->first);
+            run.release(i->second);
 		}
 		map.~map();
 		return this + 1;
@@ -2008,7 +2008,7 @@ namespace PILS
 
 	const Step *PipeToFirsts::pipeEnd(Runner &run)
 	{
-		filter->release();
+        run.release(filter);
 		const Any *result;
 		if (map.empty())
 			(result = &Empty::singleton)->retain();
@@ -2019,7 +2019,7 @@ namespace PILS
 			what.callAttribute()->isNode(dummy, cliche);
 			const Constant *name = cliche->head;
 			name->retain();
-			NodeBuilder<const Any> build(name);
+            NodeBuilder<const Any> build(run, name);
 			for (std::map<const Constant *, const Any *>::iterator i = map.begin(); i != map.end(); i++)
 			{
 				build.aim(i->first);
@@ -2034,7 +2034,7 @@ namespace PILS
 
 	Sink *PipingToFirsts::kick(Runner &run)
 	{
-		item->release();
+        run.release(item);
 		return this + 1;
 	}
 
@@ -2053,7 +2053,7 @@ namespace PILS
 		if (!pipe.map.insert(std::pair<const Constant *, const Any *>(key, item)).second)
 		{
 			key->unduplicateReference();
-			item->release();
+            run.release(item);
 		}
 		return (Pipesource *)(run.sink = this + 1);
 	}
@@ -2064,11 +2064,11 @@ namespace PILS
 		const Any *value;
 		if (!pair->isNameValuePair(name, value))
 			return pass(run, (const Any*)pair);
-		item->release();
+        run.release(item);
 		item = value;
 		item->retain();
 		name->retain();
-		pair->release();
+        run.release(pair);
 		return pass(run, name);
 	}
 
@@ -2099,7 +2099,7 @@ namespace PILS
 		if (!inserted.second)
 		{
 			key->unduplicateReference();
-			inserted.first->second->release();
+            run.release(inserted.first->second);
 			inserted.first->second = item;
 		}
 		return (Pipesource *)(run.sink = this + 1);
@@ -2160,13 +2160,13 @@ namespace PILS
 	{
 		const Language *language = value->as_Language();
 		if (language) new (run.allocate(sizeof(SinkBug))) SinkBug(language);
-		else value->release();
+        else run.release(value);
 		return what.whoAttribute();
 	}
 
 	Sink *FoldingToFolds::kick(Runner &run)
 	{
-		oldValue->release();
+        run.release(oldValue);
 		return this + 1;
 	}
 
@@ -2178,15 +2178,15 @@ namespace PILS
 	const Step *FoldingToFolds::pass(Runner &run, const Any *value)
 	{
 		std::map<const Constant *, const Any *>::iterator iterator = pipe.map.find(&key);
-		iterator->second->release();
+        run.release(iterator->second);
 		iterator->second = value;
-		oldValue->release();
+        run.release(oldValue);
 		return (Pipesource *)(run.sink = this + 1);
 	}
 
 	Sink *SinkBug::kick(Runner &run)
 	{
-		language->release();
+        run.release(language);
 		return this + 1;
 	}
 
@@ -2363,43 +2363,43 @@ namespace PILS
 
 	const Step *SinkCallingCombinedTail::called(Runner &run, const Constant &call)
 	{
-		thing->release();
+        run.release(thing);
 		return ((Sink*) (this + 1))->called(run, Empty::singleton);
 	}
 
 	const Step *SinkCallingCombinedTail::called(Runner &run, const Integer &call)
 	{
-		thing->release();
+        run.release(thing);
 		return ((Sink*) (this + 1))->called(run, Empty::singleton);
 	}
 
 	const Step *SinkCallingCombinedTail::called(Runner &run, const Empty &call)
 	{
-		thing->release();
+        run.release(thing);
 		return ((Sink*) (this + 1))->called(run, Empty::singleton);
 	}
 
 	const Step *SinkCallingCombinedTail::called(Runner &run, const NodeConstant &call)
 	{
-		thing->release();
+        run.release(thing);
 		return ((Sink*) (this + 1))->called(run, Empty::singleton);
 	}
 
 	const Step *SinkCallingCombinedTail::called(Runner &run, const ListConstant &call)
 	{
-		thing->release();
+        run.release(thing);
 		return ((Sink*) (this + 1))->called(run, Empty::singleton);
 	}
 
 	const Step *SinkCallingCombinedTail::called(Runner &run, const NodeExpress &call)
 	{
-		thing->release();
+        run.release(thing);
 		return ((Sink*) (this + 1))->called(run, Empty::singleton);
 	}
 
 	const Step *SinkCallingCombinedTail::called(Runner &run, const ListExpress &call)
 	{
-		thing->release();
+        run.release(thing);
 		return ((Sink*) (this + 1))->called(run, Empty::singleton);
 	}
 
@@ -2620,7 +2620,7 @@ namespace PILS
 	Sink *PipeDistinct::kick(Runner &run)
 	{
 		for (std::set<const Any *>::const_iterator i = set.begin(); i != set.end(); i++)
-			(*i)->release();
+            run.release(*i);
 		set.~set();
 		return this + 1;
 	}
@@ -2658,9 +2658,9 @@ namespace PILS
 	Sink *PipeDistinctFilter::kick(Runner &run)
 	{
 		for (std::set<const Constant *>::const_iterator i = set.begin(); i != set.end(); i++)
-			(*i)->release();
+            run.release(*i);
 		set.~set();
-		filter->release();
+        run.release(filter);
 		return this + 1;
 	}
 
@@ -2692,7 +2692,7 @@ namespace PILS
 
 	Sink *PipingDistinctFilter::kick(Runner &run)
 	{
-		item->release();
+        run.release(item);
 		return this + 1;
 	}
 
@@ -2717,7 +2717,7 @@ namespace PILS
 		}
 		else
 		{
-			item->release();
+            run.release(item);
 			key->unduplicateReference();
 			return (Pipesource *)(run.sink);
 		}
@@ -2729,11 +2729,11 @@ namespace PILS
 		const Any *value;
 		if (!pair->isNameValuePair(name, value))
 			return pass(run, (const Any*)pair);
-		item->release();
+        run.release(item);
 		item = value;
 		item->retain();
 		name->retain();
-		pair->release();
+        run.release(pair);
 		return pass(run, name);
 	}
 
@@ -2748,7 +2748,7 @@ namespace PILS
 	{
 		for (std::map<const Constant *, double>::iterator i = map.begin(); i != map.end(); i++)
 		{
-			i->first->release();
+            run.release(i->first);
 		}
 		map.~map();
 		return this + 1;
@@ -2775,7 +2775,7 @@ namespace PILS
 			if (!insert.second)
 			{
 				insert.first->second += 1;
-				key->release();
+                run.release(key);
 			}
 			return (Pipesource *)run.sink;
 		}
@@ -2797,7 +2797,7 @@ namespace PILS
 		else
 		{
 			Builtin::name.counts.retain();
-			NodeBuilder<const Constant> build(&Builtin::name.counts);
+            NodeBuilder<const Constant> build(run, &Builtin::name.counts);
 			for (std::map<const Constant *, double>::const_iterator i = map.begin(); i != map.end(); i++)
 			{
 				build.aim(i->first);

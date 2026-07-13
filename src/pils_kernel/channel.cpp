@@ -217,7 +217,7 @@ namespace PILS
 
 	Sink *SinkListen::kick(Runner &run)
 	{
-		ear->release();
+        run.release(ear);
 		return this + 1;
 	}
 }

@@ -53,8 +53,8 @@ namespace PILS
 		{
 			return (const NodeConstant*) NodeBuilder<const Constant>::build();
 		}
-		ConfigurationBuilder()
-			: NodeBuilder<const Constant>(&Builtin::name.minus)
+        ConfigurationBuilder()
+            : NodeBuilder<const Constant>(Runner::main(), &Builtin::name.minus)
 		{
 			Builtin::name.minus.retain();
 		}
@@ -64,6 +64,12 @@ namespace PILS
         assert(MainThread::singleton == nullptr);
         MainThread::singleton = new MainThread(QThread::currentThread());
         commandLineHandler = getCommandLineHandler();
+    }
+
+    Runner &Runner::main()
+    {
+        assert(MainThread::singleton);
+        return *MainThread::singleton;
     }
 
     bool PilsCommander::executeCommandLine(const std::vector<std::string> &args)
@@ -85,8 +91,8 @@ namespace PILS
         {
             // MainThread::RunLevel runlevel;
             runner.run(cmd);
-            cmd->release();
-            runner.where_->release();
+            runner.release(cmd);
+            runner.release(runner.where_);
         }
 
         return QGuiApplication::topLevelWindows().size() != 0;
@@ -125,7 +131,7 @@ namespace PILS
         const Language *language;
 
         {
-            NodeBuilder<const Constant> gloss(PilsString::get(_PS("system")));
+            NodeBuilder<const Constant> gloss(Runner::main(), PilsString::get(_PS("system")));
 
             gloss.aim(Empty::get());
             gloss.set(PilsString::get(_PS("\1.")));
@@ -216,7 +222,7 @@ namespace PILS
         {
             runner.run(test);
 
-            test->release();
+            runner.release(test);
             test = runner.where_;
 
             (runner.where_ = PILS::Plum::cake())->retain();
@@ -225,7 +231,7 @@ namespace PILS
 
             commandLineHandler = runner.where_;
 
-            test->release();
+            runner.release(test);
         }
         catch (const wchar_t *msg)
         {

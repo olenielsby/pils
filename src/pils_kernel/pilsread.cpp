@@ -6,7 +6,7 @@ namespace PILS
 {
 	Sink *ParsingNormal::kick(Runner &run)
 	{
-		if (inversion) inversion->release();
+        if (inversion) run.release(inversion);
 		this->ParsingNormal::~ParsingNormal();
 		return (Sink*)(this + 1);
 	}
@@ -40,8 +40,8 @@ namespace PILS
 
 	Sink *ParsingTrace::kick(Runner &run)
 	{
-		if (inversion) inversion->release();
-		tracechain->release();
+        if (inversion) run.release(inversion);
+        run.release(tracechain);
 		this->ParsingTrace::~ParsingTrace();
 		return (Sink *)(this + 1);
 	}
@@ -855,7 +855,7 @@ namespace PILS
 		{
 			const PilsString *prefix = PilsString::get((const PILS_CHAR *)from, at - from);
 			nameSelector = (const NodeConstant *)language.namespaces->getAttribute(*prefix);
-			prefix->release();
+            run.release(prefix);
 			if (!nameSelector)
 				return error(run, ERROR_BAD_PREFIX);
 			from = ++at;
@@ -908,7 +908,7 @@ namespace PILS
 			const Constant* namespaceUrl = nameSelector->cliche->head;
 			if (namespaceUrl == &Builtin::name.minus)
 			{
-				name->release();
+                run.release(name);
 				return error(run, ERROR_UNKNOWN_NAME);
 			}
 			namespaceUrl->retain();
@@ -968,7 +968,7 @@ namespace PILS
 						const Constant* namespaceUrl = nameSelector->cliche->head;
 						if (namespaceUrl == &Builtin::name.minus)
 						{
-							name->release();
+                            run.release(name);
 							return error(run, ERROR_UNKNOWN_NAME);
 						}
 						namespaceUrl->retain();
@@ -1432,7 +1432,7 @@ namespace PILS
 
 	const Step *Parse::beginCurl(Runner &run, Parsing &parsing)
 	{
-		return (new (run.allocate(sizeof(ParseRuleset))) ParseRuleset(at))->beginCurl(run, parsing);
+        return (new (run.allocate(sizeof(ParseRuleset))) ParseRuleset(run, at))->beginCurl(run, parsing);
 	}
 
 	const Step *Parse::endCurl(Runner &run, Parsing &parsing)
@@ -1448,7 +1448,7 @@ namespace PILS
 	const Step *Parse::colon(Runner &run, Parsing &parsing)
 	{
 		PokerHead::singleton.retain();
-        AnyNodeBuilderChain *chain = new AnyNodeBuilderChain(&PokerHead::singleton, at, nullptr);
+        AnyNodeBuilderChain *chain = new AnyNodeBuilderChain(run, &PokerHead::singleton, at, nullptr);
         chain->aim(Empty::get());
 		new (run.allocate(sizeof(ParseNodeAttributes))) ParseNodeAttributes(chain, parsing.at);
 		new (run.allocate(sizeof(ParseAttributeValue))) ParseAttributeValue(parsing.at, Empty::singleton);
@@ -1463,7 +1463,7 @@ namespace PILS
 	const Step *Parse::colonNode(Runner &run, Parsing &parsing)
 	{
 		PokerHead::singleton.retain();
-		AnyNodeBuilderChain *chain = new AnyNodeBuilderChain(&PokerHead::singleton, at, nullptr);
+        AnyNodeBuilderChain *chain = new AnyNodeBuilderChain(run, &PokerHead::singleton, at, nullptr);
 		new (run.allocate(sizeof(ParseNodeAttributes))) ParseNodeAttributes(chain, parsing.at);
 		new (run.allocate(sizeof(ParseAttributeName))) ParseAttributeName(parsing.at);
 		return &parsing;
@@ -1476,7 +1476,7 @@ namespace PILS
 
 	const Step *Parse::semicolonNode(Runner &run, Parsing &parsing)
 	{
-        AnyNodeBuilderChain *chain = new AnyNodeBuilderChain(Empty::get(), at, nullptr);
+        AnyNodeBuilderChain *chain = new AnyNodeBuilderChain(run, Empty::get(), at, nullptr);
 		new (run.allocate(sizeof(ParseNodeAttributes))) ParseNodeAttributes(chain, parsing.at);
 		new (run.allocate(sizeof(ParseAttributeName))) ParseAttributeName(parsing.at);
 		return &parsing;
@@ -1517,7 +1517,7 @@ namespace PILS
 
 	const Step *Parse::nodehead(Runner &run, Parsing &parsing, const Constant *head)
 	{
-		new (run.allocate(sizeof(ParseNodeStart))) ParseNodeStart(new AnyNodeBuilderChain(head, at, nullptr), parsing.at);
+        new (run.allocate(sizeof(ParseNodeStart))) ParseNodeStart(new AnyNodeBuilderChain(run, head, at, nullptr), parsing.at);
 		return &parsing;
 	}
 
@@ -1556,10 +1556,10 @@ namespace PILS
 			new (run.allocate(sizeof(ParseSequel))) ParseSequel(parsing.at, value);
 			break;
 		case PARSE_ELEMENT:
-			new (run.allocate(sizeof(ParseList))) ParseList(parsing.at, value);
+            new (run.allocate(sizeof(ParseList))) ParseList(run, parsing.at, value);
 			break;
 		default:
-			value->release();
+            run.release(value);
 			parsing.redirectError(run, Parsing::ERROR_NOT_IMPLEMENTED);
 		}
 	}
@@ -1615,7 +1615,7 @@ namespace PILS
 
 	Sink *ParseHoldAny::kick(Runner &run)
 	{
-		hold->release();
+        run.release(hold);
 		return (Sink *)(this + 1);
 	}
 
@@ -1714,7 +1714,7 @@ namespace PILS
 
 	Sink *ParseHideInversionBase::kick(Runner &run)
 	{
-		if (restore) restore->release();
+        if (restore) run.release(restore);
 		restore = hold;
 		return (Sink *)(this + 1);
 	}
@@ -1794,7 +1794,7 @@ namespace PILS
 
 	Sink *ParseHoldConstant::kick(Runner &run)
 	{
-		hold->release();
+        run.release(hold);
 		return (Sink *)(this + 1);
 	}
 
@@ -1834,7 +1834,7 @@ namespace PILS
 
 	const Step *ParseName::beginParenthesis(Runner &run, Parsing &parsing)
 	{
-		AnyNodeBuilderChain *chain = new AnyNodeBuilderChain(hold, this[1].at, nullptr);
+        AnyNodeBuilderChain *chain = new AnyNodeBuilderChain(run, hold, this[1].at, nullptr);
 		run.sink = (Sink *)(this + 1);
 		new (run.allocate(sizeof(ParseHideInversion))) ParseHideInversion(this[1].at, parsing, nullptr);
 		new (run.allocate(sizeof(ParsePhraseStart))) ParsePhraseStart(chain, parsing.at);
@@ -1843,7 +1843,7 @@ namespace PILS
 
 	const Step *ParseName::beginSquare(Runner &run, Parsing &parsing)
 	{
-		AnyNodeBuilderChain *chain = new AnyNodeBuilderChain(hold, this[1].at, nullptr);
+        AnyNodeBuilderChain *chain = new AnyNodeBuilderChain(run, hold, this[1].at, nullptr);
 		run.sink = (Sink *)(this + 1);
 		new (run.allocate(sizeof(ParseHideInversion))) ParseHideInversion(this[1].at, parsing, nullptr);
 		new (run.allocate(sizeof(ParseConstantPhraseStart))) ParseConstantPhraseStart(chain, parsing.at);
@@ -1927,14 +1927,14 @@ namespace PILS
 			delete chain;
 			chain = next;
 		}
-		inner->release();
+        run.release(inner);
 		return (Sink *)(this + 1);
 	}
 
 	const Step *ParseColonInversion::attributeName(Runner &run, Parsing &parsing, const Constant *name)
 	{
 		PokerHead::singleton.retain();
-		chain = new AnyNodeBuilderChain(&PokerHead::singleton, at, chain);
+        chain = new AnyNodeBuilderChain(run, &PokerHead::singleton, at, chain);
 		chain->aim(name);
 		chain->set(inner);
 		const Any *value = build(run, parsing);
@@ -1961,7 +1961,7 @@ namespace PILS
 	const Step *ParseColonInversion::colonColon(Runner &run, Parsing &parsing)
 	{
 		PokerHead::singleton.retain();
-		chain = new AnyNodeBuilderChain(&PokerHead::singleton, at, chain);
+        chain = new AnyNodeBuilderChain(run, &PokerHead::singleton, at, chain);
 		at = parsing.at;
         chain->aim(Empty::get());
 		return &parsing;
@@ -2185,10 +2185,10 @@ namespace PILS
 			new (run.allocate(sizeof(ParseConstantElement))) ParseConstantElement(parsing.at, value);
 			break;
 		case PARSE_ELEMENT:
-			new (run.allocate(sizeof(ParseConstantCommaList))) ParseConstantCommaList(parsing.at, value);
+            new (run.allocate(sizeof(ParseConstantCommaList))) ParseConstantCommaList(run, parsing.at, value);
 			break;
 		default:
-			value->release();
+            run.release(value);
 			parsing.redirectError(run, Parsing::ERROR_NOT_IMPLEMENTED);
 		}
 	}
@@ -2199,7 +2199,7 @@ namespace PILS
 			close(run, parsing, level, constant);
 		else
 		{
-			value->release();
+            run.release(value);
 			parsing.redirectError(run, Parsing::ERROR_BAD_CONSTANT);
 		}
 	}
@@ -2215,7 +2215,7 @@ namespace PILS
 
 	const Step *ParseConstant::nodehead(Runner &run, Parsing &parsing, const Constant *head)
 	{
-		new (run.allocate(sizeof(ParseConstantNodeStart))) ParseConstantNodeStart(new AnyNodeBuilderChain(head, at, nullptr), parsing.at);
+        new (run.allocate(sizeof(ParseConstantNodeStart))) ParseConstantNodeStart(new AnyNodeBuilderChain(run, head, at, nullptr), parsing.at);
 		return &parsing;
 	}
 
@@ -2361,7 +2361,7 @@ namespace PILS
 			}
 			else
 			{
-				value->release();
+                run.release(value);
 				parsing.redirectError(run, Parsing::ERROR_BAD_CONSTANT);
 			}
 		}
@@ -2403,7 +2403,7 @@ namespace PILS
 			}
 			else
 			{
-				value->release();
+                run.release(value);
 				parsing.redirectError(run, Parsing::ERROR_BAD_CONSTANT);
 			}
 		}
@@ -2431,7 +2431,7 @@ namespace PILS
 				}
 				else
 				{
-					node->release();
+                    run.release(node);
 					parsing.redirectError(run, Parsing::ERROR_BAD_CONSTANT);
 				}
 				
@@ -2580,7 +2580,7 @@ namespace PILS
 
 	Sink *ParseConstantHold::kick(Runner &run)
 	{
-		hold->release();
+        run.release(hold);
 		return (Sink *)(this + 1);
 	}
 
@@ -2633,7 +2633,7 @@ namespace PILS
 	{
 		const Constant *first = hold;
 		run.sink = (Sink *)(this + 1);
-		ParseConstantShortList *parse = new (run.allocate(sizeof(ParseConstantShortList))) ParseConstantShortList(parsing.at, first, second);
+        ParseConstantShortList *parse = new (run.allocate(sizeof(ParseConstantShortList))) ParseConstantShortList(run, parsing.at, first, second);
 		parse->close(run, parsing, level);
 	}
 

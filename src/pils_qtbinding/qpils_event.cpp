@@ -24,7 +24,7 @@ namespace PILS{
         assert(thread);
         if (when == nullptr || QThread::currentThread() != thread->qThread)
         {
-            arg->release();
+            run.release(arg);
             return false;
         }
         bool eventWasHandled = false;
@@ -38,21 +38,21 @@ namespace PILS{
         new (run.allocate(sizeof(SinkQtEventCallback))) SinkQtEventCallback(run.where_, eventWasHandled);
         run.where_ = when;
         run.run(call->caller(*thread, *when));
-        call->release();
-        release();
+        run.release(call);
+        run.release(this);
         return eventWasHandled;
     }
 
     Sink *SinkQtEventCallback::kick(Runner &run)
     {
-        run.where_->release();
+        run.release(run.where_);
         run.where_ = whence;
         return this + 1;
     }
 
     const Step *SinkQtEventCallback::pass(Runner &run, const Any *value)
     {
-        value->release();
+        run.release(value);
         run.sink = kick(run);
         wasHandled = true;
         return nullptr;

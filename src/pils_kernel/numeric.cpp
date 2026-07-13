@@ -58,7 +58,7 @@ namespace PILS
 	const Step *SinkPropertyMinus::pass(Runner &run, const Integer *value)
 	{
 		long v = value->value;
-		value->release();
+        run.release(value);
 		long result = -v;
 		if (v == result && v != 0)
 			return (run.sink = this + 1)->pass(run, -(double)v);
@@ -68,15 +68,15 @@ namespace PILS
 	const Step *SinkPropertyMinus::pass(Runner &run, const Float *value)
 	{
 		double result = -value->value;
-		value->release();
-		return (run.sink = this + 1)->pass(run, result);
+        run.release(value);
+        return (run.sink = this + 1)->pass(run, result);
 	}
 
 	const Step *SinkPropertyMinus::pass(Runner &run, const Duration *value)
 	{
 		const Duration *result = Duration::get(-value->value);
-		value->release();
-		return (run.sink = this + 1)->pass(run, result);
+        run.release(value);
+        return (run.sink = this + 1)->pass(run, result);
 	}
 
 	FloatProperty::FloatProperty(const PILS_CHAR *name, double (*function)(double))
@@ -122,16 +122,16 @@ namespace PILS
 	{
 		WhoFloatProperty &what = (WhoFloatProperty &)this->what;
 		double result = what.function(value->value);
-		value->release();
-		return (run.sink = this + 1)->pass(run, result);
+        run.release(value);
+        return (run.sink = this + 1)->pass(run, result);
 	}
 
 	const Step *SinkFloatProperty::pass(Runner &run, const Float *value)
 	{
 		WhoFloatProperty &what = (WhoFloatProperty &)this->what;
 		double result = what.function(value->value);
-		value->release();
-		return (run.sink = this + 1)->pass(run, result);
+        run.release(value);
+        return (run.sink = this + 1)->pass(run, result);
 	}
 
 	const NodeConstantShort *BuiltinClicheOperationPlus::newNode(const Constant *&link, const Integer *value) const
@@ -312,16 +312,16 @@ namespace PILS
 	const Step *SinkWhoPlusRawInteger::pass(Runner &run, const Integer *value)
 	{
 		double result = (double)value->value + operand;
-		value->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoPlusRawInteger::pass(Runner &run, const Float *value)
 	{
 		double result = value->value + operand;
-		value->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
@@ -356,16 +356,16 @@ namespace PILS
 	const Step *SinkWhoPlusRawFloat::pass(Runner &run, const Integer *value)
 	{
 		double result = value->value + operand;
-		value->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoPlusRawFloat::pass(Runner &run, const Float *value)
 	{
 		double result = value->value + operand;
-		value->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
@@ -400,16 +400,16 @@ namespace PILS
 	const Step *SinkWhoPlusUncountedInteger::pass(Runner &run, const Integer *value)
 	{
 		double result = (double)value->value + ((const Integer&)operand).value;
-		value->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoPlusUncountedInteger::pass(Runner &run, const Float *value)
 	{
 		double result = value->value + ((const Integer&)operand).value;
-		value->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
@@ -430,16 +430,16 @@ namespace PILS
 	const Step *SinkWhoPlusUncountedFloat::pass(Runner &run, const Integer *value)
 	{
 		double result = value->value + ((const Float&)operand).value;
-		value->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoPlusUncountedFloat::pass(Runner &run, const Float *value)
 	{
 		double result = value->value + ((const Float&)operand).value;
-		value->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
@@ -460,185 +460,185 @@ namespace PILS
 	const Step *SinkWhoPlusUncountedTimestamp::pass(Runner &run, const Duration *value)
 	{
 		const Timestamp *result = Timestamp::get(value->value + ((const Timestamp&)operand).value);
-		value->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoPlusUncountedDuration::pass(Runner &run, const Timestamp *value)
 	{
 		const Timestamp *result = Timestamp::get(value->value + ((const Duration&)operand).value);
-		value->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoPlusUncountedDuration::pass(Runner &run, const PilsDate *value)
 	{
 		const PilsDate *result = PilsDate::get(value->value + ((const Duration&)operand).value);
-		value->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoPlusUncountedDuration::pass(Runner &run, const Duration *value)
 	{
 		const Duration *result = Duration::get(value->value + ((const Duration&)operand).value);
-		value->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoPlusUncountedPilsDate::pass(Runner &run, const Duration *value)
 	{
 		const PilsDate *result = PilsDate::get(value->value + ((const PilsDate&)operand).value);
-		value->release();
-		run.sink = this + 1;
+        run.release(&operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoPlusInteger::pass(Runner &run, long value)
 	{
 		double result = (double)value + ((const Integer*)operand)->value;
-		operand->release();
-		run.sink = this + 1;
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoPlusInteger::pass(Runner &run, double value)
 	{
 		double result = value + ((const Integer*)operand)->value;
-		operand->release();
-		run.sink = this + 1;
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoPlusInteger::pass(Runner &run, const Integer &value)
 	{
 		double result = (double)value.value + ((const Integer*)operand)->value;
-		operand->release();
-		run.sink = this + 1;
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoPlusInteger::pass(Runner &run, const Float &value)
 	{
 		double result = value.value + ((const Integer*)operand)->value;
-		operand->release();
-		run.sink = this + 1;
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoPlusInteger::pass(Runner &run, const Integer *value)
 	{
 		double result = (double)value->value + ((const Integer*)operand)->value;
-		value->release();
-		operand->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoPlusInteger::pass(Runner &run, const Float *value)
 	{
 		double result = value->value + ((const Integer*)operand)->value;
-		value->release();
-		operand->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoPlusFloat::pass(Runner &run, long value)
 	{
 		double result = value + ((const Float*)operand)->value;
-		operand->release();
-		run.sink = this + 1;
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoPlusFloat::pass(Runner &run, double value)
 	{
 		double result = value + ((const Float*)operand)->value;
-		operand->release();
-		run.sink = this + 1;
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoPlusFloat::pass(Runner &run, const Integer &value)
 	{
 		double result = value.value + ((const Float*)operand)->value;
-		operand->release();
-		run.sink = this + 1;
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoPlusFloat::pass(Runner &run, const Float &value)
 	{
 		double result = value.value + ((const Float*)operand)->value;
-		operand->release();
-		run.sink = this + 1;
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoPlusFloat::pass(Runner &run, const Integer *value)
 	{
 		double result = value->value + ((const Float*)operand)->value;
-		value->release();
-		operand->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoPlusFloat::pass(Runner &run, const Float *value)
 	{
 		double result = value->value + ((const Float*)operand)->value;
-		value->release();
-		operand->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoPlusTimestamp::pass(Runner &run, const Duration *value)
 	{
 		const Timestamp *result = Timestamp::get(value->value + ((const Timestamp*)operand)->value);
-		value->release();
-		operand->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoPlusDuration::pass(Runner &run, const Timestamp *value)
 	{
 		const Timestamp *result = Timestamp::get(value->value + ((const Duration*)operand)->value);
-		value->release();
-		operand->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoPlusDuration::pass(Runner &run, const PilsDate *value)
 	{
 		const PilsDate *result = PilsDate::get(value->value + ((const Duration*)operand)->value);
-		value->release();
-		operand->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoPlusDuration::pass(Runner &run, const Duration *value)
 	{
 		const Duration *result = Duration::get(value->value + ((const Duration*)operand)->value);
-		value->release();
-		operand->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoPlusPilsDate::pass(Runner &run, const Duration *value)
 	{
 		const PilsDate *result = PilsDate::get(value->value + ((const PilsDate*)operand)->value);
-		value->release();
-		operand->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
@@ -820,7 +820,7 @@ namespace PILS
 	const Step *SinkWhoMinusRawInteger::pass(Runner &run, const Integer *value)
 	{
 		double result = (double)value->value - operand;
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -828,8 +828,8 @@ namespace PILS
 	const Step *SinkWhoMinusRawInteger::pass(Runner &run, const Float *value)
 	{
 		double result = value->value - operand;
-		value->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
@@ -864,16 +864,16 @@ namespace PILS
 	const Step *SinkWhoMinusRawFloat::pass(Runner &run, const Integer *value)
 	{
 		double result = value->value - operand;
-		value->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoMinusRawFloat::pass(Runner &run, const Float *value)
 	{
 		double result = value->value - operand;
-		value->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
@@ -908,16 +908,16 @@ namespace PILS
 	const Step *SinkWhoMinusUncountedInteger::pass(Runner &run, const Integer *value)
 	{
 		double result = (double)value->value - ((const Integer&)operand).value;
-		value->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoMinusUncountedInteger::pass(Runner &run, const Float *value)
 	{
 		double result = value->value - ((const Integer&)operand).value;
-		value->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
@@ -938,16 +938,16 @@ namespace PILS
 	const Step *SinkWhoMinusUncountedFloat::pass(Runner &run, const Integer *value)
 	{
 		double result = value->value - ((const Float&)operand).value;
-		value->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoMinusUncountedFloat::pass(Runner &run, const Float *value)
 	{
 		double result = value->value - ((const Float&)operand).value;
-		value->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
@@ -968,47 +968,47 @@ namespace PILS
 	const Step *SinkWhoMinusUncountedTimestamp::pass(Runner &run, const Timestamp *value)
 	{
 		const Duration *result = Duration::get(value->value - ((const Timestamp&)operand).value);
-		value->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoMinusUncountedDuration::pass(Runner &run, const Timestamp *value)
 	{
 		const Timestamp *result = Timestamp::get(value->value - ((const Duration&)operand).value);
-		value->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoMinusUncountedDuration::pass(Runner &run, const PilsDate *value)
 	{
 		const PilsDate *result = PilsDate::get(value->value - ((const Duration&)operand).value);
-		value->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoMinusUncountedDuration::pass(Runner &run, const Duration *value)
 	{
 		const Duration *result = Duration::get(value->value - ((const Duration&)operand).value);
-		value->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoMinusUncountedPilsDate::pass(Runner &run, const PilsDate *value)
 	{
 		const Duration *result = Duration::get(value->value - ((const PilsDate&)operand).value);
-		value->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoMinusInteger::pass(Runner &run, long value)
 	{
 		double result = (double)value - ((const Integer*)operand)->value;
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1016,137 +1016,137 @@ namespace PILS
 	const Step *SinkWhoMinusInteger::pass(Runner &run, double value)
 	{
 		double result = value - ((const Integer*)operand)->value;
-		operand->release();
-		run.sink = this + 1;
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoMinusInteger::pass(Runner &run, const Integer &value)
 	{
 		double result = (double)value.value - ((const Integer*)operand)->value;
-		operand->release();
-		run.sink = this + 1;
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoMinusInteger::pass(Runner &run, const Float &value)
 	{
 		double result = value.value - ((const Integer*)operand)->value;
-		operand->release();
-		run.sink = this + 1;
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoMinusInteger::pass(Runner &run, const Integer *value)
 	{
 		double result = (double)value->value - ((const Integer*)operand)->value;
-		value->release();
-		operand->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoMinusInteger::pass(Runner &run, const Float *value)
 	{
 		double result = value->value - ((const Integer*)operand)->value;
-		value->release();
-		operand->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoMinusFloat::pass(Runner &run, long value)
 	{
 		double result = value - ((const Float*)operand)->value;
-		operand->release();
-		run.sink = this + 1;
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoMinusFloat::pass(Runner &run, double value)
 	{
 		double result = value - ((const Float*)operand)->value;
-		operand->release();
-		run.sink = this + 1;
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoMinusFloat::pass(Runner &run, const Integer &value)
 	{
 		double result = value.value - ((const Float*)operand)->value;
-		operand->release();
-		run.sink = this + 1;
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoMinusFloat::pass(Runner &run, const Float &value)
 	{
 		double result = value.value - ((const Float*)operand)->value;
-		operand->release();
-		run.sink = this + 1;
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoMinusFloat::pass(Runner &run, const Integer *value)
 	{
 		double result = value->value - ((const Float*)operand)->value;
-		value->release();
-		operand->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoMinusFloat::pass(Runner &run, const Float *value)
 	{
 		double result = value->value - ((const Float*)operand)->value;
-		value->release();
-		operand->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoMinusTimestamp::pass(Runner &run, const Timestamp *value)
 	{
 		const Duration *result = Duration::get(value->value - ((const Timestamp*)operand)->value);
-		value->release();
-		operand->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoMinusDuration::pass(Runner &run, const Timestamp *value)
 	{
 		const Timestamp *result = Timestamp::get(value->value - ((const Duration*)operand)->value);
-		value->release();
-		operand->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoMinusDuration::pass(Runner &run, const PilsDate *value)
 	{
 		const PilsDate *result = PilsDate::get(value->value - ((const Duration*)operand)->value);
-		value->release();
-		operand->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoMinusDuration::pass(Runner &run, const Duration *value)
 	{
 		const Duration *result = Duration::get(value->value - ((const Duration*)operand)->value);
-		value->release();
-		operand->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
 	const Step *SinkWhoMinusPilsDate::pass(Runner &run, const PilsDate *value)
 	{
 		const Duration *result = Duration::get(value->value - ((const PilsDate*)operand)->value);
-		value->release();
-		operand->release();
-		run.sink = this + 1;
+        run.release(value);
+        run.release(operand);
+        run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
 
@@ -1280,7 +1280,7 @@ namespace PILS
 	const Step *SinkWhoTimesRawInteger::pass(Runner &run, const Integer *value)
 	{
 		double result = (double)value->value * operand;
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1288,7 +1288,7 @@ namespace PILS
 	const Step *SinkWhoTimesRawInteger::pass(Runner &run, const Float *value)
 	{
 		double result = value->value * operand;
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1296,7 +1296,7 @@ namespace PILS
 	const Step *SinkWhoTimesRawInteger::pass(Runner &run, const Duration *value)
 	{
 		const Duration *result = Duration::get(value->value * operand);
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1332,7 +1332,7 @@ namespace PILS
 	const Step *SinkWhoTimesRawFloat::pass(Runner &run, const Integer *value)
 	{
 		double result = value->value * operand;
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1340,7 +1340,7 @@ namespace PILS
 	const Step *SinkWhoTimesRawFloat::pass(Runner &run, const Float *value)
 	{
 		double result = value->value * operand;
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1348,7 +1348,7 @@ namespace PILS
 	const Step *SinkWhoTimesRawFloat::pass(Runner &run, const Duration *value)
 	{
 		const Duration *result = Duration::get((long long)(value->value * operand));
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1384,7 +1384,7 @@ namespace PILS
 	const Step *SinkWhoTimesUncountedInteger::pass(Runner &run, const Integer *value)
 	{
 		double result = (double)value->value * ((const Integer&)operand).value;
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1392,7 +1392,7 @@ namespace PILS
 	const Step *SinkWhoTimesUncountedInteger::pass(Runner &run, const Float *value)
 	{
 		double result = value->value * ((const Integer&)operand).value;
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1400,7 +1400,7 @@ namespace PILS
 	const Step *SinkWhoTimesUncountedInteger::pass(Runner &run, const Duration *value)
 	{
 		const Duration *result = Duration::get(value->value * ((const Integer&)operand).value);
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1422,7 +1422,7 @@ namespace PILS
 	const Step *SinkWhoTimesUncountedFloat::pass(Runner &run, const Integer *value)
 	{
 		double result = value->value * ((const Float&)operand).value;
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1430,7 +1430,7 @@ namespace PILS
 	const Step *SinkWhoTimesUncountedFloat::pass(Runner &run, const Float *value)
 	{
 		double result = value->value * ((const Float&)operand).value;
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1438,7 +1438,7 @@ namespace PILS
 	const Step *SinkWhoTimesUncountedFloat::pass(Runner &run, const Duration *value)
 	{
 		const Duration *result = Duration::get((long long)(value->value * ((const Float&)operand).value));
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1476,7 +1476,7 @@ namespace PILS
 	const Step *SinkWhoTimesUncountedDuration::pass(Runner &run, const Integer *value)
 	{
 		const Duration *result = Duration::get(value->value * ((const Duration&)operand).value);
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1484,7 +1484,7 @@ namespace PILS
 	const Step *SinkWhoTimesUncountedDuration::pass(Runner &run, const Float *value)
 	{
 		const Duration *result = Duration::get((long long)(value->value * ((const Duration&)operand).value));
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1506,7 +1506,7 @@ namespace PILS
 	const Step *SinkWhoTimesInteger::pass(Runner &run, long value)
 	{
 		double result = (double)value * ((const Integer*)operand)->value;
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1514,7 +1514,7 @@ namespace PILS
 	const Step *SinkWhoTimesInteger::pass(Runner &run, double value)
 	{
 		double result = value * ((const Integer*)operand)->value;
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1522,7 +1522,7 @@ namespace PILS
 	const Step *SinkWhoTimesInteger::pass(Runner &run, const Integer &value)
 	{
 		double result = (double)value.value * ((const Integer*)operand)->value;
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1530,7 +1530,7 @@ namespace PILS
 	const Step *SinkWhoTimesInteger::pass(Runner &run, const Float &value)
 	{
 		double result = value.value * ((const Integer*)operand)->value;
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1538,8 +1538,8 @@ namespace PILS
 	const Step *SinkWhoTimesInteger::pass(Runner &run, const Integer *value)
 	{
 		double result = (double)value->value * ((const Integer*)operand)->value;
-		value->release();
-		operand->release();
+        run.release(value);
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1547,8 +1547,8 @@ namespace PILS
 	const Step *SinkWhoTimesInteger::pass(Runner &run, const Float *value)
 	{
 		double result = value->value * ((const Integer*)operand)->value;
-		value->release();
-		operand->release();
+        run.release(value);
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1556,8 +1556,8 @@ namespace PILS
 	const Step *SinkWhoTimesInteger::pass(Runner &run, const Duration *value)
 	{
 		const Duration *result = Duration::get(value->value * ((const Integer*)operand)->value);
-		value->release();
-		operand->release();
+        run.release(value);
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1565,7 +1565,7 @@ namespace PILS
 	const Step *SinkWhoTimesFloat::pass(Runner &run, long value)
 	{
 		double result = value * ((const Float*)operand)->value;
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1573,7 +1573,7 @@ namespace PILS
 	const Step *SinkWhoTimesFloat::pass(Runner &run, double value)
 	{
 		double result = value * ((const Float*)operand)->value;
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1581,7 +1581,7 @@ namespace PILS
 	const Step *SinkWhoTimesFloat::pass(Runner &run, const Integer &value)
 	{
 		double result = value.value * ((const Float*)operand)->value;
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1589,7 +1589,7 @@ namespace PILS
 	const Step *SinkWhoTimesFloat::pass(Runner &run, const Float &value)
 	{
 		double result = value.value * ((const Float*)operand)->value;
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1597,8 +1597,8 @@ namespace PILS
 	const Step *SinkWhoTimesFloat::pass(Runner &run, const Integer *value)
 	{
 		double result = value->value * ((const Float*)operand)->value;
-		value->release();
-		operand->release();
+        run.release(value);
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1606,8 +1606,8 @@ namespace PILS
 	const Step *SinkWhoTimesFloat::pass(Runner &run, const Float *value)
 	{
 		double result = value->value * ((const Float*)operand)->value;
-		value->release();
-		operand->release();
+        run.release(value);
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1615,8 +1615,8 @@ namespace PILS
 	const Step *SinkWhoTimesFloat::pass(Runner &run, const Duration *value)
 	{
 		const Duration *result = Duration::get((long long)(value->value * ((const Float*)operand)->value));
-		value->release();
-		operand->release();
+        run.release(value);
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1624,7 +1624,7 @@ namespace PILS
 	const Step *SinkWhoTimesDuration::pass(Runner &run, long value)
 	{
 		const Duration *result = Duration::get(value * ((const Duration*)operand)->value);
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1632,7 +1632,7 @@ namespace PILS
 	const Step *SinkWhoTimesDuration::pass(Runner &run, double value)
 	{
 		const Duration *result = Duration::get((long long)(value * ((const Duration*)operand)->value));
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1640,7 +1640,7 @@ namespace PILS
 	const Step *SinkWhoTimesDuration::pass(Runner &run, const Integer &value)
 	{
 		const Duration *result = Duration::get(value.value * ((const Duration*)operand)->value);
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1648,7 +1648,7 @@ namespace PILS
 	const Step *SinkWhoTimesDuration::pass(Runner &run, const Float &value)
 	{
 		const Duration *result = Duration::get((long long)(value.value * ((const Duration*)operand)->value));
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1656,8 +1656,8 @@ namespace PILS
 	const Step *SinkWhoTimesDuration::pass(Runner &run, const Integer *value)
 	{
 		const Duration *result = Duration::get(value->value * ((const Duration*)operand)->value);
-		value->release();
-		operand->release();
+        run.release(value);
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1665,8 +1665,8 @@ namespace PILS
 	const Step *SinkWhoTimesDuration::pass(Runner &run, const Float *value)
 	{
 		const Duration *result = Duration::get((long long)(value->value * ((const Duration*)operand)->value));
-		value->release();
-		operand->release();
+        run.release(value);
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1801,7 +1801,7 @@ namespace PILS
 	const Step *SinkWhoDivideRawInteger::pass(Runner &run, const Integer *value)
 	{
 		double result = (double)value->value / operand;
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1809,7 +1809,7 @@ namespace PILS
 	const Step *SinkWhoDivideRawInteger::pass(Runner &run, const Float *value)
 	{
 		double result = value->value / operand;
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1817,7 +1817,7 @@ namespace PILS
 	const Step *SinkWhoDivideRawInteger::pass(Runner &run, const Duration *value)
 	{
 		const Duration *result = Duration::get(value->value / operand);
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1853,7 +1853,7 @@ namespace PILS
 	const Step *SinkWhoDivideRawFloat::pass(Runner &run, const Integer *value)
 	{
 		double result = value->value / operand;
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1861,7 +1861,7 @@ namespace PILS
 	const Step *SinkWhoDivideRawFloat::pass(Runner &run, const Float *value)
 	{
 		double result = value->value / operand;
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1869,7 +1869,7 @@ namespace PILS
 	const Step *SinkWhoDivideRawFloat::pass(Runner &run, const Duration *value)
 	{
 		const Duration *result = Duration::get((long long)(value->value / operand));
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1905,7 +1905,7 @@ namespace PILS
 	const Step *SinkWhoDivideUncountedInteger::pass(Runner &run, const Integer *value)
 	{
 		double result = (double)value->value / ((const Integer&)operand).value;
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1913,7 +1913,7 @@ namespace PILS
 	const Step *SinkWhoDivideUncountedInteger::pass(Runner &run, const Float *value)
 	{
 		double result = value->value / ((const Integer&)operand).value;
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1921,7 +1921,7 @@ namespace PILS
 	const Step *SinkWhoDivideUncountedInteger::pass(Runner &run, const Duration *value)
 	{
 		const Duration *result = Duration::get(value->value / ((const Integer&)operand).value);
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1943,7 +1943,7 @@ namespace PILS
 	const Step *SinkWhoDivideUncountedFloat::pass(Runner &run, const Integer *value)
 	{
 		double result = value->value / ((const Float&)operand).value;
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1951,7 +1951,7 @@ namespace PILS
 	const Step *SinkWhoDivideUncountedFloat::pass(Runner &run, const Float *value)
 	{
 		double result = value->value / ((const Float&)operand).value;
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1959,7 +1959,7 @@ namespace PILS
 	const Step *SinkWhoDivideUncountedFloat::pass(Runner &run, const Duration *value)
 	{
 		const Duration *result = Duration::get((long long)(value->value / ((const Float&)operand).value));
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1981,7 +1981,7 @@ namespace PILS
 	const Step *SinkWhoDivideUncountedDuration::pass(Runner &run, const Duration *value)
 	{
 		double result = (double)value->value / ((const Duration&)operand).value;
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1989,7 +1989,7 @@ namespace PILS
 	const Step *SinkWhoDivideInteger::pass(Runner &run, long value)
 	{
 		double result = (double)value / ((const Integer*)operand)->value;
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -1997,7 +1997,7 @@ namespace PILS
 	const Step *SinkWhoDivideInteger::pass(Runner &run, double value)
 	{
 		double result = value / ((const Integer*)operand)->value;
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2005,7 +2005,7 @@ namespace PILS
 	const Step *SinkWhoDivideInteger::pass(Runner &run, const Integer &value)
 	{
 		double result = (double)value.value / ((const Integer*)operand)->value;
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2013,7 +2013,7 @@ namespace PILS
 	const Step *SinkWhoDivideInteger::pass(Runner &run, const Float &value)
 	{
 		double result = value.value / ((const Integer*)operand)->value;
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2021,8 +2021,8 @@ namespace PILS
 	const Step *SinkWhoDivideInteger::pass(Runner &run, const Integer *value)
 	{
 		double result = (double)value->value / ((const Integer*)operand)->value;
-		value->release();
-		operand->release();
+        run.release(value);
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2030,8 +2030,8 @@ namespace PILS
 	const Step *SinkWhoDivideInteger::pass(Runner &run, const Float *value)
 	{
 		double result = value->value / ((const Integer*)operand)->value;
-		value->release();
-		operand->release();
+        run.release(value);
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2039,8 +2039,8 @@ namespace PILS
 	const Step *SinkWhoDivideInteger::pass(Runner &run, const Duration *value)
 	{
 		const Duration *result = Duration::get(value->value / ((const Integer*)operand)->value);
-		value->release();
-		operand->release();
+        run.release(value);
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2048,7 +2048,7 @@ namespace PILS
 	const Step *SinkWhoDivideFloat::pass(Runner &run, long value)
 	{
 		double result = value / ((const Float*)operand)->value;
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2056,7 +2056,7 @@ namespace PILS
 	const Step *SinkWhoDivideFloat::pass(Runner &run, double value)
 	{
 		double result = value / ((const Float*)operand)->value;
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2064,7 +2064,7 @@ namespace PILS
 	const Step *SinkWhoDivideFloat::pass(Runner &run, const Integer &value)
 	{
 		double result = value.value / ((const Float*)operand)->value;
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2072,7 +2072,7 @@ namespace PILS
 	const Step *SinkWhoDivideFloat::pass(Runner &run, const Float &value)
 	{
 		double result = value.value / ((const Float*)operand)->value;
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2080,8 +2080,8 @@ namespace PILS
 	const Step *SinkWhoDivideFloat::pass(Runner &run, const Integer *value)
 	{
 		double result = value->value / ((const Float*)operand)->value;
-		value->release();
-		operand->release();
+        run.release(value);
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2089,8 +2089,8 @@ namespace PILS
 	const Step *SinkWhoDivideFloat::pass(Runner &run, const Float *value)
 	{
 		double result = value->value / ((const Float*)operand)->value;
-		value->release();
-		operand->release();
+        run.release(value);
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2098,8 +2098,8 @@ namespace PILS
 	const Step *SinkWhoDivideFloat::pass(Runner &run, const Duration *value)
 	{
 		const Duration *result = Duration::get((long long)(value->value / ((const Float*)operand)->value));
-		value->release();
-		operand->release();
+        run.release(value);
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2107,8 +2107,8 @@ namespace PILS
 	const Step *SinkWhoDivideDuration::pass(Runner &run, const Duration *value)
 	{
 		double result = value->value / (double)((const Duration *)operand)->value;
-		value->release();
-		operand->release();
+        run.release(value);
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2251,7 +2251,7 @@ namespace PILS
 		double result = (double)value->value / operand;
 		if (result >= 0) result = floor(result);
 		else result = -floor(-result);
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2261,7 +2261,7 @@ namespace PILS
 		double result = value->value / operand;
 		if (result >= 0) result = floor(result);
 		else result = -floor(-result);
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2307,7 +2307,7 @@ namespace PILS
 		double result = value->value / operand;
 		if (result >= 0) result = floor(result);
 		else result = -floor(-result);
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2317,7 +2317,7 @@ namespace PILS
 		double result = value->value / operand;
 		if (result >= 0) result = floor(result);
 		else result = -floor(-result);
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2363,7 +2363,7 @@ namespace PILS
 		double result = (double)value->value / ((const Integer&)operand).value;
 		if (result >= 0) result = floor(result);
 		else result = -floor(-result);
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2373,7 +2373,7 @@ namespace PILS
 		double result = value->value / ((const Integer&)operand).value;
 		if (result >= 0) result = floor(result);
 		else result = -floor(-result);
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2401,7 +2401,7 @@ namespace PILS
 		double result = value->value / ((const Float&)operand).value;
 		if (result >= 0) result = floor(result);
 		else result = -floor(-result);
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2411,7 +2411,7 @@ namespace PILS
 		double result = value->value / ((const Float&)operand).value;
 		if (result >= 0) result = floor(result);
 		else result = -floor(-result);
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2437,7 +2437,7 @@ namespace PILS
 	const Step *SinkWhoIntegerDivideUncountedDuration::pass(Runner &run, const Duration *value)
 	{
 		double result = (double)(value->value / ((const Duration&)operand).value);
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2447,7 +2447,7 @@ namespace PILS
 		double result = (double)value / ((const Integer*)operand)->value;
 		if (result >= 0) result = floor(result);
 		else result = -floor(-result);
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2457,7 +2457,7 @@ namespace PILS
 		double result = value / ((const Integer*)operand)->value;
 		if (result >= 0) result = floor(result);
 		else result = -floor(-result);
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2467,7 +2467,7 @@ namespace PILS
 		double result = (double)value.value / ((const Integer*)operand)->value;
 		if (result >= 0) result = floor(result);
 		else result = -floor(-result);
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2477,7 +2477,7 @@ namespace PILS
 		double result = value.value / ((const Integer*)operand)->value;
 		if (result >= 0) result = floor(result);
 		else result = -floor(-result);
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2487,8 +2487,8 @@ namespace PILS
 		double result = (double)value->value / ((const Integer*)operand)->value;
 		if (result >= 0) result = floor(result);
 		else result = -floor(-result);
-		value->release();
-		operand->release();
+        run.release(value);
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2498,8 +2498,8 @@ namespace PILS
 		double result = value->value / ((const Integer*)operand)->value;
 		if (result >= 0) result = floor(result);
 		else result = -floor(-result);
-		value->release();
-		operand->release();
+        run.release(value);
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2509,7 +2509,7 @@ namespace PILS
 		double result = value / ((const Float*)operand)->value;
 		if (result >= 0) result = floor(result);
 		else result = -floor(-result);
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2519,7 +2519,7 @@ namespace PILS
 		double result = value / ((const Float*)operand)->value;
 		if (result >= 0) result = floor(result);
 		else result = -floor(-result);
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2529,7 +2529,7 @@ namespace PILS
 		double result = value.value / ((const Float*)operand)->value;
 		if (result >= 0) result = floor(result);
 		else result = -floor(-result);
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2539,7 +2539,7 @@ namespace PILS
 		double result = value.value / ((const Float*)operand)->value;
 		if (result >= 0) result = floor(result);
 		else result = -floor(-result);
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2549,8 +2549,8 @@ namespace PILS
 		double result = value->value / ((const Float*)operand)->value;
 		if (result >= 0) result = floor(result);
 		else result = -floor(-result);
-		value->release();
-		operand->release();
+        run.release(value);
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2560,8 +2560,8 @@ namespace PILS
 		double result = value->value / ((const Float*)operand)->value;
 		if (result >= 0) result = floor(result);
 		else result = -floor(-result);
-		value->release();
-		operand->release();
+        run.release(value);
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2569,8 +2569,8 @@ namespace PILS
 	const Step *SinkWhoIntegerDivideDuration::pass(Runner &run, const Duration *value)
 	{
 		double result = (double)(value->value / ((const Duration*)operand)->value);
-		value->release();
-		operand->release();
+        run.release(value);
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2681,7 +2681,7 @@ namespace PILS
 	const Step *SinkWhoModuloRawInteger::pass(Runner &run, const Integer *value)
 	{
 		double result = fmod((double)value->value, operand);
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2689,7 +2689,7 @@ namespace PILS
 	const Step *SinkWhoModuloRawInteger::pass(Runner &run, const Float *value)
 	{
 		double result = fmod(value->value, operand);
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2725,7 +2725,7 @@ namespace PILS
 	const Step *SinkWhoModuloRawFloat::pass(Runner &run, const Integer *value)
 	{
 		double result = fmod(value->value, operand);
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2733,7 +2733,7 @@ namespace PILS
 	const Step *SinkWhoModuloRawFloat::pass(Runner &run, const Float *value)
 	{
 		double result = fmod(value->value, operand);
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2769,7 +2769,7 @@ namespace PILS
 	const Step *SinkWhoModuloUncountedInteger::pass(Runner &run, const Integer *value)
 	{
 		double result = fmod((double)value->value, ((const Integer&)operand).value);
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2777,7 +2777,7 @@ namespace PILS
 	const Step *SinkWhoModuloUncountedInteger::pass(Runner &run, const Float *value)
 	{
 		double result = fmod(value->value, ((const Integer&)operand).value);
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2799,7 +2799,7 @@ namespace PILS
 	const Step *SinkWhoModuloUncountedFloat::pass(Runner &run, const Integer *value)
 	{
 		double result = fmod(value->value, ((const Float&)operand).value);
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2807,7 +2807,7 @@ namespace PILS
 	const Step *SinkWhoModuloUncountedFloat::pass(Runner &run, const Float *value)
 	{
 		double result = fmod(value->value, ((const Float&)operand).value);
-		value->release();
+        run.release(value);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2829,7 +2829,7 @@ namespace PILS
 	const Step *SinkWhoModuloInteger::pass(Runner &run, long value)
 	{
 		double result = fmod((double)value, ((const Integer*)operand)->value);
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2837,7 +2837,7 @@ namespace PILS
 	const Step *SinkWhoModuloInteger::pass(Runner &run, double value)
 	{
 		double result = fmod(value, ((const Integer*)operand)->value);
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2845,7 +2845,7 @@ namespace PILS
 	const Step *SinkWhoModuloInteger::pass(Runner &run, const Integer &value)
 	{
 		double result = fmod((double)value.value, ((const Integer*)operand)->value);
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2853,7 +2853,7 @@ namespace PILS
 	const Step *SinkWhoModuloInteger::pass(Runner &run, const Float &value)
 	{
 		double result = fmod(value.value, ((const Integer*)operand)->value);
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2861,8 +2861,8 @@ namespace PILS
 	const Step *SinkWhoModuloInteger::pass(Runner &run, const Integer *value)
 	{
 		double result = fmod((double)value->value, ((const Integer*)operand)->value);
-		value->release();
-		operand->release();
+        run.release(value);
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2870,8 +2870,8 @@ namespace PILS
 	const Step *SinkWhoModuloInteger::pass(Runner &run, const Float *value)
 	{
 		double result = fmod(value->value, ((const Integer*)operand)->value);
-		value->release();
-		operand->release();
+        run.release(value);
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2879,7 +2879,7 @@ namespace PILS
 	const Step *SinkWhoModuloFloat::pass(Runner &run, long value)
 	{
 		double result = fmod(value, ((const Float*)operand)->value);
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2887,7 +2887,7 @@ namespace PILS
 	const Step *SinkWhoModuloFloat::pass(Runner &run, double value)
 	{
 		double result = fmod(value, ((const Float*)operand)->value);
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2895,7 +2895,7 @@ namespace PILS
 	const Step *SinkWhoModuloFloat::pass(Runner &run, const Integer &value)
 	{
 		double result = fmod(value.value, ((const Float*)operand)->value);
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2903,7 +2903,7 @@ namespace PILS
 	const Step *SinkWhoModuloFloat::pass(Runner &run, const Float &value)
 	{
 		double result = fmod(value.value, ((const Float*)operand)->value);
-		operand->release();
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2911,8 +2911,8 @@ namespace PILS
 	const Step *SinkWhoModuloFloat::pass(Runner &run, const Integer *value)
 	{
 		double result = fmod(value->value, ((const Float*)operand)->value);
-		value->release();
-		operand->release();
+        run.release(value);
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2920,8 +2920,8 @@ namespace PILS
 	const Step *SinkWhoModuloFloat::pass(Runner &run, const Float *value)
 	{
 		double result = fmod(value->value, ((const Float*)operand)->value);
-		value->release();
-		operand->release();
+        run.release(value);
+        run.release(operand);
 		run.sink = this + 1;
 		return run.sink->pass(run, result);
 	}
@@ -2950,7 +2950,7 @@ namespace PILS
 	const Step *SinkPropertyHexadecimal::pass(Runner &run, const Integer *value)
 	{
 		long v = value->value;
-		value->release();
+        run.release(value);
 		PILS_CHAR buffer[10] = {'0', 'x'};
 		for (int i = 7; i >= 0; i--)
 			buffer[9 - i] = "0123456789abcdef"[0xf & v >> i * 4];
@@ -2995,7 +2995,7 @@ namespace PILS
 		if (operand->isNumber(unit) && unit != 0)
 		{
 			double result = round(value->value / unit) * unit;
-			value->release();
+            run.release(value);
 			return (run.sink = kick(run))->pass(run, result);
 		}
 		else return pass(run, (const Any *)value);
@@ -3007,7 +3007,7 @@ namespace PILS
 		if (operand->isNumber(unit) && unit > 0)
 		{
 			double result = round(value->value / unit) * unit;
-			value->release();
+            run.release(value);
 			return (run.sink = kick(run))->pass(run, result);
 		}
 		else return pass(run, (const Any *)value);
@@ -3030,7 +3030,7 @@ namespace PILS
 			{
 				time = -time;
 			}
-			value->release();
+            run.release(value);
 			return (run.sink = kick(run))->pass(run, Timestamp::get(time));
 		}
 		else return pass(run, (const Any *)value);
@@ -3053,7 +3053,7 @@ namespace PILS
 			{
 				time = -time;
 			}
-			value->release();
+            run.release(value);
 			return (run.sink = kick(run))->pass(run, PilsDate::get(time));
 		}
 		else return pass(run, (const Any *)value);
@@ -3076,7 +3076,7 @@ namespace PILS
 			{
 				time = -time;
 			}
-			value->release();
+            run.release(value);
 			return (run.sink = kick(run))->pass(run, Duration::get(time));
 		}
 		else return pass(run, (const Any *)value);
@@ -3088,7 +3088,7 @@ namespace PILS
 		if (operand->isNumber(unit) && unit != 0)
 		{
 			double result = truncate(value->value / unit) * unit;
-			value->release();
+            run.release(value);
 			return (run.sink = kick(run))->pass(run, result);
 		}
 		else return pass(run, (const Any *)value);
@@ -3100,7 +3100,7 @@ namespace PILS
 		if (operand->isNumber(unit) && unit > 0)
 		{
 			double result = truncate(value->value / unit) * unit;
-			value->release();
+            run.release(value);
 			return (run.sink = kick(run))->pass(run, result);
 		}
 		else return pass(run, (const Any *)value);
@@ -3113,7 +3113,7 @@ namespace PILS
 		{
 			long long time = value->value;
 			time -= time % unit->value;
-			value->release();
+            run.release(value);
 			return (run.sink = kick(run))->pass(run, Timestamp::get(time));
 		}
 		else return pass(run, (const Any *)value);
@@ -3126,7 +3126,7 @@ namespace PILS
 		{
 			long long time = value->value;
 			time -= time % unit->value;
-			value->release();
+            run.release(value);
 			return (run.sink = kick(run))->pass(run, PilsDate::get(time));
 		}
 		else return pass(run, (const Any *)value);
@@ -3139,7 +3139,7 @@ namespace PILS
 		{
 			long long time = value->value;
 			time -= time % unit->value;
-			value->release();
+            run.release(value);
 			return (run.sink = kick(run))->pass(run, Duration::get(time));
 		}
 		else return pass(run, (const Any *)value);
@@ -3170,14 +3170,14 @@ namespace PILS
 	const Step *SinkPropertyGreenwichMeanTime::pass(Runner &run, const PilsDate *value)
 	{
 		const Timestamp *result = Timestamp::get(value->value);
-		value->release();
+        run.release(value);
 		return (run.sink = kick(run))->pass(run, result);
 	}
 
 	const Step *SinkPropertyGreenwichMeanTime::pass(Runner &run, const Timestamp *value)
 	{
 		const PilsDate *result = PilsDate::get(value->value);
-		value->release();
+        run.release(value);
 		run.sink = kick(run);
 		return (run.sink = kick(run))->pass(run, result);
 	}
@@ -3186,7 +3186,7 @@ namespace PILS
 	{
 		PilsDate::Split local;
 		local.put(value->value);
-		value->release();
+        run.release(value);
 		run.sink = kick(run);
 		const Timestamp *result = Timestamp::get(local.getTimestampFromLocalTime());
 		return (run.sink = kick(run))->pass(run, result);
@@ -3196,7 +3196,7 @@ namespace PILS
 	{
 		Timestamp::Split stamp;
 		stamp.put(value->value);
-		value->release();
+        run.release(value);
 		stamp.zoneSecond = 0;
 		const PilsDate *result = PilsDate::get(stamp.get());
 		return (run.sink = kick(run))->pass(run, result);

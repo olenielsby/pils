@@ -9,15 +9,6 @@ namespace PILS
         refcount.retain();
 	}
 
-    void Any::release() const
-	{
-        if(refcount.release())
-		{
-            Mutex::Lock lock(Mutex::singleMutex);
-			((Any*)this)->disposeRoot();
-		}
-	}
-
 	void Any::releaseReferenceInsideLock() const
 	{
         if(refcount.release())
@@ -29,11 +20,6 @@ namespace PILS
 	void Any::unduplicateReference() const
 	{
         bool gone = refcount.release();
-        if(gone)
-
-        {
-            writeToDebugOutput(10);
-        }
         assert(!gone && "Any::unduplicateReference() underflow");
 	}
 

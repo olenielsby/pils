@@ -126,7 +126,7 @@ struct QtSignalImpl : QtSignalImplementation
                                          wrapper->pilsSignalCallback(
                                              cliche, nullptr, 0);
 
-                                         wrapper->release();
+                                         wrapper->run.release(wrapper);
                                      },
                                      Qt::QueuedConnection);
                              }
@@ -152,7 +152,7 @@ struct QtSignalImpl : QtSignalImplementation
                                              },
                                              args_copy);
 
-                                         wrapper->release();
+                                         wrapper->run.release(wrapper);
                                      },
                                      Qt::QueuedConnection);
                              }

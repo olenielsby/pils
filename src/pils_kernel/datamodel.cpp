@@ -1,5 +1,6 @@
 /* This file is public domain */
 #include "datamodel.h"
+#include "sink.h"
 #include <string.h>
 #include <typeinfo>
 #include <cxxabi.h>
@@ -1696,118 +1697,18 @@ namespace PILS
 		return false;
 	}
 
-	template <> const Any *NodeBuilder<const Constant>::build()
-	{
-		size_t count = this->count();
-		const Any *node;
-		switch (count)
-		{
-		case 0:
-            return nullptr;
-		case 1:
-			if (joker)
-			{
-				const ClicheTiny *cliche = head->clichefy();
-				node = cliche->ClicheShort::node(joker);
-				cliche->unduplicateReference();
-			}
-			else
-			{
-				map::iterator run = mapping.begin();
-				const ClicheShort *cliche = head->clichefy(run->first);
-				node = cliche->node(run->second);
-				cliche->unduplicateReference();
-			}
-			break;
-		default:
-			{
-				const Constant** attributes = new const Constant*[count];
-				const Constant** values = new const Constant*[count];
-				const Constant** a = attributes;
-				const Constant** v = values;
-				if (joker)
-				{
-					*a++ = &Empty::singleton;
-					*v++ = joker;
-				}
-				for (map::iterator run = mapping.begin(); run != mapping.end(); run++)
-				{
-					*a++ = run->first;
-					*v++ = (const Constant*)run->second;
-				}
-				const Cliche *cliche = head->clichefy(attributes, count);
-                delete[] attributes;
-				node = cliche->node(values);
-                delete[] values;
-				cliche->unduplicateReference();
-			}
-		}
-		alive = false;
-		return node;
-	}
-
-	template <> const Any *NodeBuilder<const Any>::build()
-	{
-		size_t count = this->count();
-		const Any *node;
-		switch (count)
-		{
-		case 0:
-            return nullptr;
-		case 1:
-			if (joker)
-			{
-				const ClicheTiny *cliche = head->clichefy();
-				node = cliche->ClicheShort::node(joker);
-				cliche->release();
-			}
-			else
-			{
-				map::iterator run = mapping.begin();
-				const ClicheShort *cliche = head->clichefy(run->first);
-				node = cliche->node(run->second);
-				cliche->release();
-			}
-			break;
-		default:
-			{
-				const Constant** attributes = new const Constant*[count];
-				const Any** values = new const Any*[count];
-				const Constant** a = attributes;
-				const Any** v = values;
-				if (joker)
-				{
-					*a++ = &Empty::singleton;
-					*v++ = joker;
-				}
-				for (map::iterator run = mapping.begin(); run != mapping.end(); run++)
-				{
-					*a++ = run->first;
-					*v++ = run->second;
-				}
-				const Cliche *cliche = head->clichefy(attributes, count);
-                delete[] attributes;
-				node = cliche->node(values);
-                delete[] values;
-				cliche->release();
-			}
-		}
-		alive = false;
-		return node;
-	}
-
 	ClicheBuilder::~ClicheBuilder()
 	{
 		if (alive)
 		{
-			head->release();
+            head->unduplicateReference();
 			if (joker)
 			{
-				Empty::singleton.release();
+                Empty::singleton.unduplicateReference();
 			}
-			for (std::set<const Constant*>::iterator run = setting.begin(); run != setting.end();	run++)
+            for (std::set<const Constant*>::iterator r = setting.begin(); r != setting.end(); r++)
 			{
-				(*run)->release();
+                (*r)->unduplicateReference();
 			}
 		}
 	}
@@ -1822,7 +1723,7 @@ namespace PILS
 		{
 			if (setting.insert(key).second) return true;
 		}
-		key->release();
+        key->unduplicateReference();
 		return false;
 	}
 
@@ -1855,8 +1756,8 @@ namespace PILS
 				cliche = head->clichefy(&Empty::singleton);
 			else
 			{
-				std::set<const Constant*>::iterator run = setting.begin();
-				cliche = head->clichefy(*run);
+                std::set<const Constant*>::iterator r = setting.begin();
+                cliche = head->clichefy(*r);
 			}
 			break;
 		default:
@@ -1867,9 +1768,9 @@ namespace PILS
 				{
 					*a++ = &Empty::singleton;
 				}
-				for (std::set<const Constant*>::iterator run = setting.begin(); run != setting.end(); run++)
+                for (std::set<const Constant*>::iterator r = setting.begin(); r != setting.end(); r++)
 				{
-					*a++ = *run;
+                    *a++ = *r;
 				}
 				cliche = head->clichefy(attributes, count);
                 delete[] attributes;
