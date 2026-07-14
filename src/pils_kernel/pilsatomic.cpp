@@ -1,7 +1,8 @@
 /* This file is public domain */
 #include "pilsatomic.h"
 #include "datamodel.h"
-
+#include "datamodel.h"
+#include "sink.h"
 namespace PILS
 {
     void Any::retain() const
@@ -13,7 +14,7 @@ namespace PILS
 	{
         if(refcount.release())
 		{
-			((Any*)this)->disposeRoot();
+            ((Any*)this)->disposeRoot(Runner::main());
 		}
 	}
 
@@ -72,8 +73,8 @@ namespace PILS
             // Unhash before invalidating refcount,
             // or other threads might grab it.
             removeFromHashTable();
-            refcount.becomeScrap(scrap.refcount.queue());
-            scrap.refcount.queue() = const_cast<Any*>(this);
+            refcount.becomeScrap(scrap.refcount.link());
+            scrap.refcount.link() = const_cast<Any*>(this);
         }
     }
 

@@ -17,17 +17,19 @@ namespace PILS
 
 	/* For protection against circularity when inserting callbacks in non-aliens */
 
-	void Any::disposeRoot()
-	{
+    void Any::disposeRoot(Runner &run)
+    {
+        assert(run.deletionQueue == nullptr);
         refcount.becomeScrap(nullptr);
-		for (Any *unroll = destroy(); unroll; unroll = unroll->destroy());
+        for (run.deletionQueue = destroy(run); run.deletionQueue; run.deletionQueue = run.deletionQueue->destroy(run));
 	}
 
-	Any *Any::destroy()
+    Any *Any::destroy(Runner &run)
 	{
         unlink();
         destroying();
         Any *link = refcount.link();
+        refcount.prepareForDeletion(run);
         delete this;
         return link;
 	}

@@ -235,9 +235,9 @@ namespace PILS
     protected:
         virtual void writingToDebugOutput(int level) const;
 	private:
-		Any *destroy();
+        Any *destroy(Runner &run);
 		friend class Special;
-		void disposeRoot();
+        void disposeRoot(Runner &run);
 	};
 
 	class Number;

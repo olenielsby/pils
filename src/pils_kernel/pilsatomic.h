@@ -6,6 +6,8 @@
 
 namespace PILS {
 
+class Runner;
+
 class Terminator
 {
 public:
@@ -20,7 +22,7 @@ private:
     {
         std::atomic<long> refCount;
         T* scrapLink;
-        T** scrapQueueAddress;
+        Runner *deletionRunner;
     };
 
 #ifndef NDEBUG
@@ -28,7 +30,7 @@ private:
     {
         Count,
         Link,
-        Queue
+        Deletable
     };
     ScrapState scrapState = ScrapState::Count;
 #endif
@@ -41,7 +43,9 @@ public:
 
     ~RefcountOrScrap() noexcept
     {
-        assert(Terminator::terminated || scrapState != ScrapState::Count && "RefcountOrScrap destroyed before becomeScrap()");
+#ifndef NDEBUG
+        assert(Terminator::terminated || scrapState == ScrapState::Deletable && "Not prepared for destruction");
+#endif
     }
 
     std::atomic<long>& count() noexcept
@@ -58,22 +62,6 @@ public:
         assert(scrapState == ScrapState::Link);
 #endif
         return scrapLink;
-    }
-
-    T**& queueAddress() noexcept
-    {
-#ifndef NDEBUG
-        assert(scrapState == ScrapState::Queue);
-#endif
-        return scrapQueueAddress;
-    }
-
-    T*& queue() noexcept
-    {
-#ifndef NDEBUG
-        assert(scrapState == ScrapState::Queue);
-#endif
-        return *scrapQueueAddress;
     }
 
     void retain() noexcept
@@ -127,9 +115,21 @@ public:
         scrapLink = next;
     }
 
-    T* nextScrap() const noexcept
+    void prepareForDeletion(Runner &run) noexcept
     {
-        return scrapLink;
+#ifndef NDEBUG
+        assert(scrapState == ScrapState::Link);
+        scrapState = ScrapState::Deletable;
+#endif
+        deletionRunner = &run;
+    }
+
+    Runner &run() noexcept
+    {
+#ifndef NDEBUG
+        assert(scrapState == ScrapState::Deletable);
+#endif
+        return *deletionRunner;
     }
 };
 

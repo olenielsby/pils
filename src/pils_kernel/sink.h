@@ -39,7 +39,7 @@ namespace PILS
 		virtual const Step *callingKnot(const Any &who, const Any &call, const Any *assignValue);
 		virtual const Step *thread(const Any &what);
         void release(const Any *thing);
-        // Bridge &bridge;
+        Any *deletionQueue = nullptr;
 		char *stackLimit;
 		char *pessimistStackLimit;
 		Sink *sink;
