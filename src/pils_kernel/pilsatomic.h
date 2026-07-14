@@ -2,6 +2,7 @@
 #pragma once
 #include <atomic>
 #include <cassert>
+#include <cstdio>
 
 namespace PILS {
 
@@ -133,3 +134,33 @@ public:
 };
 
 }
+
+class LiveObjectCounter
+{
+public:
+    LiveObjectCounter() noexcept
+    {
+        ++count;
+    }
+    ~LiveObjectCounter() noexcept
+    {
+        --count;
+    }
+    static void report(const char *prefix)
+    {
+#ifndef NDEBUG
+        std::fprintf(stderr, "%s - object balace: %ld\n", prefix, count.load());
+        count.store(0);
+#endif
+    }
+private:
+    inline static std::atomic<long> count{0};
+};
+
+#ifndef NDEBUG
+#define LIVE_OBJECT_COUNT \
+private: \
+    LiveObjectCounter liveObjectCounter;
+#else
+#define LIVE_OBJECT_COUNT
+#endif

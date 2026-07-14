@@ -104,15 +104,25 @@ int main(int argc, char* argv[])
                          QCoreApplication::quit();
                      });
 
+    LiveObjectCounter::report("Startup");
+
     PILS::PilsCommander commander(qtPathToStd(QCoreApplication::applicationFilePath()));
+
+    LiveObjectCounter::report("Commander constructed");
 
     // kør første commandline
     commander.executeCommandLine(qtArgsToStd(QCoreApplication::arguments()));
 
+    LiveObjectCounter::report("Command line executed");
+
     // start IPC server
     CommandLineServer server(serverName, commander);
 
+    LiveObjectCounter::report("CommandLineServer started");
+
     int result = app.exec();
+
+    LiveObjectCounter::report("Happy end");
 
     PILS::Terminator::terminated = true;
     return result;

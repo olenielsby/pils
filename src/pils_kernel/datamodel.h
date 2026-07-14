@@ -132,6 +132,7 @@ namespace PILS
 	class Any
 		: public Step
 	{
+        LIVE_OBJECT_COUNT
     public:
         static void* operator new(size_t baseSize, size_t extra)
         {
