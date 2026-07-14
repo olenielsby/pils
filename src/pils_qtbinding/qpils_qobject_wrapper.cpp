@@ -276,7 +276,7 @@ void QtObjectWrapper::write(Writing &writing) const
         writing.write('?');
 }
 
-void QtObjectWrapper::unlink()
+void QtObjectWrapper::destroying()
 {
     // Note: QObject can be queue for deleteLater()
     assert(mind == nullptr);
@@ -286,7 +286,7 @@ void QtObjectWrapper::unlink()
     object = nullptr;
     if (o && o->parent() == nullptr)
         o->deleteLater();
-    ReallySpecial::unlink();
+    ReallySpecial::destroying();
 }
 
 QtObjectWrapper::QtObjectWrapper(Runner &run, const Constant *&link, const QtObjectClassName *className, QObject *object)

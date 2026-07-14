@@ -87,10 +87,10 @@ namespace PILS
 		return element[0];
 	}
 
-    void Ruleset::unlink()
+    void Ruleset::destroying()
 	{
 		compiled.releaseFrom(*this);
-        PokerShort::unlink();
+        PokerShort::destroying();
     }
 
 	Ruleset::Compilation::Compilation(const Rule *const *rules, size_t count)

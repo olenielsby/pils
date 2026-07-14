@@ -277,10 +277,10 @@ namespace PILS
 			return BuiltinPokerClicheTrailer::node(element);
 	}
 
-    void BuilderTrailer::unlink()
+    void BuilderTrailer::destroying()
 	{
         name->releaseFrom(*this);
-        PokerTrailer::unlink();
+        PokerTrailer::destroying();
 	}
 
 	const Step *BuilderShort::step_(Runner &run) const

@@ -16,9 +16,8 @@ namespace PILS
 		return false;
 	}
 
-    void MainThread::unlink()
+    void MainThread::destroying()
 	{
-		unhash();
 		this->Runner::~Runner();
 	}
 
@@ -182,7 +181,7 @@ namespace PILS
         PilsThread::runLevelTouchDown();
     }
 
-    // size_t WorkerThread::unlink()
+    // size_t WorkerThread::destroying()
     // {
     // 	unhash();
     // 	if (when) when->releaseFrom(*this);

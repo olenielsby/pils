@@ -61,7 +61,7 @@ namespace PILS
 			tag->retain();
             nameCliche->unduplicateReference();
 		}
-        void unlink() override;
+        void destroying() override;
         const Step *step_(Runner &run) const override;
 	private:
 		const Any *dummy;

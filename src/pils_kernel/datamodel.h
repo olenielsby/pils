@@ -169,7 +169,8 @@ namespace PILS
         void releaseReferenceInsideLock() const; // DEPRECATED
         void releaseFrom(Any &scrap) const; // DEPRECATED
         void releaseFromScrap(const Any &scrap) const;
-        virtual void unlink() {} // DEPRECATED
+        virtual void destroying() {}
+        virtual void unlink() {}
         virtual void removeFromHashTable() const = 0;
         virtual void releaseChildren() const {}
         virtual bool write(Writing &writing, WriteState state, long level, const Constant *dot) const = 0;
@@ -558,7 +559,7 @@ namespace PILS
 	protected:
         CountedConstant(const Constant *&link, size_t c);
 	public:
-        void unlink() override;
+        void destroying() override;
         const Integer *const count;
 	};
 
@@ -650,7 +651,7 @@ namespace PILS
 		size_t count;
         const Constant *head;
         const Constant *attributes[1];
-        void unlink() override;
+        void destroying() override;
         const NodeConstantShort *newSpecializeNode(const Constant *&link, const ClicheShort &cliche) const override;
         void releaseChildren() const override;
         bool write (Writing &writing, WriteState state, long level, const Constant *dot) const override;
@@ -684,7 +685,7 @@ namespace PILS
 	{
 	public:
         const Constant *element[1];
-        void unlink() override;
+        void destroying() override;
         void releaseChildren() const override;
         const ListConstant *as_ListConstant() const override;
         const NodeConstantShort *newSpecializeNode(const Constant *&link, const ClicheShort &cliche) const override;
@@ -1072,7 +1073,7 @@ namespace PILS
 	public:
 		const Cliche *cliche;
         const Constant *element[1];
-        void unlink() override;
+        void destroying() override;
         void releaseChildren() const override;
         const NodeConstantShort *newSpecializeNode(const Constant *&link, const ClicheShort &cliche) const override;
         bool write (Writing &writing, WriteState state, long level, const Constant *dot) const override;
@@ -1277,7 +1278,7 @@ namespace PILS
 	public:
 		const Integer *count;
 		const Any *element[1];
-        void unlink() override;
+        void destroying() override;
         void releaseChildren() const override;
         bool write (Writing &writing, WriteState state, long level, const Constant *dot) const override;
         const Any *labeling(Writing &writing) const override;
@@ -1301,7 +1302,7 @@ namespace PILS
 		: public Express
 	{
 	public:
-        void unlink() override;
+        void destroying() override;
         void releaseChildren() const override;
         const Cliche *cliche;
 		const Any *element[1];

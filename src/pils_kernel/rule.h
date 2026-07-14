@@ -13,7 +13,7 @@ namespace PILS
         const Step *step_(Runner &run) const override;
         bool compileBuild(CompilingBuild &compiling) const override;
         bool write(Writing &writing, WriteState state, long level, const Constant *dot) const override;
-        void unlink() override;
+        void destroying() override;
 		class Compilation
 		{
 		public:

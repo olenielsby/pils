@@ -26,6 +26,7 @@ namespace PILS
 	Any *Any::destroy()
 	{
         unlink();
+        destroying();
         Any *link = refcount.link();
         delete this;
         return link;
@@ -670,10 +671,10 @@ namespace PILS
 		}
 	}
 
-    void CountedConstant::unlink()
+    void CountedConstant::destroying()
     {
         count->releaseFrom(*this);
-        Constant::unlink();
+        Constant::destroying();
     }
 
 	Cliche::Cliche(const Constant *&link, const Constant *h, const Constant *const *a, size_t c)
@@ -1102,12 +1103,12 @@ namespace PILS
 			attributes[i]->unduplicateReference();
 	}
 
-    void Cliche::unlink()
+    void Cliche::destroying()
 	{
 		head->releaseFrom(*this);
 		for (size_t i = 0; i < count; i++)
 			attributes[i]->releaseFrom(*this);
-        Constant::unlink();
+        Constant::destroying();
 	}
 
 	const NodeConstant *ClicheLong::nodifyingConstant(const Constant *const *attributes) const
@@ -1450,13 +1451,13 @@ namespace PILS
 			element[i]->unduplicateReference();
 	}
 
-    void NodeConstant::unlink()
+    void NodeConstant::destroying()
 	{
 		size_t count = cliche->count;
 		cliche->releaseFrom(*this);
 		for (size_t i = 0; i < count; i++)
 			element[i]->releaseFrom(*this);
-        Constant::unlink();
+        Constant::destroying();
 	}
 
     void NodeExpress::releaseChildren() const
@@ -1565,12 +1566,12 @@ namespace PILS
 			element[i]->unduplicateReference();
 	}
 
-    void ListConstant::unlink()
+    void ListConstant::destroying()
 	{
         size_t c = count->value;
 		for (size_t i = 0; i < c; i++)
 			element[i]->releaseFrom(*this);
-        CountedConstant::unlink();
+        CountedConstant::destroying();
 	}
 
     void ListConstant::releaseChildren() const
@@ -1588,13 +1589,13 @@ namespace PILS
 			element[i] = e[i];
 	}
 
-    void ListExpress::unlink()
+    void ListExpress::destroying()
 	{
 		size_t c = count->value;
 		count->releaseFrom(*this);
 		for (size_t i = 0; i < c; i++)
 			element[i]->releaseFrom(*this);
-        Express::unlink();
+        Express::destroying();
 	}
 
     void ListExpress::releaseChildren() const
@@ -1661,13 +1662,13 @@ namespace PILS
 		return ((const ClicheShort*)cliche)->whoOperation(this, who);
 	}
 
-    void NodeExpress::unlink()
+    void NodeExpress::destroying()
 	{
 		size_t c = cliche->count;
 		cliche->releaseFrom(*this);
 		for (size_t i = 0; i < c; i++)
 			element[i]->releaseFrom(*this);
-        Express::unlink();
+        Express::destroying();
 	}
 
 	bool NodeExpressLong::isNameValuePair(const Constant *&name, const Any *&value) const

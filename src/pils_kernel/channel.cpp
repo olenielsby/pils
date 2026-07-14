@@ -76,7 +76,6 @@ namespace PILS
 
     void Listener::unlink()
     {
-        // TODO: ensure mutex locking. Presently, unlink() runs with mutex lock.
         *previous = next;
         if (next)
             next->previous = previous;

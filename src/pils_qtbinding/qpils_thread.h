@@ -73,7 +73,7 @@ namespace PILS
 		: public PendableThread
 	{
 	public:
-        void unlink() override;
+        void destroying() override;
 		static MainThread *singleton;
         // void runLevelTouchDown() override;
 	private:
@@ -91,7 +91,7 @@ namespace PILS
  //        WorkerThread(const Constant *&link, std::thread::id threadID)
     // 		: PilsThread(link, threadID)
     // 	{}
- //        void unlink() override;
+ //        void destroying() override;
  //        const Step *callingKnot(const Any &who, const Any &call) override;
  //        const Step *callingKnot(const Any &who, const Any &call, const Any *assignValue) override;
     // 	static void* knotCallback(void*);
