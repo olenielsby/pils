@@ -89,10 +89,9 @@ namespace PILS
 
     void Ruleset::unlink()
 	{
-		element[0]->releaseFrom(*this);
-		cliche->unduplicateReference();
 		compiled.releaseFrom(*this);
-	}
+        PokerShort::unlink();
+    }
 
 	Ruleset::Compilation::Compilation(const Rule *const *rules, size_t count)
 		: assigning(nullptr), count(count), size(0)

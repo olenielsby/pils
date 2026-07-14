@@ -49,9 +49,9 @@ namespace PILS
 
     void FileName::unlink()
 	{
-		unhash();
 		name->releaseFrom(*this);
         delete file;
+        ReallySpecial::unlink();
 	}
 
     const Any *FileName::specialCalling(Runner &run, const Constant &method) const

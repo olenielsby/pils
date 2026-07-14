@@ -168,7 +168,7 @@ namespace PILS
         void releaseReferenceInsideLock() const; // DEPRECATED
         void releaseFrom(Any &scrap) const; // DEPRECATED
         void releaseFromScrap(const Any &scrap) const;
-        virtual void unlink() = 0; // DEPRECATED
+        virtual void unlink() {} // DEPRECATED
         virtual void removeFromHashTable() const = 0;
         virtual void releaseChildren() const {}
         virtual bool write(Writing &writing, WriteState state, long level, const Constant *dot) const = 0;
@@ -557,7 +557,7 @@ namespace PILS
 	protected:
         CountedConstant(const Constant *&link, size_t c);
 	public:
-        void releaseChildren() const override;
+        void unlink() override;
         const Integer *const count;
 	};
 
@@ -607,7 +607,6 @@ namespace PILS
 #endif
         const PILS_CHAR value[];
         const PilsString *hashLookup(const PILS_CHAR *text, size_t c) const override;
-        void unlink() override;
         static const PilsString *get(const PILS_CHAR *text, size_t count);
 		static const PilsString *get(const PILS_CHAR *text);
         static const PilsString *getInsideLock(const PILS_CHAR *text, size_t count);
@@ -650,6 +649,7 @@ namespace PILS
 		size_t count;
         const Constant *head;
         const Constant *attributes[1];
+        void unlink() override;
         const NodeConstantShort *newSpecializeNode(const Constant *&link, const ClicheShort &cliche) const override;
         void releaseChildren() const override;
         bool write (Writing &writing, WriteState state, long level, const Constant *dot) const override;
@@ -738,7 +738,6 @@ namespace PILS
         ClicheShort(const Constant *&link, const Constant *h, const Constant *a)
 			: Cliche(link, h, &a, 1)
 		{}
-        void unlink() override;
         virtual const NodeConstantShort *newNode(const Constant *&link, const Integer *value) const;
         virtual const NodeConstantShort *newNode(const Constant *&link, const Float *value) const;
         virtual const NodeConstantShort *newNode(const Constant *&link, const PilsColor *value) const;
@@ -891,7 +890,6 @@ namespace PILS
         const ClicheLong *hashLookup(const Constant *h, const Constant *const *a, size_t c) const override;
         ClicheLong(const Constant *&link, const Constant *h, const Constant *const *a, size_t c);
         virtual const NodeConstantLong *newNodeConstant(const Constant *&link, const Constant *const *value) const;
-        void unlink() override;
         virtual const NodeConstantLong *nodeConstant(const Constant *const *attributes) const;
         const Any *node(const Any *const *element) const override;
         const Any *node(const Constant *const *element) const override;
@@ -1073,6 +1071,7 @@ namespace PILS
 	public:
 		const Cliche *cliche;
         const Constant *element[1];
+        void unlink() override;
         void releaseChildren() const override;
         const NodeConstantShort *newSpecializeNode(const Constant *&link, const ClicheShort &cliche) const override;
         bool write (Writing &writing, WriteState state, long level, const Constant *dot) const override;
@@ -1095,7 +1094,6 @@ namespace PILS
 		: public NodeConstant
 	{
 	public:
-        void unlink() override;
         const NodeConstantShort *hashLookup(const ClicheShort &cliche, const Constant *value) const override;
         NodeConstantShort(const Constant *&link, const ClicheShort &cliche, const Constant *value);
         const Step *step_(Runner &run) const override;
@@ -1133,7 +1131,6 @@ namespace PILS
 		: public NodeConstant
 	{
 	public:
-        void unlink() override;
         const NodeConstantLong *hashLookup(const ClicheLong &cliche, const Constant *const *value) const override;
         NodeConstantLong(const Constant *&link, const ClicheLong &cliche, const Constant *const *value);
         const Step *step_(Runner &run) const override;
@@ -1303,6 +1300,7 @@ namespace PILS
 		: public Express
 	{
 	public:
+        void unlink() override;
         void releaseChildren() const override;
         const Cliche *cliche;
 		const Any *element[1];
@@ -1332,7 +1330,6 @@ namespace PILS
 		NodeExpressShort(const ClicheShort &cliche, const Any *value)
 			: NodeExpress(cliche, value)
 		{}
-        void unlink() override;
         const Step *step_(Runner &run) const override;
         const CallWho* callWho(const Any *who) const override;
         const Step *passUncounted(Runner &run) const override;
@@ -1405,7 +1402,6 @@ namespace PILS
 		: public NodeExpress
 	{
 	public:
-        void unlink() override;
 		NodeExpressLong(const ClicheLong &cliche, const Any *const *element)
 			: NodeExpress(cliche, element)
 		{}

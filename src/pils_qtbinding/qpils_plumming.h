@@ -117,9 +117,6 @@ namespace PILS
 	{
 	public:
         using SingletonSpecial::specialCalling;
-        void unlink() override;
-        size_t hash() const;
-        bool specialCompare(const ReallySpecial *special) const;
         const Any *specialCalling(Runner &run, const Constant &name, const Any &args) const override;
         const Any *specialCalling(Runner &run, const Constant &name) const override;
         const Any *specialCalling(Runner &run, const SystemProperty &call) const override;

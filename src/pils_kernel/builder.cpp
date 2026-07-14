@@ -279,10 +279,8 @@ namespace PILS
 
     void BuilderTrailer::unlink()
 	{
-		cliche->releaseFrom(*this);
-		element[0]->releaseFrom(*this);
-		element[1]->releaseFrom(*this);
-		name->releaseFrom(*this);
+        name->releaseFrom(*this);
+        PokerTrailer::unlink();
 	}
 
 	const Step *BuilderShort::step_(Runner &run) const

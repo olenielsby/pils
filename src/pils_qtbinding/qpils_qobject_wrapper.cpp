@@ -280,13 +280,13 @@ void QtObjectWrapper::unlink()
 {
     // Note: QObject can be queue for deleteLater()
     assert(mind == nullptr);
-    unhash();
     removeWhen();
     className->releaseFrom(*this);
     QObject* o = object.data();
     object = nullptr;
     if (o && o->parent() == nullptr)
         o->deleteLater();
+    ReallySpecial::unlink();
 }
 
 QtObjectWrapper::QtObjectWrapper(Runner &run, const Constant *&link, const QtObjectClassName *className, QObject *object)

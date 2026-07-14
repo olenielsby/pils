@@ -179,6 +179,7 @@ namespace PILS
     void Constant::unlink()
     {
         unhash();
+        Any::unlink();
     }
 
     const Constant *Constant::as_Constant() const
@@ -669,15 +670,11 @@ namespace PILS
 		}
 	}
 
-    void CountedConstant::releaseChildren() const
+    void CountedConstant::unlink()
     {
-        count->releaseFromScrap(*this);
+        count->releaseFrom(*this);
+        Constant::unlink();
     }
-    void PilsString::unlink()
-	{
-		count->releaseFrom(*this);
-		unhash();
-	}
 
 	Cliche::Cliche(const Constant *&link, const Constant *h, const Constant *const *a, size_t c)
 		: Constant(link), count(c), head(h)
@@ -1003,13 +1000,6 @@ namespace PILS
 		attributes[0]->unduplicateReference();
 	}
 
-    void ClicheShort::unlink()
-	{
-		unhash();
-		head->releaseFrom(*this);
-		attributes[0]->releaseFrom(*this);
-	}
-
 	const NodeConstant *ClicheShort::nodifyingConstant(const Constant *const *attributes) const
 	{
 		return nodeConstant(attributes[0]);
@@ -1112,12 +1102,12 @@ namespace PILS
 			attributes[i]->unduplicateReference();
 	}
 
-    void ClicheLong::unlink()
+    void Cliche::unlink()
 	{
-		unhash();
 		head->releaseFrom(*this);
 		for (size_t i = 0; i < count; i++)
 			attributes[i]->releaseFrom(*this);
+        Constant::unlink();
 	}
 
 	const NodeConstant *ClicheLong::nodifyingConstant(const Constant *const *attributes) const
@@ -1411,13 +1401,6 @@ namespace PILS
 		element[0]->unduplicateReference();
 	}
 
-    void NodeConstantShort::unlink()
-	{
-		unhash();
-		cliche->releaseFrom(*this);
-		element[0]->releaseFrom(*this);
-	}
-
 	const NodeConstantShort *ClicheShort::nodeConstant(const Constant *value) const
 	{
 		size_t hash = reinterpret_cast<size_t>(this) - 5 * reinterpret_cast<size_t>(value);
@@ -1467,13 +1450,13 @@ namespace PILS
 			element[i]->unduplicateReference();
 	}
 
-    void NodeConstantLong::unlink()
+    void NodeConstant::unlink()
 	{
-		unhash();
 		size_t count = cliche->count;
 		cliche->releaseFrom(*this);
 		for (size_t i = 0; i < count; i++)
 			element[i]->releaseFrom(*this);
+        Constant::unlink();
 	}
 
     void NodeExpress::releaseChildren() const
@@ -1584,11 +1567,10 @@ namespace PILS
 
     void ListConstant::unlink()
 	{
-        unhash();
         size_t c = count->value;
-		count->releaseFrom(*this);
 		for (size_t i = 0; i < c; i++)
 			element[i]->releaseFrom(*this);
+        CountedConstant::unlink();
 	}
 
     void ListConstant::releaseChildren() const
@@ -1612,6 +1594,7 @@ namespace PILS
 		count->releaseFrom(*this);
 		for (size_t i = 0; i < c; i++)
 			element[i]->releaseFrom(*this);
+        Express::unlink();
 	}
 
     void ListExpress::releaseChildren() const
@@ -1673,23 +1656,18 @@ namespace PILS
 		return true;
 	}
 
-    void NodeExpressShort::unlink()
-	{
-		cliche->releaseFrom(*this);
-		element[0]->releaseFrom(*this);
-	}
-
 	const CallWho *NodeExpressShort::callWho(const Any *who) const
 	{
 		return ((const ClicheShort*)cliche)->whoOperation(this, who);
 	}
 
-    void NodeExpressLong::unlink()
+    void NodeExpress::unlink()
 	{
 		size_t c = cliche->count;
 		cliche->releaseFrom(*this);
 		for (size_t i = 0; i < c; i++)
 			element[i]->releaseFrom(*this);
+        Express::unlink();
 	}
 
 	bool NodeExpressLong::isNameValuePair(const Constant *&name, const Any *&value) const

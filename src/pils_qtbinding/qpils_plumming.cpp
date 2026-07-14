@@ -16,11 +16,6 @@ namespace PILS
 		: plumcake(*new Plumcake())
 	{}
 
-    void Plumcake::unlink()
-	{
-        throw L"Plumcake::unlink Reference counter leak";
-	}
-
 	void Plumcake::write(Writing &writing) const
 	{
 		writing.write((PILS_CHAR)'*');
@@ -36,16 +31,6 @@ namespace PILS
         QtObjectClassName::initialize();
         QtEventCliche::initialize();
     }
-
-	size_t Plumcake::hash() const
-	{
-		throw L"Bad plumcake";
-	}
-
-	bool Plumcake::specialCompare(const ReallySpecial *special) const
-	{
-		throw L"Bad plumcake";
-	}
 
 	const Any *Plumcake::specialCalling(Runner &run, const SystemProperty &call) const
 	{

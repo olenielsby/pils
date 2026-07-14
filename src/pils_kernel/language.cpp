@@ -337,10 +337,8 @@ namespace PILS
 
     void Language::unlink()
 	{
-        unhash();
         delete index;
-		cliche->releaseFrom(*this);
-		element[0]->releaseFrom(*this);
+        NodeConstantTiny::unlink();
 	}
 
 	NameSkin Language::nameLookup(const ClicheShort *name, Index::Record &record) const
