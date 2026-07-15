@@ -18,7 +18,6 @@ namespace PILS
 
     MainThread::~MainThread()
 	{
-        this->Runner::~Runner(); // TODO: remove this
 	}
 
 	PilsThread *PilsThread::RunLevel::getCurrent(PilsThread *candidate)

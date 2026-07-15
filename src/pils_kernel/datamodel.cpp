@@ -678,6 +678,7 @@ namespace PILS
 
     CountedConstant::~CountedConstant()
     {
+        if(Terminator::terminated) return;
         releaseChild(count);
     }
 
@@ -1094,6 +1095,7 @@ namespace PILS
 
     Cliche::~Cliche()
 	{
+        if(Terminator::terminated) return;
         releaseChild(head);
 		for (size_t i = 0; i < count; i++)
             releaseChild(attributes[i]);
