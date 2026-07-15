@@ -2,8 +2,6 @@
 #include "qpils_plumming.h"
 #include "qpils_converter.h"
 namespace PILS{
-class QtEventFilterProxy;
-
 class QtObjectWrapper
     : public QObject, public ReallySpecial
 {
@@ -23,7 +21,6 @@ public:
     const Any *specialWhen(Runner &run, const Any &argument) const override;
     mutable const Any *when = nullptr;
     mutable uint64_t eventMask = 0;
-    mutable QtEventFilterProxy *eventFilterProxy = nullptr;
     void pilsSignalCallback(const QtSignalCliche *cliche, const Constant *argv[], size_t argc) const;
     bool pilsEventCallback(const QtEventCliche *cliche, const Constant *arg) const;
     bool converting(PlatformSpecificConverter &converter) const override;

@@ -65,35 +65,5 @@ namespace PILS{
         return nullptr;
     }
 
-    QtEventFilterProxy::QtEventFilterProxy(const QtObjectWrapper *wrapper, QObject *parent)
-        : QObject(parent), wrapper(wrapper)
-    {
-    }
 
-    QtEventFilterProxy::~QtEventFilterProxy()
-    {
-        if (wrapper)
-        {
-            wrapper->eventFilterProxy = nullptr;
-            wrapper = nullptr;
-        }
-    }
-
-    bool QtEventFilterProxy::eventFilter(QObject *watched, QEvent *event)
-    {
-        if (!wrapper)
-            return false;
-
-        const QtEventCliche *c = QtEventCliche::eventTable[event->type()];
-        if (!c)
-            return false;
-
-        if (!(wrapper->eventMask & c->mask))
-            return false;
-
-        // dispatch til PILS
-        c->impl(event, wrapper, c);
-
-        return false; // true hvis event skal stoppes
-    }
 }

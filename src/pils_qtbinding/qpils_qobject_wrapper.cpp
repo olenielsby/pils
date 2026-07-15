@@ -217,7 +217,6 @@ const Any *QtObjectWrapper::specialWhen(Runner &run, const Any &argument) const
     // TODO: isMultipleReferenced can be simplified since it only applies to parentless objects
     if (object->parent() == nullptr && refcount.isMultipleReferenced(retainCount(state)))
         return nullptr;
-    assert(eventFilterProxy == nullptr);
     argument.retain();
     when = &argument;
     QtSignalEventClicheExtractor extractor;
@@ -227,12 +226,7 @@ const Any *QtObjectWrapper::specialWhen(Runner &run, const Any &argument) const
         for (auto implement = cliche->implementations; implement != nullptr; implement = implement->next)
             implement->connectIfCompatible(object.data(), const_cast<QtObjectWrapper*>(this), cliche);
     }
-    if (extractor.eventMask != 0)
-    {
-        eventMask = extractor.eventMask;
-        eventFilterProxy = new QtEventFilterProxy(this, object);
-        object->installEventFilter(eventFilterProxy);
-    }
+    eventMask = extractor.eventMask;
     retain();
     return this;
 }
@@ -293,6 +287,11 @@ bool QtObjectWrapper::eventFilter(QObject *watched, QEvent *event)
     default:
         break;
     }
+
+    const QtEventCliche *cliche = QtEventCliche::eventTable[event->type()];
+    if (cliche && (eventMask & cliche->mask))
+        cliche->impl(event, this, cliche);
+
     return QObject::eventFilter(watched, event);
 }
 
@@ -323,11 +322,6 @@ QtObjectWrapper::~QtObjectWrapper()
     object = nullptr;
     if (o && o->parent() == nullptr)
         o->deleteLater();
-    if (eventFilterProxy)
-    {
-        eventFilterProxy->wrapper = nullptr;
-        eventFilterProxy = nullptr;
-    }
     assert(when == nullptr);
     assert(mind == nullptr);
     assert(object == nullptr);

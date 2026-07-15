@@ -99,13 +99,5 @@ private:
     bool &wasHandled;
 };
 
-class QtEventFilterProxy : public QObject
-{
-public:
-    QtEventFilterProxy(const QtObjectWrapper *wrapper, QObject *parent);
-    ~QtEventFilterProxy();
-    bool eventFilter(QObject *watched, QEvent *event) override;
-    const QtObjectWrapper *wrapper;
-};
 
 }
