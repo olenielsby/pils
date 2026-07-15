@@ -111,52 +111,29 @@ struct QtSignalImpl : QtSignalImplementation
 
         auto* casted = static_cast<Obj*>(obj);
 
-        QObject::connect(casted, signal,
-                         qApp,
-                         [wrapper, cliche](auto&&... args)
-                         {
-                             wrapper->retain();
+        QObject::connect(
+            casted,
+            signal,
+            qApp,
+            [wrapper, cliche](auto&&... args)
+            {
+                if constexpr (Blind)
+                {
+                    wrapper->pilsSignalCallback(cliche, nullptr, 0);
+                }
+                else
+                {
+                    const Constant* argv[] = {
+                        QtWrap::wrap(args)...
+                    };
 
-                             if constexpr (Blind)
-                             {
-                                 QMetaObject::invokeMethod(
-                                     qApp,
-                                     [wrapper, cliche]()
-                                     {
-                                         wrapper->pilsSignalCallback(
-                                             cliche, nullptr, 0);
-
-                                         wrapper->run.release(wrapper);
-                                     },
-                                     Qt::QueuedConnection);
-                             }
-                             else
-                             {
-                                 auto args_copy = std::make_tuple(args...);
-
-                                 QMetaObject::invokeMethod(
-                                     qApp,
-                                     [wrapper, cliche, args_copy]() mutable
-                                     {
-                                         std::apply(
-                                             [&](auto&&... unpacked)
-                                             {
-                                                 const Constant* argv[] = {
-                                                     QtWrap::wrap(unpacked)...
-                                                 };
-
-                                                 wrapper->pilsSignalCallback(
-                                                     cliche,
-                                                     argv,
-                                                     sizeof...(unpacked));
-                                             },
-                                             args_copy);
-
-                                         wrapper->run.release(wrapper);
-                                     },
-                                     Qt::QueuedConnection);
-                             }
-                         });
+                    wrapper->pilsSignalCallback(
+                        cliche,
+                        argv,
+                        sizeof...(args));
+                }
+            },
+            Qt::QueuedConnection);
 
         return true;
     }
