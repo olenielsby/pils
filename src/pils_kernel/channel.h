@@ -58,23 +58,52 @@ private:
 			run.calling.who = listener;
             return listener->ear()->calling(run, call);
 		}
-		const Step *called(Runner &run, const T &call)
-		{
-			{
+
+        const Step *called(Runner &run, const T &call)
+        {
+            Listener *previous = 0;
+
+            {
                 Mutex::Lock lock(Mutex::singleMutex);
-				for (Listener *next = listener->next; next; next = next->next)
-				{
-					if (next->duplicateReferenceNoChildren())
-					{
-                        run.release(listener); //TODO: move outside lock
-						listener = next;
-						return this;
-					}
-				}
-			}
-			return (run.sink = kick(run))->called(run, call);
-		}
-		Sink *kick(Runner &run)
+
+                for (Listener *next = listener->next; next; next = next->next)
+                {
+                    if (next->duplicateReferenceNoChildren())
+                    {
+                        previous = listener;
+                        listener = next;
+                        break;
+                    }
+                }
+            }
+
+            if (previous)
+            {
+                run.release(previous);
+                return this;
+            }
+
+            return (run.sink = kick(run))->called(run, call);
+        }
+
+  //       const Step *called(Runner &run, const T &call)
+        // {
+        // 	{
+  //               Mutex::Lock lock(Mutex::singleMutex);
+        // 		for (Listener *next = listener->next; next; next = next->next)
+        // 		{
+        // 			if (next->duplicateReferenceNoChildren())
+        // 			{
+        // 				listener->releaseReferenceInsideLock();
+        // 				listener = next;
+        // 				return this;
+        // 			}
+        // 		}
+        // 	}
+        // 	return (run.sink = kick(run))->called(run, call);
+        // }
+
+        Sink *kick(Runner &run)
 		{
             run.release(listener);
 			run.calling.who = &oldWho;
@@ -128,22 +157,49 @@ private:
 			run.calling.who = listener;
             return listener->ear()->calling(run, call, &assignValue);
 		}
-		const Step *called(Runner &run, const Any &call, const Any *assignValue)
-		{
-			{
+
+        const Step *called(Runner &run, const Any &call, const Any *assignValue)
+        {
+            Listener *release = 0;
+
+            {
                 Mutex::Lock lock(Mutex::singleMutex);
-				for (Listener *next = listener->next; next; next = next->next)
-				{
-					if (next->duplicateReferenceNoChildren())
-					{
-                        run.release(listener); // TODO: move outside lock
-						listener = next;
-						return this;
-					}
-				}
-			}
-			return (run.sink = kick(run))->called(run, call, assignValue);
-		}
+
+                for (Listener *next = listener->next; next; next = next->next)
+                {
+                    if (next->duplicateReferenceNoChildren())
+                    {
+                        release = listener;
+                        listener = next;
+                        break;
+                    }
+                }
+            }
+
+            if (release)
+            {
+                run.release(release);
+                return this;
+            }
+
+            return (run.sink = kick(run))->called(run, call, assignValue);
+        }
+        // const Step *called(Runner &run, const Any &call, const Any *assignValue)
+        // {
+        // 	{
+  //               Mutex::Lock lock(Mutex::singleMutex);
+        // 		for (Listener *next = listener->next; next; next = next->next)
+        // 		{
+        // 			if (next->duplicateReferenceNoChildren())
+        // 			{
+        // 				listener->releaseReferenceInsideLock();
+        // 				listener = next;
+        // 				return this;
+        // 			}
+        // 		}
+        // 	}
+        // 	return (run.sink = kick(run))->called(run, call, assignValue);
+        // }
 		const Step *pass(Runner &run, const Any *thing)
 		{
 			run.sink = kick(run);

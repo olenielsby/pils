@@ -76,10 +76,10 @@ namespace PILS
 
     void Listener::unlink()
     {
+        Mutex::Lock lock(Mutex::singleMutex);
         *previous = next;
         if (next)
             next->previous = previous;
-        PokerTrailer::unlink();
 	}
 
 	const Step *Channel::calling(Runner &run, const Constant &call) const
