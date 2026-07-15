@@ -6,7 +6,7 @@
 
 namespace PILS {
 
-class Runner;
+class DeletionQueue;
 
 class Terminator
 {
@@ -22,7 +22,7 @@ private:
     {
         std::atomic<long> refCount;
         T* scrapLink;
-        Runner *deletionRunner;
+        DeletionQueue *queue;
     };
 
 #ifndef NDEBUG
@@ -30,7 +30,7 @@ private:
     {
         Count,
         Link,
-        Deletable
+        Deleting
     };
     ScrapState scrapState = ScrapState::Count;
 #endif
@@ -44,7 +44,7 @@ public:
     ~RefcountOrScrap() noexcept
     {
 #ifndef NDEBUG
-        assert(Terminator::terminated || scrapState == ScrapState::Deletable && "Not prepared for destruction");
+        assert(Terminator::terminated || scrapState == ScrapState::Deleting && "Not prepared for destruction");
 #endif
     }
 
@@ -115,21 +115,21 @@ public:
         scrapLink = next;
     }
 
-    void prepareForDeletion(Runner &run) noexcept
+    void prepareForDeletion(DeletionQueue &q) noexcept
     {
 #ifndef NDEBUG
         assert(scrapState == ScrapState::Link);
-        scrapState = ScrapState::Deletable;
+        scrapState = ScrapState::Deleting;
 #endif
-        deletionRunner = &run;
+        queue = &q;
     }
 
-    Runner &run() noexcept
+    DeletionQueue &deletionQueue() noexcept
     {
 #ifndef NDEBUG
-        assert(scrapState == ScrapState::Deletable);
+        assert(scrapState == ScrapState::Deleting);
 #endif
-        return *deletionRunner;
+        return *queue;
     }
 };
 

@@ -108,7 +108,7 @@ namespace PILS
 	void Ruleset::Compilation::releaseFrom(Ruleset &ruleset)
 	{
 		for (size_t i = 0; i < this->count; i++)
-            Runner::main().release(cliche[i]); // TODO: get proper Runner
+            ruleset.releaseChild(cliche[i]);
 		delete [] cliche;
 		delete [] (const char*)(calling?calling:assigning);
 	}

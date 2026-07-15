@@ -17,26 +17,11 @@ namespace PILS
 
 	/* For protection against circularity when inserting callbacks in non-aliens */
 
-    void Any::disposeRoot(Runner &run)
-    {
-        assert(run.deletionQueue == nullptr);
-        refcount.becomeScrap(nullptr);
-        for (run.deletionQueue = destroy(run); run.deletionQueue; run.deletionQueue = run.deletionQueue->destroy(run));
-	}
-
-    Any *Any::destroy(Runner &run)
-	{
-        unlink();
-        Any *link = refcount.link();
-        refcount.prepareForDeletion(run);
-        delete this;
-        return link;
-	}
-
     void Any::releaseChild(const Any *child) const
     {
-        refcount.run().release(child); // TODO: queue it instead of recursing
+        refcount.deletionQueue().releaseChild(const_cast<Any*>(child));
     }
+
     bool Any::isList(const Any *const *&element, const Integer *&count) const
 	{
 		return false;

@@ -160,6 +160,7 @@ namespace PILS
         virtual void unduplicateChildren() const;
         friend class Writing;
         friend class Runner;
+        friend class DeletionQueue;
         mutable RefcountOrScrap<Any> refcount;
     public:
         void unduplicateReference() const;

@@ -49,7 +49,7 @@ namespace PILS
 
     FileName::~FileName()
 	{
-        refcount.run().release(name);
+        releaseChild(name);
         delete file;
 	}
 

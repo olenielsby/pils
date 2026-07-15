@@ -24,7 +24,22 @@ namespace PILS
 	class Miss;
 	class Bridge;
 
-	class Runner
+
+    class DeletionQueue
+    {
+    public:
+        void release(Any *thing);
+        void releaseChild(Any *thing);
+    private:
+#ifndef NDEBUG
+        bool deleting = false;
+#endif
+        Any *first = nullptr;
+        void drain();
+        void enqueue(Any *thing);
+    };
+
+    class Runner
 	{
 	public:
         explicit Runner(size_t stackSize);
@@ -38,9 +53,11 @@ namespace PILS
 		virtual const Step *callingKnot(const Any &who, const Any &call);
 		virtual const Step *callingKnot(const Any &who, const Any &call, const Any *assignValue);
 		virtual const Step *thread(const Any &what);
-        void release(const Any *thing);
-        Any *deletionQueue = nullptr;
-		char *stackLimit;
+        void release(const Any *thing)
+        {
+            deletionQueue.release(const_cast<Any*>(thing));
+        }
+        char *stackLimit;
 		char *pessimistStackLimit;
 		Sink *sink;
 		Sink *stackOverflowSink;
@@ -66,6 +83,8 @@ namespace PILS
 		const Step *callingStackOverflow();
 		bool oldTimer;
         static Runner &main();
+    private:
+        DeletionQueue deletionQueue;
 	};
 
     class PassingMind : public Strap::Sticker

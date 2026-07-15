@@ -3,6 +3,58 @@
 
 namespace PILS
 {
+
+void DeletionQueue::release(Any *thing)
+{
+    assert(thing);
+
+#ifndef NDEBUG
+    assert(!deleting);
+#endif
+    if (!thing->refcount.release())
+        return;
+    enqueue(thing);
+    drain();
+}
+
+void DeletionQueue::releaseChild(Any *thing)
+{
+    assert(thing);
+
+#ifndef NDEBUG
+    assert(deleting);
+#endif
+    if (!thing->refcount.release())
+        return;
+    enqueue(thing);
+}
+
+
+void DeletionQueue::enqueue(Any *thing)
+{
+    thing->unlink();
+    thing->refcount.becomeScrap(first);
+    first = thing;
+}
+
+
+void DeletionQueue::drain()
+{
+#ifndef NDEBUG
+    assert(!deleting);
+    deleting = true;
+#endif
+    while (first)
+    {
+        Any *thing = first;
+        first = thing->refcount.link();
+        thing->refcount.prepareForDeletion(*this);
+        delete thing;
+    }
+#ifndef NDEBUG
+    deleting = false;
+#endif
+}
     Runner::Runner(size_t stackSize)
     : oldTimer(true), threadStrapSticker(*this)
 	{
@@ -26,15 +78,6 @@ namespace PILS
 		while (step_ != nullptr)
 			step_ = step_->step_(*this);
 	}
-
-    void Runner::release(const Any *thing)
-    {
-        assert(thing);
-        if(thing->refcount.release())
-        {
-            const_cast<Any*>(thing)->disposeRoot(*this);
-        }
-    }
 
     bool Runner::isMainThread() const
 	{

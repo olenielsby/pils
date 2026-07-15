@@ -300,7 +300,7 @@ QtObjectWrapper::~QtObjectWrapper()
 // #endif
     assert(mind == nullptr);
     removeWhen();
-    refcount.run().release(className);
+    releaseChild(className);
     QObject* o = object.data();
     object = nullptr;
     if (o && o->parent() == nullptr)
