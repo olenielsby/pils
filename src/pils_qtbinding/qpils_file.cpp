@@ -47,11 +47,10 @@ namespace PILS
 		writing.write(name->value, name->count->value);
 	}
 
-    void FileName::destroying()
+    FileName::~FileName()
 	{
-		name->releaseFrom(*this);
+        refcount.run().release(name);
         delete file;
-        ReallySpecial::destroying();
 	}
 
     const Any *FileName::specialCalling(Runner &run, const Constant &method) const

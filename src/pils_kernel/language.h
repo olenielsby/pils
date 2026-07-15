@@ -36,7 +36,7 @@ namespace PILS
 			  flags(value->element[0]->as_String()->value[0])
 		{}
 
-        void destroying() override;
+        ~Language();
 		Index *index; /* Fast name lookup when writing */
 		const NodeConstant *namespaces;
 		const NodeConstant *defaultNamespace;

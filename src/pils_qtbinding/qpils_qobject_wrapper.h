@@ -13,7 +13,6 @@ public:
     const QtObjectClassName *className;
     QPointer<QObject> object;
     void write(Writing &writing) const override;
-    void destroying() override;
     bool specialComparing(const QtObjectLookup &lookup) const override;
     const Any *specialCalling(Runner &run, const QtMethodName &method, const Any &arg) const override;
     const Any *specialCalling(Runner &run, const QtMethodName &method) const override;

@@ -66,7 +66,7 @@ private:
 				{
 					if (next->duplicateReferenceNoChildren())
 					{
-						listener->releaseReferenceInsideLock();
+                        run.release(listener); //TODO: move outside lock
 						listener = next;
 						return this;
 					}
@@ -136,7 +136,7 @@ private:
 				{
 					if (next->duplicateReferenceNoChildren())
 					{
-						listener->releaseReferenceInsideLock();
+                        run.release(listener); // TODO: move outside lock
 						listener = next;
 						return this;
 					}

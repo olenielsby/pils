@@ -335,10 +335,9 @@ namespace PILS
         return new const NodeConstantShort(link, *this, value);
 	}
 
-    void Language::destroying()
+    Language::~Language()
 	{
         delete index;
-        NodeConstantTiny::destroying();
 	}
 
 	NameSkin Language::nameLookup(const ClicheShort *name, Index::Record &record) const

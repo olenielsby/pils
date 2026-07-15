@@ -73,8 +73,8 @@ namespace PILS
 		: public PendableThread
 	{
 	public:
-        void destroying() override;
-		static MainThread *singleton;
+        ~MainThread();
+        static MainThread *singleton;
         // void runLevelTouchDown() override;
 	private:
         const Step *thread(const Any &what) override;

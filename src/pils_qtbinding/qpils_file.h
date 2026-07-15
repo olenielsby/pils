@@ -18,7 +18,7 @@ namespace PILS
         bool specialComparing(const FileNameLookup &lookup) const override;
         bool converting(PlatformSpecificConverter &converter) const override;
         void write(Writing & writing) const override;
-        void destroying() override;
+        ~FileName();
     private:
 		const PilsString *name;
         bool isFolder;

@@ -87,10 +87,9 @@ namespace PILS
 		return element[0];
 	}
 
-    void Ruleset::destroying()
+    Ruleset::~Ruleset()
 	{
 		compiled.releaseFrom(*this);
-        PokerShort::destroying();
     }
 
 	Ruleset::Compilation::Compilation(const Rule *const *rules, size_t count)
@@ -109,7 +108,7 @@ namespace PILS
 	void Ruleset::Compilation::releaseFrom(Ruleset &ruleset)
 	{
 		for (size_t i = 0; i < this->count; i++)
-			cliche[i]->releaseFrom(ruleset);
+            Runner::main().release(cliche[i]); // TODO: get proper Runner
 		delete [] cliche;
 		delete [] (const char*)(calling?calling:assigning);
 	}

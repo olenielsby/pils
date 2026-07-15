@@ -276,19 +276,6 @@ void QtObjectWrapper::write(Writing &writing) const
         writing.write('?');
 }
 
-void QtObjectWrapper::destroying()
-{
-    // Note: QObject can be queue for deleteLater()
-    assert(mind == nullptr);
-    removeWhen();
-    className->releaseFrom(*this);
-    QObject* o = object.data();
-    object = nullptr;
-    if (o && o->parent() == nullptr)
-        o->deleteLater();
-    ReallySpecial::destroying();
-}
-
 QtObjectWrapper::QtObjectWrapper(Runner &run, const Constant *&link, const QtObjectClassName *className, QObject *object)
     : ReallySpecial (link), className(className), object(object), state(State::Deleted), mind(nullptr), run(run)
 {
@@ -311,6 +298,13 @@ QtObjectWrapper::~QtObjectWrapper()
 //     std::fputc('~', stderr);
 //     className->writeToDebugOutput(10);
 // #endif
+    assert(mind == nullptr);
+    removeWhen();
+    refcount.run().release(className);
+    QObject* o = object.data();
+    object = nullptr;
+    if (o && o->parent() == nullptr)
+        o->deleteLater();
     if (eventFilterProxy)
     {
         eventFilterProxy->wrapper = nullptr;

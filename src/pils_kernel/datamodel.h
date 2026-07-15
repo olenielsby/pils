@@ -165,14 +165,11 @@ namespace PILS
         void unduplicateReference() const;
         inline bool releaseIfMultipleReferenced() const {return refcount.releaseIfMultipleReferenced();}
         void retain() const;
-        // void release() const;
-        void releaseReferenceInsideLock() const; // DEPRECATED
-        void releaseFrom(Any &scrap) const; // DEPRECATED
-        void releaseFromScrap(const Any &scrap) const;
-        virtual void destroying() {}
+        // void releaseReferenceInsideLock() const; // DEPRECATED
+        // void releaseFromScrap(const Any &scrap) const;
         virtual void unlink() {}
         virtual void removeFromHashTable() const = 0;
-        virtual void releaseChildren() const {}
+        // virtual void releaseChildren() const {}
         virtual bool write(Writing &writing, WriteState state, long level, const Constant *dot) const = 0;
         virtual const Any *labeling(Writing &writing) const;
         virtual const Call *callHere() const;
@@ -233,6 +230,7 @@ namespace PILS
         void writeToDebugOutput(int levels) const;
         void writingToDebugOutputNextLevel(int level) const;
     protected:
+        void releaseChild(const Any *child) const;
         virtual void writingToDebugOutput(int level) const;
 	private:
         Any *destroy(Runner &run);
@@ -559,7 +557,7 @@ namespace PILS
 	protected:
         CountedConstant(const Constant *&link, size_t c);
 	public:
-        void destroying() override;
+        ~CountedConstant();
         const Integer *const count;
 	};
 
@@ -651,9 +649,8 @@ namespace PILS
 		size_t count;
         const Constant *head;
         const Constant *attributes[1];
-        void destroying() override;
+        ~Cliche();
         const NodeConstantShort *newSpecializeNode(const Constant *&link, const ClicheShort &cliche) const override;
-        void releaseChildren() const override;
         bool write (Writing &writing, WriteState state, long level, const Constant *dot) const override;
         const Any *labeling(Writing &writing) const override;
         const NodeConstant *nodeConstant(const Constant *const *attributes) const;
@@ -685,12 +682,11 @@ namespace PILS
 	{
 	public:
         const Constant *element[1];
-        void destroying() override;
-        void releaseChildren() const override;
         const ListConstant *as_ListConstant() const override;
         const NodeConstantShort *newSpecializeNode(const Constant *&link, const ClicheShort &cliche) const override;
         const ListConstant *hashLookup(const Constant *const *a, size_t c, bool copying) const override;
         ListConstant(const Constant *&link, const Constant *const *a, size_t c, bool copying);
+        ~ListConstant();
         bool write (Writing &writing, WriteState state, long level, const Constant *dot) const override;
         const Any *labeling(Writing &writing) const override;
         static const ListConstant *get(const Constant *const *e, size_t c, bool copying = false);
@@ -1073,8 +1069,7 @@ namespace PILS
 	public:
 		const Cliche *cliche;
         const Constant *element[1];
-        void destroying() override;
-        void releaseChildren() const override;
+        ~NodeConstant();
         const NodeConstantShort *newSpecializeNode(const Constant *&link, const ClicheShort &cliche) const override;
         bool write (Writing &writing, WriteState state, long level, const Constant *dot) const override;
         const Any *labeling(Writing &writing) const override;
@@ -1278,8 +1273,7 @@ namespace PILS
 	public:
 		const Integer *count;
 		const Any *element[1];
-        void destroying() override;
-        void releaseChildren() const override;
+        ~ListExpress();
         bool write (Writing &writing, WriteState state, long level, const Constant *dot) const override;
         const Any *labeling(Writing &writing) const override;
         bool isList(const Any *const *&element, const Integer *&count) const override;
@@ -1302,8 +1296,7 @@ namespace PILS
 		: public Express
 	{
 	public:
-        void destroying() override;
-        void releaseChildren() const override;
+        ~NodeExpress();
         const Cliche *cliche;
 		const Any *element[1];
         bool write (Writing &writing, WriteState state, long level, const Constant *dot) const override;

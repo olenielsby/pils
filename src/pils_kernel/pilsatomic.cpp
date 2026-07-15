@@ -10,15 +10,7 @@ namespace PILS
         refcount.retain();
 	}
 
-	void Any::releaseReferenceInsideLock() const
-	{
-        if(refcount.release())
-		{
-            ((Any*)this)->disposeRoot(Runner::main());
-		}
-	}
-
-	void Any::unduplicateReference() const
+    void Any::unduplicateReference() const
 	{
         bool gone = refcount.release();
         assert(!gone && "Any::unduplicateReference() underflow");
@@ -54,29 +46,6 @@ namespace PILS
 			return false;
 		}
 	}
-
-    //old method for use inside lock
-    void Any::releaseFrom(Any &scrap) const
-	{
-        if (refcount.release())
-		{
-            refcount.becomeScrap(scrap.refcount.link());
-            scrap.refcount.link() = (Any*)this;
-		}
-	}
-
-    //new method for use without lock
-    void Any::releaseFromScrap(const Any &scrap) const
-    {
-        if (refcount.release())
-        {
-            // Unhash before invalidating refcount,
-            // or other threads might grab it.
-            removeFromHashTable();
-            refcount.becomeScrap(scrap.refcount.link());
-            scrap.refcount.link() = const_cast<Any*>(this);
-        }
-    }
 
     bool Any::duplicateReference(bool copying) const
 	{
