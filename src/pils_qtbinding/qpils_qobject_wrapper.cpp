@@ -276,13 +276,31 @@ void QtObjectWrapper::write(Writing &writing) const
         writing.write('?');
 }
 
+
+bool QtObjectWrapper::eventFilter(QObject *watched, QEvent *event)
+{
+    switch (event->type())
+    {
+    case QEvent::ParentChange:
+    case QEvent::Show:
+    case QEvent::Hide:
+        checkState();
+        break;
+    case QEvent::Close:
+        if (object && object->parent() == nullptr)
+            object->deleteLater();
+        break;
+    default:
+        break;
+    }
+    return QObject::eventFilter(watched, event);
+}
+
 QtObjectWrapper::QtObjectWrapper(Runner &run, const Constant *&link, const QtObjectClassName *className, QObject *object)
     : ReallySpecial (link), className(className), object(object), state(State::Deleted), mind(nullptr), run(run)
 {
-    StateChangeFilter *filter = new StateChangeFilter(*this);
-    filter->setParent(object);
-    object->installEventFilter(filter);
-    QObject::connect(object, &QObject::destroyed, object, [this]() { removeWhen(); });
+    object->installEventFilter(this);
+    QObject::connect(object, &QObject::destroyed, this, [this]() { removeWhen(); });
     if (QWindow *win = qobject_cast<QWindow*>(object))
         QObject::connect(win, &QWindow::visibleChanged, object, [this]() { checkState(); });
     checkState();

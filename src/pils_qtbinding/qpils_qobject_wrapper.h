@@ -5,7 +5,7 @@ namespace PILS{
 class QtEventFilterProxy;
 
 class QtObjectWrapper
-    : public ReallySpecial
+    : public QObject, public ReallySpecial
 {
 public:
     QtObjectWrapper(Runner &run, const Constant *&link, const QtObjectClassName *className, QObject *object);
@@ -48,32 +48,7 @@ private:
         Deleted                 // wrapper survives dead object
     };
 
-    class StateChangeFilter : public QObject
-    {
-    public:
-        StateChangeFilter(QtObjectWrapper &wrapper): wrapper(wrapper) {}
-        // ~StateChangeFilter() override {wrapper.removeWhen();}
-
-        QtObjectWrapper &wrapper;
-        bool eventFilter(QObject *watched, QEvent *event) override
-        {
-            switch (event->type())
-            {
-            case QEvent::ParentChange:
-            case QEvent::Show:
-            case QEvent::Hide:
-                wrapper.checkState();
-                break;
-            case QEvent::Close:
-                if (wrapper.object->parent() == nullptr)
-                    wrapper.object->deleteLater();
-                break;
-            default:
-                break;
-            }
-            return QObject::eventFilter(watched, event);
-        }
-    };
+    bool eventFilter(QObject *watched, QEvent *event) override;
     mutable State state;
     mutable QtPassingMind *mind;
     State computeCurrentState() const;
