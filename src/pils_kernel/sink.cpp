@@ -32,7 +32,6 @@ namespace PILS
         assert(thing);
         if(thing->refcount.release())
         {
-            Mutex::Lock lock(Mutex::singleMutex);
             const_cast<Any*>(thing)->disposeRoot(*this);
         }
     }

@@ -34,18 +34,18 @@ namespace PILS
         static Mutex singleMutex;
         class Lock
         {
-            // Mutex &mutex;
+            Mutex &mutex;
         public:
             explicit Lock(Mutex &mutex)
-                // : mutex(mutex)
+                : mutex(mutex)
             {
-                // assert(!mutex.locked);
-                // mutex.locked = true;
+                assert(!mutex.locked);
+                mutex.locked = true;
             }
             ~Lock()
             {
-                // assert(mutex.locked);
-                // mutex.locked = false;
+                assert(mutex.locked);
+                mutex.locked = false;
             }
         };
     private:
