@@ -54,7 +54,7 @@ namespace PILS
 			return (const NodeConstant*) NodeBuilder<const Constant>::build();
 		}
         ConfigurationBuilder()
-            : NodeBuilder<const Constant>(Runner::main(), &Builtin::name.minus)
+            : NodeBuilder<const Constant>(Runner::current(), &Builtin::name.minus) //todo: is Runner needed?
 		{
 			Builtin::name.minus.retain();
 		}
@@ -66,8 +66,9 @@ namespace PILS
         commandLineHandler = getCommandLineHandler();
     }
 
-    Runner &Runner::main()
+    Runner &Runner::current()
     {
+        // TODO: prepare for multithreading
         assert(MainThread::singleton);
         return *MainThread::singleton;
     }
@@ -131,7 +132,7 @@ namespace PILS
         const Language *language;
 
         {
-            NodeBuilder<const Constant> gloss(Runner::main(), PilsString::get(_PS("system")));
+            NodeBuilder<const Constant> gloss(Runner::current(), PilsString::get(_PS("system")));
 
             gloss.aim(Empty::get());
             gloss.set(PilsString::get(_PS("\1.")));

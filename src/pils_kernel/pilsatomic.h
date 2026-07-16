@@ -82,24 +82,6 @@ public:
         return refCount > extraAllowed;
     }
 
-    bool releaseIfMultipleReferenced() noexcept
-    {
-        assert(scrapState == ScrapState::Count && "RefcountOrScrap::releaseIfMultipleReferenced after becomeScrap()");
-
-        long count = refCount.load(std::memory_order_relaxed);
-
-        while (count > 0) {
-            if (refCount.compare_exchange_weak(
-                    count,
-                    count - 1,
-                    std::memory_order_release,
-                    std::memory_order_relaxed))
-                return true;
-        }
-
-        return false;
-    }
-
     static void acquireFence() noexcept
     {
         std::atomic_thread_fence(std::memory_order_acquire);

@@ -233,29 +233,27 @@ const Any *QtObjectWrapper::specialWhen(Runner &run, const Any &argument) const
 
 void QtObjectWrapper::removeWhen() const
 {
-    class QDeferredAnyRelease final : public QObject
-    {
-    public:
-        explicit QDeferredAnyRelease(const Any* value)
-            : value(value)
-        {
-            deleteLater();
-        }
+    // class QDeferredAnyRelease final : public QObject
+    // {
+    // public:
+    //     explicit QDeferredAnyRelease(const Any* value)
+    //         : value(value)
+    //     {
+    //         deleteLater();
+    //     }
 
-        ~QDeferredAnyRelease() override
-        {
-            Runner::main().release(value); //TODO: verify main thread
-        }
+    //     ~QDeferredAnyRelease() override
+    //     {
+    //         Runner::current().release(value);
+    //     }
 
-    private:
-        const Any* value;
-    };
+    // private:
+    //     const Any* value;
+    // };
     const Any* w = when;
     when = nullptr;
-    if (!w)
-        return;
-    if (!w->releaseIfMultipleReferenced())
-        new QDeferredAnyRelease(w);
+    if (w)
+        Runner::current().release(w);
 }
 
 void QtObjectWrapper::write(Writing &writing) const

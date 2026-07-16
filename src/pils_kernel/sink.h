@@ -82,7 +82,7 @@ namespace PILS
         bool stackOverflow() const;
 		const Step *callingStackOverflow();
 		bool oldTimer;
-        static Runner &main();
+        static Runner &current();
     private:
         DeletionQueue deletionQueue;
 	};

@@ -164,7 +164,6 @@ namespace PILS
         mutable RefcountOrScrap<Any> refcount;
     public:
         void unduplicateReference() const;
-        inline bool releaseIfMultipleReferenced() const {return refcount.releaseIfMultipleReferenced();}
         void retain() const;
         // void releaseReferenceInsideLock() const; // DEPRECATED
         // void releaseFromScrap(const Any &scrap) const;

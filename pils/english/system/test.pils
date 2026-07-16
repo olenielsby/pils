@@ -3,10 +3,10 @@
 | :ok
   this program filename =* "test"
 }
-><:[module:. test, .timestamp 2026-07-09T16:04:01.535+02 .language system]><;
+><:[module:. test, .timestamp 2026-07-16T09:33:15.562+02 .language system]><;
 { .test
 | :ok
-  [3 6 2] smallest
+  platform lifetime [knud]
 }
 ><:[module:. vild, .timestamp 2026-07-09T12:03:41.800+02 .language system]><;
 ><:[module:. vild hest .timestamp 2026-07-09T15:07:05.371+02 .language system]><;
