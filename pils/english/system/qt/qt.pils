@@ -74,14 +74,14 @@
 ><:[module:. platform qt entry .timestamp 2008-07-23T09:38:47.465+02 .language system]><;
 @
 ><:[module:. platform qt entry clang .timestamp 2026-07-06T13:14:31.947+02 .language qt]><;
-><:[module:. platform qt entry clang test .timestamp 2026-07-16T13:37:10.400+02 .language qt]><;
+><:[module:. platform qt entry clang test .timestamp 2026-07-16T13:45:40.003+02 .language qt]><;
 ;new plumcake;
 { .test
 | :ok
   ;u new Q:ClangTranslationUnit;
   (u q:parse "/home/ole/pilsprogramming/src/pils_kernel/sink.h" = 1) and:
   ;c u q:cursor;
-  c q:spelling, c q:kind
+  c q:spelling, c q:kind, c q:semanticParent q:spelling
 }><:[module:. platform qt entry icon .timestamp 2010-02-28T14:55:28.627+01 .language qt]><;
 { icon: .size .png | :ok Q:Image: png }
 ><:[module:. platform qt entry lifetime .timestamp 2026-07-11T22:36:22.215+02 .language qt]><;
