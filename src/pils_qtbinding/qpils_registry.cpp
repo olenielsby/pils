@@ -1,6 +1,7 @@
 #include "registry.h"
 #include "qpils_event.h"
 #include "qpils_supplement.h"
+#include "qpils_clang.h"
 namespace PILS
 {
 void QtObjectClassName::initialize()
@@ -558,6 +559,21 @@ void QtObjectClassName::initialize()
 
     BEGIN_CLASS(QPilsDelayedDestroy)
     CONSTRUCTOR_NOARGS(QPilsDelayedDestroy)
+    END_CLASS()
+
+    BEGIN_CLASS(QClangTranslationUnit)
+    CONSTRUCTOR_NOARGS(QClangTranslationUnit)
+    EXACT_METHOD(QClangTranslationUnit, parse)
+    EXACT_METHOD(QClangTranslationUnit, rootCursor)
+    END_CLASS()
+
+    BEGIN_CLASS(QClangCursor)
+    EXACT_METHOD(QClangCursor, spelling)
+    EXACT_METHOD(QClangCursor, kind)
+    EXACT_METHOD(QClangCursor, isNull)
+    // EXACT_METHOD(QClangCursor, parentCursor)
+    EXACT_METHOD(QClangCursor, firstChild)
+    EXACT_METHOD(QClangCursor, nextSibling)
     END_CLASS()
 }
 

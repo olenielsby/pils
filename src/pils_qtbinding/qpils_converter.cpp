@@ -240,7 +240,17 @@ const Constant *QtWrap::wrap(QPilsTreeNode *obj)
     {
         return Empty::get();
     }
-    QtObjectLookup lookup(Runner::current(), obj, QPilsTreeNode::getClassName()); //Todo: make thread safe
+    QtObjectLookup lookup(Runner::current(), obj, QPilsTreeNode::getClassName());
+    return lookup.lookup();
+}
+
+const Constant *QtWrap::wrap(QClangCursor *obj)
+{
+    if (obj == nullptr)
+    {
+        return Empty::get();
+    }
+    QtObjectLookup lookup(Runner::current(), obj, QClangCursor::getClassName());
     return lookup.lookup();
 }
 

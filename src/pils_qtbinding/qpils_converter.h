@@ -2,6 +2,7 @@
 #include "qpils_plumming.h"
 #include "qobject.h"
 #include "qpils_supplement.h"
+#include "qpils_clang.h"
 #include <QMouseEvent>
 #include <type_traits>
 #include <QTextCursor>
@@ -113,6 +114,7 @@ public:
     static const Constant *wrap(const QString &s);
     static const Constant *wrap(QObject *obj);
     static const Constant *wrap(QPilsTreeNode *obj);
+    static const Constant *wrap(QClangCursor *obj);
     static const Constant *wrap(int v);
     static const Constant *wrap(double v);
     static const Constant *wrap(bool v);

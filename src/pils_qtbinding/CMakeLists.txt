@@ -26,6 +26,7 @@ add_library(pils_qtbinding STATIC
 
 target_include_directories(pils_qtbinding PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
+    /usr/lib/llvm-18/include
 )
 
 target_link_libraries(pils_qtbinding PUBLIC
@@ -33,7 +34,9 @@ target_link_libraries(pils_qtbinding PUBLIC
     Qt6::Widgets
     Qt6::Network
     pils_kernel
+    /usr/lib/llvm-18/lib/libclang.so
 )
+
 target_compile_features(pils_qtbinding PUBLIC cxx_std_17)
 
 enable_asan(pils_qtbinding)
