@@ -3,7 +3,7 @@
 #include "qpils_converter.h"
 namespace PILS{
 class QtObjectWrapper
-    : public QObject, public ReallySpecial
+    : public ReallySpecial, public QObject
 {
 public:
     QtObjectWrapper(Runner &run, const Constant *&link, const QtObjectClassName *className, QObject *object);
