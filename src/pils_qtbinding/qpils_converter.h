@@ -114,7 +114,8 @@ public:
     static const Constant *wrap(const QString &s);
     static const Constant *wrap(QObject *obj);
     static const Constant *wrap(QPilsTreeNode *obj);
-    static const Constant *wrap(QClangCursor *obj);
+    static const Constant *wrap(const CXCursor &c);
+    static const Constant *wrap(CXString s);
     static const Constant *wrap(int v);
     static const Constant *wrap(double v);
     static const Constant *wrap(bool v);

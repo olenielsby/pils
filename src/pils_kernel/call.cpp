@@ -461,7 +461,7 @@ namespace PILS
 	{
 		for (size_t i = 1; i < 4; i++)
 			if (cliche->attributes[i] == &call)
-				return element[i]->passUncounted(run);
+                return element[i]->passUncounted(run);
 		return element[0]->calling(run, call);
 	}
 

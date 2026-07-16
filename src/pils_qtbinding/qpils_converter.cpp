@@ -244,16 +244,51 @@ const Constant *QtWrap::wrap(QPilsTreeNode *obj)
     return lookup.lookup();
 }
 
-const Constant *QtWrap::wrap(QClangCursor *obj)
+const Constant *QtWrap::wrap(CXString s)
 {
-    if (obj == nullptr)
-    {
-        return Empty::get();
-    }
-    QtObjectLookup lookup(Runner::current(), obj, QClangCursor::getClassName());
-    return lookup.lookup();
+    const char *text = clang_getCString(s);
+    const Constant *result = wrap(text ? text : "");
+    clang_disposeString(s);
+    return result;
 }
 
+const Constant *QtWrap::wrap(const CXCursor &c)
+{
+    CXSourceLocation location = clang_getCursorLocation(c);
+
+    CXFile file;
+    unsigned line = 0;
+    unsigned column = 0;
+    unsigned offset = 0;
+
+    clang_getExpansionLocation(
+        location,
+        &file,
+        &line,
+        &column,
+        &offset);
+
+    const Constant *argv[] =
+        {
+            wrap(clang_getCursorKindSpelling(
+                clang_getCursorKind(c))),
+
+            wrap(clang_getCursorSpelling(c)),
+
+            wrap(clang_getCursorDisplayName(c)),
+
+            wrap(clang_getCursorUSR(c)),
+
+            file
+                ? wrap(clang_getFileName(file))
+                : Empty::get(),
+
+            wrap((int)line),
+            wrap((int)column)
+        };
+
+    return ListConstant::get(argv, std::size(argv));
+}
 const Constant *QtWrap::wrap(const QMouseEvent &e)
 {
     const Constant* argv[] = {

@@ -564,18 +564,11 @@ void QtObjectClassName::initialize()
     BEGIN_CLASS(QClangTranslationUnit)
     CONSTRUCTOR_NOARGS(QClangTranslationUnit)
     EXACT_METHOD(QClangTranslationUnit, parse)
+    EXACT_METHOD(QClangTranslationUnit, firstChild)
+    EXACT_METHOD(QClangTranslationUnit, nextSibling)
+    EXACT_METHOD(QClangTranslationUnit, semanticParent)
     EXACT_METHOD(QClangTranslationUnit, cursor)
-    END_CLASS()
-
-    BEGIN_CLASS(QClangCursor)
-    EXACT_METHOD(QClangCursor, spelling)
-    EXACT_METHOD(QClangCursor, kind)
-    EXACT_METHOD(QClangCursor, isNull)
-    EXACT_METHOD(QClangCursor, semanticParent)
-    EXACT_METHOD(QClangCursor, firstChild)
-    EXACT_METHOD(QClangCursor, nextSibling)
-    END_CLASS()
-}
+    END_CLASS()}
 
 template<typename EventT>
 void qtEventDispatch(QEvent *event,
