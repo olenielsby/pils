@@ -564,7 +564,7 @@ void QtObjectClassName::initialize()
     BEGIN_CLASS(QClangTranslationUnit)
     CONSTRUCTOR_NOARGS(QClangTranslationUnit)
     EXACT_METHOD(QClangTranslationUnit, parse)
-    EXACT_METHOD(QClangTranslationUnit, rootCursor)
+    EXACT_METHOD(QClangTranslationUnit, cursor)
     END_CLASS()
 
     BEGIN_CLASS(QClangCursor)

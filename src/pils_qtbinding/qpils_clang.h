@@ -20,7 +20,7 @@ public:
 
     bool parse(const QString &filename);
 
-    QClangCursor *rootCursor() const;
+    QClangCursor *cursor() const;
 
 private:
     CXIndex m_index = nullptr;
@@ -44,7 +44,6 @@ public:
 
     bool isNull() const;
 
-    QClangCursor *parentCursor() const;
     QClangCursor *firstChild() const;
     QClangCursor *nextSibling() const;
     QClangCursor *semanticParent() const;

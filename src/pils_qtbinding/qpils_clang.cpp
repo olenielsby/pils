@@ -50,24 +50,32 @@ bool QClangTranslationUnit::parse(const QString &filename)
     return m_translationUnit != nullptr;
 }
 
-QClangCursor *QClangTranslationUnit::rootCursor() const
+QClangCursor *QClangTranslationUnit::cursor() const
 {
     if (!m_translationUnit)
         return nullptr;
 
+    auto *tu = const_cast<QClangTranslationUnit *>(this);
+
     return new QClangCursor(
-        const_cast<QClangTranslationUnit *>(this),
-        clang_getTranslationUnitCursor(m_translationUnit));
+        tu,
+        clang_getTranslationUnitCursor(m_translationUnit),
+        tu);
 }
+
+
+
 
 ///////////////////////////////////////////////////////////////////////////////
 
 QClangCursor::QClangCursor(
-    QClangTranslationUnit *translationUnit_,
-    CXCursor cursor_,
-    QObject *)
-    : m_translationUnit(translationUnit_)
-    , m_cursor(cursor_)
+    QClangTranslationUnit *translationUnit,
+    CXCursor cursor,
+    QObject *parent)
+    :
+    QObject(parent),
+    m_translationUnit(translationUnit),
+    m_cursor(cursor)
 {
 }
 
@@ -105,7 +113,8 @@ QClangCursor *QClangCursor::semanticParent() const
 {
     return new QClangCursor(
         m_translationUnit,
-        clang_getCursorSemanticParent(m_cursor));
+        clang_getCursorSemanticParent(m_cursor),
+        m_translationUnit);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -144,7 +153,8 @@ QClangCursor *QClangCursor::firstChild() const
 
     return new QClangCursor(
         m_translationUnit,
-        data.cursor);
+        data.cursor,
+        m_translationUnit);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -198,5 +208,6 @@ QClangCursor *QClangCursor::nextSibling() const
 
     return new QClangCursor(
         m_translationUnit,
-        data.next);
+        data.next,
+        m_translationUnit);
 }
