@@ -27,8 +27,7 @@ namespace PILS
 			std::map<const Constant*, const PilsString*> prefix;
 		};
         NameSkin nameLookup(const ClicheShort* name, Index::Record &record) const;
-        const Any *read(const PilsString *text) const;
-		Language(const Constant *&link, const NodeConstant *value, const NodeConstant *defaultNamespace, Index *index)
+        Language(const Constant *&link, const NodeConstant *value, const NodeConstant *defaultNamespace, Index *index)
 			: NodeConstantTiny(link, BuiltinClicheLanguage::singleton, value),
 			  index(index),
 			  namespaces(value),

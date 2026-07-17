@@ -1,6 +1,5 @@
 /* This file is public domain */
-#ifndef DEFINE_PILS_BUILTIN_H
-#define DEFINE_PILS_BUILTIN_H
+#pragma once
 #include "datamodel.h"
 namespace PILS
 {
@@ -3492,4 +3491,3 @@ namespace PILS
 		{}
 	};
 }
-#endif

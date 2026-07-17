@@ -10,7 +10,7 @@ const char *PILS::PilsCommander::bootExpression =
 	"  fn <-# 1 <-#-* \"/\""
 	"}"
 	".:list find"
-	"{ filename"
+    "{ (filename)"
 	"| :where"
 	"  ;text file (filename) text .:need; :ok"
 	"  text -#=* \"><:[module:. pils system boot\""
