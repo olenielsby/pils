@@ -2,7 +2,7 @@
 ><:[module:. platform qt .timestamp 2008-06-25T15:43:08.612+02 .language system]><;
 ><:[module:. platform qt dialog .timestamp 2026-07-17T16:17:16.160+02 .language qt]><;
 ;new plumcake .WA_DeleteOnClose 55 .WindowModal 1;
-{ .dialog: .window .boss
+{ dialog: .window .boss
 | :where :what :ok
   new Q:Dialog (window)
   q:setAttribute (WA_DeleteOnClose, 1)
@@ -11,15 +11,15 @@
   q:resize (boss size or [300 200])
   q:show
   when
-  { .channel | :who :ok channel: who }
+  { channel | :who :ok channel: who }
   { listen: handler
   | :who :ok
     ;listener who channel listen (handler);
     who q:show mind listener := listener;
     who
   } 
-  { .bug | shit }
-  { .close
+  { bug | shit }
+  { close
   | :who :ok
     window mind dialog-listen := ();
     who q:close
@@ -37,13 +37,13 @@
     :use
     { when: .boss
     | :self :ok
-      { .bug | shit }
+      { bug | shit }
       { node: boss
       | :who
         ;text boss text .:need; :ok
         who q:addChild (text) when (self when: .boss)
       }
-      { .boss | :where :what shit and: :ok boss }
+      { boss | :where :what shit and: :ok boss }
     }
     ;
     ;layout new Q:VBoxLayout(who);
@@ -76,7 +76,7 @@
 ><:[module:. platform qt entry clang .timestamp 2026-07-06T13:14:31.947+02 .language qt]><;
 ><:[module:. platform qt entry clang test .timestamp 2026-07-16T18:57:26.633+02 .language qt]><;
 ;new plumcake;
-{ .test
+{ test
 | :ok
   ;u new Q:ClangTranslationUnit;
    u q:parse "/home/ole/pilsprogramming/src/pils_kernel/sink.h" and:
@@ -97,9 +97,9 @@
 }
   ><:[module:. platform qt entry path .timestamp 2009-01-27T20:31:04.937+01 .language system]><;
 ;path
-{ .documents | :ok [pils-configuration:documents-directory] }
+{ documents | :ok [pils-configuration:documents-directory] }
 ><:[module:. platform qt entry system .timestamp 2008-08-08T04:55:32.254+02 .language system]><;
-{ .system | :try @@ [platform qt system [?:?|pils-configuration:system]] }
+{ system | :try @@ [platform qt system [?:?|pils-configuration:system]] }
 ><:[module:. platform qt entry window .timestamp 2026-07-17T16:20:40.235+02 .language qt]><;
 ;new plumcake .WA_DeleteOnClose 55;
 { window: boss
@@ -112,10 +112,10 @@
   q:show
   q:resize (boss size .:need)
   when
-  { .activate
+  { activate
   | :who :possibly who q:raise .:need q:activateWindow
   }
-  { .channel | :who :ok channel: who }
+  { channel | :who :ok channel: who }
   { listen: handler
   | :who :ok
     who mind listen := who channel listen (handler);
@@ -148,7 +148,7 @@
     who q:setCentralWidget (inner) and:
     @ lane: .layout new Q:HBoxLayout .widget inner .boss
   }
-  { .splitter
+  { splitter
   | :who :ok
     { column: boss
     | :ok
@@ -191,8 +191,8 @@
   }
   { icon: ' | :who :try who q:setWindowIcon (icon) }
   { title: $ title | :who ' q:setWindowTitle (title) .:try }
-  { .pinpoint | :who :ok who mind pinpointer call: @@ [pils run pinpoint] }
-  { .size
+  { pinpoint | :who :ok who mind pinpointer call: @@ [pils run pinpoint] }
+  { size
   | :who :possibly who juce-getWidth .:need, who juce-getHeight .:need
   }
   { menubar: boss | :who :ok @ menubar: .window who .boss }
@@ -222,7 +222,7 @@
 
 ><:[module:. platform qt filedialog .timestamp 2026-07-04T16:20:33.564+02 .language qt]><;
 ;new plumcake .WA_DeleteOnClose 55;
-{ .filedialog: .window .boss
+{ filedialog: .window .boss
 | :possibly
   new Q:FileDialog (window)
   q:setAttribute (WA_DeleteOnClose, 1)
@@ -231,9 +231,9 @@
   q:setDirectory (boss path .:need)
   q:show
   when
-  { .bug | shit }
-  { .boss | :where :what shit and: :ok boss }
-  { .close | :who :ok who q:close }
+  { bug | shit }
+  { boss | :where :what shit and: :ok boss }
+  { close | :who :ok who q:close }
   { qs:fileSelected: x | :try boss pick: x }
 }
 ><:[module:. platform qt lane .timestamp 2026-07-11T10:16:26.500+02 .language qt]><;
@@ -249,7 +249,7 @@
   layout q:setContentsMargin [0 0 0 0] anyway:
   layout q:setSpacing (boss spacing or 4) anyway:
   widget q:setLayout (layout) anyway:
-  { .bug | shit }
+  { bug | shit }
   { column: boss
   | :ok
     ;w lane-widget (.boss);
@@ -291,10 +291,10 @@
   call (@ ownership: .boss) when
   { qs:clicked: args | :try boss pressed }
   { title: $ title | :who :ok who q:setText (title) }
-  { .title | :who :ok who q:text }
+  { title | :who :ok who q:text }
   { enabled: enabled | :who :ok who q:setEnabled (enabled) }
-  { .enabled | :who :ok who q:isEnabled }
-  { .focus | :who :ok who q:setFocus }
+  { enabled | :who :ok who q:isEnabled }
+  { focus | :who :ok who q:setFocus }
   title (title)
 }
 ><:[module:. platform qt lane canvas .timestamp 2026-07-10T17:13:43.393+02 .language qt]><;
@@ -308,16 +308,16 @@
   { qs:textChanged:
   | :who :try boss text:. who q:toPlainText
   }
-  { .channel | :who :ok channel: who }
-  { .text | :who :ok who q:toPlainText }
+  { channel | :who :ok channel: who }
+  { text | :who :ok who q:toPlainText }
   { text: ' | :who :ok who q:setPlainText: text }
   { selection: a, b
   | :who :ok who q:setSelection(a, b) and:
       who q:ensureCursorVisible and: who
   }
-  { .selection | :who :ok who q:selection }
-  { .focus | :who :ok who q:setFocus }
-  { .pickup | :who :ok who }
+  { selection | :who :ok who q:selection }
+  { focus | :who :ok who q:setFocus }
+  { pickup | :who :ok who }
   +++ boss
 }
 ><:[module:. platform qt lane label .timestamp 2026-07-17T16:25:47.832+02 .language qt]><;
@@ -328,7 +328,7 @@
   try {(widget)|layout q:addWidget: widget}
   call (@ ownership: .boss) when:
   { text: $ text | :who :ok who q:setText (text) }
-  { .text | :who :ok who q:text }
+  { text | :who :ok who q:text }
   +++ boss
 }
 ><:[module:. platform qt lane line-edit .timestamp 2026-07-10T16:45:29.030+02 .language qt]><;
@@ -338,8 +338,8 @@
   ;widget new Q:LineEdit when
   ( { qs:textChanged: text | :who :try who text:. text }
     { text: text | :who :ok who q:setText (text) }
-    { .text | :who :ok who q:text }
-    { .focus | :who :ok who q:setFocus }
+    { text | :who :ok who q:text }
+    { focus | :who :ok who q:setFocus }
     +++ boss
   )
   ;
@@ -353,12 +353,12 @@
   ;widget new Q:TabWidget;
   layout q:addWidget (widget) and:
   widget when
-  ( { .bug | :ok shit }
-    { .boss | :where :what shit and: :ok boss }
+  ( { bug | :ok shit }
+    { boss | :where :what shit and: :ok boss }
     { qs:currentChanged: n | :who :try boss select: .tabs who }
     { own: (= id) | :who :try (channel: who) own (id) }
-    { .current | :who :ok who q:currentWidget }
-    { .tabs
+    { current | :who :ok who q:currentWidget }
+    { tabs
     | :who :ok
       who q:count up every
       { (n) | :ok who q:widget: n - 1 }
@@ -367,7 +367,7 @@
     | :who :ok
       ;layout new Q:VBoxLayout;
       ;tab new Q:Widget when
-      ( { .bug | :ok shit }
+      ( { bug | :ok shit }
         +++ boss )
       ;
       tab q:setLayout (layout) and:
@@ -377,8 +377,8 @@
     { tab: boss
     | :who :ok
       ;tab new Q:Widget when
-      ( { .bug | :ok shit }
-        { .boss | :where :what shit and: :ok boss }
+      ( { bug | :ok shit }
+        { boss | :where :what shit and: :ok boss }
         { column: boss
         | :who :ok
           @ lane: .layout new Q:VBoxLayout .widget who .boss
@@ -387,7 +387,7 @@
         | :who :ok
           @ lane: .layout new Q:HBoxLayout .widget who .boss
         }
-        { .select | ;tabs who; :who :ok tabs q:setCurrentWidget (who) and: who }
+        { select | ;tabs who; :who :ok tabs q:setCurrentWidget (who) and: who }
         +++ boss
       )
       ;
@@ -411,19 +411,19 @@
     who q:addRootNode (text)
     when (when (.boss))
   }
-  { .focus | :who :ok who q:setFocus }
+  { focus | :who :ok who q:setFocus }
   +++ boss
 }
 ===
 { when: .boss
 | :self :ok
-  { .bug | shit }
+  { bug | shit }
   { node: boss
   | :who
     ;text boss text .:need; :ok
     who q:addChild (text) when (self when: .boss)
   }
-  { .boss | 0 or: :where :what shit and: :ok boss }
+  { boss | 0 or: :where :what shit and: :ok boss }
   +++ boss
 }
 ><:[module:. platform qt menubar .timestamp 2026-07-04T17:05:50.309+02 .language qt]><;

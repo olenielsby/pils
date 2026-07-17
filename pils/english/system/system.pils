@@ -15,7 +15,7 @@ here may not be pinned.
 { : object list: step
 | :ok object repeat {(ok)|list := step call (ok) or (?); :ok} .:list
 }
-{ .user | :ok @@ [pils user] }
+{ user | :ok @@ [pils user] }
 { say: say | :ok {} write: say }
 { saying: say | :ok {} write: say }
 { say: $ ok | :ok }
@@ -58,13 +58,13 @@ here may not be pinned.
   find {(n)|module-name +# n & [pils language] & language .(@@) .:try}
 }
 { language: . [system] .module-name +&? .library $? | :ok {} }
-{ .platform
+{ platform
 | :ok @ ([platform [?:?|pils-configuration:platform] entry])
 }
 { datafile: $ filename
 | :possibly file (filename) try (channel: pils-dependency: .thread ' or [dummy-thread])
 }
-{ .datafile-check
+{ datafile-check
 | :ok
   (strap: program: this program filename)?
   legs
@@ -80,7 +80,7 @@ here may not be pinned.
   try {* module|:ok @@ [pils system changed] changed: .module}
 }
 ===
-{ .user | :ok @@ [pils user] }
+{ user | :ok @@ [pils user] }
 ><:[module:. pils, .timestamp 2008-11-02T13:02:10.765+01 .language system]><;
 
 ><:[module:. pils language .timestamp 2008-08-28T10:37:59.074+02 .language system]><;
@@ -184,8 +184,8 @@ PILS should be restarted and tested after each edit.
   )
   ;
   { | :try draw basemodule:. module-name .library }
-  { .bootfilename | :ok bootfilename }
-  { .plumcake | :ok plumcake }
+  { bootfilename | :ok bootfilename }
+  { plumcake | :ok plumcake }
   { @@: = +& module-name | :try module-name call (draw) }
   { @: = names
   | :ok
@@ -494,23 +494,23 @@ PILS should be restarted and tested after each edit.
   or:
   :ok library-node
 }
-{ .header | :ok library-node? }
-{ .modules | :ok library-node legs {(a) := b|:ok a, b} {() := ?|?} }
-{ .node | :ok library-node }
-{ .header := = changed | :self :ok self changed:. .module-name [] }
+{ header | :ok library-node? }
+{ modules | :ok library-node legs {(a) := b|:ok a, b} {() := ?|?} }
+{ node | :ok library-node }
+{ header := = changed | :self :ok self changed:. .module-name [] }
 { = +& module-name := changed = * module:. $?
 | :self :ok
   self changed:. .module-name
 }
 { = +& module-name := [] | :self :ok self delete: .module-name }
-{ .library | :who :ok who }
+{ library | :who :ok who }
 { = +& module-name
 | :possibly
   module:. module-name call (library-node) .:need
   .library library-filename
   .module-name
 }
-{ .library-language |:ok library-language }
+{ library-language |:ok library-language }
 { language: .module-name +& '
 | :try @@ (module-name call (library-node) .:need language or :ok {})
 }
@@ -574,7 +574,7 @@ PILS should be restarted and tested after each edit.
   & (library: . program-library .filename program-filename .why [main])
   reverse
 }
-{ .test|:self :try this program filename call (self) }
+{ test | :self :try this program filename call (self) }
 ><:[module:. pils system path .timestamp 2026-07-17T16:01:35.504+02 .language system]><;
 !!
 Edit with care - everything depends on this module.
@@ -585,33 +585,33 @@ PILS should be restarted and tested after each edit.
 .
 { path: .
 | :ok
-  { .configuration-filename
+  { configuration-filename
   | :ok
     [pils-configuration:configuration-directory]
     "config."
     [pils-configuration:pils-filetype]
   }
-  { .user-configuration-filename
+  { user-configuration-filename
   | :ok
     [pils-configuration:configuration-directory]
     "config."
     [pils-configuration:pils-filetype]
   }
-  { .language-configuration-filename
+  { language-configuration-filename
   | :ok
       bootfilename <-#^* "/pils/"
       ([pils-configuration:language] lower) "/system/config."
       [pils-configuration:pils-filetype]
   }
-  { .default-configuration-filename
+  { default-configuration-filename
   | :ok bootfilename <-#^* "/" . "config." [pils-configuration:pils-filetype]
   }
-  { .platform-filename
+  { platform-filename
   | :ok
     bootfilename <-#^* "/" [pils-configuration:platform] "/"
     [pils-configuration:platform] "." [pils-configuration:pils-filetype]
   }
-  { .platform-program-filename
+  { platform-program-filename
   | :ok
     bootfilename <-#^* "/"
     [pils-configuration:platform] "/"
@@ -625,13 +625,13 @@ PILS should be restarted and tested after each edit.
     (language-name) "/system/" (language-name) "."
     [pils-configuration:pils-filetype]
   }
-  { .editor-filename
+  { editor-filename
   | :ok bootfilename <-#^* "/" . "editor." [pils-configuration:pils-filetype]
   }
-  { .icons-filename
+  { icons-filename
   | :ok bootfilename <-#^* "/" . "icons." [pils-configuration:pils-filetype]
   }
-  { .bugpinner-filename
+  { bugpinner-filename
   | :ok bootfilename <-#^* "/" . "bugpinner." [pils-configuration:pils-filetype]
   }
   { encode: $ ok
@@ -649,13 +649,13 @@ PILS should be restarted and tested after each edit.
     | :if ok <+#-* "/" =* "." = 0; :ok (') "." [pils-configuration:pils-filetype]
     }
   }
-  { .encodings | :try encodings }
-  { .decodings | :try decodings }
+  { encodings | :try encodings }
+  { decodings | :try decodings }
   ===
-  { .decodings
+  { decodings
   | :self :ok self encodings split 2 every {(a, b)|:ok b, a} splice
   }
-  { .encodings
+  { encodings
   | :ok
     bootfilename <-#^* "/pils/", "<pils>/",
     [pils-configuration:configuration-directory], "<config>/",
@@ -701,9 +701,9 @@ knot:
   ;
   program-strap? :=
   ( knot:
-    { .existing-program | :ok :call program-strap }
-    { .library-list | program-strap call (self) anyway: }
-    { .libraries
+    { existing-program | :ok :call program-strap }
+    { library-list | program-strap call (self) anyway: }
+    { libraries
     | :ok
       libraries every {* library: .filename .why|:ok library: .filename .why}
     }
@@ -842,8 +842,8 @@ PILS should be restarted and tested after each edit.
 
 ;library-channel (channel: pils-library: this program filename);
 { (call) = save: .filename | :try :call }
-{ .save | :try save (.filename this program filename) }
-{ .savez | :try save (.filename this program filename . ".testing" bug {}) }
+{ save | :try save (.filename this program filename) }
+{ savez | :try save (.filename this program filename . ".testing" bug {}) }
 ===
 { save: .filename
 | :ok
@@ -871,7 +871,7 @@ Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
 !!
 
-{ .start | :ok [channel: pils: command-line] }
+{ start | :ok [channel: pils: command-line] }
 { command-line: .
 | oops
 }

@@ -39,12 +39,12 @@
     )
   ;
   ;window platform window
-  { .title | :ok error-title }
-  { .size | :ok [600 300] }
-  { .icon | :ok @@ [pils icon horn hot large] }
+  { title | :ok error-title }
+  { size | :ok [600 300] }
+  { icon | :ok @@ [pils icon horn hot large] }
   ;
   window mind suppress := channel listen
-    { .suppress|:ok [SUPPRESSED ERROR] bug {} }
+    { suppress | :ok [SUPPRESSED ERROR] bug {} }
   ;
   ;splitter window splitter column ();
   ;input splitter edit (); 
@@ -71,9 +71,9 @@
     @@ [pils edit source menu action find] host:
     .window
     .minding [find]
-    .pages {.current|:ok output}
+    .pages {current|:ok output}
   }
-  { .locate
+  { locate
   | :ok
     module filename @@@ [pils editor] window
     mind operations operations
@@ -88,7 +88,7 @@
     )
     focus
   }
-  { .test
+  { test
   | :possibly :tag [test];
     ;text input text .language module language;
     ;expression
@@ -97,8 +97,8 @@
       { :error error:. .start .end
       | :ok [test];
         window ask: . [show syntax error];
-        { .ok | :ok input selection (start, end) }
-        { .cancel | :ok [] }
+        { ok | :ok input selection (start, end) }
+        { cancel | :ok [] }
       }
     ;
     output text:
@@ -106,7 +106,7 @@
     expression ---:
     where +++: node: :;error .what .module .where .who
   }
-  { .detach | :ok window icon (@@ [pils icon horn cold large]) mind suppress := () }
+  { detach | :ok window icon (@@ [pils icon horn cold large]) mind suppress := () }
   { locate: .what? .module? | window say [not located] }
   { locate: .what .module *
     module: .name .language .text .filename .expression
@@ -119,8 +119,8 @@
 
 ><:[module:. pils run error hint .timestamp 2009-08-29T12:53:13.952+02 .language system]><;
 ;error-channel (channel: error: this program filename);
-{ .hint | :ok () }
-{ .hint
+{ hint | :ok () }
+{ hint
 | :possibly
   error-channel listen
   ( ;hint hint:
@@ -223,7 +223,7 @@
 }
 
 ><:[module:. pils run log .timestamp 2026-07-03T18:42:44.323+02 .language system]><;
-{ .window
+{ window
 | :ok
   this module channel window or:
   ;window platform window "Log" icon (@@ [pils icon horn cold]);

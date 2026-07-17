@@ -2,9 +2,9 @@
 ><:[module: . pils run .timestamp 2009-01-06T23:04:38.578+01 .language system]><;
 ><:[module: . pils run command .timestamp 2009-01-06T23:06:07.891+01 .language system]><;
 ><:[module: . pils run command open .language system]><;
-{ .open | :ok @@ [pils editor] window }
+{ open | :ok @@ [pils editor] window }
 ><:[module: . pils run command register .timestamp 2009-02-10T18:39:41.144+01 .language system]><;
-{ .register
+{ register
 | :ok
   @@ registry
   try {(ok) <$* "/"|:ok . (this program filename <+#^* "/" <-#=* ".")}

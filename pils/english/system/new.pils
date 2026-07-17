@@ -1,5 +1,5 @@
 ><:[module: . test, .timestamp 2008-12-06T22:53:54.506+01 .language system]><;
-{ .test
+{ test
 | :ok
   ! write your test code here
 }

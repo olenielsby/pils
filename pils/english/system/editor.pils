@@ -1,16 +1,16 @@
 [pils: .use?]
 ><:[module:. pils, .timestamp 2008-12-23T02:24:30.089+01 .language system]><;
 ><:[module:. pils editor .timestamp 2026-07-12T13:43:28.264+02 .language system]><;
-{ .window
+{ window
 | :ok
   ;lifetime platform lifetime (this module name);
   this module channel window or:
   ;window
     platform window
-    { .title  | :ok @@ title }
-    { .channel | :ok this module channel }
-    { .size | :ok [500 600] }
-    { .icon
+    { title  | :ok @@ title }
+    { channel | :ok this module channel }
+    { size | :ok [500 600] }
+    { icon
     | :ok
       :call @@:
       [pils icon opener] &
@@ -25,16 +25,16 @@
  ! ;module-listener
   window mind module-listener :=
    this module channel listen
-  { .window
+  { window
   | (window: ' .program this program filename) bug {}
   }
-  { .window
+  { window
   | :try window activate
   }
   ;
   ;splitter window splitter column ();
   ;tabs splitter tabs
-    { .module-label | :who :ok (channel: who) own [module-label] }
+    { module-label | :who :ok (channel: who) own [module-label] }
     { select: .tabs
     | ;page tabs current;
       @ menu (.window .tabs .page)
@@ -44,7 +44,7 @@
 !      this 
 !      tabs module-label text (this program language write: page id)
     }
-    { .bug
+    { bug
     | :who
       who module-label text (this program language write: who current id)
     }
@@ -56,45 +56,45 @@
       }
       or:
       ;tab tabs tab
-        { .id | :ok module-name }
-        { .editor | :ok (channel: tabs) own (edit: module-name) }
-        { .bug | :ok shit }
-        { .name
+        { id | :ok module-name }
+        { editor | :ok (channel: tabs) own (edit: module-name) }
+        { bug | :ok shit }
+        { name
         | :ok
           this program language write (module-name <+# 1 1)
           -#$* "[" <-#$* "]"
         }
       ;
-      :use { .edit | :ok (channel: tabs) own (edit: module-name) };
-      ;tab-column tab column {.spacing|:ok 2};
+      :use { edit | :ok (channel: tabs) own (edit: module-name) };
+      ;tab-column tab column {spacing|:ok 2};
       tab-column label [tr1] text (this program language write (module-name))
       and:
       ;edit tab-column edit
         { text: .
         | @ menu: .window .tabs .page tabs current
         }
-        { .owner | :ok tabs }
-        { .id | :ok edit: module-name }
+        { owner | :ok tabs }
+        { id | :ok edit: module-name }
       ;
       edit text (module-name call (library-channel node) module) and:
       tab select and: edit focus
     }
   ;
-  ;result splitter edit {.text | :ok "(Test output will be shown here)"};
+  ;result splitter edit { text | :ok "(Test output will be shown here)"};
   window mind state := [new];
   window mind result := result;
   window mind splitter := splitter;
   window mind active := tabs;
   window mind tabs := tabs;
   window mind operations :=
-  { .operations | :ok @ operations (.window .tabs) }
+  { operations | :ok @ operations (.window .tabs) }
   ;
   ;statusbar window statusbar ();
   statusbar label [status] text (say [search] ":") and:
   ;search statusbar line-edit ();
   statusbar button
-    { .title | :ok say [next] }
-    { .pressed
+    { title | :ok say [next] }
+    { pressed
     | ;edit tabs current editor;
       ;text edit text .search search text .from edit selection largest;
       ;at text -# from =* search;
@@ -104,8 +104,8 @@
     }
   and:
   statusbar button
-    { .title | :ok say [previous] }
-    { .pressed
+    { title | :ok say [previous] }
+    { pressed
     | ;edit tabs current editor;
       ;text edit text .search search text .from edit selection largest;
       ;at text +# from <=* search;
@@ -113,7 +113,7 @@
       ;to from - at;
       edit selection (to, to + search count)
     }
-    { .pressed
+    { pressed
     |  ;edit tabs current editor;
       ;text edit text .search search text .from edit selection smallest;
       ;at text +# from <=* search;
@@ -129,12 +129,12 @@
   {|}
 }
 ><:[module:. pils editor === .timestamp 2008-12-23T02:25:18.339+01 .language system]><;
-{ .library-channel | :ok channel: pils-library: this program filename }
-{ .editor-channel | :ok this module channel }
-{ .window | :try @@ [pils editor] window }
+{ library-channel | :ok channel: pils-library: this program filename }
+{ editor-channel | :ok this module channel }
+{ window | :try @@ [pils editor] window }
 
 ><:[module:. pils editor latest .timestamp 2008-05-28T01:30:44.271+02 .language system]><;
-{ .latest
+{ latest
 | library-channel node
   legs
   { +& name := ? | :ok name, () }
@@ -290,9 +290,9 @@
   ;
   ;dialog
   window dialog
-  { .title | :ok say [pick module] }
-  { .size | :ok [400 300] }
-  { .bug | bug }
+  { title | :ok say [pick module] }
+  { size | :ok [400 300] }
+  { bug | bug }
   ;
   ;column dialog column ();
   ;view column tree
@@ -309,15 +309,15 @@
     { branch: .; items
     | :ok
       self populate: .tree items .view ' node
-      { .text
+      { text
       | :ok language write (branch <+# 1 singlewise) -#$* "[" <-#$* "]"
       }
-      { .id | :ok branch }
+      { id | :ok branch }
     }
   }
   populate (.view .tree) and:
   dialog listen
-  { .cancel | }
+  { cancel | }
 }
 ><:[module:. pils editor operations .timestamp 2026-07-16T19:18:06.912+02 .language system]><;
 ;library-channel;
@@ -340,7 +340,7 @@
   | :ok @ navigate: .window .tabs .home ()
   }
 ! end test rule
-  { .detective | :ok @ detective: .window .tabs }
+  { detective | :ok @ detective: .window .tabs }
   { [test open] | :try @@ [pils run command open] open }
   { new: .page | :ok @ new: .page .window  }
   { rename: .page
@@ -514,18 +514,18 @@
     savez and:
     :try tabs open (.module-name)
   }
-  { .open
+  { open
   | :ok window filedialog
-    { .path | :ok  this program filename <-#-* "/" }
-    {  .filter | :ok "*." [pils-configuration:pils-filetype] }
-    {  .title | :ok say [open file] }
-    {  .bug | shit }
+    { path | :ok  this program filename <-#-* "/" }
+    {  filter | :ok "*." [pils-configuration:pils-filetype] }
+    {  title | :ok say [open file] }
+    {  bug | shit }
     { pick: file
     | :if file <$* ("." [pils-configuration:pils-filetype]) > 0;
       :try file @@@ [pils run start] .:need start
     }
   }
-  { .explorer | :try platform system explorer }
+  { explorer | :try platform system explorer }
   ==='
   { valid: .page
   | :tag [valid];
@@ -555,8 +555,8 @@
         .start
         .end
       | ( window ask: . error;
-          { .show | :ok page editor or (page) selection (start, end) }
-          { .cancel | :ok }
+          { show | :ok page editor or (page) selection (start, end) }
+          { cancel | :ok }
         )
         and:
         [error coming] bug {} and:
@@ -603,16 +603,16 @@
     savez
   }
   ===
-  { .save | :try @@ [pils system program-file] save }
-  { .savez | :ok @@ [pils system program-file] savez }
-  { .paged | :try @ refresh: .window .tabs }
+  { save | :try @@ [pils system program-file] save }
+  { savez | :ok @@ [pils system program-file] savez }
+  { paged | :try @ refresh: .window .tabs }
   { [pane: result] | :ok [result escape] find (editor-channel) anyway: }
 }
 ><:[module:. pils editor operations new .timestamp 2026-07-05T22:37:29.808+02 .language system]><;
 { new: .page .window
 | :ok
   ;dialog window dialog
-    {.title|:ok say [create new module]}
+    {title|:ok say [create new module]}
   ;
   ;main-column dialog column ();
   ;new-name main-column line-edit
@@ -620,16 +620,16 @@
   ;
   ;button-row main-column row ();
   ;ok-button button-row button
-    { .title | :ok say [ok] }
-    { .pressed | :try dialog channel ok }
+    { title | :ok say [ok] }
+    { pressed | :try dialog channel ok }
   ;
   ;cancel-button button-row button
-    { .title | :ok say [cancel] }
-    { .pressed | :try window channel cancel }
+    { title | :ok say [cancel] }
+    { pressed | :try window channel cancel }
   ;
   ;error-message main-column label (;text "nul putte");
   dialog listen
-  { .cancel | }
+  { cancel | }
   { validate: | }
 }
 
@@ -753,7 +753,7 @@
   | actions find {select: . [test]; ?|:ok ()} or:
     :ok actions &:
     select: . [test];
-    function: . [test] .module {.test|:ok say [no test]} .home
+    function: . [test] .module {test|:ok say [no test]} .home
   }
   each
   { select: .; action = function:. .module? .home?
@@ -784,17 +784,17 @@ language: {}? head "graph"><:[module:. pils language system .timestamp 2008-12-2
   :try command call (@)
 }
 ><:[module:. pils run command edit .timestamp 2008-12-23T02:34:41.793+01 .language system]><;
-{ .edit | :ok @@ [pils editor] window }
+{ edit | :ok @@ [pils editor] window }
 ><:[module:. pils run command open .timestamp 2008-12-23T02:22:18.902+01 .language system]><;
-{ .open | :ok @@ [pils editor] window }
+{ open | :ok @@ [pils editor] window }
 ><:[module:. pils run command test .timestamp 2008-12-23T01:45:24.703+01 .language system]><;
-{ .test
+{ test
 | :ok
 [exebug @@ [pils editor] window] bug {} and:
   @@ [pils editor] window
 }
 ><:[module:. pils run start .timestamp 2008-12-23T02:23:01.293+01 .language system]><;
-{ .start | :try @@ [pils editor] window }
+{ start | :try @@ [pils editor] window }
 ><:[module:. pils talk .timestamp 2008-12-23T02:23:09.511+01 .language system]><;
 ><:[module:. pils textual .timestamp 2011-07-15T11:00:01.698+02 .language system]><;
 { textual: .result .language
