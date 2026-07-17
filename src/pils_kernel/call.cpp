@@ -968,7 +968,7 @@ namespace PILS
 		const Any *thing = call.specialCall(run, *(const ReallySpecial*)this);
         if (thing)
 			return thing->passCounted(run);
-        if (thing = getWhen())
+        if ((thing = getWhen()))
 		{
 			new (run.allocate(sizeof(SinkHoldCalling))) SinkHoldCalling(thing);
 			new (run.allocate(sizeof(SinkCallingWhoTag))) SinkCallingWhoTag(*run.calling.who);
@@ -983,7 +983,7 @@ namespace PILS
 		const Any *thing = call.specialCall(run, *(const ReallySpecial*)this);
 		if (thing)
 			return thing->passCounted(run);
-        if (thing = getWhen())
+        if ((thing = getWhen()))
 		{
 			new (run.allocate(sizeof(SinkHoldCalling))) SinkHoldCalling(thing);
 			new (run.allocate(sizeof(SinkCallingWhoTag))) SinkCallingWhoTag(*run.calling.who);
@@ -998,7 +998,7 @@ namespace PILS
 		const Any *thing = call.specialCall(run, *(const ReallySpecial*)this);
 		if (thing)
 			return thing->passCounted(run);
-        if (thing = getWhen())
+        if ((thing = getWhen()))
 		{
 			new (run.allocate(sizeof(SinkHoldCalling))) SinkHoldCalling(thing);
 			new (run.allocate(sizeof(SinkCallingWhoTag))) SinkCallingWhoTag(*run.calling.who);
@@ -1013,7 +1013,7 @@ namespace PILS
 		const Any *thing = call.specialCall(run, *(const ReallySpecial*)this);
 		if (thing)
 			return thing->passCounted(run);
-        if (thing = getWhen())
+        if ((thing = getWhen()))
 		{
 			new (run.allocate(sizeof(SinkHoldCalling))) SinkHoldCalling(thing);
 			new (run.allocate(sizeof(SinkCallingWhoTag))) SinkCallingWhoTag(*run.calling.who);
@@ -1028,7 +1028,7 @@ namespace PILS
 		const Any *thing = call.specialCall(run, *(const ReallySpecial*)this);
 		if (thing)
 			return thing->passCounted(run);
-        if (thing = getWhen())
+        if ((thing = getWhen()))
 		{
 			new (run.allocate(sizeof(SinkHoldCalling))) SinkHoldCalling(thing);
 			new (run.allocate(sizeof(SinkCallingWhoTag))) SinkCallingWhoTag(*run.calling.who);
@@ -1043,7 +1043,7 @@ namespace PILS
 		const Any *thing = call.specialCall(run, *(const ReallySpecial*)this);
 		if (thing)
 			return thing->passCounted(run);
-        if (thing = getWhen())
+        if ((thing = getWhen()))
 		{
 			new (run.allocate(sizeof(SinkHoldCalling))) SinkHoldCalling(thing);
 			new (run.allocate(sizeof(SinkCallingWhoTag))) SinkCallingWhoTag(*run.calling.who);
@@ -1061,7 +1061,7 @@ namespace PILS
             run.release(assignValue);
 			return thing->passCounted(run);
 		}
-        if (thing = getWhen())
+        if ((thing = getWhen()))
 		{
 			new (run.allocate(sizeof(SinkHoldCalling))) SinkHoldCalling(thing);
 			new (run.allocate(sizeof(SinkCallingWhoTag))) SinkCallingWhoTag(*run.calling.who);

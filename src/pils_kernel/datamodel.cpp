@@ -217,7 +217,6 @@ namespace PILS
 		while (*link != this)
 			link = &(*link)->hashLink;
 		*link = hashLink;
-        hashLink == nullptr;
 	}
 
 	const ClicheShort *Empty::newCliche(const Constant *&link, const Constant *a) const
