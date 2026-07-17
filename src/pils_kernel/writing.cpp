@@ -487,6 +487,7 @@ namespace PILS
 		case WRITING_CONSTANT_ATTRIBUTE:
 		case WRITING_CONSTANT_ELEMENT:
 		case WRITING_CONSTANT_SHORT_ELEMENT:
+        case WRITING_RULEPATTERN:
 			wrap = false;
 			break;
 		default:
@@ -1062,7 +1063,7 @@ namespace PILS
 			&& (skin = writing.language->nameLookup(head, record)) != NAMESKIN_NONE)
 		{
 			writing.spaceElement();
-			bool wrap = state == WRITING_ARGUMENT;
+            bool wrap = state == WRITING_ARGUMENT||state == WRITING_RULEPATTERN;
 			if (wrap)
 			{
 				writing.write('(');
@@ -1214,7 +1215,7 @@ namespace PILS
 		if (head
 			&& (skin = writing.language->nameLookup(head, record)) != NAMESKIN_NONE)
 		{
-			bool wrap = state == WRITING_ARGUMENT;
+            bool wrap = state == WRITING_ARGUMENT||state == WRITING_RULEPATTERN;
 			writing.spaceElement();
 			if (wrap)
 			{
@@ -1384,6 +1385,7 @@ namespace PILS
 			break;
 		case WRITING_ARGUMENT:
 		case WRITING_DOT_ARGUMENT:
+        case WRITING_RULEPATTERN:
 		default:
 			wrap = true;
 		}
@@ -1792,7 +1794,7 @@ namespace PILS
 			if (match != &Empty::singleton)
 			{
 				writing.optionalSpace();
-                writing.write(match, WRITING_EXPRESSION, level, nullptr);
+                writing.write(match, WRITING_RULEPATTERN, level, nullptr);
 			}
 			writing.level--;
 			writing.optionalSpaceOrBreak();
