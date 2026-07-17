@@ -470,7 +470,8 @@ namespace PILS
 			: Parse(at)
 		{}
 		void close(Runner &run, Parsing &parsing, ParseLevel level, const Any *value);
-	};
+        void closePhrase(Runner &run, Parsing &parsing, ParseLevel level, const Any *value);
+    };
 
 	class ParseRulePattern
 		: public ParseRulePatternBase
@@ -490,7 +491,7 @@ namespace PILS
 		ParseRuleDotPattern(const unsigned char *at)
 			: ParseRulePatternBase(at)
 		{}
-		void closePhrase(Runner &run, Parsing &parsing, ParseLevel level, const Any *value);
+        // void closePhrase(Runner &run, Parsing &parsing, ParseLevel level, const Any *value);
 	};
 
 	class ParseRuleAction

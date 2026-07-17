@@ -233,7 +233,7 @@ PILS should be restarted and tested after each edit.
   { traceread: x | :try language traceread: x }
   +++ plumcake
 }
-><:[module:. pils system boot .timestamp 2026-07-17T15:44:05.856+02 .language system]><;
+><:[module:. pils system boot .timestamp 2026-07-17T16:48:28.870+02 .language system]><;
 !!
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
@@ -274,7 +274,7 @@ that allows the system modules to reference each other
     }
   }
   call
-  { library-node
+  { (library-node)
   | :ok
     { @@: & module-name
     | :who

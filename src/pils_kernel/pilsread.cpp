@@ -2730,7 +2730,8 @@ namespace PILS
 		return &parsing;
 	}
 
-	void ParseRuleDotPattern::closePhrase(Runner &run, Parsing &parsing, ParseLevel level, const Any *value)
+    // void ParseRuleDotPattern::closePhrase(Runner &run, Parsing &parsing, ParseLevel level, const Any *value)
+    void ParseRulePatternBase::closePhrase(Runner &run, Parsing &parsing, ParseLevel level, const Any *value)
 	{
 		return close(run, parsing, level, value);
 	}
