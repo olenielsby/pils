@@ -51,7 +51,7 @@
     { module: .module-name .tabs
     | :ok
       tabs tabs find
-      {  tab
+      { (tab)
       | :if tab id = module-name; :ok tab select
       }
       or:
@@ -165,18 +165,18 @@
   ;
   ;items who items (.page .window .tabs);
   items legs
-  { at := item = *;menu path
+  { (at) := item = *;menu path
   | :ok
     (item:. .at) & (path listwise reverse) fold
-    { chain := name | :ok name:. .at; chain }
+    { (chain) := name | :ok name:. .at; chain }
   }
   call
-  { level
+  { (level)
   | :who :ok
     level groups
     { name:. .at; value | :ok :name (submenu: .name); value }
     { name:. .at; value = item: .? .at | :ok :name (item: .name); value }
-    legs {group := values = (*;at) 1 |:ok group:. .at; values}
+    legs {(group) := values = (*;at) 1 |:ok group:. .at; values}
     order [call: at]
     every
     { group: . (item: .name) .at; (item:. .at) 1 | :ok item:. .name .at }
@@ -185,13 +185,13 @@
     }
   }
   first (menubar) fold
-  { menu := submenu: .name; items
+  { (menu) := submenu: .name; items
   | :self :ok 
     items first (menu menu (.name saying (name)))
     fold (self)
     and: menu
   }
-  { menu := item:. .at .name
+  { (menu) := item:. .at .name
   | :ok item call
     { menu:.? .shortcut .action
     | :ok menu action (. .name saying (name) .shortcut)
@@ -238,7 +238,7 @@
     ( menu: . [module copy] .shortcut "Ctrl+K" .action copy: .page )
 !    &
 !    ( (text, home) call
-!      { ?
+!      { (?)
 !      |:ok
 !        (@ rename: .page .library-channel .home)
 !      }
@@ -246,7 +246,7 @@
 !      | :ok
 !        (@ rename: .page .library-channel .home)
 !        &
-!        ( library-channel node legs {ok := ?|:ok}
+!        ( library-channel node legs {(ok) := ?|:ok}
 !          find {& ok|:if (ok $* home > 0) and (ok <> home); :ok ()} or:
 !          menu: . [module destroy] .action delete: .page
 !        )
@@ -272,18 +272,18 @@
   :ok
   ;modules 
     library-channel node legs {+& ok := ?|:ok}
-    order {ok|:ok ' .(language write) <-##* ",]"}
+    order {(ok)|:ok ' .(language write) <-##* ",]"}
   ;
   ;tree
   ( level:. 1; modules) call
   { level:.; items
   | :self :ok
-    items groups { item | :ok item +# level }
+    items groups { (item) | :ok item +# level }
     legs
-    { branch := items
+    { (branch) := items
     | :ok branch:.;
       self level: . ' + 1;
-      items each {ok & n|:if n > level; :ok}
+      items each {(ok) & n|:if n > level; :ok}
     }
     order {branch:.;?|:ok language write (branch)}
   }   
@@ -358,7 +358,7 @@
     ;
     ;new
       this program language read ("[" (text) "]") or ()
-      call {ok = ? // ?|:ok} or (:ok window say [bad module name])
+      call {(ok) = ? // ?|:ok} or (:ok window say [bad module name])
     ;
     ;new old <-# 1 & new;
     new call (library-channel node)
@@ -391,7 +391,7 @@
     ;
     ;new
       this program language read ("[" (text) "]") or ()
-      call {ok = ? // ?|:ok} or (:ok window say [bad module name])
+      call {(ok) = ? // ?|:ok} or (:ok window say [bad module name])
     ;
     ;new old <-# 1 & new;
     new call (library-channel node)
@@ -459,7 +459,7 @@
     ;module-name page mind module-name;
     ;modules
       library-channel node legs
-      {module :=|:if module $* module-name > 0; :ok module: .; ='}
+      {(module) :=|:if module $* module-name > 0; :ok module: .; ='}
     ;
     modules find ([call: module] -> to node)
     and (window say [module already exists])
@@ -480,7 +480,7 @@
     savez
     and:
     tabs count down each (tabs) each
-    { tab
+    { (tab)
     | :if tab page .:need mind module-name $* module-name > 0; tab close
     }
     and:
@@ -570,17 +570,17 @@
   }
   { read: .text ' =* ":"
   | this program language read (text) or ()
-    call {ok = +$? // +$?|:ok} .:try anyway:
+    call {(ok) = +$? // +$?|:ok} .:try anyway:
     this program language read
     ("[" (text +#=* ":") ({} write (text -#=* ":")) "]") .:try
   }
   { rename: .old .new
   | :ok
     tabs count down each (tabs) each
-    { tab | :if tab page .:need mind module-name $* old > 0; tab close }
+    { (tab) | :if tab page .:need mind module-name $* old > 0; tab close }
     and:
     (library-channel) modules each
-    { name, module
+    { (name, module)
     | :if name $* old > 0;
       ;new ' & (name -#$* old);
       (library-channel) (new) or:
@@ -593,7 +593,7 @@
   { copy: .old .new
   | :ok
     (library-channel) modules each
-    { name, module
+    { (name, module)
     | :if name $* old > 0;
       ;new ' & (name -#$* old);
       (library-channel) (new) or:
@@ -637,7 +637,7 @@
 { old-stuff-newx: .page
 | ;text window ask text [.header create, .label new module] .:need;
   :if text count > 0;
-  ;newname read (.text) .:need call {ok = ? // ?|:ok}
+  ;newname read (.text) .:need call {(ok) = ? // ?|:ok}
     or (:ok window say [bad module name])
   ;
   ;new page mind module-name & newname;
@@ -650,16 +650,16 @@
   { library: .why? .filename
   | :ok [node] call: channel: pils-library: filename
   }
-  find ((call: new) -> {ok|:ok ' without [timestamp]})
+  find ((call: new) -> {(ok)|:ok ' without [timestamp]})
   or
   ( module: .
-    ( this program language write (: { newname | :quote :ok })
+    ( this program language write (: { (newname) | :quote :ok })
       <-#$* " " . ""=
       try
-      { text
+      { (text)
       | ;ok text *=* ["{[", "{ .", "]|", ""="| ", "}", ""="}"];
         this program language read (ok) or ()
-        call {{n|?}|:if n = newname; :ok} .:try
+        call {{(n)|?}|:if n = newname; :ok} .:try
       }
     )
     .language library-channel header language or [system]
@@ -689,23 +689,23 @@
     .else 1
   )
   try:
-  { (state: .page .changed), ?
+  { ((state: .page .changed), ?)
   | tabs mind images . page := (state: .selected 0 .changed) }
-  { (state: .page .changed?), (state: .page .changed?)
+  { ((state: .page .changed?), (state: .page .changed?))
   | ? }
-  { ?, state = state: .page? .changed
+  { (?, state = state: .page? .changed)
   | window mind state := state;
     tabs mind images . page := (state: .selected 1 .changed);
     @ menu (.page .window .tabs)
   }
-  { x, x | ? }
+  { (x, x) | ? }
 }
 ><:[module:. pils editor result .timestamp 2011-07-24T00:32:13.771+02 .language system]><;
 { result:. .window .tabs?
 | :ok
   window mind result text:
   result call
-  { result | :ok this program language indent: result }
+  { (result) | :ok this program language indent: result }
   { $ ok | :ok }
 }
 
@@ -716,24 +716,24 @@
 { test-methods: .home = & '
 | :ok
   (home & [test], home)
-  & (home count up each {count|:ok home <-# count & [test]})
-  & ((home count - 1) down each {count|:ok home +# count})
+  & (home count up each {(count)|:ok home <-# count & [test]})
+  & ((home count - 1) down each {(count)|:ok home +# count})
   each
-  { module-name
+  { (module-name)
   | :ok
     ;module @@ (module-name) or ();
     module call
-    { ? | :ok () }
+    { (?) | :ok () }
     { ::where .ruleset ::ruleset
     | :try ruleset every {:;match .action?|:ok match}
     }
     { [] * module | :ok module cliche legs +#^* (,) }
     each
-    { function = ? // ?
+    { (function) = ? // ?
     | :ok
       (select: . function; function:. .module-name)
       try
-      { ok =
+      { (ok) =
         select: . function <> [test];
         spec = function:. .module-name ' = (function) 0
       | :ok (select: . [test]; spec) & ok
@@ -749,7 +749,7 @@
   | :ok select:.; function:. .module @@ (module-name) .home
   }
   try
-  { actions
+  { (actions)
   | actions find {select: . [test]; ?|:ok ()} or:
     :ok actions &:
     select: . [test];
@@ -758,7 +758,7 @@
   each
   { select: .; action = function:. .module? .home?
   | :ok
-    ;function ' try {ok * ?|:ok};
+    ;function ' try {(ok) * ?|:ok};
     menu: . [test], this program language name (function) or (function)
     .action .shortcut :if select = [test]; "Ctrl+T"
   }
@@ -766,7 +766,7 @@
 }
 ><:[module:. pils editor title .timestamp 2026-07-08T23:06:14.594+02 .language system]><;
 this program filename call
-{filename|:ok filename <+#^* "/" . " - " (filename <-#^* "/")}
+{(filename)|:ok filename <+#^* "/" . " - " (filename <-#^* "/")}
 ><:[module:. pils language .timestamp 2008-12-23T02:33:21.871+01 .language system]><;
 ><:[module:. pils language graph .timestamp 2009-09-02T16:26:34.424+02 .language system]><;
 language: {}? head "graph"><:[module:. pils language system .timestamp 2008-12-23T02:33:28.886+01 .language system]><;
@@ -800,7 +800,7 @@ language: {}? head "graph"><:[module:. pils language system .timestamp 2008-12-2
 { textual: .result .language
 | :ok
   result call
-  { result | :ok language indent: result }
+  { (result) | :ok language indent: result }
   { $ ok | :ok }
 }
 

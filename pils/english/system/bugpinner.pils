@@ -34,7 +34,7 @@
       ( error call {+$ message . 1|:ok message <-#+* ""/~} or:
         saying
         (error try: [call: text] +++ [ok: .])
-        call {?|:ok "..."}{ok $ (? < 60)|:ok}
+        call {(?)|:ok "..."}{(ok) $ (? < 60)|:ok}
       )
     )
   ;
@@ -128,24 +128,24 @@
     .size error-channel size .:need
     .text error-channel text .:need
   )
-  call {hint|:ok error-channel close anyway: hint}
+  call {(hint)|:ok error-channel close anyway: hint}
 }
 ><:[module:. pils run error menubuild .timestamp 2009-08-29T12:53:13.952+02 .language system]><;
 { menubuild: .menuitems .menubar
 | :ok
   menuitems legs
-  { at := item = *;menu path
+  { (at) := item = *;menu path
   | :ok
     (item:. .at) & (path listwise reverse) fold
-    { chain := name | :ok name:. .at; chain }
+    { (chain) := name | :ok name:. .at; chain }
   }
   call
-  { level
+  { (level)
   | :who :ok
     level groups
     { name:. .at; value | :ok :name (submenu: .name); value }
     { name:. .at; value = item: .? .at | :ok :name (item: .name); value }
-    legs {group := values = (*;at) 1 |:ok group:. .at; values}
+    legs {(group) := values = (*;at) 1 |:ok group:. .at; values}
     order [call: at]
     every
     { group: . (item: .name) .at; (item:. .at) 1 | :ok item:. .name .at }
@@ -154,13 +154,13 @@
     }
   }
   first (menubar) fold
-  { menu := submenu: .name; items
+  { (menu) := submenu: .name; items
   | :self :ok 
     items first (menu menu (.name saying (name)))
     fold (self)
     and: menu
   }
-  { menu := item:. .at .name
+  { (menu) := item:. .at .name
   | :ok item call
     { menu:.? .shortcut .action
     | :ok menu action (. .name saying (name) .shortcut)
@@ -184,7 +184,7 @@
   &:
   error call {ok . ? .:|:ok} or (who)
   repeat
-  { ? when: ok | :ok }
+  { (?) when: ok | :ok }
   { ([] // ?) * ;: ok | :ok }
   { * :: ? | ? }
   { ::using; ok | :self :ok using repeat (self) and: ok }
@@ -206,14 +206,14 @@
     .:try
   }
   .:list each
-  { action = locate: .what? .module * ;name ' . 0
+  { (action) = locate: .what? .module * ;name ' . 0
   | :try name:. ' .(this program language name) .:need; action
   }
   legs
-  { counting := name: .; action
+  { (counting) := name: .; action
   | :ok menu: . [locate], [ruleset], name .action
   }
-  { counting := name: .; action
+  { (counting) := name: .; action
   | :try menu: .
     [locate], [ruleset], name .action .shortcut :need counting call
     [ "Ctrl+1", "Ctrl+2", "Ctrl+3", "Ctrl+4", "Ctrl+5",
@@ -237,7 +237,7 @@
   window menu (. [menu:. log clear .action clear], .action {|}) and:
   window mind listen :=
   [channel: log] listen
-  { item = * log: .what .value
+  { (item) = * log: .what .value
   | ;logging window mind logging;
     :if logging count < 500;
     window mind logging := (logging) (item,);
@@ -272,7 +272,7 @@
 ===
 { path:. .what .expression ' legs
 | :self :try
-  expression legs {step := expression|:ok path: . (:;step; path) .what .expression}
+  expression legs {(step) := expression|:ok path: . (:;step; path) .what .expression}
   find (self)
 }
 { path:. .what .expression what

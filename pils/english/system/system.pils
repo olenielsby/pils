@@ -1,5 +1,5 @@
 [nonsense]
-><:[module:. ===, .timestamp 2011-07-20T23:59:11.596+02 .language system]><;
+><:[module:. ===, .timestamp 2026-07-17T15:31:40.656+02 .language system]><;
 !!
 The rules of this module are available to all modules except the
 [pils system ...] ones.
@@ -8,13 +8,12 @@ Edit with care - the bug pinning depends on this module, so bugs
 here may not be pinned.
 !!
 
-! { ok graph:graph | :ok } ! validate graphs by call
 { : object list
 | :possibly
-  object count .:need call {ok count|:ok} .:need up every (object)
+  object count .:need call {(ok) count|:ok} .:need up every (object)
 }
 { : object list: step
-| :ok object repeat {ok|list := step call (ok) or (?); :ok} .:list
+| :ok object repeat {(ok)|list := step call (ok) or (?); :ok} .:list
 }
 { .user | :ok @@ [pils user] }
 { say: say | :ok {} write: say }
@@ -24,9 +23,9 @@ here may not be pinned.
 { saying: say | :who ' user .:need talk .:need saying (say) .:try }
 { say: say | :who ' user .:need talk .:need say (say) .:try }
 { saying: say | :who ' user .:need talk .:need saying (say) .:try }
-{ text . ([upper] // replace) | :try text *=* replace .:need upper }
-{ text . ([lower] // replace) | :try text *=* replace .:need lower }
-{ text . ([title] // replace) | :try text $*=* replace .:need title }
+{ (text) ([upper] // replace) | :try text *=* replace .:need upper }
+{ (text) ([lower] // replace) | :try text *=* replace .:need lower }
+{ (text) ([title] // replace) | :try text $*=* replace .:need title }
 { : filename @@@: = +& module-name
 | :try module-name call:
   filename call (@@ [pils system program]) .:need -> [call: instance]
@@ -44,19 +43,19 @@ here may not be pinned.
   module-name call ((channel: pils-library: library) node) .:need
   language .:need
   call
-  { language
+  { (language)
   | :ok 
     module-name count down 0 every
-    {n| :ok module-name +# n & [pils language] & language}
+    {(n)| :ok module-name +# n & [pils language] & language}
   }
   { [system] | :ok {} }
-  find {module-name|:try @@ (module-name)}
+  find {(module-name)|:try @@ (module-name)}
 }
 { language: .? .module-name +&? .library $? | :ok {} }
 { language:. .module-name = +& ' .library $ '
 | :try
   module-name count down 0
-  find {n|module-name +# n & [pils language] & language .(@@) .:try}
+  find {(n)|module-name +# n & [pils language] & language .(@@) .:try}
 }
 { language: . [system] .module-name +&? .library $? | :ok {} }
 { .platform
@@ -72,7 +71,7 @@ here may not be pinned.
   { +& name := * ;dependencies * '
   | dependencies legs
     { (file file: ?) := timestamp
-    | (file timestamp .:need, timestamp) call {ok, ok|:ok} or:
+    | (file timestamp .:need, timestamp) call {(ok, ok)|:ok} or:
       :ok name
     }
     find [ok] .:try
@@ -87,11 +86,9 @@ here may not be pinned.
 ><:[module:. pils language .timestamp 2008-08-28T10:37:59.074+02 .language system]><;
 
 
-><:[module:. pils language system .timestamp 2008-05-25T01:25:45.546+02 .language system]><;
-
-
+><:[module:. pils language system .timestamp 2026-07-17T15:32:52.139+02 .language system]><;
 {}><:[module:. pils system .timestamp 2008-12-23T22:36:30.023+01 .language system]><;
-><:[module:. pils system base .timestamp 2011-07-21T00:21:29.946+02 .language system]><;
+><:[module:. pils system base .timestamp 2026-07-17T15:37:40.767+02 .language system]><;
 !!
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
@@ -109,7 +106,7 @@ PILS should be restarted and tested after each edit.
   .program-language
 | :ok
   ;draw
-    { module-name
+    { (module-name)
     | module-name try (channel: pils-dependency: .thread ' or [dummy-thread])
       call (program-strap) .:need
       call {* ;instance ok|:ok} .:try
@@ -129,37 +126,37 @@ PILS should be restarted and tested after each edit.
   ;
   ;module-paths
     module-name count down 0 each
-    {n|:ok module-name +# n}
+    {(n)|:ok module-name +# n}
   .names ()
   ;
   :;@@
   ( { / name
-    | :try module-paths every {ok|:ok ' & name} except (same) find (draw)
+    | :try module-paths every {(ok)|:ok ' & name} except (same) find (draw)
     }
     { = & names
-    | :try module-paths every {ok|:ok ' & names} except (same) find (draw)
+    | :try module-paths every {(ok)|:ok ' & names} except (same) find (draw)
     }
   )
   .@
   ( { / name * node
     | :try node call: :need
-      module-paths every {ok|:ok ' & name} except (same) find (draw)
+      module-paths every {(ok)|:ok ' & name} except (same) find (draw)
     }
     { / name * node :=
     | :try node call
       ( :need
-        module-paths every {ok|:ok ' & name} except (same) find (draw)
+        module-paths every {(ok)|:ok ' & name} except (same) find (draw)
       )
       :=
     }
     { / name
     | :try name call: :need
-      module-paths every {ok|:ok ' & name} except (same) find (draw)
+      module-paths every {(ok)|:ok ' & name} except (same) find (draw)
     }
     { / name :=
     | :try name call
       ( :need
-        module-paths every {ok|:ok ' & name} except (same) find (draw)
+        module-paths every {(ok)|:ok ' & name} except (same) find (draw)
       )
       :=
     }
@@ -178,7 +175,7 @@ PILS should be restarted and tested after each edit.
       { = name | :try name call: strap? }
       { = name := ok
       | :ok ' try: knot:
-        { ? | strap? := strap? merge: name, ok }
+        { (?) | strap? := strap? merge: name, ok }
       }
       { | :ok strap? }
       .:quote --- ;strap strap: mind: program: program-filename
@@ -195,26 +192,26 @@ PILS should be restarted and tested after each edit.
     { / name * node
     | ;names ' & name;
       :try node call: :need
-      module-paths every {ok|:ok ' & names} except (same) find (draw)
+      module-paths every {(ok)|:ok ' & names} except (same) find (draw)
     }
     { / name * node :=
     | ;names ' & name;
       :try node call
       ( :need
-        module-paths every {ok|:ok ' & names} except (same) find (draw)
+        module-paths every {(ok)|:ok ' & names} except (same) find (draw)
       )
       :=
     }
     { / name
     | ;names ' & name;
       :try name call: :need
-      module-paths every {ok|:ok ' & names} except (same) find (draw)
+      module-paths every {(ok)|:ok ' & names} except (same) find (draw)
     }
     { / name :=
     | ;names ' & name;
       :try name call
       ( :need
-        module-paths every {ok|:ok ' & names} except (same) find (draw)
+        module-paths every {(ok)|:ok ' & names} except (same) find (draw)
       )
       :=
     }
@@ -236,7 +233,7 @@ PILS should be restarted and tested after each edit.
   { traceread: x | :try language traceread: x }
   +++ plumcake
 }
-><:[module:. pils system boot .timestamp 2011-07-21T00:52:13.557+02 .language system]><;
+><:[module:. pils system boot .timestamp 2026-07-17T15:44:05.856+02 .language system]><;
 !!
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
@@ -250,11 +247,11 @@ that allows the system modules to reference each other
 | :where :ok
   text -#$* ""efbbbf split "><.:"
   every
-  { ok
+  { (ok)
   | :ok ' split "><.;"
-    every {ok|:ok ' -#$* ""= *=* ["><..", "><."]}
+    every {(ok)|:ok ' -#$* ""= *=* ["><..", "><."]}
     legs:
-    { ? := ok | :ok }
+    { (?) := ok | :ok }
     { 1 := ok | :ok ' .({} read) }
     ===
     { :error error: . .start .end
@@ -265,11 +262,11 @@ that allows the system modules to reference each other
     }
   }
   firsts
-  { program-header, | :ok :name (); program-header }
-  { module = (* module: . name), text
+  { (program-header,) | :ok :name (); program-header }
+  { (module) = (* module: . name), text
   | :ok :name; module merge: module:. text
   }
-  { module = (* module: . name $* [pils system]), text
+  { (module) = (* module: . name $* [pils system]), text
   | :ok :name; module merge: module:. text; {} read (text)
     ===
     { :error error:. .start .end
@@ -286,11 +283,11 @@ that allows the system modules to reference each other
       | :ok body ---: where +++ :
         ;@@
           module-name call
-          { module-path
+          { (module-path)
           | :who [module-path];
             :ok
             { = relative-name | :try who @@: module-path & relative-name }
-            { .? | :try module-path <-# 1 call (who [module-path]) }
+            { | :try module-path <-# 1 call (who [module-path]) }
           }
           { | ? }
         .program (;filename .path filename <-#^* "/" .language {})
@@ -301,7 +298,7 @@ that allows the system modules to reference each other
       }
     }
     try
-    { system
+    { (system)
     | strap [system: boot]? := (channel: pils-library: filename) listen:
       system @@ [pils system library] ---:
       ;library-filename filename
@@ -324,7 +321,7 @@ that allows the system modules to reference each other
   "********************************ERROR*******************************" bug {} and:
   (what: .; error) bug {}
 }
-><:[module:. pils system changed .timestamp 2026-07-08T22:10:49.771+02 .language system]><;
+><:[module:. pils system changed .timestamp 2026-07-17T15:47:28.290+02 .language system]><;
 !!
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
@@ -338,14 +335,14 @@ knot:
     program-strap?
     call {() * ok|:ok} or ()
     legs
-    { value := *;dependencies ok
-    | :ok ' legs {name := ?|:ok :name; value}
+    { (value) := *;dependencies ok
+    | :ok ' legs {(name) := ?|:ok :name; value}
     }
-    splice groups [ok] **=** {? := ok|:ok ' firsts [ok]}
+    splice groups [ok] **=** {(?) := ok|:ok ' firsts [ok]}
   ;
-  (,module try {ok|:ok (ok,) firsts [ok]} {|?} {? call [.firsts .singles] *?|?})
+  (,module try {(ok)|:ok (ok,) firsts [ok]} {|?} {(?) call [.firsts .singles] *?|?})
   repeat
-  { done, * more
+  { (done, * more)
   | :ok
     done merge (more),
     more
@@ -355,16 +352,16 @@ knot:
     splice except (done) firsts [ok]
   }
   call
-  { changed,,
+  { (changed,,)
   | :ok :exit
     program-strap? :=
     program-strap? try {knot: ?|exit := ()}
-    legs {name := value|name call (changed) or: :ok :name; value}
+    legs {(name) := value|name call (changed) or: :ok :name; value}
     singles [ok] head () try {;: ok|:ok}
     ;
   }
 }
-><:[module:. pils system librarian .timestamp 2011-09-28T17:23:05.277+02 .language system]><;
+><:[module:. pils system librarian .timestamp 2026-07-17T15:51:36.531+02 .language system]><;
 !!
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
@@ -388,10 +385,10 @@ is used to notify programs of changes.
     -#$* ""efbbbf ! notepad-compatibility - bogus endian marker
     split "><.:"
     every
-    { segment
+    { (segment)
     | :ok
       segment split "><.;"
-      every {part|:ok part -#$* ""= *=* ["><..", "><."]}
+      every {(part)|:ok part -#$* ""= *=* ["><..", "><."]}
     }
   ;
   ;header segments call {(text,) 1|;ok {} read (text) or (?); :ok};
@@ -405,7 +402,7 @@ is used to notify programs of changes.
       (channel: pils-library: language-library) node .:need
       .([pils language] & language call) .:need
       call
-      { * module: . | :try {} read (module) or () call {ok language|:ok} }
+      { * module: . | :try {} read (module) or () call {(ok) language|:ok} }
       { * ;language | language singlewise call [system:.] or: ? }
       .:try
     }
@@ -415,11 +412,11 @@ is used to notify programs of changes.
   ;modules
     segments -# 1
     every
-    { module-header, module-text
+    { (module-header, module-text)
     | :try
       library-language read (module-header) or (?)
       call
-      { module-head = = * module:. +& module-name
+      { (module-head) = = * module:. +& module-name
       | :ok
         module-name,
         module-head merge: module:. module-text
@@ -429,7 +426,7 @@ is used to notify programs of changes.
   ;
   :ok
   ;library-node
-    modules first (, header) firsts {name, value|:ok :name; value}
+    modules first (, header) firsts {(name, value)|:ok :name; value}
   ;
   (channel: pils-library: library-filename) listen:
   @@ [pils system library] ---:
@@ -439,7 +436,7 @@ is used to notify programs of changes.
   .library-language
   .bootfilename
 }
-><:[module:. pils system library .timestamp 2011-07-21T00:40:19.962+02 .language system]><;
+><:[module:. pils system library .timestamp 2026-07-17T15:57:55.004+02 .language system]><;
 !!
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
@@ -489,7 +486,7 @@ PILS should be restarted and tested after each edit.
       (channel: pils-library: language-library) node .:need
       .(([pils], [language], language) call) .:need
       call
-      { * module:. | :try {} read (module) or () call {ok language|:ok} }
+      { * module:. | :try {} read (module) or () call {(ok) language|:ok} }
       .:try
     }
     or {}
@@ -498,7 +495,7 @@ PILS should be restarted and tested after each edit.
   :ok library-node
 }
 { .header | :ok library-node? }
-{ .modules | :ok library-node legs {a := b|:ok a, b} {() := ?|?} }
+{ .modules | :ok library-node legs {(a) := b|:ok a, b} {() := ?|?} }
 { .node | :ok library-node }
 { .header := = changed | :self :ok self changed:. .module-name [] }
 { = +& module-name := changed = * module:. $?
@@ -517,7 +514,7 @@ PILS should be restarted and tested after each edit.
 { language: .module-name +& '
 | :try @@ (module-name call (library-node) .:need language or :ok {})
 }
-><:[module:. pils system library-list .timestamp 2011-07-20T23:52:33.178+02 .language system]><;
+><:[module:. pils system library-list .timestamp 2026-07-17T15:55:51.749+02 .language system]><;
 !!
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
@@ -536,7 +533,7 @@ PILS should be restarted and tested after each edit.
     ),
     ( use:
       (channel: pils-library: program-filename) header use or ()
-      reverse every {ok|:ok ' -#$* "*"}
+      reverse every {(ok)|:ok ' -#$* "*"}
     ),
     configuration:
     [ default-configuration-filename
@@ -546,15 +543,15 @@ PILS should be restarted and tested after each edit.
     every (@@ [pils system path])
     &:
     program-filename <-#-* "/" call
-    { ? | :ok () }
-    { ok <$* "/"
+    { (?) | :ok () }
+    { (ok) <$* "/"
     | :who :ok ' <-# 1 <-#-* "/" call (who) &
        (ok . "config." [pils-configuration:pils-filetype])
     }
   )
   every
-  { why ;: ok
-  | :ok ' every {library|:ok library:. .why .path program-filename}
+  { (why) ;: ok
+  | :ok ' every {(library)|:ok library:. .why .path program-filename}
   }
   splice
   every
@@ -569,8 +566,8 @@ PILS should be restarted and tested after each edit.
   | ;library filename call (@@ [pils system librarian]) .:need; :ok
     (channel: pils-library: filename) header use or () reverse
     each
-    { library | :ok library:. .path filename .why ' try [.use used] }
-    { ? $* "*" | ? }
+    { (library) | :ok library:. .path filename .why ' try [.use used] }
+     { (?) $* "*" | ? }
     each (self) and:
     library:. .filename .why
   }
@@ -578,13 +575,13 @@ PILS should be restarted and tested after each edit.
   reverse
 }
 { .test|:self :try this program filename call (self) }
-><:[module:. pils system path .timestamp 2011-07-21T00:51:59.932+02 .language system]><;
+><:[module:. pils system path .timestamp 2026-07-17T16:01:35.504+02 .language system]><;
 !!
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
 !!
 
-{ ok | :ok ' +++: ok path:. this program filename or: bootfilename }
+{ (ok) | :ok ' +++: ok path:. this program filename or: bootfilename }
 .
 { path: .
 | :ok
@@ -640,7 +637,7 @@ PILS should be restarted and tested after each edit.
   { encode: $ ok
   | :ok ' *=* ["\", "/"]
     try
-    { ok
+    { (ok)
     | ;ok ' <-#$* ("." [pils-configuration:pils-filetype]);
       :if ok <+#-* "/" =* "." = 0; :ok
     }
@@ -648,7 +645,7 @@ PILS should be restarted and tested after each edit.
   }
   { decode: $ ok
   | :ok ' $*=* decodings try
-    { ok
+    { (ok)
     | :if ok <+#-* "/" =* "." = 0; :ok (') "." [pils-configuration:pils-filetype]
     }
   }
@@ -656,7 +653,7 @@ PILS should be restarted and tested after each edit.
   { .decodings | :try decodings }
   ===
   { .decodings
-  | :self :ok self encodings split 2 every {a, b|:ok b, a} splice
+  | :self :ok self encodings split 2 every {(a, b)|:ok b, a} splice
   }
   { .encodings
   | :ok
@@ -668,7 +665,7 @@ PILS should be restarted and tested after each edit.
     bootfilename <-#=* "/pils/" "/app/", "<app>/",
   }
 }
-><:[module:. pils system program .timestamp 2011-09-19T13:05:41.787+02 .language system]><;
+><:[module:. pils system program .timestamp 2026-07-17T16:09:42.497+02 .language system]><;
 !!
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
@@ -679,7 +676,7 @@ knot:
 { $ program-filename | :ok strap (program: program-filename) }
 ->
 ;[@@: pils system base] .[@@: pils system library-list];
-{ program-strap = strap: program: $ program-filename
+{ (program-strap) = strap: program: $ program-filename
 | :self
   :try self program:
   .program-filename
@@ -697,7 +694,7 @@ knot:
     (channel: pils-library: program-filename) library-language
   .command-line-processor
     [channel: pils: command-line] listen
-    { command-line
+    { (command-line)
     | :ok [pils system start] call (program-strap) instance command-line: .
     }
   .draw [ok] +++ depend -> program-strap -> {* ;instance ok|:ok}
@@ -715,25 +712,25 @@ knot:
       ;program-strap ' try (self);
       ;dependencies
         bound legs
-        { depend := *;dependencies
-        | :ok dependencies legs {name := ?|:ok :name; depend}
+        { (depend) := *;dependencies
+        | :ok dependencies legs {(name) := ?|:ok :name; depend}
         }
         splice groups [ok]
       ;
       ;invalid
         ( (firsts:),
-          module-name try {ok|:ok (ok,) firsts [ok]} {|?} {[firsts] *?|?}
+          module-name try {(ok)|:ok (ok,) firsts [ok]} {|?} {[firsts] *?|?}
         )
         repeat
-        { done, * more
+        { (done, * more)
         | :ok
           done merge (more),
           more cliche legs each (dependencies) splice except (done)
           firsts [ok]
         }
-        call {ok,,|:ok}
+        call {(ok,,)|:ok}
       ;
-      bound legs {name := value | name call (invalid) or: :ok :name; value }
+      bound legs {(name) := value | name call (invalid) or: :ok :name; value }
       singles [ok]
       try {* b|:ok program-strap? := b head () merge: , program-strap?}
       and:
@@ -741,16 +738,16 @@ knot:
       changed (.module-name .library-filename)
       anyway:
     }
-    { internal-name = basemodule: . = +& module-name .library
+    { (internal-name) = basemodule: . = +& module-name .library
     | :try
       libraries every [call: filename] -#^* (library,) --# 1
-      every {filename|:ok channel: pils-library: filename}
+      every {(filename)|:ok channel: pils-library: filename}
       each (call: module-name)
       find: module-maker (.internal-name)
     }
     { = +& module-name
     | :try
-      libraries every {library|:ok channel: pils-library: library filename}
+      libraries every {(library)|:ok channel: pils-library: library filename}
       each (call: module-name)
       find: module-maker (.internal-name module-name)
     }
@@ -797,16 +794,16 @@ language read (module-text)
               ---:
               module-name repeat
               { +& ok | :ok ' <-# 1 }
-              { ok = [===] 0 | :possibly ok <-#+* [===,] <-# 1 or: ? }
+              { (ok) = [===] 0 | :possibly ok <-#+* [===,] <-# 1 or: ? }
               { & name | list := name & [===] }
               .:list
               each (draw)
               first (basement)
-              fold {ok := more|:ok more +++ ok}
+              fold {(ok) := more|:ok more +++ ok}
             )
             firsts
-            { ok | :ok }
-            { file file: ? | :possibly :name file; file timestamp .:need }
+            { (ok) | :ok }
+            { (file) file: ? | :possibly :name file; file timestamp .:need }
           )
           singles [ok]
         ;
@@ -820,7 +817,7 @@ language read (module-text)
     { language: .module (* ;language) .module-name
     | ;language ' .([pils language] &);
       :try module-name count down 0 find:
-      { n | :ok module-name +# n & language } -> draw
+      { (n) | :ok module-name +# n & language } -> draw
     }
     { language: .module (* ;language [system]) .module-name?
     | :ok {}
@@ -837,14 +834,14 @@ language read (module-text)
   "BASIC ERROR in @ [pils system program] - (what:. .error)" bug {} and:
   (what:. .error) bug {}
 }
-><:[module:. pils system program-file .timestamp 2011-07-20T23:12:23.226+02 .language system]><;
+><:[module:. pils system program-file .timestamp 2026-07-17T16:03:33.090+02 .language system]><;
 !!
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
 !!
 
 ;library-channel (channel: pils-library: this program filename);
-{ call = save: .filename | :try :call }
+{ (call) = save: .filename | :try :call }
 { .save | :try save (.filename this program filename) }
 { .savez | :try save (.filename this program filename . ".testing" bug {}) }
 ===
@@ -857,15 +854,15 @@ PILS should be restarted and tested after each edit.
   (({} write (library-node?) ""= try (;["[]"=] ""),),)
   &
   ( library-node legs
-    { module-name := module-node = * module: .
+    { (module-name) := module-node = * module: .
     | :ok
       library-language write
       (module-node without [] merge: ;module module-name),
       module
     }
-    order {ok, ?|:ok ' *=* [",", " ,"]}
+    order {(ok, ?)|:ok ' *=* [",", " ,"]}
   )
-  every { ok |:ok ' every {ok|:ok ' *=* ["><.", "><.."]} splice "><.;"= }
+  every { (ok) |:ok ' every {(ok)|:ok ' *=* ["><.", "><.."]} splice "><.;"= }
   splice "><.:"
 }
 ><:[module:. pils system start .timestamp 2011-09-29T22:05:33.429+02 .language system]><;
@@ -940,18 +937,18 @@ PILS should be restarted and tested after each edit.
 ><:[module:. pils talk .timestamp 2009-04-28T16:25:35.234+02 .language system]><;
 ><:[module:. pils talk english .timestamp 2026-07-08T22:11:01.492+02 .language system]><;
 @@ [pils talk system]
-><:[module:. pils talk system .timestamp 2026-07-08T22:11:19.245+02 .language system]><;
+><:[module:. pils talk system .timestamp 2026-07-17T16:12:53.811+02 .language system]><;
 { say: say
 | :who ' saying (say) .:need title .:try }
 { saying: try
 | :who
   ;language user .:need language .:need;
   :try ' call
-  { try | language write (try) .:need ++# 100 .:try }
+  { (try) | language write (try) .:need ++# 100 .:try }
   { = try | :try language write (try) .:need -#$* "[" <-#$* "]" ++# 100 }
   { / name | :try language name (name) }
   { $ text | :ok text }
-  { +& q | :self :try q every {say|:try who saying: say} .:need splice " " }
+  { +& q | :self :try q every {(say)|:try who saying: say} .:need splice " " }
   { ++& list
   | :self
     (list . 1 call (self) .:need)

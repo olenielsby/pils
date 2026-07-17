@@ -1,6 +1,6 @@
 ><:[module:. platform, .timestamp 2008-06-25T15:43:00.909+02 .language system]><;
 ><:[module:. platform qt .timestamp 2008-06-25T15:43:08.612+02 .language system]><;
-><:[module:. platform qt dialog .timestamp 2026-07-06T13:14:31.947+02 .language qt]><;
+><:[module:. platform qt dialog .timestamp 2026-07-17T16:17:16.160+02 .language qt]><;
 ;new plumcake .WA_DeleteOnClose 55 .WindowModal 1;
 { .dialog: .window .boss
 | :where :what :ok
@@ -63,7 +63,7 @@
     tree
   }
   try
-  { who
+  { (who)
   | new Q:Shortcut ("Ctrl+Shift+F1", who)
     when
     { qs:activated: ?
@@ -100,7 +100,7 @@
 { .documents | :ok [pils-configuration:documents-directory] }
 ><:[module:. platform qt entry system .timestamp 2008-08-08T04:55:32.254+02 .language system]><;
 { .system | :try @@ [platform qt system [?:?|pils-configuration:system]] }
-><:[module:. platform qt entry window .timestamp 2026-07-12T10:30:11.049+02 .language qt]><;
+><:[module:. platform qt entry window .timestamp 2026-07-17T16:20:40.235+02 .language qt]><;
 ;new plumcake .WA_DeleteOnClose 55;
 { window: boss
 | :where :what
@@ -197,7 +197,7 @@
   }
   { menubar: boss | :who :ok @ menubar: .window who .boss }
   try
-  { who
+  { (who)
   | new Q:Shortcut ("Ctrl+Shift+F1", who)
     when
     { qs:activated: ?
@@ -281,13 +281,13 @@
   :ok new Q:PilsGroupBox (title) q:setFlat 1
 }
 
-><:[module:. platform qt lane button .timestamp 2026-07-09T11:55:32.695+02 .language qt]><;
+><:[module:. platform qt lane button .timestamp 2026-07-17T16:23:33.529+02 .language qt]><;
 ;new plumcake;
 { button: .boss .parent .layout
 | ;title boss title .:need call {$ ok|:ok} .:need;
   :ok
   new Q:PushButton
-  try {widget|layout q:addWidget (widget)}
+  try {(widget)|layout q:addWidget (widget)}
   call (@ ownership: .boss) when
   { qs:clicked: args | :try boss pressed }
   { title: $ title | :who :ok who q:setText (title) }
@@ -298,12 +298,12 @@
   title (title)
 }
 ><:[module:. platform qt lane canvas .timestamp 2026-07-10T17:13:43.393+02 .language qt]><;
-><:[module:. platform qt lane edit .timestamp 2026-07-11T21:56:49.380+02 .language qt]><;
+><:[module:. platform qt lane edit .timestamp 2026-07-17T16:25:18.921+02 .language qt]><;
 ;new plumcake;
 { edit: .boss .parent .layout
 | :ok
   new Q:PilsPlainTextEdit
-  try {widget|layout q:addWidget: widget}
+  try {(widget)|layout q:addWidget: widget}
   call (@ ownership: .boss) when:
   { qs:textChanged:
   | :who :try boss text:. who q:toPlainText
@@ -320,12 +320,12 @@
   { .pickup | :who :ok who }
   +++ boss
 }
-><:[module:. platform qt lane label .timestamp 2026-07-11T09:53:22.496+02 .language qt]><;
+><:[module:. platform qt lane label .timestamp 2026-07-17T16:25:47.832+02 .language qt]><;
 ;new plumcake;
 { label: .boss .parent .layout
 | :ok
   new Q:Label
-  try {widget|layout q:addWidget: widget}
+  try {(widget)|layout q:addWidget: widget}
   call (@ ownership: .boss) when:
   { text: $ text | :who :ok who q:setText (text) }
   { .text | :who :ok who q:text }
@@ -346,7 +346,7 @@
   layout q:addWidget (widget) and:
   widget
 }
-><:[module:. platform qt lane tabs .timestamp 2026-07-10T17:33:07.478+02 .language qt]><;
+><:[module:. platform qt lane tabs .timestamp 2026-07-17T16:28:26.402+02 .language qt]><;
 ;new plumcake;
 { tabs: .boss .parent .layout
 | :ok
@@ -361,7 +361,7 @@
     { .tabs
     | :who :ok
       who q:count up every
-      { n | :ok who q:widget: n - 1 }
+      { (n) | :ok who q:widget: n - 1 }
     }	
     { tab: boss
     | :who :ok
@@ -451,7 +451,7 @@
   }
   or: window q:menuBar q:clear
 }
-><:[module:. platform qt ownership .timestamp 2026-07-10T16:07:28.172+02 .language qt]><;
+><:[module:. platform qt ownership .timestamp 2026-07-17T16:32:20.212+02 .language qt]><;
 ! If the component boss has an id and an owner,
 ! a listener must be installed in the owner's channel,
 ! to allow the component to be found by its id.
@@ -474,7 +474,7 @@
   .id boss id .:need call { = ok | :ok } .:need
   ;
   :ok
-  { widget
+  { (widget)
   | :ok
      ;trap () merge ((own: id), widget);
      ;listener channel listen (trap);

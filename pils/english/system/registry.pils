@@ -7,9 +7,9 @@
 { .register
 | :ok
   @@ registry
-  try {ok <$* "/"|:ok . (this program filename <+#^* "/" <-#=* ".")}
+  try {(ok) <$* "/"|:ok . (this program filename <+#^* "/" <-#=* ".")}
   split "/" first (this module path <-#^* "/pils/" "registry/")
-  fold {path := name|:ok folder (path) create anyway: path . name . "/"}
+  fold {(path) := name|:ok folder (path) create anyway: path . name . "/"}
   <-# 1 "." [pils-configuration:pils-filetype] .(file) text :=
   {} write (pils: .use this program filename <-#=* ".",)
   "><.:[module: . pils, .timestamp 2000-01-01T00:00:00Z]><.;"=

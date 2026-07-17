@@ -1,7 +1,7 @@
 [pils: .use?]
 ><:[module:. pils, .timestamp 2008-12-23T02:24:30.089+01 .language system]><;
 ><:[module:. pils icon .timestamp 2008-12-23T02:27:46.589+01 .language system]><;
-{ call = icon: .size? .png? | :try call call: platform }
+{ (call) = icon: .size? .png? | :try call call: platform }
 { large: .png | :ok platform icon: .size [32 32] .png }
 { small: .png | :ok platform icon: .size [16 16] .png }
 ><:[module:. pils icon === .timestamp 2008-12-23T02:27:53.527+01 .language system]><;
