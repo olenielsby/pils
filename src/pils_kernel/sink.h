@@ -809,7 +809,7 @@ namespace PILS
         Sink *kick(Runner &run) override;
 	};
 
-	class SinkCondition
+    class SinkConditional
 		: public SinkForget
 	{
 	public:
@@ -830,8 +830,20 @@ namespace PILS
         const Step *pass(Runner &run, const Special &value) override;
         const Step *pass(Runner &run, const Integer *value) override;
         const Step *pass(Runner &run, const Any *value) override;
-		virtual const Step *fail(Runner &run) = 0;
-		virtual const Step *succeed(Runner &run) = 0;
+    public:
+        const Step *fail(Runner &run);
+        const Step *succeed(Runner &run);
+        Sink *kick(Runner &run) override;
+        SinkConditional(const Any &where_, const Any &clause)
+            : where_(where_), clause(clause), elseClause(Empty::singleton)
+        {}
+        SinkConditional(const Any &where_, const Any &clause, const Any &elseClause)
+            : where_(where_), clause(clause), elseClause(elseClause)
+        {}
+    protected:
+        const Any &where_;
+        const Any &clause;
+        const Any &elseClause;
 	};
 
 	class SinkTagged

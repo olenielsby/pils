@@ -903,100 +903,100 @@ namespace PILS
 
 	const Step *If::step_(Runner &run) const
 	{
-		new (run.allocate(sizeof(SinkIf))) SinkIf(*run.where_, *element[0]);
+        new (run.allocate(sizeof(SinkConditional))) SinkConditional(*run.where_, *element[0]);
 		return element[1];
 	}
 
 	const Step *IfElse::step_(Runner &run) const
 	{
-		new (run.allocate(sizeof(SinkIf))) SinkIf(*run.where_, *element[0], *element[2]);
+        new (run.allocate(sizeof(SinkConditional))) SinkConditional(*run.where_, *element[0], *element[2]);
 		return element[1];
 	}
 
-	const Step *SinkCondition::miss(Runner &run)
+    const Step *SinkConditional::miss(Runner &run)
 	{
 		for (Sink *sink = run.sink->kick(run); sink != this; sink = sink->kick(run));
 		return fail(run);
 	}
 
-	const Step *SinkCondition::pass(Runner &run, long value)
+    const Step *SinkConditional::pass(Runner &run, long value)
 	{
 		return succeed(run);
 	}
 
-	const Step *SinkCondition::pass(Runner &run, double value)
+    const Step *SinkConditional::pass(Runner &run, double value)
 	{
 		return succeed(run);
 	}
 
-	const Step *SinkCondition::pass(Runner &run, const Integer &value)
+    const Step *SinkConditional::pass(Runner &run, const Integer &value)
 	{
 		return succeed(run);
 	}
 
-	const Step *SinkCondition::pass(Runner &run, const Float &value)
+    const Step *SinkConditional::pass(Runner &run, const Float &value)
 	{
 		return succeed(run);
 	}
 
-	const Step *SinkCondition::pass(Runner &run, const PilsString &value)
+    const Step *SinkConditional::pass(Runner &run, const PilsString &value)
 	{
 		return succeed(run);
 	}
 
-	const Step *SinkCondition::pass(Runner &run, const Cliche &value)
+    const Step *SinkConditional::pass(Runner &run, const Cliche &value)
 	{
 		return succeed(run);
 	}
 
-	const Step *SinkCondition::pass(Runner &run, const ListConstant &value)
+    const Step *SinkConditional::pass(Runner &run, const ListConstant &value)
 	{
 		return succeed(run);
 	}
 
-	const Step *SinkCondition::pass(Runner &run, const NodeConstantShort &value)
+    const Step *SinkConditional::pass(Runner &run, const NodeConstantShort &value)
 	{
 		return succeed(run);
 	}
 
-	const Step *SinkCondition::pass(Runner &run, const NodeConstantLong &value)
+    const Step *SinkConditional::pass(Runner &run, const NodeConstantLong &value)
 	{
 		return succeed(run);
 	}
 
-	const Step *SinkCondition::pass(Runner &run, const Special &value)
+    const Step *SinkConditional::pass(Runner &run, const Special &value)
 	{
 		return succeed(run);
 	}
 
-	const Step *SinkCondition::pass(Runner &run, const ListExpress &value)
+    const Step *SinkConditional::pass(Runner &run, const ListExpress &value)
 	{
 		return succeed(run);
 	}
 
-	const Step *SinkCondition::pass(Runner &run, const NodeExpressShort &value)
+    const Step *SinkConditional::pass(Runner &run, const NodeExpressShort &value)
 	{
 		return succeed(run);
 	}
 
-	const Step *SinkCondition::pass(Runner &run, const NodeExpressLong &value)
+    const Step *SinkConditional::pass(Runner &run, const NodeExpressLong &value)
 	{
 		return succeed(run);
 	}
 
-	const Step *SinkCondition::pass(Runner &run, const Integer *value)
-	{
-        run.release(value);
-		return succeed(run);
-	}
-
-	const Step *SinkCondition::pass(Runner &run, const Any *value)
+    const Step *SinkConditional::pass(Runner &run, const Integer *value)
 	{
         run.release(value);
 		return succeed(run);
 	}
 
-	Sink *SinkIf::kick(Runner &run)
+    const Step *SinkConditional::pass(Runner &run, const Any *value)
+	{
+        run.release(value);
+		return succeed(run);
+	}
+
+    Sink *SinkConditional::kick(Runner &run)
 	{
 		if (&where_ != run.where_)
 		{
@@ -1007,7 +1007,7 @@ namespace PILS
 		return this + 1;
 	}
 
-	const Step *SinkIf::fail(Runner &run)
+    const Step *SinkConditional::fail(Runner &run)
 	{
 		if (&where_ != run.where_)
 		{
@@ -1020,7 +1020,7 @@ namespace PILS
 		return &elseClause;
 	}
 
-	const Step *SinkIf::succeed(Runner &run)
+    const Step *SinkConditional::succeed(Runner &run)
 	{
 		const Any &clause = this->clause;
 		const Any &where_ = this->where_;

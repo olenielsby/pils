@@ -498,25 +498,6 @@ namespace PILS
 		const Any *dummy[2];
 	};
 
-	class SinkIf
-		: public SinkCondition
-	{
-	public:
-        const Step *fail(Runner &run) override;
-        const Step *succeed(Runner &run) override;
-        Sink *kick(Runner &run) override;
-		SinkIf(const Any &where_, const Any &clause)
-			: where_(where_), clause(clause), elseClause(Empty::singleton)
-		{}
-		SinkIf(const Any &where_, const Any &clause, const Any &elseClause)
-			: where_(where_), clause(clause), elseClause(elseClause)
-		{}
-	protected:
-		const Any &where_;
-		const Any &clause;
-		const Any &elseClause;
-	};
-
 	class SinkWhoWorkaround
 		: public SinkWhoCalling
 	{
