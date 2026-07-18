@@ -134,11 +134,11 @@ The differences function is not utf-8-aware.
 ===
 { wordstarter: +$ x | :ok x <+# 1 <+* " .,()[]{|}""!?:;"~<=>7f }
 { wordstopper: +$ x | :ok x +# 1 +* " .,()[]{|}""!?:;"~<=>7f }
-><:[module:. pils, .timestamp 2008-12-21T14:24:30.089+01 .language system]><;
-><:[module:. pils edit .timestamp 2008-12-21T14:24:38.136+01 .language system]><;
-><:[module:. pils edit large .timestamp 2008-12-21T14:24:44.839+01 .language system]><;
+><:[module:. puls, .timestamp 2008-12-21T14:24:30.089+01 .language system]><;
+><:[module:. puls edit .timestamp 2008-12-21T14:24:38.136+01 .language system]><;
+><:[module:. puls edit large .timestamp 2008-12-21T14:24:44.839+01 .language system]><;
 @@ source +++ ;zoom 6
-><:[module:. pils edit source .timestamp 2011-09-28T17:13:49.545+02 .language system]><;
+><:[module:. puls edit source .timestamp 2011-09-28T17:13:49.545+02 .language system]><;
 { edit: .parent .module-name .library-channel
 | :who :ok
   ;extra
@@ -186,7 +186,7 @@ The differences function is not utf-8-aware.
   | :who :ok who text (text) selection (selection)
   }
   ;
-  parent codepane [.syntax pils]
+  parent codepane [.syntax puls]
   zoom (who zoom)
   text (module-name call (library-channel node) module)
   when
@@ -197,13 +197,13 @@ The differences function is not utf-8-aware.
   call {ok|:ok ' mind extra := extra; ok}
 }
 { .zoom | :ok @@ zoom }
-><:[module:. pils edit source menu .timestamp 2008-12-21T14:25:00.121+01 .language system]><;
+><:[module:. puls edit source menu .timestamp 2008-12-21T14:25:00.121+01 .language system]><;
 { menu: .window .edit
 | :ok
   ;who @ action (.window .edit);
   (menu: . [edit source find] .shortcut "Ctrl+F" .action action: . [find] .who),
 }
-><:[module:. pils edit source menu action .timestamp 2009-03-05T12:55:54.050+01 .language system]><;
+><:[module:. puls edit source menu action .timestamp 2009-03-05T12:55:54.050+01 .language system]><;
 { action: .window .edit
 | :ok
   { .find
@@ -215,7 +215,7 @@ The differences function is not utf-8-aware.
     .pages {.current | :try window mind focused}
   }
 }
-><:[module:. pils edit source menu action find .timestamp 2011-07-21T00:44:08.405+02 .language system]><;
+><:[module:. puls edit source menu action find .timestamp 2011-07-21T00:44:08.405+02 .language system]><;
 ;defaults
   [search: .find "" .direction down .casing_sensitive 0 .whole_words_only 0]
 ;
@@ -241,10 +241,10 @@ The differences function is not utf-8-aware.
     .:try
   }
 }
-><:[module:. pils editor .timestamp 2011-06-25T21:49:14.177+02 .language system]><;
+><:[module:. puls editor .timestamp 2011-06-25T21:49:14.177+02 .language system]><;
 { .window
 | :who
-[exebug pils editor, window] bug {} and:
+[exebug puls editor, window] bug {} and:
   :try who window: .module-name @ latest
 }
 { window: .module-name
@@ -261,7 +261,7 @@ The differences function is not utf-8-aware.
     { .icon
     | :ok 
       :call @@:
-      [pils icon opener] &
+      [puls icon opener] &
       (:if this program filename = bootfilename; [horizontal] .else [vertical])
       & [cold large]
     }
@@ -302,11 +302,11 @@ The differences function is not utf-8-aware.
   and:
   window
 }
-><:[module:. pils editor === .timestamp 2008-12-21T14:25:18.339+01 .language system]><;
-{ .library-channel | :ok channel: pils-library: this program filename }
+><:[module:. puls editor === .timestamp 2008-12-21T14:25:18.339+01 .language system]><;
+{ .library-channel | :ok channel: puls-library: this program filename }
 { .editor-channel | :ok this module channel }
-{ .window | :try @@ [pils editor] window }
-><:[module:. pils editor detective .timestamp 2011-09-29T21:57:05.394+02 .language system]><;
+{ .window | :try @@ [puls editor] window }
+><:[module:. puls editor detective .timestamp 2011-09-29T21:57:05.394+02 .language system]><;
 { detective: .window .tabs
 | :ok
   editor-channel escape anyway:
@@ -360,7 +360,7 @@ The differences function is not utf-8-aware.
     { selected: .
     | :who ' mind hits . selected call
       { hit = hit: .? .line? .module? .library .text?
-      | :try hit call: library @@@ [pils editor detective hit]
+      | :try hit call: library @@@ [puls editor detective hit]
       }
       and: who focus
     }
@@ -411,7 +411,7 @@ The differences function is not utf-8-aware.
     { | :ok () }
     { module:. .text? .library
     | :ok
-      library @@@ [pils editor detective hit] open (.module) anyway:
+      library @@@ [puls editor detective hit] open (.module) anyway:
     }
   }
   { .populate
@@ -472,23 +472,23 @@ The differences function is not utf-8-aware.
   [high low] every {side|:ok row (side) mind height := 40} and:
   column ! show 0
 }
-><:[module:. pils editor detective hit .timestamp 2011-07-20T23:44:38.195+02 .language system]><;
+><:[module:. puls editor detective hit .timestamp 2011-07-20T23:44:38.195+02 .language system]><;
 { h = * hit:. .module
-| @@ [pils editor] window mind operations operations
+| @@ [puls editor] window mind operations operations
   module (.module-name module) .:need
   selection (hit .scroll-to-center 1) anyway: :ok ()
 }
 { open: .module
-| @@ [pils editor] window mind operations operations
+| @@ [puls editor] window mind operations operations
   module (.module-name module) .:try
 }
-><:[module:. pils editor detective icon .timestamp 2008-12-21T14:25:31.808+01 .language system]><;
-><:[module:. pils editor detective icon === .timestamp 2008-12-19T02:27:21.951+01 .language system]><;
-@@ [pils icon ===]
-><:[module:. pils editor detective icon detectives .timestamp 2008-12-21T14:25:41.668+01 .language system]><;
-><:[module:. pils editor detective icon detectives both .timestamp 2008-11-02T15:55:25.108+01 .language system]><;
+><:[module:. puls editor detective icon .timestamp 2008-12-21T14:25:31.808+01 .language system]><;
+><:[module:. puls editor detective icon === .timestamp 2008-12-19T02:27:21.951+01 .language system]><;
+@@ [puls icon ===]
+><:[module:. puls editor detective icon detectives .timestamp 2008-12-21T14:25:41.668+01 .language system]><;
+><:[module:. puls editor detective icon detectives both .timestamp 2008-11-02T15:55:25.108+01 .language system]><;
 
-><:[module:. pils editor detective icon detectives both === .timestamp 2008-11-02T15:55:35.905+01 .language system]><;
+><:[module:. puls editor detective icon detectives both === .timestamp 2008-11-02T15:55:35.905+01 .language system]><;
 
 ;png
 ""89"PNG"/1a=~~~<"IHDR"~~~10~~~100806~~~1ff3ff
@@ -500,11 +500,11 @@ The differences function is not utf-8-aware.
 ""b50b"CH`"b8a9e8fbb3"l"c9"Z"bf"6">8c"~"ef"m"7f"I"c0"@"9091>ae"E2"d5a0
 ""08c7"#"d689"M["13b3991e"&"eb"("85"U""i"a8">"fbbfe4f2bd"<.s"~~~~
 "IEND"ae"B`"82
-><:[module:. pils editor detective icon detectives both small .timestamp 2008-05-25T01:29:43.986+02 .language system]><;
+><:[module:. puls editor detective icon detectives both small .timestamp 2008-05-25T01:29:43.986+02 .language system]><;
 
-small (.png)><:[module:. pils editor detective icon detectives high .timestamp 2008-11-02T15:55:57.998+01 .language system]><;
+small (.png)><:[module:. puls editor detective icon detectives high .timestamp 2008-11-02T15:55:57.998+01 .language system]><;
 
-><:[module:. pils editor detective icon detectives high === .timestamp 2008-11-02T15:56:02.280+01 .language system]><;
+><:[module:. puls editor detective icon detectives high === .timestamp 2008-11-02T15:56:02.280+01 .language system]><;
 
 ;png
 ""89"PNG"/1a=~~~<"IHDR"~~~10~~~100806~~~1ff3ff
@@ -515,11 +515,11 @@ small (.png)><:[module:. pils editor detective icon detectives high .timestamp 2
 ""a4a8"M"e6d9f5ea"A"f3e1"*oE? "7fbd83"["83"_"b0e9"#"06"&"1a<d6b6ccc0
 ""8b0c861ef40ea7b7caff9b"x"~"m"d888"?"eebb"%"c9~~~~"IEND"ae"B`"
 ""82
-><:[module:. pils editor detective icon detectives high small .timestamp 2008-05-25T01:29:52.482+02 .language system]><;
+><:[module:. puls editor detective icon detectives high small .timestamp 2008-05-25T01:29:52.482+02 .language system]><;
 
-small (.png)><:[module:. pils editor detective icon detectives low .timestamp 2008-11-02T15:56:14.842+01 .language system]><;
+small (.png)><:[module:. puls editor detective icon detectives low .timestamp 2008-11-02T15:56:14.842+01 .language system]><;
 
-><:[module:. pils editor detective icon detectives low === .timestamp 2008-11-02T15:56:21.655+01 .language system]><;
+><:[module:. puls editor detective icon detectives low === .timestamp 2008-11-02T15:56:21.655+01 .language system]><;
 
 ;png
 ""89"PNG"/1a=~~~<"IHDR"~~~10~~~100806~~~1ff3ff
@@ -529,11 +529,11 @@ small (.png)><:[module:. pils editor detective icon detectives low .timestamp 20
 ""0fed"`"e5e7cfc3fbdac1"I"e3ee"7q"b7"*"a4"V"10de"4}"f2ea"A"8082"*"edc4=
 "R"bff7"="7f="`"~f4ea01"e"eebc"YOb"80a4e9f91813"q"d8acbdc8ea1e"l"b5
 ""8e"|"c99e"<"c1"k"~~~~"IEND"ae"B`"82
-><:[module:. pils editor detective icon detectives low small .timestamp 2008-05-25T01:30:26.888+02 .language system]><;
+><:[module:. puls editor detective icon detectives low small .timestamp 2008-05-25T01:30:26.888+02 .language system]><;
 
-small (.png)><:[module:. pils editor detective icon detectives none .timestamp 2008-11-02T15:56:34.889+01 .language system]><;
+small (.png)><:[module:. puls editor detective icon detectives none .timestamp 2008-11-02T15:56:34.889+01 .language system]><;
 
-><:[module:. pils editor detective icon detectives none === .timestamp 2008-11-02T15:56:40.858+01 .language system]><;
+><:[module:. puls editor detective icon detectives none === .timestamp 2008-11-02T15:56:40.858+01 .language system]><;
 
 ;png
 ""89"PNG"/1a=~~~<"IHDR"~~~10~~~100806~~~1ff3ff
@@ -541,10 +541,10 @@ small (.png)><:[module:. pils editor detective icon detectives none .timestamp 2
 ""~~~"EIDAT8"cbed91"A"=~"!"10c3"&"8bffff"r|"c08e"2"e8"A"04"{-"
 ""a485a0c6"N"bed8cc"-"~10"p"19c0a4"k"f9e07f"MM9<"8d"9"~"0"06daca0f"("
 ">"18"Z"a8aa"<"afb10316"s"181b"A"d6fdf7~~~~"IEND"ae"B`"82
-><:[module:. pils editor detective icon detectives none small .timestamp 2008-05-25T01:30:06.741+02 .language system]><;
+><:[module:. puls editor detective icon detectives none small .timestamp 2008-05-25T01:30:06.741+02 .language system]><;
 
 small (.png)
-><:[module:. pils editor detective match .timestamp 2011-07-21T00:36:51.469+02 .language system]><;
+><:[module:. puls editor detective match .timestamp 2011-07-21T00:36:51.469+02 .language system]><;
 { match: .wanted
 | ;match this program language read (wanted) or (:ok [ok:]);
   :ok
@@ -581,19 +581,19 @@ small (.png)
     }
   }
 }
-><:[module:. pils editor detective modules .timestamp 2011-07-21T00:30:07.013+02 .language system]><;
+><:[module:. puls editor detective modules .timestamp 2011-07-21T00:30:07.013+02 .language system]><;
 
 { .modules
 | :ok
   this program libraries every
   { library: .filename .why?
   | :ok
-    (channel: pils-library: filename) node legs
+    (channel: puls-library: filename) node legs
     { module := * module:. +$ text | :ok module:. .text .library filename }
   }
   splice distinct [call: module]
 }
-><:[module:. pils editor detective state .timestamp 2011-09-06T00:12:07.938+02 .language system]><;
+><:[module:. puls editor detective state .timestamp 2011-09-06T00:12:07.938+02 .language system]><;
 { state: .search (search: .high .low) .tree
 | :ok
   { flap:. .item; branches
@@ -621,7 +621,7 @@ small (.png)
       ]
     }
   }
-}><:[module:. pils editor latest .timestamp 2008-05-25T01:30:44.271+02 .language system]><;
+}><:[module:. puls editor latest .timestamp 2008-05-25T01:30:44.271+02 .language system]><;
 
 { .latest
 | library-channel node
@@ -632,8 +632,8 @@ small (.png)
   .:try anyway: :ok
   @ new
 }
-><:[module:. pils editor libraries .timestamp 2011-09-30T14:10:36.478+02 .language system]><;
-;library-channel (channel: pils-library: this program filename);
+><:[module:. puls editor libraries .timestamp 2011-09-30T14:10:36.478+02 .language system]><;
+;library-channel (channel: puls-library: this program filename);
 { .import
 | :ok
   this module channel import or:
@@ -676,7 +676,7 @@ small (.png)
     ;old hot text call {+$ ok|:ok} .:need;
     library-channel node? call
     { * ;language ?:? // name
-    | :if old = "<pils>/" (name) "/system/" (name); :ok
+    | :if old = "<puls>/" (name) "/system/" (name); :ok
       panel say [can not remove file language library]
     }
     or:
@@ -688,7 +688,7 @@ small (.png)
       .path this program path
     )
     .:need
-    .(@@ [pils system path] encode)
+    .(@@ [puls system path] encode)
     .:need
     .(list insert)
     and: changed
@@ -712,14 +712,14 @@ small (.png)
 { .libraries := use
 | :ok
   library-channel header
-  := library-channel header try {|:ok [pils: .use?]} merge (;use);
-  @@ [pils system program-file] save and:
-  (channel: pils-library-changed: this program filename) library-list
+  := library-channel header try {|:ok [puls: .use?]} merge (;use);
+  @@ [puls system program-file] save and:
+  (channel: puls-library-changed: this program filename) library-list
   anyway:
   ;tabs window mind tabs;
   @ menu: .window .tabs .page tabs current
 }
-><:[module:. pils editor menu .timestamp 2011-09-30T01:03:36.568+02 .language system]><;
+><:[module:. puls editor menu .timestamp 2011-09-30T01:03:36.568+02 .language system]><;
 ;library-channel;
 { menu: .page .window .tabs
 | :ok
@@ -775,28 +775,28 @@ small (.png)
           menu: . [module destroy] .action delete: .page
         )
       }
-      { "", ? $* [pils system] | :ok ()}
-      { "", [pils language system] | :ok () }
+      { "", ? $* [puls system] | :ok ()}
+      { "", [puls language system] | :ok () }
     )
     & (@ editors: .page)
     &:
-    @@ . [[?:?|pils-configuration:platform] [?:?|pils-configuration:system]]
+    @@ . [[?:?|puls-configuration:platform] [?:?|puls-configuration:system]]
     or ()
     menu (.page .text .module-name home) or ()
   )
   & (@ languages: .page)
   & (@ libraries)
 }
-><:[module:. pils editor menu editors .timestamp 2011-09-29T13:03:24.879+02 .language system]><;
+><:[module:. puls editor menu editors .timestamp 2011-09-29T13:03:24.879+02 .language system]><;
 ;library-channel;
 { editors: .page
 | :ok
   ;module-name page mind module-name;
   this program libraries each
   { library: .why ? <> [configuration] .filename
-  | :try (channel: pils-library: filename) node .:need legs
+  | :try (channel: puls-library: filename) node .:need legs
     { name := ?
-    | :try name -##* module-name call {[pils], [edit], ok|:ok}
+    | :try name -##* module-name call {[puls], [edit], ok|:ok}
     }
   }
   splice distinct
@@ -810,14 +810,14 @@ small (.png)
     .action edit:. .page
   }
 }
-><:[module:. pils editor menu languages .timestamp 2009-04-27T18:27:12.424+02 .language system]><;
+><:[module:. puls editor menu languages .timestamp 2009-04-27T18:27:12.424+02 .language system]><;
 ;library-channel .filename this program filename;
 { languages: .page
 | :ok
   @@ module languages (.page) &:
   @@ program languages
 }
-><:[module:. pils editor menu languages module .timestamp 2011-07-21T00:34:36.056+02 .language system]><;
+><:[module:. puls editor menu languages module .timestamp 2011-07-21T00:34:36.056+02 .language system]><;
 ;library-channel .filename this program filename;
 { languages: .page
 | :ok
@@ -825,13 +825,13 @@ small (.png)
   ;current page mind language;
   this program libraries each
   { library: .filename library .why ? <> [configuration]
-  | (channel: pils-library: library) node .:need legs
-    { language =* [pils language] := module = *;module +$?
-    | ;stub language <-#=* [pils language];
+  | (channel: puls-library: library) node .:need legs
+    { language =* [puls language] := module = *;module +$?
+    | ;stub language <-#=* [puls language];
       :if module-name +#$* stub = stub; :ok
-      language <+#^* [pils language]
+      language <+#^* [puls language]
     }
-    { ? <$* [pils language] := ? | ? }
+    { ? <$* [puls language] := ? | ? }
     .:try
   }
   splice distinct order {ok|:ok this program language write (ok) <-#+* ",]"}
@@ -849,9 +849,9 @@ small (.png)
     menu: . [language] & language .action language:. .page
   }
 }
-><:[module:. pils editor menu languages program .timestamp 2011-07-20T23:41:10.056+02 .language system]><;
+><:[module:. puls editor menu languages program .timestamp 2011-07-20T23:41:10.056+02 .language system]><;
 ;library-channel .filename this program filename
-.pilssuffix "." [pils-configuration:pils-filetype]
+.pulssuffix "." [puls-configuration:puls-filetype]
 ;
 { .languages
 | :ok
@@ -861,16 +861,16 @@ small (.png)
   { library: .filename ok .why ? <> [configuration] | :ok }
   distinct each
   { filename
-  | ;name filename <-#$* pilssuffix <+#-* "/";
+  | ;name filename <-#$* pulssuffix <+#-* "/";
     :if
       filename =
-      bootfilename <-#^* "/pils/"
-      (name) "/system/" (name) (pilssuffix)
+      bootfilename <-#^* "/puls/"
+      (name) "/system/" (name) (pulssuffix)
     ;
     ;language ?:? // name
-    .library-node (channel: pils-library: filename) node
+    .library-node (channel: puls-library: filename) node
     ;
-    ([pils], [language], language) call (library-node) or ()
+    ([puls], [language], language) call (library-node) or ()
     call
     { * module:. .language [system]
     | :try {} read (module) .:need call {? language|:ok ()}
@@ -882,7 +882,7 @@ small (.png)
     .else menu:. .action language: .
   }
 }
-{ .test|:ok pilssuffix}><:[module:. pils editor menu libraries .timestamp 2011-07-21T00:36:41.374+02 .language system]><;
+{ .test|:ok pulssuffix}><:[module:. puls editor menu libraries .timestamp 2011-07-21T00:36:41.374+02 .language system]><;
 { .libraries
 | :ok
   ( :if this program filename <> bootfilename;
@@ -894,13 +894,13 @@ small (.png)
     [.use 1 .used 2 .configuration 3 .system 4 .platform 4]
   | :ok
     :name section;
-    menu: . [libraries], [open], filename .(@@ [pils system path] encode)
+    menu: . [libraries], [open], filename .(@@ [puls system path] encode)
     .action open: .library filename
   }
   legs { section := | :ok section: .; =' } order [call: section] every [call:]
   splice [[menu:. libraries open -],]
 }
-><:[module:. pils editor menu rename .timestamp 2011-09-29T23:54:03.026+02 .language system]><;
+><:[module:. puls editor menu rename .timestamp 2011-09-29T23:54:03.026+02 .language system]><;
 { rename: .page .library-channel .home
 | :ok
   ( menu: . [module rename] .shortcut "Ctrl+R" .action rename: .page )
@@ -930,13 +930,13 @@ small (.png)
     { library: .filename .why [use]
     | :ok
       menu:
-      . [module], [move], [library], filename .(@@ [pils system path] encode)
+      . [module], [move], [library], filename .(@@ [puls system path] encode)
       .action move: .page .library filename
     }
   )
 }
-><:[module:. pils editor navigate .timestamp 2011-07-21T00:16:57.767+02 .language system]><;
-;library-channel (channel: pils-library: this program filename)
+><:[module:. puls editor navigate .timestamp 2011-07-21T00:16:57.767+02 .language system]><;
+;library-channel (channel: puls-library: this program filename)
 .language this program language
 ;
 { navigate: .home .window .tabs
@@ -1001,7 +1001,7 @@ small (.png)
   icons
   ( .size 16 .icons
     [opener horizontal cold, opener vertical cold, bottle, bottle empty]
-    each {name|:ok @@ ([pils icon] & name & [small])}
+    each {name|:ok @@ ([puls icon] & name & [small])}
   )
   when
   { activated: .
@@ -1014,7 +1014,7 @@ small (.png)
   }
   { .escape | :try editor-channel escape }
 }
-><:[module:. pils editor new .timestamp 2011-07-21T00:34:25.617+02 .language system]><;
+><:[module:. puls editor new .timestamp 2011-07-21T00:34:25.617+02 .language system]><;
 { new: .filename
 | :if file (filename) count or 0 = 0; :ok
   ;choices;
@@ -1025,7 +1025,7 @@ small (.png)
     { activated: .
     | ( :if file (filename) count or 0 = 0;
         file (filename) text := activated call (choices) .:need new;
-        filename @@@ [pils editor] window
+        filename @@@ [puls editor] window
       )
       and: :ok window close
     }
@@ -1034,24 +1034,24 @@ small (.png)
 }
 { .test
 | :ok
-  [pils-configuration:language]
+  [puls-configuration:language]
 }
 ===
 { .choices
 | :ok
-  folder (this module filename <-#^* "/pils/") folders each
+  folder (this module filename <-#^* "/puls/") folders each
   { ? folder: path
   | ;name path <-#$* "/" <+#-* "/";
     :try choice:. say (?:? // name) .name
     .new
-      file (path . "system/new." [pils-configuration:pils-filetype])
+      file (path . "system/new." [puls-configuration:puls-filetype])
       text .:need
-    .relevance :if name = [pils-configuration:language] lower; 2
+    .relevance :if name = [puls-configuration:language] lower; 2
     .else name bug {} call {"english"|:ok 1} {?|:ok 0} bug {}    !! = "english" !!
   }
   order [call: choice]
 }
-><:[module:. pils editor operations .timestamp 2011-07-20T23:43:25.557+02 .language system]><;
+><:[module:. puls editor operations .timestamp 2011-07-20T23:43:25.557+02 .language system]><;
 ;library-channel;
 { operations: .window .tabs
 | :ok
@@ -1060,19 +1060,19 @@ small (.png)
   +++
   { close: .page |:if tabs count > 1; tabs hot close }
   { function:. .module .home
-  | ;error-hint @ [pils run error] hint;
+  | ;error-hint @ [puls run error] hint;
     [result escape] find (editor-channel) anyway:
     @ result: . function call (module) .:need .window .tabs
   }
   { [library import] | :ok @@ libraries import }
-  { open: .library | library @@@ [pils editor] window }
+  { open: .library | library @@@ [puls editor] window }
   { navigate: .page
   | @ navigate: .window .tabs .home page mind module-name
   }
   { .detective | :ok @ detective: .window .tabs }
-  { [test open] | :try @@ [pils run command open] open }
+  { [test open] | :try @@ [puls run command open] open }
 }
-><:[module:. pils editor operations file .timestamp 2011-09-28T17:11:36.982+02 .language system]><;
+><:[module:. puls editor operations file .timestamp 2011-09-28T17:11:36.982+02 .language system]><;
 ;library-channel;
 
 { file: .window .tabs
@@ -1091,7 +1091,7 @@ small (.png)
     this program libraries
     every
     { library: .why? .filename
-    | :ok [node] call: channel: pils-library: filename
+    | :ok [node] call: channel: puls-library: filename
     }
     find ((call: new) -> {ok|:ok ' without [timestamp]})
     or
@@ -1209,7 +1209,7 @@ small (.png)
     paged anyway:
     save and:
     pane [result] and:
-    ;error-hint @ [pils run error] hint;
+    ;error-hint @ [puls run error] hint;
     @ test-methods (.home module-name)
     find {menu: .? .shortcut ? <> [] .action ok| :ok}
     try
@@ -1222,7 +1222,7 @@ small (.png)
     }
   }
   { move: .page .library
-  | ;to (channel: pils-library: library);
+  | ;to (channel: puls-library: library);
     ;module-name page mind module-name;
     ;modules
       library-channel node legs
@@ -1240,7 +1240,7 @@ small (.png)
     and:
     modules each { module: .; =' | to . module := }
     and:
-    library @@@ [pils system program-file] save
+    library @@@ [puls system program-file] save
     and:
     modules each { module: .; ? | library-channel . module := () }
     and:
@@ -1266,7 +1266,7 @@ small (.png)
   }
   { language: .
   | library-channel header
-    := library-channel header try [-: pils: .language?] merge (;language);
+    := library-channel header try [-: puls: .language?] merge (;language);
     paged anyway:
     @ menu (.window .tabs .page tabs current) anyway:
     save and:
@@ -1287,11 +1287,11 @@ small (.png)
   { .open
   | window ask open
     ( .path this program filename <-#-* "/"
-      .type [pils-configuration:pils-filetype]
-      .filter "*." [pils-configuration:pils-filetype])
+      .type [puls-configuration:puls-filetype]
+      .filter "*." [puls-configuration:puls-filetype])
     .:need
-    call { ok | :if  ok <$* ("." [pils-configuration:pils-filetype]) > 0; :ok } .:need
-    @@@ [pils run start] .:need
+    call { ok | :if  ok <$* ("." [puls-configuration:puls-filetype]) > 0; :ok } .:need
+    @@@ [puls run start] .:need
     start .:try
   }
   { .explorer | :try platform system explorer }
@@ -1334,11 +1334,11 @@ small (.png)
     save
   }
   ===
-  { .save | :try @@ [pils system program-file] save }
+  { .save | :try @@ [puls system program-file] save }
   { .paged | :try @ refresh: .window .tabs }
   { [pane: result] | :ok [result escape] find (editor-channel) anyway: }
 }
-><:[module:. pils editor operations file reconstruct .timestamp 2011-07-21T00:13:52.291+02 .language pils language system]><;
+><:[module:. puls editor operations file reconstruct .timestamp 2011-07-21T00:13:52.291+02 .language puls language system]><;
 { reconstruct: .window .tabs
 | :ok
   ;tabs ' count up every (tabs) every
@@ -1380,11 +1380,11 @@ small (.png)
   ;tab tabs every [call: hot] legs {ok := 1|:ok} find (window mind tabs);
   tab select and: tab page focus
 }
-><:[module:. pils editor pinpoint .timestamp 2009-04-27T18:28:36.752+02 .language system]><;
+><:[module:. puls editor pinpoint .timestamp 2009-04-27T18:28:36.752+02 .language system]><;
 { pinpoint: .what .where
 | ;module where this .:need module .:need;
   :try
-  module filename @@@ [pils editor] window mind operations operations
+  module filename @@@ [puls editor] window mind operations operations
   module (.module-name module name) .:need
   selection
   ( :need @@ . [run pinpoint] pinpoint:
@@ -1396,8 +1396,8 @@ small (.png)
   .:need
   focus
 }
-><:[module:. pils editor refresh .timestamp 2011-09-29T22:09:18.880+02 .language system]><;
-;library-channel (channel: pils-library: this program filename);
+><:[module:. puls editor refresh .timestamp 2011-09-29T22:09:18.880+02 .language system]><;
+;library-channel (channel: puls-library: this program filename);
 { refresh: .tabs .window
 | ;page tabs current .:need; :ok
   page focus and:
@@ -1431,7 +1431,7 @@ small (.png)
   }
   { x, x | ? }
 }
-><:[module:. pils editor result .timestamp 2011-07-21T00:32:13.771+02 .language system]><;
+><:[module:. puls editor result .timestamp 2011-07-21T00:32:13.771+02 .language system]><;
 { result:. .window .tabs
 | :who
   (:try @ graph:. result .window .tabs) anyway:
@@ -1455,11 +1455,11 @@ small (.png)
   { $ ok | :ok }
 }
 { result: .splitter | :ok splitter codepane show 0 }
-><:[module:. pils editor result find .timestamp 2009-03-05T12:21:31.949+01 .language system]><;
+><:[module:. puls editor result find .timestamp 2009-03-05T12:21:31.949+01 .language system]><;
 { find: .textpane
 | :ok
 }
-><:[module:. pils editor result graph .timestamp 2011-07-20T23:40:16.545+02 .language system]><;
+><:[module:. puls editor result graph .timestamp 2011-07-20T23:40:16.545+02 .language system]><;
 { graph:. ' graph:graph .window .tabs
 | :ok
   ;canvas window mind graph or
@@ -1481,7 +1481,7 @@ small (.png)
   canvas mind graph := graph;
   canvas refresh
 }
-><:[module:. pils editor result graph paint .timestamp 2011-07-21T00:13:39.187+02 .language system]><;
+><:[module:. puls editor result graph paint .timestamp 2011-07-21T00:13:39.187+02 .language system]><;
 { paint:. .canvas
 | :try
   paint graph:
@@ -1491,10 +1491,10 @@ small (.png)
   graph:size:. canvas size every {ok > 20|:ok ' - 10} .:need;
   canvas mind graph
 }
-><:[module:. pils editor size .timestamp 2008-07-27T22:18:21.438+02 .language system]><;
+><:[module:. puls editor size .timestamp 2008-07-27T22:18:21.438+02 .language system]><;
 
 600, 700
-><:[module:. pils editor tabs .timestamp 2011-07-20T23:42:07.263+02 .language system]><;
+><:[module:. puls editor tabs .timestamp 2011-07-20T23:42:07.263+02 .language system]><;
 ;library-channel;
 { tabs: .parent .window
 | :ok
@@ -1526,7 +1526,7 @@ small (.png)
   tabs mind images := @ imagelist (.tabs);
   tabs
 }
-><:[module:. pils editor tabs imagelist .timestamp 2011-09-28T17:08:48.575+02 .language system]><;
+><:[module:. puls editor tabs imagelist .timestamp 2011-09-28T17:08:48.575+02 .language system]><;
 { imagelist: .tabs
 | :ok
   [ horizontal cold,
@@ -1534,7 +1534,7 @@ small (.png)
     vertical cold,
     vertical hot
   ]
-  each {name|:ok @@ ([pils icon opener] & name & [small])}
+  each {name|:ok @@ ([puls icon opener] & name & [small])}
   .(tabs icons: .size 16 .icons)
   and:
   { page := state: .changed .selected
@@ -1550,17 +1550,17 @@ small (.png)
     === {:error|:ok 0}
   }
 }
-><:[module:. pils editor tabs page .timestamp 2009-08-29T11:08:08.828+02 .language system]><;
+><:[module:. puls editor tabs page .timestamp 2009-08-29T11:08:08.828+02 .language system]><;
 { page: .tabs .module-name
 | ;edit
     module-name call (library-channel node) .:need
-    call {* (module: .? .edit ok = ? // ?) anyway [.edit pils-source]|:ok}
+    call {* (module: .? .edit ok = ? // ?) anyway [.edit puls-source]|:ok}
     .:need
   ;
   ;edit-module
     module-name count down 0
-    every {n|:ok module-name +# n & [pils edit] & edit}
-    & [pils edit source,]
+    every {n|:ok module-name +# n & [puls edit] & edit}
+    & [puls edit source,]
     find {module-name|:try @@ (module-name)} .:need
   ;
   ;page edit-module edit (.parent tabs .module-name .library-channel) .:need;
@@ -1578,7 +1578,7 @@ small (.png)
   tabs refresh anyway:
   page
 }
-><:[module:. pils editor test-methods .timestamp 2011-09-06T00:05:11.995+02 .language system]><;
+><:[module:. puls editor test-methods .timestamp 2011-09-06T00:05:11.995+02 .language system]><;
 { test-methods: .home = & '
 | :ok
   (home & [test], home)
@@ -1630,19 +1630,19 @@ small (.png)
   }
   & [menu:. test go .action test open .shortcut "Ctrl+G"]
 }
-><:[module:. pils editor title .timestamp 2008-05-25T01:33:39.509+02 .language system]><;
+><:[module:. puls editor title .timestamp 2008-05-25T01:33:39.509+02 .language system]><;
 
 this program filename call
 {filename|:ok filename <+#^* "/" . " - " (filename <-#^* "/")}
-><:[module:. pils icon .timestamp 2008-12-21T14:27:46.589+01 .language system]><;
+><:[module:. puls icon .timestamp 2008-12-21T14:27:46.589+01 .language system]><;
 { call = icon: .size? .png? | :try call call: platform }
 { large: .png | :ok platform icon: .size [32 32] .png }
 { small: .png | :ok platform icon: .size [16 16] .png }
-><:[module:. pils icon === .timestamp 2008-12-21T14:27:53.527+01 .language system]><;
+><:[module:. puls icon === .timestamp 2008-12-21T14:27:53.527+01 .language system]><;
 { large: .png | :ok platform icon: .size [32 32] .png }
 { small: .png | :ok platform icon: .size [16 16] .png }
-><:[module:. pils icon bottle .timestamp 2008-12-21T14:26:42.964+01 .language system]><;
-><:[module:. pils icon bottle === .timestamp 2008-12-21T14:26:37.824+01 .language system]><;
+><:[module:. puls icon bottle .timestamp 2008-12-21T14:26:42.964+01 .language system]><;
+><:[module:. puls icon bottle === .timestamp 2008-12-21T14:26:37.824+01 .language system]><;
 ;png
 ""89"PNG"/1a=~~~<"IHDR"~~~" "~~~" "0806~~~"szz"-
 ""f4~~~06"bKGD"~ff~ff~ffa0bda793~~01"pIDATx"dab597db-
@@ -1658,8 +1658,8 @@ this program filename call
 "H4"fc"W"1de8"w"bc"GP"c3e0"c"c1e5"@"b114"d"981a11"f"ac"5"b9"`"c4fe9003"W"-
 ""0b97b1cd9c"<""">"w"ff03"<"""c6e7"@"b6bfc6b503"^"f2dcb5"Q"8f"S"80"y"b5"?"-
 ""bf"p"e1eeb1fa05cc"`"189ad4fb"m"a3~~~~"IEND"ae"B`"82
-><:[module:. pils icon bottle empty .timestamp 2008-12-21T14:26:22.761+01 .language system]><;
-><:[module:. pils icon bottle empty === .timestamp 2008-12-21T14:26:28.589+01 .language system]><;
+><:[module:. puls icon bottle empty .timestamp 2008-12-21T14:26:22.761+01 .language system]><;
+><:[module:. puls icon bottle empty === .timestamp 2008-12-21T14:26:28.589+01 .language system]><;
 ;png
 ""89"PNG"/1a=~~~<"IHDR"~~~10~~~100806~~~1f-
 ""f3ff"a"~~~04"sBIT"08080808"|"08"d"88~~~80"IDAT8"8dc5-
@@ -1668,15 +1668,15 @@ this program filename call
 "e"e0161b03"p"bfaee1"n"01c41ba4d695d8"U"13d9"*["e4"w"""f5<"6"f105-
 ""81e480"?v"f07f81"O">"lk"f98a"U"95c08aec99a3"3e"~"1"a919"&Y"92-
 ""1e99"_G"9a"L"13eef5~~~~"IEND"ae"B`"82
-><:[module:. pils icon bottle empty small .timestamp 2008-12-21T14:26:32.777+01 .language system]><;
+><:[module:. puls icon bottle empty small .timestamp 2008-12-21T14:26:32.777+01 .language system]><;
 small (.png)
-><:[module:. pils icon bottle large .timestamp 2008-12-21T14:26:11.933+01 .language system]><;
+><:[module:. puls icon bottle large .timestamp 2008-12-21T14:26:11.933+01 .language system]><;
 large (.png)
-><:[module:. pils icon bottle small .timestamp 2008-12-21T14:26:17.402+01 .language system]><;
+><:[module:. puls icon bottle small .timestamp 2008-12-21T14:26:17.402+01 .language system]><;
 small (.png)
-><:[module:. pils icon horn .timestamp 2008-12-21T14:26:52.761+01 .language system]><;
-><:[module:. pils icon horn cold .timestamp 2008-12-21T14:26:58.121+01 .language system]><;
-><:[module:. pils icon horn cold === .timestamp 2008-12-21T14:27:01.074+01 .language system]><;
+><:[module:. puls icon horn .timestamp 2008-12-21T14:26:52.761+01 .language system]><;
+><:[module:. puls icon horn cold .timestamp 2008-12-21T14:26:58.121+01 .language system]><;
+><:[module:. puls icon horn cold === .timestamp 2008-12-21T14:27:01.074+01 .language system]><;
 ;png
 ""89"PNG"/1a=~~~<"IHDR"~~~" "~~~" "0806~~~"szz"-
 ""f4~~~06"bKGD"~ff~ff~ffa0bda793~~0190"IDATx"dabd"W"d1-
@@ -1693,10 +1693,10 @@ small (.png)
 ""07120b"I"8ad117a9ccccb1"("f10cac"4"f3f2e484abe0"]"1b"b"a6ceaea793ada8-
 ""89b9e71e~"N"16a0"~"f5"#"1f")"7f"+"cbef0390"w"~ac8f049797~"l"16020edd-
 "$"028d"~"a4"~"~d89cc6dc8b"b/5"~~~~"IEND"ae"B`"82
-><:[module:. pils icon horn cold large .timestamp 2008-12-21T14:27:05.011+01 .language system]><;
+><:[module:. puls icon horn cold large .timestamp 2008-12-21T14:27:05.011+01 .language system]><;
 large (.png)
-><:[module:. pils icon horn hot .timestamp 2008-12-21T14:27:09.527+01 .language system]><;
-><:[module:. pils icon horn hot === .timestamp 2008-12-21T14:27:14.621+01 .language system]><;
+><:[module:. puls icon horn hot .timestamp 2008-12-21T14:27:09.527+01 .language system]><;
+><:[module:. puls icon horn hot === .timestamp 2008-12-21T14:27:14.621+01 .language system]><;
 ;png
 ""89"PNG"/1a=~~~<"IHDR"~~~" "~~~" "0806~~~"szz"-
 ""f4~~~06"bKGD"~ff~ff~ffa0bda793~~018f"IDATx"dabd"W"d1-
@@ -1713,10 +1713,10 @@ large (.png)
 ""04aa"0"8d91d117c6"~G"f08ea8"Fw"88c0"T"07"4"d9a2b7"h"86ee02"o"04"p"d7"y"-
 ""f1f0"."c0fc8487fefdb09dffb7b6"|"fd"b"f2d5"q"fc86f395e0"x"8688ec95"$p"-
 ""05c6e4"5"fd0f"0"cf"<"bd0c"$P"a4~~~~"IEND"ae"B`"82
-><:[module:. pils icon horn hot large .timestamp 2008-12-21T14:27:18.043+01 .language system]><;
+><:[module:. puls icon horn hot large .timestamp 2008-12-21T14:27:18.043+01 .language system]><;
 large (.png)
-><:[module:. pils icon mug .timestamp 2008-12-21T14:27:24.964+01 .language system]><;
-><:[module:. pils icon mug === .timestamp 2008-12-21T14:27:30.058+01 .language system]><;
+><:[module:. puls icon mug .timestamp 2008-12-21T14:27:24.964+01 .language system]><;
+><:[module:. puls icon mug === .timestamp 2008-12-21T14:27:30.058+01 .language system]><;
 ;png
 ""89"PNG"/1a=~~~<"IHDR"~~~" "~~~" "0806~~~"szz"-
 ""f4~~~06"bKGD"~ff~ff~ffa0bda793~~02"7IDATx"dae5"W["-
@@ -1739,12 +1739,12 @@ large (.png)
 ""a7cf"X"18"T<"ab05f8d0df";"0c"X(b"bb"3P"19bb19bf"J"ecaef1e5b7e1"'B"-
 "zr"f2b70cf41b"%"f9bd"q"~80"?"c4"2wC-"fe"&"a2~~~~"IEND"ae"B"-
 "`"82
-><:[module:. pils icon mug large .timestamp 2008-12-21T14:30:17.996+01 .language system]><;
+><:[module:. puls icon mug large .timestamp 2008-12-21T14:30:17.996+01 .language system]><;
 large (.png)
-><:[module:. pils icon opener .timestamp 2008-12-21T14:30:24.027+01 .language system]><;
-><:[module:. pils icon opener horizontal .timestamp 2008-12-21T14:30:28.777+01 .language system]><;
-><:[module:. pils icon opener horizontal cold .timestamp 2008-12-21T14:30:35.027+01 .language system]><;
-><:[module:. pils icon opener horizontal cold === .timestamp 2008-12-21T14:30:38.746+01 .language system]><;
+><:[module:. puls icon opener .timestamp 2008-12-21T14:30:24.027+01 .language system]><;
+><:[module:. puls icon opener horizontal .timestamp 2008-12-21T14:30:28.777+01 .language system]><;
+><:[module:. puls icon opener horizontal cold .timestamp 2008-12-21T14:30:35.027+01 .language system]><;
+><:[module:. puls icon opener horizontal cold === .timestamp 2008-12-21T14:30:38.746+01 .language system]><;
 ;png
 ""89"PNG"/1a=~~~<"IHDR"~~~" "~~~" "0806~~~"szz"-
 ""f4~~~06"bKGD"~ff~ff~ffa0bda793~~~b5"IDATx"daed"U"db-
@@ -1754,12 +1754,12 @@ large (.png)
 ""bd"~"85"[XjA"84e5"2"dc"BX"ade8"9"04a7fb"{Xv"~"d"f7febcf67fd2a0"*"-
 ""d710ab9d7fda"8"a0"Bx"13"Zd"bf"V"01a512"v"16bc87f9"a"878b050cb3~"3"dd-
 ""92a2"3"e6"T"c012"66^p"~";FF"1595"5"1f"0"~~~~"IEND"ae"B`"82
-><:[module:. pils icon opener horizontal cold large .timestamp 2008-12-21T14:30:42.277+01 .language system]><;
+><:[module:. puls icon opener horizontal cold large .timestamp 2008-12-21T14:30:42.277+01 .language system]><;
 large (.png)
-><:[module:. pils icon opener horizontal cold small .timestamp 2008-12-21T14:30:46.214+01 .language system]><;
+><:[module:. puls icon opener horizontal cold small .timestamp 2008-12-21T14:30:46.214+01 .language system]><;
 small (.png)
-><:[module:. pils icon opener horizontal hot .timestamp 2008-12-21T14:30:51.980+01 .language system]><;
-><:[module:. pils icon opener horizontal hot === .timestamp 2008-12-21T14:31:00.324+01 .language system]><;
+><:[module:. puls icon opener horizontal hot .timestamp 2008-12-21T14:30:51.980+01 .language system]><;
+><:[module:. puls icon opener horizontal hot === .timestamp 2008-12-21T14:31:00.324+01 .language system]><;
 ;png
 ""89"PNG"/1a=~~~<"IHDR"~~~" "~~~" "0806~~~"szz"-
 ""f4~~~06"bKGD"~ff~ff~ffa0bda793~~~d5"IDATx"daed"V]"-
@@ -1770,13 +1770,13 @@ small (.png)
 "7"1d"5"0b~e0957fd7"B"f4>0e1d89f88a"O">91"x"ab"e"d4"H$/"c59d92f9"U"-
 ""9d~c2c6"}"d39590"VB"c3ccc0ef"#"18c8edfc"Zb"d3"["e006f696a5"%d"fa")"-
 "m"e9=8ddebe"`"d9b282bd~"i"8f03"d"dc"0"12"-"~~~~"IEND"ae"B`"82
-><:[module:. pils icon opener horizontal hot large .timestamp 2008-12-21T14:31:07.824+01 .language system]><;
+><:[module:. puls icon opener horizontal hot large .timestamp 2008-12-21T14:31:07.824+01 .language system]><;
 large (.png)
-><:[module:. pils icon opener horizontal hot small .timestamp 2008-12-21T14:31:11.371+01 .language system]><;
+><:[module:. puls icon opener horizontal hot small .timestamp 2008-12-21T14:31:11.371+01 .language system]><;
 small (.png)
-><:[module:. pils icon opener vertical .timestamp 2008-12-21T14:31:15.308+01 .language system]><;
-><:[module:. pils icon opener vertical cold .timestamp 2008-12-21T14:32:12.808+01 .language system]><;
-><:[module:. pils icon opener vertical cold === .timestamp 2008-12-21T14:32:18.668+01 .language system]><;
+><:[module:. puls icon opener vertical .timestamp 2008-12-21T14:31:15.308+01 .language system]><;
+><:[module:. puls icon opener vertical cold .timestamp 2008-12-21T14:32:12.808+01 .language system]><;
+><:[module:. puls icon opener vertical cold === .timestamp 2008-12-21T14:32:18.668+01 .language system]><;
 ;png
 ""89"PNG"/1a=~~~<"IHDR"~~~" "~~~" "0806~~~"szz"-
 ""f4~~~06"bKGD"~ff~ff~ffa0bda793~~~bf"IDATx"daed97cb-
@@ -1787,12 +1787,12 @@ small (.png)
 ""b61bc8f0"Iu)"d9"+"c0"$"04"w"ce17"[P"02"J@">"("01"%"a004fc89~e2"["fb-
 ""bfa4d8"\"90"#"a01bce919c<"55"18"n!"a0a9fa"r"~"K"96"4F"aa";"b5a5~~-
 ""~~"IEND"ae"B`"82
-><:[module:. pils icon opener vertical cold large .timestamp 2008-12-21T14:32:22.339+01 .language system]><;
+><:[module:. puls icon opener vertical cold large .timestamp 2008-12-21T14:32:22.339+01 .language system]><;
 large (.png)
-><:[module:. pils icon opener vertical cold small .timestamp 2008-12-21T14:32:25.699+01 .language system]><;
+><:[module:. puls icon opener vertical cold small .timestamp 2008-12-21T14:32:25.699+01 .language system]><;
 small (.png)
-><:[module:. pils icon opener vertical hot .timestamp 2008-12-21T14:32:29.355+01 .language system]><;
-><:[module:. pils icon opener vertical hot === .timestamp 2008-12-21T14:32:33.355+01 .language system]><;
+><:[module:. puls icon opener vertical hot .timestamp 2008-12-21T14:32:29.355+01 .language system]><;
+><:[module:. puls icon opener vertical hot === .timestamp 2008-12-21T14:32:33.355+01 .language system]><;
 ;png
 ""89"PNG"/1a=~~~<"IHDR"~~~" "~~~" "0806~~~"szz"-
 ""f4~~~06"bKGD"~ff~ff~ffa0bda793~~~db"IDATx"daed97cd-
@@ -1804,37 +1804,37 @@ small (.png)
 ""96".V"02efff0b0ed905b8~17e002"\"800bf0":"c0"r[SWI"f2"D_"a0a992-
 ""e29be9"c*"93b6ea"5"b7b3"8n6"a6~f005b1da"AV)"af"cQ"~~~~"IE"-
 "ND"ae"B`"82
-><:[module:. pils icon opener vertical hot large .timestamp 2008-12-21T14:32:36.402+01 .language system]><;
+><:[module:. puls icon opener vertical hot large .timestamp 2008-12-21T14:32:36.402+01 .language system]><;
 large (.png)
-><:[module:. pils icon opener vertical hot small .timestamp 2008-12-21T14:32:39.355+01 .language system]><;
+><:[module:. puls icon opener vertical hot small .timestamp 2008-12-21T14:32:39.355+01 .language system]><;
 small (.png)
-><:[module:. pils language .timestamp 2008-12-21T14:33:21.871+01 .language system]><;
-><:[module:. pils language graph .timestamp 2009-08-30T16:26:34.424+02 .language system]><;
-language: {}? head "graph"><:[module:. pils language system .timestamp 2008-12-21T14:33:28.886+01 .language system]><;
+><:[module:. puls language .timestamp 2008-12-21T14:33:21.871+01 .language system]><;
+><:[module:. puls language graph .timestamp 2009-08-30T16:26:34.424+02 .language system]><;
+language: {}? head "graph"><:[module:. puls language system .timestamp 2008-12-21T14:33:28.886+01 .language system]><;
 {}
-><:[module:. pils language text .timestamp 2008-12-21T14:33:32.543+01 .language system]><;
+><:[module:. puls language text .timestamp 2008-12-21T14:33:32.543+01 .language system]><;
 { read: ok | :ok }
-><:[module:. pils language textlist .timestamp 2011-07-20T23:14:55.447+02 .language system]><;
+><:[module:. puls language textlist .timestamp 2011-07-20T23:14:55.447+02 .language system]><;
 { read: ok | :ok ' split ""= <-#$* ["",] }
-><:[module:. pils run .timestamp 2008-12-21T14:34:33.933+01 .language system]><;
-><:[module:. pils run command .timestamp 2008-12-21T14:34:37.746+01 .language system]><;
+><:[module:. puls run .timestamp 2008-12-21T14:34:33.933+01 .language system]><;
+><:[module:. puls run command .timestamp 2008-12-21T14:34:37.746+01 .language system]><;
 { command: .
 |
-[exebug pils run command] bug {} and:
+[exebug puls run command] bug {} and:
 (command: .) bug {} and:
   :try command call (@)
 }
-><:[module:. pils run command edit .timestamp 2008-12-21T14:34:41.793+01 .language system]><;
-{ .edit | :ok @@ [pils editor] window }
-><:[module:. pils run command open .timestamp 2008-12-21T14:22:18.902+01 .language system]><;
-{ .open | :ok @@ [pils editor] window }
-><:[module:. pils run command test .timestamp 2008-12-21T13:45:24.703+01 .language system]><;
+><:[module:. puls run command edit .timestamp 2008-12-21T14:34:41.793+01 .language system]><;
+{ .edit | :ok @@ [puls editor] window }
+><:[module:. puls run command open .timestamp 2008-12-21T14:22:18.902+01 .language system]><;
+{ .open | :ok @@ [puls editor] window }
+><:[module:. puls run command test .timestamp 2008-12-21T13:45:24.703+01 .language system]><;
 { .test
 | :ok
-[exebug @@ [pils editor] window] bug {} and:
-  @@ [pils editor] window
+[exebug @@ [puls editor] window] bug {} and:
+  @@ [puls editor] window
 }
-><:[module:. pils run error .timestamp 2011-09-28T17:14:33.593+02 .language system]><;
+><:[module:. puls run error .timestamp 2011-09-28T17:14:33.593+02 .language system]><;
 (channel: error: this program filename) +++:
 knot:
 ;channel this module channel;
@@ -1864,10 +1864,10 @@ knot:
   ;window platform window (error-title);
   "Error window created" bug {} and:
   window or:
-  window icon (@@ [pils icon horn hot large]) anyway:
+  window icon (@@ [puls icon horn hot large]) anyway:
   ;splitter window splitter [horizontal];
-  ;input splitter codepane zoom (@@ [pils edit source zoom]);
-  ;output splitter codepane zoom (@@ [pils edit source zoom]);
+  ;input splitter codepane zoom (@@ [puls edit source zoom]);
+  ;output splitter codepane zoom (@@ [puls edit source zoom]);
   window mind? :=
     channel listen {|:ok window},
     (channel: error: this program filename) listen
@@ -1937,13 +1937,13 @@ knot:
   { [edit find]
   | :ok
     window find: .host
-    @@ [pils edit source menu action find] host:
+    @@ [puls edit source menu action find] host:
     .window
     .minding [find]
     .pages {.current|:ok output}
   }
   { .locate
-  | module filename @@@ [pils editor] window mind operations operations
+  | module filename @@@ [puls editor] window mind operations operations
     module (.module-name module name)
     selection
     ( @ pinpoint:
@@ -1971,17 +1971,17 @@ knot:
     expression ---:
     where +++: node: :;error .what .module .where .who
   }
-  { .detach | window icon (@@ [pils icon horn cold large]) mind? := () }
+  { .detach | window icon (@@ [puls icon horn cold large]) mind? := () }
   { locate: .what? .module? | window say [not located] }
   { locate: .what .module *
     module: .name .language .text .filename .expression
-  | filename @@@ [pils editor] .:need window mind operations operations
+  | filename @@@ [puls editor] .:need window mind operations operations
     module (.module-name name)
     selection (:need @ pinpoint: .what .expression .source text .language)
     focus .:try
   }
 }
-><:[module:. pils run error hint .timestamp 2009-08-29T08:53:13.952+02 .language system]><;
+><:[module:. puls run error hint .timestamp 2009-08-29T08:53:13.952+02 .language system]><;
 ;error-channel (channel: error: this program filename);
 { .hint | :ok () }
 { .hint
@@ -1994,11 +1994,11 @@ knot:
   )
   call {hint|:ok error-channel close anyway: hint}
 }
-><:[module:. pils run log .timestamp 2011-07-21T01:03:26.518+02 .language system]><;
+><:[module:. puls run log .timestamp 2011-07-21T01:03:26.518+02 .language system]><;
 { .window
 | :ok
   this module channel window or:
-  ;window platform window "Log" icon (@@ [pils icon horn cold]);
+  ;window platform window "Log" icon (@@ [puls icon horn cold]);
   window mind . (this module channel listen (;window)) := ();
   window mind logging := ();
   ;log window list [.columns expression, value 200];
@@ -2018,10 +2018,10 @@ knot:
   }
 }
 { [test test] | :self ' window }
-><:[module:. pils run pinpoint .timestamp 2011-07-21T00:58:18.180+02 .language system]><;
+><:[module:. puls run pinpoint .timestamp 2011-07-21T00:58:18.180+02 .language system]><;
 { pinpoint: .what .module * ;name .language .text .filename .expression
 | :who :try
-  filename @@@ [pils editor]
+  filename @@@ [puls editor]
   window mind operations operations
   module (.module-name name)
   selection (:need who pinpoint (.what .expression .source text .language))
@@ -2054,10 +2054,10 @@ knot:
   { +& list := + n | :ok (list) (n) }
   { * node := = attribute | :ok attribute call: :: node }
 }
-><:[module:. pils run start .timestamp 2008-12-21T14:23:01.293+01 .language system]><;
-{ .start | :try @@ [pils editor] window }
-><:[module:. pils talk .timestamp 2008-12-21T14:23:09.511+01 .language system]><;
-><:[module:. pils textual .timestamp 2011-07-12T11:00:01.698+02 .language system]><;
+><:[module:. puls run start .timestamp 2008-12-21T14:23:01.293+01 .language system]><;
+{ .start | :try @@ [puls editor] window }
+><:[module:. puls talk .timestamp 2008-12-21T14:23:09.511+01 .language system]><;
+><:[module:. puls textual .timestamp 2011-07-12T11:00:01.698+02 .language system]><;
 { textual: .result .language
 | :ok
   result call

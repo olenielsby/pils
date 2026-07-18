@@ -825,7 +825,7 @@ namespace PILS
         SinkConditional(const Any &where_, const Any &clause, const Any &elseClause)
             : where_(where_), clause(clause), elseClause(elseClause)
         {}
-    protected:
+    private:
         const Any &where_;
         const Any &clause;
         const Any &elseClause;

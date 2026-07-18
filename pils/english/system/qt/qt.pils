@@ -402,7 +402,7 @@
 { tree: .boss .parent .layout
 | :ok
   new Q:PilsTreeWidget (parent)
-  try {widget|layout q:addWidget (widget)}
+  try {(widget)|layout q:addWidget (widget)}
   when:
   { qs:itemActivated: ? | :who :try who picked: who q:currentNode }
   { node: boss
@@ -423,7 +423,6 @@
     ;text boss text .:need; :ok
     who q:addChild (text) when (self when: .boss)
   }
-  { boss | 0 or: :where :what shit and: :ok boss }
   +++ boss
 }
 ><:[module:. platform qt menubar .timestamp 2026-07-04T17:05:50.309+02 .language qt]><;

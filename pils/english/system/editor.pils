@@ -263,7 +263,7 @@
 !  & (@ languages: .page)
 !  & (@ libraries)
 }
-><:[module:. pils editor navigate .timestamp 2026-07-10T18:32:23.467+02 .language system]><;
+><:[module:. pils editor navigate .timestamp 2026-07-17T21:29:10.124+02 .language system]><;
 ;library-channel (channel: pils-library: this program filename)
 .language this program language
 ;
@@ -292,7 +292,7 @@
   window dialog
   { title | :ok say [pick module] }
   { size | :ok [400 300] }
-  { bug | bug }
+  { bug | shit }
   ;
   ;column dialog column ();
   ;view column tree
@@ -316,10 +316,11 @@
     }
   }
   populate (.view .tree) and:
+  [hip hop] bug {} and:
   dialog listen
   { cancel | }
 }
-><:[module:. pils editor operations .timestamp 2026-07-16T19:18:06.912+02 .language system]><;
+><:[module:. pils editor operations .timestamp 2026-07-18T17:34:31.577+02 .language system]><;
 ;library-channel;
 { operations: .window .tabs
 | :ok
@@ -429,7 +430,7 @@
     @ menu (.window .tabs .page)
   }
   { [save and test]: .page
-  | ;module-name page mind module-name;
+  | ;module-name page id;
     ;module
       module-name call (library-channel) .:need
       call {* module: . ok|:ok} .:need
@@ -608,15 +609,20 @@
   { paged | :try @ refresh: .window .tabs }
   { [pane: result] | :ok [result escape] find (editor-channel) anyway: }
 }
-><:[module:. pils editor operations new .timestamp 2026-07-05T22:37:29.808+02 .language system]><;
+><:[module:. pils editor operations new .timestamp 2026-07-18T15:51:36.157+02 .language system]><;
 { new: .page .window
 | :ok
+  ;module page id
+  .language this program language
+  .start-info say [enter module name]
+  ;
   ;dialog window dialog
-    {title|:ok say [create new module]}
+    { title | :ok say [create new module] }
   ;
   ;main-column dialog column ();
+  ;info main-column label () text (say [enter module name]);
   ;new-name main-column line-edit
-    { text: text | :try dialog channel validate (text) }
+    { text:. | :try dialog channel consider (text) }
   ;
   ;button-row main-column row ();
   ;ok-button button-row button
@@ -625,14 +631,37 @@
   ;
   ;cancel-button button-row button
     { title | :ok say [cancel] }
-    { pressed | :try window channel cancel }
+    { pressed | dialog close  }
   ;
-  ;error-message main-column label (;text "nul putte");
   dialog listen
-  { cancel | }
-  { validate: | }
-}
+  { consider: text | info text: validate (text) info }
+  { ok | dialog close }
+  { ok
+  | validate (new-name text) call
+    { valid: .module .info?
+    | :ok create (.module)
+    }
+    or: :ok [don't close]
+  }
+  ===
+  { validate: ? | :ok info:. say [invalid module name] } 
+  { validate: "" | :ok info:. start-info }
+  { validate: text
+  | ;module
+      language read ("[" (text) "]") .:need
+      call {(ok) = ? // ?|:ok} .:need
+      .(module &)
+    ;
+    :ok
+    module call (library-channel node) and
+    ( info:. say ([module], " " (language write: module) " ", [already exists]) )
+    or:
+    valid: .module .info say [create module] ": " (language write: module)
+  }
+  { create: .module | :ok (pretend: module) bug {} } 
 
+
+}
 
 { old-stuff-newx: .page
 | ;text window ask text [.header create, .label new module] .:need;
