@@ -919,82 +919,18 @@ namespace PILS
 		return fail(run);
 	}
 
-    const Step *SinkConditional::pass(Runner &run, long value)
+    const Step *SinkConditional::pass(Runner &run, long dummy)
 	{
-		return succeed(run);
-	}
-
-    const Step *SinkConditional::pass(Runner &run, double value)
-	{
-		return succeed(run);
-	}
-
-    const Step *SinkConditional::pass(Runner &run, const Integer &value)
-	{
-		return succeed(run);
-	}
-
-    const Step *SinkConditional::pass(Runner &run, const Float &value)
-	{
-		return succeed(run);
-	}
-
-    const Step *SinkConditional::pass(Runner &run, const PilsString &value)
-	{
-		return succeed(run);
-	}
-
-    const Step *SinkConditional::pass(Runner &run, const Cliche &value)
-	{
-		return succeed(run);
-	}
-
-    const Step *SinkConditional::pass(Runner &run, const ListConstant &value)
-	{
-		return succeed(run);
-	}
-
-    const Step *SinkConditional::pass(Runner &run, const NodeConstantShort &value)
-	{
-		return succeed(run);
-	}
-
-    const Step *SinkConditional::pass(Runner &run, const NodeConstantLong &value)
-	{
-		return succeed(run);
-	}
-
-    const Step *SinkConditional::pass(Runner &run, const Special &value)
-	{
-		return succeed(run);
-	}
-
-    const Step *SinkConditional::pass(Runner &run, const ListExpress &value)
-	{
-		return succeed(run);
-	}
-
-    const Step *SinkConditional::pass(Runner &run, const NodeExpressShort &value)
-	{
-		return succeed(run);
-	}
-
-    const Step *SinkConditional::pass(Runner &run, const NodeExpressLong &value)
-	{
-		return succeed(run);
-	}
-
-    const Step *SinkConditional::pass(Runner &run, const Integer *value)
-	{
-        run.release(value);
-		return succeed(run);
-	}
-
-    const Step *SinkConditional::pass(Runner &run, const Any *value)
-	{
-        run.release(value);
-		return succeed(run);
-	}
+        const Any &clause = this->clause;
+        const Any &where_ = this->where_;
+        run.sink = this + 1;
+        if (&where_ != run.where_)
+        {
+            where_.retain();
+            new (run.allocate(sizeof(SinkWhereabout))) SinkWhereabout(&where_);
+        }
+        return &clause;
+    }
 
     Sink *SinkConditional::kick(Runner &run)
 	{
@@ -1018,19 +954,6 @@ namespace PILS
 		const Any &elseClause = this->elseClause;
 		run.sink = this + 1;
 		return &elseClause;
-	}
-
-    const Step *SinkConditional::succeed(Runner &run)
-	{
-		const Any &clause = this->clause;
-		const Any &where_ = this->where_;
-		run.sink = this + 1;
-		if (&where_ != run.where_)
-		{
-			where_.retain();
-			new (run.allocate(sizeof(SinkWhereabout))) SinkWhereabout(&where_);
-		}
-		return &clause;
 	}
 
 	const Step *BuiltinClicheTransform::gotOperand(Runner &run, const WhoUntypedOperation &what, const Any *value) const

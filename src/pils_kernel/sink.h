@@ -815,24 +815,9 @@ namespace PILS
 	public:
         using SinkForget::pass;
         const Step *miss(Runner &run) override;
-        const Step *pass(Runner &run, long value) override;
-        const Step *pass(Runner &run, double value) override;
-        const Step *pass(Runner &run, const Integer &value) override;
-        const Step *pass(Runner &run, const Float &value) override;
-        const Step *pass(Runner &run, const PilsString &value) override;
-        const Step *pass(Runner &run, const Cliche &value) override;
-        const Step *pass(Runner &run, const ListConstant &value) override;
-        const Step *pass(Runner &run, const NodeConstantLong &value) override;
-        const Step *pass(Runner &run, const NodeConstantShort &value) override;
-        const Step *pass(Runner &run, const ListExpress &value) override;
-        const Step *pass(Runner &run, const NodeExpressLong &value) override;
-        const Step *pass(Runner &run, const NodeExpressShort &value) override;
-        const Step *pass(Runner &run, const Special &value) override;
-        const Step *pass(Runner &run, const Integer *value) override;
-        const Step *pass(Runner &run, const Any *value) override;
+        const Step *pass(Runner &run, long dummy) override;
     public:
         const Step *fail(Runner &run);
-        const Step *succeed(Runner &run);
         Sink *kick(Runner &run) override;
         SinkConditional(const Any &where_, const Any &clause)
             : where_(where_), clause(clause), elseClause(Empty::singleton)
