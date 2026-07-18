@@ -3,10 +3,10 @@
 | :ok
   this program filename =* "test"
 }
-><:[module:. test, .timestamp 2026-07-18T15:30:18.768+02 .language system]><;
- { test
+><:[module:. test, .timestamp 2026-07-18T19:22:27.083+02 .language system]><;
+{ test
 | :ok
-  :if [dum: .grisebasse] grisebasse; [øf] .else [støn]
+  :if [dum: .grisebasse] grisebasse; [bøjre] .else [drøn]
   
 }
 ><:[module:. vild, .timestamp 2026-07-09T12:03:41.800+02 .language system]><;

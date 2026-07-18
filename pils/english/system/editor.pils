@@ -1,6 +1,6 @@
 [pils: .use?]
 ><:[module:. pils, .timestamp 2008-12-23T02:24:30.089+01 .language system]><;
-><:[module:. pils editor .timestamp 2026-07-12T13:43:28.264+02 .language system]><;
+><:[module:. pils editor .timestamp 2026-07-18T19:19:43.578+02 .language system]><;
 { window
 | :ok
   ;lifetime platform lifetime (this module name);
@@ -80,9 +80,9 @@
       tab select and: edit focus
     }
   ;
-  ;result splitter edit { text | :ok "(Test output will be shown here)"};
+  ;result-pane splitter edit { text | :ok "(Test output will be shown here)"};
   window mind state := [new];
-  window mind result := result;
+  window mind result := result-pane;
   window mind splitter := splitter;
   window mind active := tabs;
   window mind tabs := tabs;
@@ -126,7 +126,12 @@
   @ menu (.window .tabs .page tabs current)
   and:
   window listen
-  {|}
+  { show: .result .page
+  | :try result-pane text:
+     result call
+    { (result) | :ok this program language indent: result }
+    { $ ok | :ok }
+  }
 }
 ><:[module:. pils editor === .timestamp 2008-12-23T02:25:18.339+01 .language system]><;
 { library-channel | :ok channel: pils-library: this program filename }
@@ -320,7 +325,7 @@
   dialog listen
   { cancel | }
 }
-><:[module:. pils editor operations .timestamp 2026-07-18T17:34:31.577+02 .language system]><;
+><:[module:. pils editor operations .timestamp 2026-07-18T19:09:44.603+02 .language system]><;
 ;library-channel;
 { operations: .window .tabs
 | :ok
@@ -429,30 +434,27 @@
     save and:
     @ menu (.window .tabs .page)
   }
+
   { [save and test]: .page
   | ;module-name page id;
     ;module
       module-name call (library-channel) .:need
       call {* module: . ok|:ok} .:need
     ;
-    ;text page mind extra valid (.page) .:need;
+    ;text valid (.page) .:need;
+    :ok
     (library-channel) (module-name)
     := module merge
-      (;module text .timestamp now .language page mind language)
+      (;module text .timestamp now ! .language page mind language
+      )
     ;
     paged anyway:
-    savez and:
-    pane [result] and:
-    ;error-hint @ [pils run error] hint;
-    @ test-methods (.home module-name)
-    find {menu: .? .shortcut ? <> [] .action ok| :ok}
-    try
-    { function:. .module .home
-    | :exit
-      ;_ (channel: error: this program filename) listen
-        {* error: .?|exit := ()}
-      ;
-      @ result:. function call (module) .:need .window .tabs
+    save and:
+    @ menu (.window .tabs .page) and:
+    (@ test-methods: .home module-name) try
+    { (menu:. ? .shortcut? .action function:. .module .home) 1
+    | ;result function call (module) .:need;
+      window channel show (.result .page)
     }
   }
   { move: .page .library
