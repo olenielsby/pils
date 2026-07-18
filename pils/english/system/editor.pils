@@ -1,6 +1,6 @@
 [pils: .use?]
 ><:[module:. pils, .timestamp 2008-12-23T02:24:30.089+01 .language system]><;
-><:[module:. pils editor .timestamp 2026-07-18T19:19:43.578+02 .language system]><;
+><:[module:. pils editor .timestamp 2026-07-18T22:00:59.611+02 .language system]><;
 { window
 | :ok
   ;lifetime platform lifetime (this module name);
@@ -38,11 +38,6 @@
     { select: .tabs
     | ;page tabs current;
       @ menu (.window .tabs .page)
-      and:
-!      :if this program filename =* "test" <> 0;
-!      "OPENED TEST" bug {} and: !shit
-!      this 
-!      tabs module-label text (this program language write: page id)
     }
     { bug
     | :who
@@ -131,6 +126,10 @@
      result call
     { (result) | :ok this program language indent: result }
     { $ ok | :ok }
+  }
+  { open: .module module-name
+  | :ok
+      @ operations (.window .tabs) module (.module-name)
   }
 }
 ><:[module:. pils editor === .timestamp 2008-12-23T02:25:18.339+01 .language system]><;
@@ -611,7 +610,7 @@
   { paged | :try @ refresh: .window .tabs }
   { [pane: result] | :ok [result escape] find (editor-channel) anyway: }
 }
-><:[module:. pils editor operations new .timestamp 2026-07-18T15:51:36.157+02 .language system]><;
+><:[module:. pils editor operations new .timestamp 2026-07-18T21:57:34.746+02 .language system]><;
 { new: .page .window
 | :ok
   ;module page id
@@ -656,50 +655,40 @@
     ;
     :ok
     module call (library-channel node) and
-    ( info:. say ([module], " " (language write: module) " ", [already exists]) )
-    or:
-    valid: .module .info say [create module] ": " (language write: module)
-  }
-  { create: .module | :ok (pretend: module) bug {} } 
-
-
-}
-
-{ old-stuff-newx: .page
-| ;text window ask text [.header create, .label new module] .:need;
-  :if text count > 0;
-  ;newname read (.text) .:need call {(ok) = ? // ?|:ok}
-    or (:ok window say [bad module name])
-  ;
-  ;new page mind module-name & newname;
-  new call (library-channel node)
-  and (:ok window say [trying to create already existing module])
-  or:
-  (library-channel) (new) :=
-  this program libraries
-  every
-  { library: .why? .filename
-  | :ok [node] call: channel: pils-library: filename
-  }
-  find ((call: new) -> {(ok)|:ok ' without [timestamp]})
-  or
-  ( module: .
-    ( this program language write (: { (newname) | :quote :ok })
-      <-#$* " " . ""=
-      try
-      { (text)
-      | ;ok text *=* ["{[", "{ .", "]|", ""="| ", "}", ""="}"];
-        this program language read (ok) or ()
-        call {{(n)|?}|:if n = newname; :ok} .:try
-      }
+    ( info:. say
+      ( [module]," " (language write: module) " ", [already exists])
     )
-    .language library-channel header language or [system]
-  )
-  ;
-  savez and:
-  tabs open (.module-name new) and:
-  editor-channel restructure anyway:
+    or:
+    valid: .module .info
+    say [create module] ": " (language write: module)
+  }
+  { create: .module new
+  | :possibly
+    this program libraries
+    every
+    { library: .why? .filename
+    | :ok [node] call: channel: pils-library: filename
+    }
+    find ((call: new) -> {(ok)|:ok ' without [timestamp]})
+    or:
+    ;language this program language;
+    ;lastname new <+# 1 1;
+    ;testrule (: { (lastname) | :quote :ok });
+    ;newtext
+      language write (testrule) *=* ["{", "{ ", "|", ""="| ", "}", ""="}"=]
+    ;
+    language read (newtext) .:need and:
+    (library-channel) (new) :=
+    ( module: . newtext .timestamp
+      .language library-channel header language or [system]
+    );
+  save anyway:
+  window channel open (.module new) and:
+  window channel restructure anyway:
+  } 
 }
+===
+{ save | :try @@ [pils system program-file] save }
 ><:[module:. pils editor refresh .timestamp 2026-07-08T19:02:30.576+02 .language system]><;
 ;library-channel (channel: pils-library: this program filename);
 { refresh: .tabs .window
