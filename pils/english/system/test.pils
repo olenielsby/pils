@@ -3,15 +3,22 @@
 | :ok
   this program filename =* "test"
 }
-><:[module:. test, .timestamp 2026-07-18T19:22:27.083+02 .language system]><;
+><:[module:. test, .timestamp 2026-07-18T23:13:37.845+02 .language system]><;
 { test
 | :ok
-  :if [dum: .grisebasse] grisebasse; [bøjre] .else [drøn]
+  
   
 }
-><:[module:. vild, .timestamp 2026-07-09T12:03:41.800+02 .language system]><;
-><:[module:. vild hest .timestamp 2026-07-09T15:07:05.371+02 .language system]><;
+><:[module:. test gris .timestamp 2026-07-18T23:15:22.199+02 .language system]><;
+{ gris
+| :ok [testing gris]
+}
+><:[module:. vild hest .timestamp 2026-07-18T23:23:01.158+02 .language system]><;
 { hest
 | :ok
-  "æbler" til krikkens fornøjelse
+  "æbler", @ galop
+}
+><:[module:. vild hest galop .timestamp 2026-07-18T23:19:52.978+02 .language system]><;
+{ galop
+| :ok [testing galop]
 }

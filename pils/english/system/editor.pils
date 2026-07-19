@@ -610,7 +610,7 @@
   { paged | :try @ refresh: .window .tabs }
   { [pane: result] | :ok [result escape] find (editor-channel) anyway: }
 }
-><:[module:. pils editor operations new .timestamp 2026-07-18T21:57:34.746+02 .language system]><;
+><:[module:. pils editor operations new .timestamp 2026-07-18T23:15:06.634+02 .language system]><;
 { new: .page .window
 | :ok
   ;module page id
@@ -673,7 +673,7 @@
     or:
     ;language this program language;
     ;lastname new <+# 1 1;
-    ;testrule (: { (lastname) | :quote :ok });
+    ;testrule (: { (lastname) | ::ok [testing], lastname  });
     ;newtext
       language write (testrule) *=* ["{", "{ ", "|", ""="| ", "}", ""="}"=]
     ;
