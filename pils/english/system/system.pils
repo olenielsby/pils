@@ -87,8 +87,7 @@ here may not be pinned.
 
 
 ><:[module:. pils language system .timestamp 2026-07-17T15:32:52.139+02 .language system]><;
-{}><:[module:. pils system .timestamp 2008-12-23T22:36:30.023+01 .language system]><;
-><:[module:. pils system base .timestamp 2026-07-17T15:37:40.767+02 .language system]><;
+{}><:[module:. pils system base .timestamp 2026-07-17T15:37:40.767+02 .language system]><;
 !!
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
@@ -834,7 +833,7 @@ language read (module-text)
   "BASIC ERROR in @ [pils system program] - (what:. .error)" bug {} and:
   (what:. .error) bug {}
 }
-><:[module:. pils system program-file .timestamp 2026-07-17T16:03:33.090+02 .language system]><;
+><:[module:. pils system program-file .timestamp 2026-07-19T11:13:02.119+02 .language system]><;
 !!
 Edit with care - everything depends on this module.
 PILS should be restarted and tested after each edit.
@@ -855,7 +854,8 @@ PILS should be restarted and tested after each edit.
   &
   ( library-node legs
     { (module-name) := module-node = * module: .
-    | :ok
+    | :if module <> "";
+      :ok
       library-language write
       (module-node without [] merge: ;module module-name),
       module
@@ -934,7 +934,6 @@ PILS should be restarted and tested after each edit.
   [pils run command] .:need instance .:need
   command: .
 }
-><:[module:. pils talk .timestamp 2009-04-28T16:25:35.234+02 .language system]><;
 ><:[module:. pils talk english .timestamp 2026-07-08T22:11:01.492+02 .language system]><;
 @@ [pils talk system]
 ><:[module:. pils talk system .timestamp 2026-07-17T16:12:53.811+02 .language system]><;
@@ -961,9 +960,6 @@ PILS should be restarted and tested after each edit.
 ;language {}
 .language-module [pils language system]
 .talk @@ [pils talk system]
-><:[module:. plug, .timestamp 2009-06-14T04:15:52.951+02 .language system]><;
-><:[module:. plug pils .timestamp 2009-06-14T04:16:09.623+02 .language system]><;
-><:[module:. plug pils language .timestamp 2009-06-14T05:32:10.442+02 .language system]><;
 ><:[module:. plug pils language plug .timestamp 2009-06-14T05:32:17.442+02 .language system]><;
 "INSTANTIATING MODULE: plug pils language" bug {} and:
 language: {} .::? merge: "p", ["pils.org/ns/pilsplug"]:
