@@ -12,6 +12,11 @@ namespace PILS
     const PilsString *QtEventCliche::namespace_;
     const Namespace_QtClass *Namespace_QtClass::singleton;
 
+    Namespace::Namespace(const char *uriText): uri(PilsString::get(uriText))
+    {
+        map.emplace(uri, this);
+    }
+
     const Constant *SingletonSpecial::dummyHashLink = nullptr;
 	Plum::Plum()
 		: plumcake(*new Plumcake())

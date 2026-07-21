@@ -649,6 +649,10 @@ namespace PILS
         static const PilsString *const standard;
         virtual const ClicheShort *newCliche(const Constant *&link, const PilsString *name) const = 0;
         static std::unordered_map<const PilsString*, Namespace*> map;
+    protected:
+        Namespace(const char * uri);
+    private:
+        const PilsString *uri;
     };
 
 	class Cliche
