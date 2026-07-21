@@ -367,8 +367,6 @@ namespace PILS
 	const BuiltinClicheError BuiltinClicheError::singleton;
 	const BuiltinClicheErrorTrailer BuiltinClicheErrorTrailer::singleton;
 
-	Plum Plum::singleton;
-
 	BuiltinClicheSearchCount const BuiltinClicheSearchCount::plain(&Builtin::name.count_);
 
 	BuiltinClicheSearchContains const BuiltinClicheSearchContains::plain(&Builtin::name.searchContains);

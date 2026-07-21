@@ -4,13 +4,16 @@
 #include "qpils_event.h"
 #include "qpils_qobject_wrapper.h"
 #include <QIODevice>
+#include "initializers.h"
+
 namespace PILS
 {
     std::unordered_map<const PilsString *,Namespace*> Namespace::map;
-    const Namespace_QtMethod *Namespace_QtMethod::singleton;
+    const Namespace_QtMethod Namespace_QtMethod::singleton("pils.org/ns/qtmethod");
     const Namespace_QtSignal *Namespace_QtSignal::singleton;
     const PilsString *QtEventCliche::namespace_;
     const Namespace_QtClass *Namespace_QtClass::singleton;
+    Plum Plum::singleton;
 
     Namespace::Namespace(const char *uriText): uri(PilsString::get(uriText))
     {
@@ -29,7 +32,6 @@ namespace PILS
 
 	Plumcake::Plumcake()
 	{
-        Namespace_QtMethod::initialize();
         Namespace_QtSignal::initialize();
         Namespace_QtClass::initialize();
         QtEventCliche::initializeNamespace();
@@ -176,13 +178,6 @@ namespace PILS
 		return PilsString::get("english"); //TODO
 	}
 
-    void Namespace_QtMethod::initialize()
-	{
-        const PILS_CHAR* uri = _PS("pils.org/ns/qtmethod");
-        size_t c = std::char_traits<PILS_CHAR>::length(uri);
-        singleton = new ((c + 1) * sizeof(PILS_CHAR)) Namespace_QtMethod(uri, c);
-	}
-
     void Namespace_QtSignal::initialize()
     {
         const PILS_CHAR* uri = _PS("pils.org/ns/qtsignal");
@@ -202,11 +197,9 @@ namespace PILS
         namespace_ = PilsString::get("pils.org/ns/qtevent");
     }
 
-    const ClicheShort *Namespace_QtMethod::newCliche(const Constant *&link, const Constant *a) const
+    const ClicheShort *Namespace_QtMethod::newCliche(const Constant *&link, const PilsString *name) const
 	{
-		const PilsString *name = a->as_String();
-        if (name) return new const QtMethodName(link, this, name);
-        else return PilsString::newCliche(link, a);
+        return new const QtMethodName(link, uri, name);
 	}
 
     const ClicheShort *Namespace_QtSignal::newCliche(const Constant *&link, const Constant *a) const
@@ -237,13 +230,13 @@ namespace PILS
 
     const QtMethodName *QtMethodName::get(const char *name)
 	{
-        return Namespace_QtMethod::singleton->get(name);
+        return Namespace_QtMethod::singleton.get(name);
 	}
 
     const QtMethodName *Namespace_QtMethod::get(const char *name) const
 	{
-        retain();
-        return (const QtMethodName *)clichefy(PilsString::get(name));
+        uri->retain();
+        return (const QtMethodName *)uri->clichefy(PilsString::get(name));
 	}
 
     const ClicheTiny *QtMethodName::newCliche() const

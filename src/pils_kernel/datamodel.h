@@ -651,7 +651,6 @@ namespace PILS
         static std::unordered_map<const PilsString*, Namespace*> map;
     protected:
         Namespace(const char * uri);
-    private:
         const PilsString *uri;
     };
 

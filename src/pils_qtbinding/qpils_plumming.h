@@ -133,18 +133,16 @@ namespace PILS
 	/* namespace URIs */
 
     class Namespace_QtMethod
-        : public PilsString
+        : public Namespace
     {
     public:
-        using PilsString::newCliche;
-        static const Namespace_QtMethod *singleton;
-        const ClicheShort *newCliche(const Constant *&link, const Constant *a) const override;
+        static const Namespace_QtMethod singleton;
+        const ClicheShort *newCliche(const Constant *&link, const PilsString *a) const override;
         const QtMethodName *get(const char *name) const;
-        static void initialize();
     private:
         friend class Plumcake;
-        Namespace_QtMethod(const PILS_CHAR *text, size_t count)
-            :  PilsString(text, count)
+        Namespace_QtMethod(const PILS_CHAR *uri)
+            :  Namespace(uri)
         {}
     };
 
@@ -228,7 +226,7 @@ namespace PILS
 		: public ClicheShort
 	{
     public:
-        QtMethodName(const Constant *&link, const Namespace_QtMethod *h, const PilsString *a)
+        QtMethodName(const Constant *&link, const PilsString *h, const PilsString *a)
             : ClicheShort(link, h, a)
 		{}
         static const QtMethodName *get(const char *name);
