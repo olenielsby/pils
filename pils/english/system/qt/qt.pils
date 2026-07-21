@@ -1,5 +1,3 @@
-><:[module:. platform, .timestamp 2008-06-25T15:43:00.909+02 .language system]><;
-><:[module:. platform qt .timestamp 2008-06-25T15:43:08.612+02 .language system]><;
 ><:[module:. platform qt dialog .timestamp 2026-07-17T16:17:16.160+02 .language qt]><;
 ;new plumcake .WA_DeleteOnClose 55 .WindowModal 1;
 { dialog: .window .boss
@@ -73,7 +71,6 @@
 }
 ><:[module:. platform qt entry .timestamp 2008-07-23T09:38:47.465+02 .language system]><;
 @
-><:[module:. platform qt entry clang .timestamp 2026-07-06T13:14:31.947+02 .language qt]><;
 ><:[module:. platform qt entry clang test .timestamp 2026-07-16T18:57:26.633+02 .language qt]><;
 ;new plumcake;
 { test
@@ -95,7 +92,15 @@
   new Q:Object (parent) when (when) and:
   parent
 }
-  ><:[module:. platform qt entry path .timestamp 2009-01-27T20:31:04.937+01 .language system]><;
+  ><:[module:. platform qt entry locale .timestamp 2026-07-20T21:20:58.207+02 .language qt]><;
+{ locale
+| :ok plumcake
+  Q:PilsLocale when
+  { name | :who :try who q:bcp47Name }
+  { language | :who :try who q:language }
+  { territory | :who :try who q:territory }
+}
+><:[module:. platform qt entry path .timestamp 2009-01-27T20:31:04.937+01 .language system]><;
 ;path
 { documents | :ok [pils-configuration:documents-directory] }
 ><:[module:. platform qt entry system .timestamp 2008-08-08T04:55:32.254+02 .language system]><;
@@ -297,7 +302,6 @@
   { focus | :who :ok who q:setFocus }
   title (title)
 }
-><:[module:. platform qt lane canvas .timestamp 2026-07-10T17:13:43.393+02 .language qt]><;
 ><:[module:. platform qt lane edit .timestamp 2026-07-17T16:25:18.921+02 .language qt]><;
 ;new plumcake;
 { edit: .boss .parent .layout
@@ -480,8 +484,6 @@
      { when: rules | :ok widget when: rules +++ listener }
   }
 }
-><:[module:. platform qt pils .timestamp 2008-06-25T15:43:24.393+02 .language system]><;
-><:[module:. platform qt pils language .timestamp 2008-06-25T15:43:29.112+02 .language system]><;
 ><:[module:. platform qt pils language qt .timestamp 2009-02-06T10:02:35.939+01 .language system]><;
 language: {}? merge:
 ;"q" ["pils.org/ns/qtmethod":]

@@ -13,10 +13,10 @@
 { gris
 | :ok [testing gris]
 }
-><:[module:. vild hest .timestamp 2026-07-18T23:23:01.158+02 .language system]><;
+><:[module:. vild hest .timestamp 2026-07-20T21:23:30.186+02 .language system]><;
 { hest
 | :ok
-  "æbler", @ galop
+ [name language territory] each (platform locale) 
 }
 ><:[module:. vild hest galop .timestamp 2026-07-18T23:19:52.978+02 .language system]><;
 { galop

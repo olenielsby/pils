@@ -69,6 +69,24 @@ private:
     static const PILS::QtObjectClassName *className;
 };
 
+class QPilsLocale : public QObject
+{
+public:
+    explicit QPilsLocale(QObject *parent = nullptr)
+        : QObject(parent), locale(QLocale::system()) {}
+    QString name() const
+    { return locale.name(); } // da_DK
+    QString bcp47Name() const
+    { return locale.bcp47Name(); }     // da-DK
+    QString language() const
+    { return QLocale::languageToString(locale.language()); }
+    QString territory() const
+    { return QLocale::territoryToString(locale.territory()); }
+private:
+    QLocale locale;
+};
+
+
 class QPilsDelayedDestroy : public QObject
 {
 public:

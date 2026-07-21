@@ -1,5 +1,4 @@
 [pils: .use?]
-><:[module:. pils, .timestamp 2008-12-23T02:24:30.089+01 .language system]><;
 ><:[module:. pils editor .timestamp 2026-07-19T11:04:28.290+02 .language system]><;
 { window
 | :ok
@@ -329,7 +328,7 @@
   dialog listen
   { cancel | }
 }
-><:[module:. pils editor operations .timestamp 2026-07-19T10:54:38.276+02 .language system]><;
+><:[module:. pils editor operations .timestamp 2026-07-20T21:09:57.052+02 .language system]><;
 ;library-channel;
 { operations: .window .tabs
 | :ok
@@ -425,7 +424,7 @@
   | ;module-name page id;
     ;module-node module-node(.module-name);
     ;module module-node module .:need;
-    ;text valid (.page);
+    ;text valid (.page) .:need;
     :ok
     (library-channel) (module-name)
     := module-node merge
@@ -790,7 +789,6 @@
 ><:[module:. pils editor title .timestamp 2026-07-08T23:06:14.594+02 .language system]><;
 this program filename call
 {(filename)|:ok filename <+#^* "/" . " - " (filename <-#^* "/")}
-><:[module:. pils language .timestamp 2008-12-23T02:33:21.871+01 .language system]><;
 ><:[module:. pils language graph .timestamp 2009-09-02T16:26:34.424+02 .language system]><;
 language: {}? head "graph"><:[module:. pils language system .timestamp 2008-12-23T02:33:28.886+01 .language system]><;
 {}
@@ -798,7 +796,6 @@ language: {}? head "graph"><:[module:. pils language system .timestamp 2008-12-2
 { read: ok | :ok }
 ><:[module:. pils language textlist .timestamp 2011-07-23T23:14:55.447+02 .language system]><;
 { read: ok | :ok ' split ""= <-#$* ["",] }
-><:[module:. pils run .timestamp 2008-12-23T02:34:33.933+01 .language system]><;
 ><:[module:. pils run command .timestamp 2008-12-23T02:34:37.746+01 .language system]><;
 { command: .
 |
@@ -818,7 +815,6 @@ language: {}? head "graph"><:[module:. pils language system .timestamp 2008-12-2
 }
 ><:[module:. pils run start .timestamp 2008-12-23T02:23:01.293+01 .language system]><;
 { start | :try @@ [pils editor] window }
-><:[module:. pils talk .timestamp 2008-12-23T02:23:09.511+01 .language system]><;
 ><:[module:. pils textual .timestamp 2011-07-15T11:00:01.698+02 .language system]><;
 { textual: .result .language
 | :ok
