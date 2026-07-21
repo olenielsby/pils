@@ -659,6 +659,16 @@ namespace PILS
 			return NAMESKIN_NAME;
 		}
 	}
+    const ClicheShort *PilsString::newCliche(const Constant *&link, const Constant *a) const
+    {
+        if (const PilsString *name = a->as_String())
+        {
+            auto it = Namespace::map.find(this);
+            if (it != Namespace::map.end())
+                return it->second->newCliche(link, name);
+        }
+        return CountedConstant::newCliche(link, a);
+    }
 
     CountedConstant::~CountedConstant()
     {

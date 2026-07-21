@@ -245,7 +245,6 @@ namespace PILS
 	class ClicheTrailer;
 	class NodeConstantShort;
 	class NodeConstantLong;
-    class Constant;
 
     class Constant : public Any
 	{
@@ -618,6 +617,7 @@ namespace PILS
 		static const PilsString *get(const wchar_t *text);
 #endif
         const NodeConstantShort *newSpecializeNode(const Constant *&link, const ClicheShort &cliche) const override;
+        const ClicheShort *newCliche(const Constant *&link, const Constant *a) const override;
         NameSkin nameSkin() const;
         bool write (Writing &writing, WriteState state, long level, const Constant *dot) const override;
         const Any *labeling(Writing &writing) const override;
@@ -642,6 +642,14 @@ namespace PILS
 	private:
         static const Constant *&hashChain(const PILS_CHAR *text, size_t count);
 	};
+
+    class Namespace
+    {
+    public:
+        static const PilsString *const standard;
+        virtual const ClicheShort *newCliche(const Constant *&link, const PilsString *name) const = 0;
+        static std::unordered_map<const PilsString*, Namespace*> map;
+    };
 
 	class Cliche
         : public Constant

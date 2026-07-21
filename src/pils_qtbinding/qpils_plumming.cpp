@@ -6,6 +6,7 @@
 #include <QIODevice>
 namespace PILS
 {
+    std::unordered_map<const PilsString *,Namespace*> Namespace::map;
     const Namespace_QtMethod *Namespace_QtMethod::singleton;
     const Namespace_QtSignal *Namespace_QtSignal::singleton;
     const PilsString *QtEventCliche::namespace_;

@@ -3,12 +3,6 @@
 #include "datamodel.h"
 namespace PILS
 {
-	class Namespace
-	{
-	public:
-		static const PilsString *const standard;
-	};
-
 	/* Predefined names are statically allocated, to make their ordering
 	   independent of the Heap and its allocation policy. */
 
