@@ -314,14 +314,12 @@ QtObjectWrapper::~QtObjectWrapper()
 //     className->writeToDebugOutput(10);
 // #endif
     assert(mind == nullptr);
-    removeWhen();
+    if (when)
+        releaseChild(when);
     releaseChild(className);
     QObject* o = object.data();
     object = nullptr;
     if (o && o->parent() == nullptr)
         o->deleteLater();
-    assert(when == nullptr);
-    assert(mind == nullptr);
-    assert(object == nullptr);
 }
 }
