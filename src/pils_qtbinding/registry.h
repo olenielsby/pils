@@ -171,7 +171,7 @@ QtMethodRegistrar(#METHOD, static_cast<SIGNATURE>(&CLASS::METHOD), #CLASS);
 const QtObjectClassName *QtObjectClassName::registerQtClass(char const *qName, const QMetaObject &meta)
 {
     const PilsString *name = PilsString::get(qName+1);
-    const Namespace_QtClass *ns = Namespace_QtClass::singleton;
+    const PilsString *ns = Namespace_QtClass::singleton.uri;
     ns->retain();
     return new QtObjectClassName(ClicheShort::hashChain(ns, name), ns, name, &meta);
 }

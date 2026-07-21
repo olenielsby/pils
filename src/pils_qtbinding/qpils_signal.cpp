@@ -49,8 +49,8 @@ namespace PILS{
     const QtSignalName *QtSignalName::get(const char *name)
     {
         const PilsString *string = PilsString::get(name);
-        Namespace_QtSignal::singleton->retain();
-        const ClicheShort *signalName = Namespace_QtSignal::singleton->clichefy(string);
+        Namespace_QtSignal::singleton.uri->retain();
+        const ClicheShort *signalName = Namespace_QtSignal::singleton.uri->clichefy(string);
         assert(dynamic_cast<const QtSignalName *>(signalName));
         return static_cast<const QtSignalName *>(signalName);
     }

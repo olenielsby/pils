@@ -157,8 +157,8 @@ const PILS::QtObjectClassName *QPilsTreeNode::getClassName()
     if (className == nullptr)
     {
         const PILS::PilsString* pilsName = PILS::PilsString::get("PilsTreeNode");
-        PILS::Namespace_QtClass::singleton->retain();
-        const PILS::ClicheShort *dumbClassName = PILS::Namespace_QtClass::singleton->clichefy(pilsName);
+        PILS::Namespace_QtClass::singleton.uri->retain();
+        const PILS::ClicheShort *dumbClassName = PILS::Namespace_QtClass::singleton.uri->clichefy(pilsName);
         className = static_cast<const PILS::QtObjectClassName*>(dumbClassName);
     }
     return className;

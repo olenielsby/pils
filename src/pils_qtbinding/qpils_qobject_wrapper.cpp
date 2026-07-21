@@ -82,8 +82,8 @@ const QtObjectClassName *QtObjectLookup::getClassNameFromQObjectInsideLock(QObje
     QByteArray qtName(meta->className());
     const char* name = qtName.constData();
     const PilsString* pilsName = PilsString::getInsideLock(QtClassName::withoutLeadingQ(name));
-    Namespace_QtClass::singleton->retain();
-    const ClicheShort *className = Namespace_QtClass::singleton->clichefyInsideLock(pilsName);
+    Namespace_QtClass::singleton.uri->retain();
+    const ClicheShort *className = Namespace_QtClass::singleton.uri->clichefyInsideLock(pilsName);
     const QtObjectClassName* typedClassName = static_cast<const QtObjectClassName*>(className);
     typedClassName->meta = meta;
     return typedClassName;

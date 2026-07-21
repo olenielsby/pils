@@ -147,32 +147,28 @@ namespace PILS
     };
 
     class Namespace_QtSignal
-        : public PilsString
+        : public Namespace
     {
     public:
-        using PilsString::newCliche;
-        static const Namespace_QtSignal *singleton;
-        const ClicheShort *newCliche(const Constant *&link, const Constant *a) const override;
-        static void initialize();
+        static const Namespace_QtSignal singleton;
+        const ClicheShort *newCliche(const Constant *&link, const PilsString *a) const override;
     private:
         friend class Plumcake;
-        Namespace_QtSignal(const PILS_CHAR *text, size_t count)
-            :  PilsString(text, count)
+        Namespace_QtSignal(const PILS_CHAR *uri)
+            :  Namespace(uri)
         {}
     };
 
     class Namespace_QtClass
-        : public PilsString
+        : public Namespace
     {
     public:
-        using PilsString::newCliche;
-        static const Namespace_QtClass *singleton;
-        const ClicheShort *newCliche(const Constant *&link, const Constant *a) const override;
-        static void initialize();
+        static const Namespace_QtClass singleton;
+        const ClicheShort *newCliche(const Constant *&link, const PilsString *a) const override;
     private:
         // friend class Plumcake;
-        Namespace_QtClass(const PILS_CHAR *text, size_t count)
-            :  PilsString(text, count)
+        Namespace_QtClass(const PILS_CHAR *uri)
+            :  Namespace(uri)
         {}
     };
 
@@ -186,12 +182,12 @@ namespace PILS
         }
     protected:
         QtClassName(const Constant *&link,
-                    const Namespace_QtClass *h,
+                    const PilsString *h,
                     const PilsString *a)
             : ClicheShort(link, h, a)
         {}
         QtClassName(const char *name)
-            : ClicheShort(Namespace_QtClass::singleton, PilsString::get(name))
+            : ClicheShort(Namespace_QtClass::singleton.uri, PilsString::get(name))
         {}
     };
 
@@ -203,7 +199,7 @@ namespace PILS
     public:
         QtObjectClassName(
             const Constant *&link,
-            const Namespace_QtClass *h,
+            const PilsString *h,
             const PilsString *a,
             const QMetaObject *meta):
             QtClassName(link, h, a),
@@ -246,7 +242,7 @@ namespace PILS
             const ClicheShort *pilsClassName = nullptr;
             if (className != nullptr)
             {
-                pilsClassName = Namespace_QtClass::singleton->clichefy(PilsString::get(QtClassName::withoutLeadingQ(className)));
+                pilsClassName = Namespace_QtClass::singleton.uri->clichefy(PilsString::get(QtClassName::withoutLeadingQ(className)));
             }
             implementationChain =
                 new Implementation{meta, pilsClassName, std::move(invoker), implementationChain};
@@ -258,7 +254,7 @@ namespace PILS
         : public ClicheShort
     {
     public:
-        QtSignalName(const Constant *&link, const Namespace_QtSignal *h, const PilsString *a)
+        QtSignalName(const Constant *&link, const PilsString *h, const PilsString *a)
             : ClicheShort(link, h, a)
         {}
         static const QtSignalName *get(const char *name);

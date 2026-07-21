@@ -563,7 +563,7 @@ namespace PILS
 
     /* Strings of any length - a limit must be set elsewhere */
 
-    class PilsString
+    class PilsString final
 		: public CountedConstant
 	{
 	public:
@@ -649,7 +649,6 @@ namespace PILS
         static const PilsString *const standard;
         virtual const ClicheShort *newCliche(const Constant *&link, const PilsString *name) const = 0;
         static std::unordered_map<const PilsString*, Namespace*> map;
-    protected:
         Namespace(const char * uri);
         const PilsString *uri;
     };

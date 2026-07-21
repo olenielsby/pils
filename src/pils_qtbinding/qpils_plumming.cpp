@@ -10,9 +10,13 @@ namespace PILS
 {
     std::unordered_map<const PilsString *,Namespace*> Namespace::map;
     const Namespace_QtMethod Namespace_QtMethod::singleton("pils.org/ns/qtmethod");
-    const Namespace_QtSignal *Namespace_QtSignal::singleton;
+    const Namespace_QtSignal Namespace_QtSignal::singleton("pils.org/ns/qtsignal");
+    const Namespace_QtClass Namespace_QtClass::singleton("pils.org/ns/qtclass");
     const PilsString *QtEventCliche::namespace_;
-    const Namespace_QtClass *Namespace_QtClass::singleton;
+    void QtEventCliche::initializeNamespace()
+    {
+        namespace_ = PilsString::get("pils.org/ns/qtevent");
+    }
     Plum Plum::singleton;
 
     Namespace::Namespace(const char *uriText): uri(PilsString::get(uriText))
@@ -32,8 +36,6 @@ namespace PILS
 
 	Plumcake::Plumcake()
 	{
-        Namespace_QtSignal::initialize();
-        Namespace_QtClass::initialize();
         QtEventCliche::initializeNamespace();
         QtValueClassName::initialize();
         QtObjectClassName::initialize();
@@ -178,50 +180,20 @@ namespace PILS
 		return PilsString::get("english"); //TODO
 	}
 
-    void Namespace_QtSignal::initialize()
-    {
-        const PILS_CHAR* uri = _PS("pils.org/ns/qtsignal");
-        size_t c = std::char_traits<PILS_CHAR>::length(uri);
-        singleton = new ((c + 1) * sizeof(PILS_CHAR)) Namespace_QtSignal(uri, c);
-    }
-
-    void Namespace_QtClass::initialize()
-    {
-        const PILS_CHAR* uri = _PS("pils.org/ns/qtclass");
-        size_t c = std::char_traits<PILS_CHAR>::length(uri);
-        singleton = new ((c + 1) * sizeof(PILS_CHAR)) Namespace_QtClass(uri, c);
-    }
-
-    void QtEventCliche::initializeNamespace()
-    {
-        namespace_ = PilsString::get("pils.org/ns/qtevent");
-    }
-
     const ClicheShort *Namespace_QtMethod::newCliche(const Constant *&link, const PilsString *name) const
 	{
         return new const QtMethodName(link, uri, name);
 	}
 
-    const ClicheShort *Namespace_QtSignal::newCliche(const Constant *&link, const Constant *a) const
+    const ClicheShort *Namespace_QtSignal::newCliche(const Constant *&link, const PilsString *name) const
     {
-        const PilsString *name = a->as_String();
-        if (name) return new const QtSignalName(link, this, name);
-        else return PilsString::newCliche(link, a);
-    }
-    // QMetaType::fromName is not reliable
-    // so this method is ditched favor of preregistering classes.
-
-    const ClicheShort *Namespace_QtClass::newCliche(
-        const Constant *&link,
-        const Constant *a) const
-    {
-        if (const PilsString *name = a->as_String())
-        {
-            return new QtObjectClassName(link, this, name, nullptr);
-        }
-        return PilsString::newCliche(link, a);
+        return new const QtSignalName(link, uri, name);
     }
 
+    const ClicheShort *Namespace_QtClass::newCliche(const Constant *&link, const PilsString *name) const
+    {
+        return new QtObjectClassName(link, uri, name, nullptr);
+    }
 
     const Any *QtMethodName::specialCall(Runner &run, const ReallySpecial &special) const
 	{
