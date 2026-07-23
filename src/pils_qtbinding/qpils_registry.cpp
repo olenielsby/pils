@@ -62,6 +62,7 @@ void QtObjectClassName::initialize()
     METHOD_OVERLOAD(QWidget, setMaximumSize, void(QWidget::*)(int,int))
     METHOD_OVERLOAD(QWidget, setFixedSize, void(QWidget::*)(int,int))
     METHOD_(QWidget, setToolTip)
+    METHOD_OVERLOAD(QWidget, addAction, void (QWidget::*)(QAction *))
     // Layout helpers
     METHOD_OVERLOAD(QWidget, setParent, void(QWidget::*)(QWidget*))
     SIGNAL_(QWidget, customContextMenuRequested)
