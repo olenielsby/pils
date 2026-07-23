@@ -15,7 +15,7 @@ const Any *Plumcake::specialCalling(Runner &run, const QtObjectClassName &classN
     if (object == nullptr)
         return nullptr;
     // No existing wrapper, but search anyway, for consistency with pils constant hashing
-    QtObjectLookup lookup(run, object, &className);
+    QtNewObjectLookup lookup(run, object, &className);
     return lookup.lookup();
 }
 
@@ -74,6 +74,12 @@ const ReallySpecial *QtObjectLookup::newSpecial(const Constant *&link)
         className->retain();
     else className = getClassNameFromQObjectInsideLock(object);
     return new const QtObjectWrapper(run, link, className, object);
+}
+
+const ReallySpecial *QtNewObjectLookup::newSpecial(const Constant *&link)
+{
+    className->retain();
+    return new const QtNewObjectWrapper(run, link, className, object);
 }
 
 const QtObjectClassName *QtObjectLookup::getClassNameFromQObjectInsideLock(QObject* object)

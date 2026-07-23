@@ -378,4 +378,13 @@ namespace PILS
     private:
         const QtObjectClassName *getClassNameFromQObjectInsideLock(QObject *object);
     };
+    class QtNewObjectLookup
+        : public QtObjectLookup
+    {
+    public:
+        QtNewObjectLookup(Runner &run, QObject *object, const QtObjectClassName *className)
+            : QtObjectLookup(run, object, className)
+        {}
+        const ReallySpecial *newSpecial(const Constant *&link) override;
+    };
 }

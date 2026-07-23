@@ -2,6 +2,7 @@
 #include "qpils_plumming.h"
 #include "qpils_converter.h"
 namespace PILS{
+
 class QtObjectWrapper
     : public ReallySpecial, public QObject
 {
@@ -56,5 +57,14 @@ private:
     void disableMind() const;
     static int mindful(State s);
     static int retainCount(State s);
+};
+
+class QtNewObjectWrapper : public QtObjectWrapper
+{
+public:
+    QtNewObjectWrapper(Runner &run, const Constant *&link, const QtObjectClassName *className, QObject *object)
+        : QtObjectWrapper(run, link, className, object)
+    {}
+
 };
 }

@@ -1,7 +1,7 @@
-><:[module:. platform qt pest .timestamp 2026-07-23T06:55:27.170+02 .language qt]><;
-{ pest
+><:[module:. platform qt pest .timestamp 2026-07-23T22:14:29.444+02 .language qt]><;
+{ pest 
 | :ok
-  (Q:Application: plumcake) bug {} q:instance:
+  plumcake bug{} Q:Action "Dummy" 
 }
 ><:[module:. test, .timestamp 2026-07-18T23:13:37.845+02 .language system]><;
 { test
