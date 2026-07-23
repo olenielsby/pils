@@ -3414,10 +3414,10 @@ namespace PILS
 	{
 	public:
 		static const Special *cake();
-	private:
+        const Special &plumcake;
+        static Plum singleton;
+    private:
 		Plum();
-		const Special &plumcake;
-		static Plum singleton;
 	};
 
 	/* Debugging output

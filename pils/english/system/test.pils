@@ -1,7 +1,7 @@
-><:[module:. pest, .timestamp 2026-07-06T20:36:27.920+02 .language system]><;
+><:[module:. platform qt pest .timestamp 2026-07-23T06:55:27.170+02 .language qt]><;
 { pest
 | :ok
-  this program filename =* "test"
+  (Q:Application: plumcake) bug {} q:instance:
 }
 ><:[module:. test, .timestamp 2026-07-18T23:13:37.845+02 .language system]><;
 { test

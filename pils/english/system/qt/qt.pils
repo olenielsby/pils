@@ -100,6 +100,11 @@
   { language | :who :try who q:language }
   { territory | :who :try who q:territory }
 }
+><:[module:. platform qt entry locale test .timestamp 2026-07-22T22:11:18.177+02 .language qt]><;
+{ test
+| :ok :quote
+  (Q:Application: plumcake) bug {} q:instance:
+}
 ><:[module:. platform qt entry path .timestamp 2009-01-27T20:31:04.937+01 .language system]><;
 ;path
 { documents | :ok [pils-configuration:documents-directory] }

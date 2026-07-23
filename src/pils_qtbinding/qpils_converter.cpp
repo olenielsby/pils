@@ -30,6 +30,47 @@ QObject *PlatformSpecificConverter::getObject(const QtObjectWrapper &wrap)
     return wrap.object;
 }
 
+bool QtMethodCallConverter::converting(const QtMethodName &argument)
+{
+    extractor.methodName = &argument;
+    argv = &args;
+    argc = 0;
+    return true;
+}
+
+bool QtMethodCallConverter::convert(const Cliche &cliche)
+{
+    return cliche.platformConvert(*this);
+}
+bool QtMethodCallConverter::convert(const Cliche &cliche, const Any *const *value)
+{
+    if (!cliche.convert(extractor))
+        return false;
+    args = value[0];
+    if (!args->isList(argv, argc))
+    {
+        argv = &args;
+        argc = 1;
+    }
+    return true;
+}
+
+bool QtMethodNameExtractor::convert(const Cliche &value)
+{
+    return value.platformConvert(*this);
+}
+
+bool QtMethodNameExtractor::converting(const QtMethodCliche &argument)
+{
+    methodName = static_cast<const QtMethodName*>(argument.attributes[0]);
+    return true;
+}
+
+bool QtMethodNameExtractor::converting(const QtMethodName &argument)
+{
+    methodName = &argument;
+    return true;
+}
 
 bool QtFill::fill(const Any *a, bool &out)
 {

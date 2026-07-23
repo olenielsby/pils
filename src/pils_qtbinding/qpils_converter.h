@@ -16,7 +16,7 @@ class NeQImage;
 class NeQByteArray;
 class NeQTransform;
 class QtObjectWrapper;
-
+class QtMethodName;
 class PlatformSpecificConverter : public Converter
 {
 public:
@@ -32,7 +32,32 @@ public:
     virtual bool converting(const NeQTransform &argument) {return false;}
     virtual bool converting(const QtSignalCliche &argument) {return false;}
     virtual bool converting(const QtEventCliche &argument) {return false;}
+    virtual bool converting(const QtMethodName &argument) {return false;}
+    virtual bool converting(const QtMethodCliche &argument) {return false;}
     static QObject* getObject(const QtObjectWrapper &wrap);
+};
+
+class QtMethodNameExtractor
+    : public PlatformSpecificConverter
+{
+public:
+    bool convert(const Cliche &value) override;
+    bool converting(const QtMethodCliche &argument) override;
+    bool converting(const QtMethodName &argument) override;
+    const QtMethodName *methodName;
+};
+
+class QtMethodCallConverter
+    : public PlatformSpecificConverter
+{
+public:
+    bool converting(const QtMethodName &argument) override;
+    bool convert(const Cliche &cliche, const Any *const *value) override;
+    bool convert(const Cliche &cliche) override;
+    QtMethodNameExtractor extractor;
+    const Any *args;
+    const Any *const *argv;
+    size_t argc;
 };
 
 class QtImageConverter

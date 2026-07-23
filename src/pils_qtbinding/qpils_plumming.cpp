@@ -200,6 +200,11 @@ namespace PILS
 		return special.specialCalling(run, *this);
 	}
 
+    const QtClassName *QtClassName::get(const char *name)
+    {
+        return static_cast<const QtClassName*>(Namespace_QtClass::singleton.uri->clichefy(PilsString::get(withoutLeadingQ(name))));
+    }
+
     const QtMethodName *QtMethodName::get(const char *name)
 	{
         return Namespace_QtMethod::singleton.get(name);
@@ -210,6 +215,16 @@ namespace PILS
         uri->retain();
         return (const QtMethodName *)uri->clichefy(PilsString::get(name));
 	}
+
+    bool QtMethodName::platformConvert(PlatformSpecificConverter &converter) const
+    {
+        return converter.converting(*this);
+    }
+
+    bool QtMethodCliche::platformConvert(PlatformSpecificConverter &converter) const
+    {
+        return head->platformConvert(converter);
+    }
 
     const ClicheTiny *QtMethodName::newCliche() const
 	{
@@ -224,6 +239,40 @@ namespace PILS
     const ClicheTiny *QtObjectClassName::newCliche() const
     {
         return new const QtObjectClassCliche(this);
+    }
+
+    const NodeConstantShort *QtClassCliche::newNode(const Constant *&link, const Special *value) const
+    {
+        if (value == &Plum::singleton.plumcake)
+            return new const QtStaticClassNode(link, *this, value);
+        else return ClicheTiny::newNode(link, value);
+    }
+
+    const Step *QtStaticClassNode::calling(Runner &run, const Constant &call) const
+    {
+        if (!run.isMainThread())
+            return NodeConstantTiny::calling(run, call);
+        QtMethodCallConverter converter;
+        if (!call.convert(converter))
+            return NodeConstantTiny::calling(run, call);
+        const QtClassName *className = static_cast<const QtClassName*>(cliche->head);
+        for (auto *implement = className->staticImplementationChain;implement;implement = implement->next)
+        {
+            if (implement->method != converter.extractor.methodName)
+                continue;
+            const Any *result = nullptr;
+            if (!implement->invoker(converter.argv, converter.argc, result))
+                continue;
+            if (result)
+                return result;
+            else return Empty::get();
+        }
+        return NodeConstantTiny::calling(run, call);
+    }
+
+    const Step *QtStaticClassNode::calling(Runner &run, const NodeConstant &call) const
+    {
+        return calling(run, static_cast<const Constant&>(call));
     }
 
     bool ListConstant::recognize(Recognizer &recognizer) const

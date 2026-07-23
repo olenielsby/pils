@@ -75,6 +75,19 @@ struct MethodTraits<R(C::*)(Args...) const>
     static constexpr size_t Arity = sizeof...(Args);
 };
 
+// ===== StaticMethodTraits =====
+
+template<typename>
+struct StaticMethodTraits;
+
+template<typename R, typename... Args>
+struct StaticMethodTraits<R(*)(Args...)>
+{
+    using Return = R;
+    using ArgsTuple = std::tuple<Args...>;
+    static constexpr size_t Arity = sizeof...(Args);
+};
+
 template<typename Method, size_t... I>
 bool qtInvokeHelper(
     QObject* obj,
@@ -141,6 +154,60 @@ QtMethodName::Invoker makeQtInvoker(Method method)
     };
 }
 
+
+template<typename Method, size_t... I>
+bool qtStaticInvokeHelper(
+    Method method,
+    const Any* const* args,
+    size_t argc,
+    const Any*& result,
+    std::index_sequence<I...>)
+{
+    using Traits = StaticMethodTraits<Method>;
+
+    std::tuple<std::decay_t<
+        std::tuple_element_t<I, typename Traits::ArgsTuple>>...> unpacked;
+
+    bool ok = (QtFill::fill(args[I], std::get<I>(unpacked)) && ...);
+    if (!ok)
+        return false;
+
+    if constexpr (std::is_void_v<typename Traits::Return>)
+    {
+        std::apply(method, unpacked);
+        result = nullptr;
+        return true;
+    }
+    else
+    {
+        auto ret = std::apply(method, unpacked);
+        result = QtWrap::wrap(ret);
+        return true;
+    }
+}
+
+template<typename Method>
+QtClassName::StaticInvoker makeQtStaticInvoker(Method method)
+{
+    using Traits = StaticMethodTraits<Method>;
+
+    return [method]
+           (const Any* const* args,
+            size_t argc,
+            const Any*& result) -> bool
+    {
+        if (argc != Traits::Arity)
+            return false;
+
+        return qtStaticInvokeHelper(
+            method,
+            args,
+            argc,
+            result,
+            std::make_index_sequence<Traits::Arity>{});
+    };
+}
+
 template<typename Method>
 struct QtMethodRegistrar
 {
@@ -156,6 +223,28 @@ struct QtMethodRegistrar
     }
 };
 
+template<typename Method>
+struct QtStaticMethodRegistrar
+{
+    QtStaticMethodRegistrar(
+        const char *methodName,
+        const char *className,
+        Method method)
+    {
+        QtClassName::get(className)->implementStatic(
+            QtMethodName::get(methodName),
+            makeQtStaticInvoker(method));
+    }
+};
+
+template<typename R, typename... Args>
+struct StaticMethodTraits<R(*)(Args...) noexcept>
+{
+    using Return = R;
+    using ArgsTuple = std::tuple<Args...>;
+    static constexpr size_t Arity = sizeof...(Args);
+};
+
 #define METHOD_(CLASS, METHOD) \
 QtMethodRegistrar(#METHOD, &CLASS::METHOD);
 
@@ -167,6 +256,18 @@ QtMethodRegistrar(#METHOD, &CLASS::METHOD, #CLASS);
 
 #define EXACT_METHOD_OVERLOAD(CLASS, METHOD, SIGNATURE) \
 QtMethodRegistrar(#METHOD, static_cast<SIGNATURE>(&CLASS::METHOD), #CLASS);
+
+#define STATIC_METHOD(CLASS, METHOD) \
+QtStaticMethodRegistrar( \
+#METHOD, \
+#CLASS, \
+        &CLASS::METHOD);
+
+#define STATIC_METHOD_OVERLOAD(CLASS, METHOD, SIGNATURE) \
+QtStaticMethodRegistrar( \
+#METHOD, \
+#CLASS, \
+    static_cast<SIGNATURE>(&CLASS::METHOD));
 
 const QtObjectClassName *QtObjectClassName::registerQtClass(char const *qName, const QMetaObject &meta)
 {

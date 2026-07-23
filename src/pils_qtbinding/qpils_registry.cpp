@@ -17,6 +17,7 @@ void QtObjectClassName::initialize()
     END_CLASS()
 
     BEGIN_CLASS(QApplication)
+    STATIC_METHOD(QApplication, instance)
     SIGNAL_(QApplication, focusChanged)
     SIGNAL_(QApplication, applicationStateChanged)
     SIGNAL_(QApplication, aboutToQuit)
@@ -576,7 +577,8 @@ void QtObjectClassName::initialize()
     EXACT_METHOD(QClangTranslationUnit, nextSibling)
     EXACT_METHOD(QClangTranslationUnit, semanticParent)
     EXACT_METHOD(QClangTranslationUnit, cursor)
-    END_CLASS()}
+    END_CLASS()
+}
 
 template<typename EventT>
 void qtEventDispatch(QEvent *event,

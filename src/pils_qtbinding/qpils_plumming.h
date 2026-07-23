@@ -176,21 +176,48 @@ namespace PILS
         : public ClicheShort
     {
     public:
-    static const char *withoutLeadingQ(const char *name)
+        static const char *withoutLeadingQ(const char *name)
         {
-            return name+(name[0]=='Q');
+            return name + (name[0] == 'Q');
         }
+
+        using StaticInvoker =
+            std::function<bool(const Any *const *, size_t, const Any*&)>;
+
+        struct StaticImplementation
+        {
+            const QtMethodName *method;
+            StaticInvoker invoker;
+            StaticImplementation *next;
+        };
+
+        const QtClassName *implementStatic(
+            const QtMethodName *method,
+            StaticInvoker invoker) const
+        {
+            staticImplementationChain =
+                new StaticImplementation{
+                    method,
+                    std::move(invoker),
+                    staticImplementationChain
+                };
+            return this;
+        }
+        static const QtClassName *get(const char *name);
+        mutable StaticImplementation *staticImplementationChain = nullptr;
+
     protected:
         QtClassName(const Constant *&link,
                     const PilsString *h,
                     const PilsString *a)
             : ClicheShort(link, h, a)
         {}
+
         QtClassName(const char *name)
-            : ClicheShort(Namespace_QtClass::singleton.uri, PilsString::get(name))
+            : ClicheShort(Namespace_QtClass::singleton.uri,
+                          PilsString::get(name))
         {}
     };
-
     struct QtConstructorImplementation;
 
     class QtObjectClassName
@@ -225,6 +252,7 @@ namespace PILS
         QtMethodName(const Constant *&link, const PilsString *h, const PilsString *a)
             : ClicheShort(link, h, a)
 		{}
+        bool platformConvert(PlatformSpecificConverter &converter) const override;
         static const QtMethodName *get(const char *name);
         const ClicheTiny *newCliche() const override;
         const Any *specialCall(Runner &run, const ReallySpecial &special) const override;
@@ -277,16 +305,16 @@ namespace PILS
         const ClicheTiny *newCliche() const override;
     };
 
-    struct QtGenericArgumentWithStorage
-    {
-        QGenericArgument genericArgument;
-        union
-        {
-            int int_;
-            double double_;
-            QObject* obj;
-        };
-    };
+    // struct QtGenericArgumentWithStorage
+    // {
+    //     QGenericArgument genericArgument;
+    //     union
+    //     {
+    //         int int_;
+    //         double double_;
+    //         QObject* obj;
+    //     };
+    // };
 
     class QtMethodCliche
 		: public ClicheTiny
@@ -296,15 +324,40 @@ namespace PILS
 			: ClicheTiny(head)
 		{}
         const Any *specialOperation(Runner &run, const ReallySpecial &special, const Any &argument) const override;
+        bool platformConvert(PlatformSpecificConverter &converter) const override;
         static const QtMethodCliche *get(const char *name);
     };
 
-    class QtObjectClassCliche
+    class QtClassCliche
         : public ClicheTiny
     {
     public:
-        QtObjectClassCliche(const QtObjectClassName *head)
+        QtClassCliche(const QtClassName *head)
             : ClicheTiny(head)
+        {}
+        const NodeConstantShort *newNode(const Constant *&link, const Special *value) const override;
+    };
+
+    class QtStaticClassNode
+        : public NodeConstantTiny
+    {
+    public:
+        const Step *calling(Runner &run, const Constant &call) const override;
+        const Step *calling(Runner &run, const NodeConstant &call) const override;
+        QtStaticClassNode(const Constant *&link, const QtClassCliche &cliche, const Special *value)
+            : NodeConstantTiny(link, cliche, value)
+        {
+            assert(value == &Plum::singleton.plumcake);
+        }
+
+    };
+
+    class QtObjectClassCliche
+        : public QtClassCliche
+    {
+    public:
+        QtObjectClassCliche(const QtObjectClassName *head)
+            : QtClassCliche(head)
         {}
         const Any *specialOperation(Runner &run, const ReallySpecial &special, const Any &argument) const override;
     };
