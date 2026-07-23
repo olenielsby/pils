@@ -434,7 +434,7 @@
   }
   +++ boss
 }
-><:[module:. platform qt menubar .timestamp 2026-07-23T18:59:03.946+02 .language qt]><;
+><:[module:. platform qt menubar .timestamp 2026-07-23T21:52:28.357+02 .language qt]><;
 ;new plumcake;
 { menubar: .window .boss
 | :ok window q:menuBar q:clear
@@ -446,14 +446,20 @@
     { qs:triggered: args | :try boss action (.) }
     and: who
   }
+  { action: ..name
+  | :who :ok
+    ;act new Q:Action (name, who)
+      when { qs:triggered: args | :try boss action (.) }
+    ;
+    who q:addAction (act) anyway:
+    who
+  }
   { action: ..name .shortcut
   | :who :ok
-    ;act new Q:Action (name)
-      when
-      { qs:triggered: args | :try boss action (.) }
+    ;act new Q:Action (name, who)
+      when { qs:triggered: args | :try boss action (.) }
       q:setShortcut (shortcut)
     ;
-    who q:addAction (name . " (old)") when { qs:triggered: args | :try boss action (.) } anyway:
     who q:addAction (act) anyway:
     who
   }
@@ -461,7 +467,6 @@
   | :who :self :ok
     who q:addMenu (name) +++ (self)
   }
-!  or: window q:menuBar q:clear
 }
 ><:[module:. platform qt ownership .timestamp 2026-07-17T16:32:20.212+02 .language qt]><;
 ! If the component boss has an id and an owner,
