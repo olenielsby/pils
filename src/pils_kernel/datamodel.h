@@ -153,7 +153,6 @@ namespace PILS
             ::operator delete(p);
         }
         bool duplicateReferenceNoChildren() const;
-        // virtual bool isMultipleReferenced() const;
 	protected:
 		Any();
         bool duplicateReference() const;
@@ -166,11 +165,8 @@ namespace PILS
     public:
         void unduplicateReference() const;
         void retain() const;
-        // void releaseReferenceInsideLock() const; // DEPRECATED
-        // void releaseFromScrap(const Any &scrap) const;
         virtual void unlink() {}
         virtual void removeFromHashTable() const = 0;
-        // virtual void releaseChildren() const {}
         virtual bool write(Writing &writing, WriteState state, long level, const Constant *dot) const = 0;
         virtual const Any *labeling(Writing &writing) const;
         virtual const Call *callHere() const;
@@ -609,8 +605,6 @@ namespace PILS
         const PilsString *hashLookup(const PILS_CHAR *text, const Integer *count) const override;
         static const PilsString *get(const PILS_CHAR *text, size_t count);
 		static const PilsString *get(const PILS_CHAR *text);
-        // static const PilsString *getInsideLock(const PILS_CHAR *text, size_t count);
-        // static const PilsString *getInsideLock(const PILS_CHAR *text);
         static const PilsString *get(const std::string &text);
 #ifndef PILS_CHAR_IS_UTF16
 		static const PilsString *get(const wchar_t *text, size_t count);

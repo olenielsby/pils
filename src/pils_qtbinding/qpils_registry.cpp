@@ -22,6 +22,11 @@ void QtObjectClassName::initialize()
     SIGNAL_(QApplication, applicationStateChanged)
     SIGNAL_(QApplication, aboutToQuit)
     END_CLASS()
+
+    BEGIN_CLASS(QGuiApplication)
+    STATIC_METHOD(QGuiApplication, instance)
+    STATIC_METHOD(QGuiApplication, keyboardModifiers)
+    END_CLASS()
     // const QtObjectClassName* classEntry = nullptr;
 
     // ===== QWidget =====

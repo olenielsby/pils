@@ -434,7 +434,7 @@
   }
   +++ boss
 }
-><:[module:. platform qt menubar .timestamp 2026-07-23T21:52:28.357+02 .language qt]><;
+><:[module:. platform qt menubar .timestamp 2026-07-24T22:22:59.022+02 .language qt]><;
 ;new plumcake;
 { menubar: .window .boss
 | :ok window q:menuBar q:clear
@@ -458,8 +458,8 @@
   | :who :ok
     ;act new Q:Action (name, who)
       when { qs:triggered: args | :try boss action (.) }
-      q:setShortcut (shortcut)
     ;
+    act q:setShortcut (shortcut) anyway:
     who q:addAction (act) anyway:
     who
   }

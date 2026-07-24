@@ -4,7 +4,7 @@
 namespace PILS{
 
 class QtObjectWrapper
-    : public ReallySpecial, public QObject
+    : public ReallySpecial
 {
 public:
     QtObjectWrapper(Runner &run, const Constant *&link, const QtObjectClassName *className, QObject *object);
@@ -22,7 +22,7 @@ private:
     const Any *invokeMethod(const QtMethodName &name, const Any *const *args, size_t argct) const;
 };
 
-class QtNewObjectWrapper : public QtObjectWrapper
+class QtNewObjectWrapper : public QtObjectWrapper, public QObject
 {
 public:
     QtNewObjectWrapper(Runner &run, const Constant *&link, const QtObjectClassName *className, QObject *object);

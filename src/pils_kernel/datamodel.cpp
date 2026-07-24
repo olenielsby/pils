@@ -503,6 +503,7 @@ namespace PILS
             std::memcmp(text, value, count->value * sizeof(PILS_CHAR)) == 0 &&
             duplicateReference())
         {
+            count->unduplicateReference();
             return this;
         }
         return hashLink->hashLookup(text, count);
@@ -1428,7 +1429,10 @@ namespace PILS
     const ListConstant *ListConstant::hashLookup(const Constant *const *a, const Integer *count, bool copying) const
 	{
         if (count == this->count && memcmp(a, &element, count->value * sizeof(Constant*)) == 0 && duplicateReference(copying))
+        {
+            count->unduplicateReference();
 			return this;
+        }
         else return hashLink->hashLookup(a, count, copying);
 	}
 
