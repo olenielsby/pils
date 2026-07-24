@@ -15,6 +15,7 @@ const Any *Plumcake::specialCalling(Runner &run, const QtObjectClassName &classN
     if (object == nullptr)
         return nullptr;
     // No existing wrapper, but search anyway, for consistency with pils constant hashing
+    className.retain();
     QtNewObjectLookup lookup(run, object, &className);
     return lookup.lookup();
 }
@@ -70,9 +71,7 @@ const Any *QtObjectWrapper::invokeMethod(const QtMethodName &name, const Any *co
 
 const ReallySpecial *QtObjectLookup::newSpecial(const Constant *&link)
 {
-    if (className)
-        className->retain();
-    else className = getClassNameFromQObjectInsideLock(object);
+    className->retain();
     return new const QtObjectWrapper(run, link, className, object);
 }
 
@@ -82,14 +81,27 @@ const ReallySpecial *QtNewObjectLookup::newSpecial(const Constant *&link)
     return new const QtNewObjectWrapper(run, link, className, object);
 }
 
-const QtObjectClassName *QtObjectLookup::getClassNameFromQObjectInsideLock(QObject* object)
+// const QtObjectClassName *QtObjectLookup::getClassNameFromQObjectInsideLock(QObject* object)
+// {
+//     const QMetaObject* meta = object->metaObject();
+//     QByteArray qtName(meta->className());
+//     const char* name = qtName.constData();
+//     const PilsString* pilsName = PilsString::getInsideLock(QtClassName::withoutLeadingQ(name));
+//     Namespace_QtClass::singleton.uri->retain();
+//     const ClicheShort *className = Namespace_QtClass::singleton.uri->clichefyInsideLock(pilsName);
+//     const QtObjectClassName* typedClassName = static_cast<const QtObjectClassName*>(className);
+//     typedClassName->meta = meta;
+//     return typedClassName;
+// }
+
+const QtObjectClassName *QtObjectLookup::getClassNameFromQObject(QObject* object)
 {
     const QMetaObject* meta = object->metaObject();
     QByteArray qtName(meta->className());
     const char* name = qtName.constData();
-    const PilsString* pilsName = PilsString::getInsideLock(QtClassName::withoutLeadingQ(name));
+    const PilsString* pilsName = PilsString::get(QtClassName::withoutLeadingQ(name));
     Namespace_QtClass::singleton.uri->retain();
-    const ClicheShort *className = Namespace_QtClass::singleton.uri->clichefyInsideLock(pilsName);
+    const ClicheShort *className = Namespace_QtClass::singleton.uri->clichefy(pilsName);
     const QtObjectClassName* typedClassName = static_cast<const QtObjectClassName*>(className);
     typedClassName->meta = meta;
     return typedClassName;

@@ -86,23 +86,6 @@ private:
             return (run.sink = kick(run))->called(run, call);
         }
 
-  //       const Step *called(Runner &run, const T &call)
-        // {
-        // 	{
-  //               Mutex::Lock lock(Mutex::singleMutex);
-        // 		for (Listener *next = listener->next; next; next = next->next)
-        // 		{
-        // 			if (next->duplicateReferenceNoChildren())
-        // 			{
-        // 				listener->releaseReferenceInsideLock();
-        // 				listener = next;
-        // 				return this;
-        // 			}
-        // 		}
-        // 	}
-        // 	return (run.sink = kick(run))->called(run, call);
-        // }
-
         Sink *kick(Runner &run)
 		{
             run.release(listener);
@@ -184,23 +167,7 @@ private:
 
             return (run.sink = kick(run))->called(run, call, assignValue);
         }
-        // const Step *called(Runner &run, const Any &call, const Any *assignValue)
-        // {
-        // 	{
-  //               Mutex::Lock lock(Mutex::singleMutex);
-        // 		for (Listener *next = listener->next; next; next = next->next)
-        // 		{
-        // 			if (next->duplicateReferenceNoChildren())
-        // 			{
-        // 				listener->releaseReferenceInsideLock();
-        // 				listener = next;
-        // 				return this;
-        // 			}
-        // 		}
-        // 	}
-        // 	return (run.sink = kick(run))->called(run, call, assignValue);
-        // }
-		const Step *pass(Runner &run, const Any *thing)
+        const Step *pass(Runner &run, const Any *thing)
 		{
 			run.sink = kick(run);
 			return thing->passCounted(run);

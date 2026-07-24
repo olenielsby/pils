@@ -366,9 +366,16 @@ namespace PILS
         : public SpecialLookup
     {
     public:
-        QtObjectLookup(Runner &run, QObject *object, const QtObjectClassName *className = nullptr)
+        QtObjectLookup(Runner &run, QObject *object)
+            : object(object), className(getClassNameFromQObject(object)), run(run)
+        {}
+        QtObjectLookup(Runner &run, QObject *object, const QtObjectClassName *className)
             : object(object), className(className), run(run)
         {}
+        ~QtObjectLookup()
+        {
+            className->unduplicateReference();
+        }
         const ReallySpecial *newSpecial(const Constant *&link) override;
         bool compare(const ReallySpecial &special) const override;
         size_t hash() const override;
@@ -376,7 +383,8 @@ namespace PILS
         const QtObjectClassName *className;
         Runner &run;
     private:
-        const QtObjectClassName *getClassNameFromQObjectInsideLock(QObject *object);
+        // const QtObjectClassName *getClassNameFromQObjectInsideLock(QObject *object);
+        static const QtObjectClassName *getClassNameFromQObject(QObject *object);
     };
     class QtNewObjectLookup
         : public QtObjectLookup

@@ -477,10 +477,10 @@ namespace PILS
         return get(text, strlen(text));
     }
 
-    const PilsString *PilsString::getInsideLock(const PILS_CHAR *text)
-    {
-        return getInsideLock(text, strlen(text));
-    }
+    // const PilsString *PilsString::getInsideLock(const PILS_CHAR *text)
+    // {
+    //     return getInsideLock(text, strlen(text));
+    // }
 
     const PilsString *PilsString::get(const std::string &text)
     {
@@ -505,11 +505,11 @@ namespace PILS
 		return chain->hashLookup(text, count);
 	}
 
-    const PilsString *PilsString::getInsideLock(const PILS_CHAR *text, size_t count)
-    {
-        const Constant *&chain = hashChain(text, count);
-        return chain->hashLookup(text, count);
-    }
+    // const PilsString *PilsString::getInsideLock(const PILS_CHAR *text, size_t count)
+    // {
+    //     const Constant *&chain = hashChain(text, count);
+    //     return chain->hashLookup(text, count);
+    // }
 
     PilsString::PilsString(const PILS_CHAR *text, size_t count)
         : PilsString(hashChain(text, count), text, count)
@@ -912,11 +912,11 @@ namespace PILS
 		return clichefying(attribute);
 	}
 
-    const ClicheShort *Constant::clichefyInsideLock(const Constant *attribute) const
-    {
-        assert (attribute != &Empty::singleton);
-        return clichefying(attribute);
-    }
+    // const ClicheShort *Constant::clichefyInsideLock(const Constant *attribute) const
+    // {
+    //     assert (attribute != &Empty::singleton);
+    //     return clichefying(attribute);
+    // }
 
     const ClicheShort *Constant::clichefying(const Constant *attribute) const
 	{

@@ -281,7 +281,9 @@ const Constant *QtWrap::wrap(QPilsTreeNode *obj)
     {
         return Empty::get();
     }
-    QtObjectLookup lookup(Runner::current(), obj, QPilsTreeNode::getClassName());
+    auto className = QPilsTreeNode::getClassName();
+    className->retain();
+    QtObjectLookup lookup(Runner::current(), obj, className);
     return lookup.lookup();
 }
 
