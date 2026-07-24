@@ -37,7 +37,7 @@ struct QtSignalImplementation
         : meta(m), next(n) {}
 
     virtual bool connectIfCompatible(QObject* obj,
-                                     QtObjectWrapper* wrapper,
+                                     QtNewObjectWrapper* wrapper,
                                      const QtSignalCliche* cliche) const = 0;
 };
 
@@ -103,7 +103,7 @@ struct QtSignalImpl : QtSignalImplementation
         : QtSignalImplementation(&Obj::staticMetaObject, next) {}
 
     bool connectIfCompatible(QObject* obj,
-                             QtObjectWrapper* wrapper,
+                             QtNewObjectWrapper* wrapper,
                              const QtSignalCliche* cliche) const override
     {
         if (!obj->metaObject()->inherits(meta))

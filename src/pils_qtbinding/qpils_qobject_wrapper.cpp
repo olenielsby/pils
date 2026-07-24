@@ -81,19 +81,6 @@ const ReallySpecial *QtNewObjectLookup::newSpecial(const Constant *&link)
     return new const QtNewObjectWrapper(run, link, className, object);
 }
 
-// const QtObjectClassName *QtObjectLookup::getClassNameFromQObjectInsideLock(QObject* object)
-// {
-//     const QMetaObject* meta = object->metaObject();
-//     QByteArray qtName(meta->className());
-//     const char* name = qtName.constData();
-//     const PilsString* pilsName = PilsString::getInsideLock(QtClassName::withoutLeadingQ(name));
-//     Namespace_QtClass::singleton.uri->retain();
-//     const ClicheShort *className = Namespace_QtClass::singleton.uri->clichefyInsideLock(pilsName);
-//     const QtObjectClassName* typedClassName = static_cast<const QtObjectClassName*>(className);
-//     typedClassName->meta = meta;
-//     return typedClassName;
-// }
-
 const QtObjectClassName *QtObjectLookup::getClassNameFromQObject(QObject* object)
 {
     const QMetaObject* meta = object->metaObject();
@@ -117,7 +104,7 @@ size_t QtObjectLookup::hash() const
     return std::hash<QObject*>{}(object);
 }
 
-const Step *QtObjectWrapper::calling(Runner &run, const Constant &call) const
+const Step *QtNewObjectWrapper::calling(Runner &run, const Constant &call) const
 {
     if (&call == &Builtin::name.mind)
     {
@@ -128,7 +115,7 @@ const Step *QtObjectWrapper::calling(Runner &run, const Constant &call) const
             return run.sink->pass(run, mind, what);
         }
     }
-    return ReallySpecial::calling(run, call);
+    return QtObjectWrapper::calling(run, call);
 }
 
 bool QtObjectWrapper::converting(PlatformSpecificConverter &converter) const
@@ -137,7 +124,7 @@ bool QtObjectWrapper::converting(PlatformSpecificConverter &converter) const
 }
 
 
-QtObjectWrapper::State QtObjectWrapper::computeCurrentState() const
+QtNewObjectWrapper::State QtNewObjectWrapper::computeCurrentState() const
 {
     if (!object)
         return State::Deleted;
@@ -150,7 +137,7 @@ QtObjectWrapper::State QtObjectWrapper::computeCurrentState() const
                                      : State::DetachedHidden;
 }
 
-bool QtObjectWrapper::isTopLevelVisible(QObject *obj) const
+bool QtNewObjectWrapper::isTopLevelVisible(QObject *obj) const
 {
     if (auto w = qobject_cast<QWidget*>(obj))
         return w->isWindow() && w->isVisible();
@@ -160,7 +147,7 @@ bool QtObjectWrapper::isTopLevelVisible(QObject *obj) const
     return false;
 }
 
-void QtObjectWrapper::checkState() const
+void QtNewObjectWrapper::checkState() const
 {
     State oldState = state;
     state = computeCurrentState();
@@ -192,27 +179,27 @@ void QtObjectWrapper::checkState() const
         removeWhen();
 }
 
-int QtObjectWrapper::mindful(State s)
+int QtNewObjectWrapper::mindful(State s)
 {
     if (s == State::DetachedVisible || s == State::AttachedVisibleDialog)
         return 1;
     else return 0;
 }
 
-int QtObjectWrapper::retainCount(State s)
+int QtNewObjectWrapper::retainCount(State s)
 {
     if (s == State::Attached || s == State::AttachedVisibleDialog)
         return 1;
     else return 0;
 }
 
-void QtObjectWrapper::enableMind() const
+void QtNewObjectWrapper::enableMind() const
 {
     assert(mind == nullptr);
     mind = new QtPassingMind(run, *this);
 }
 
-void QtObjectWrapper::disableMind() const
+void QtNewObjectWrapper::disableMind() const
 {
     assert(mind != nullptr);
     auto gone = mind;
@@ -220,7 +207,7 @@ void QtObjectWrapper::disableMind() const
     gone->deleteLater();
 }
 
-const Any *QtObjectWrapper::specialCalling(Runner &run, const Strap &strap) const
+const Any *QtNewObjectWrapper::specialCalling(Runner &run, const Strap &strap) const
 {
     if (mind)
         mind->stick(strap);
@@ -228,7 +215,7 @@ const Any *QtObjectWrapper::specialCalling(Runner &run, const Strap &strap) cons
     return this;
 }
 
-const Any *QtObjectWrapper::specialWhen(Runner &run, const Any &argument) const
+const Any *QtNewObjectWrapper::specialWhen(Runner &run, const Any &argument) const
 {
     if (object.get() == nullptr || when != nullptr)
         return nullptr;
@@ -242,14 +229,14 @@ const Any *QtObjectWrapper::specialWhen(Runner &run, const Any &argument) const
     for (const QtSignalCliche* cliche : extractor.signalCliches)
     {
         for (auto implement = cliche->implementations; implement != nullptr; implement = implement->next)
-            implement->connectIfCompatible(object.data(), const_cast<QtObjectWrapper*>(this), cliche);
+            implement->connectIfCompatible(object.data(), const_cast<QtNewObjectWrapper*>(this), cliche);
     }
     eventMask = extractor.eventMask;
     retain();
     return this;
 }
 
-void QtObjectWrapper::removeWhen() const
+void QtNewObjectWrapper::removeWhen() const
 {
     // class QDeferredAnyRelease final : public QObject
     // {
@@ -287,7 +274,7 @@ void QtObjectWrapper::write(Writing &writing) const
 }
 
 
-bool QtObjectWrapper::eventFilter(QObject *watched, QEvent *event)
+bool QtNewObjectWrapper::eventFilter(QObject *watched, QEvent *event)
 {
     switch (event->type())
     {
@@ -312,13 +299,8 @@ bool QtObjectWrapper::eventFilter(QObject *watched, QEvent *event)
 }
 
 QtObjectWrapper::QtObjectWrapper(Runner &run, const Constant *&link, const QtObjectClassName *className, QObject *object)
-    : ReallySpecial (link), className(className), object(object), state(State::Deleted), mind(nullptr), run(run)
+    : ReallySpecial (link), className(className), object(object), run(run)
 {
-    object->installEventFilter(this);
-    QObject::connect(object, &QObject::destroyed, this, [this]() { removeWhen(); });
-    if (QWindow *win = qobject_cast<QWindow*>(object))
-        QObject::connect(win, &QWindow::visibleChanged, object, [this]() { checkState(); });
-    checkState();
 // #ifndef NDEBUG
 //     std::fputc('+', stderr);
 //     className->writeToDebugOutput(10);
@@ -327,17 +309,28 @@ QtObjectWrapper::QtObjectWrapper(Runner &run, const Constant *&link, const QtObj
 
 QtObjectWrapper::~QtObjectWrapper()
 {
-// #ifndef NDEBUG
-//     std::fputc('~', stderr);
-//     className->writeToDebugOutput(10);
-// #endif
+    releaseChild(className);
+}
+
+QtNewObjectWrapper::~QtNewObjectWrapper()
+{
     assert(mind == nullptr);
     if (when)
         releaseChild(when);
-    releaseChild(className);
     QObject* o = object.data();
     object = nullptr;
     if (o && o->parent() == nullptr)
         o->deleteLater();
 }
+QtNewObjectWrapper::QtNewObjectWrapper(Runner &run, const Constant *&link, const QtObjectClassName *className, QObject *object)
+    : QtObjectWrapper(run, link, className, object), state(State::Deleted), mind(nullptr)
+{
+    object->installEventFilter(this);
+    QObject::connect(object, &QObject::destroyed, this, [this]() { removeWhen(); });
+    if (QWindow *win = qobject_cast<QWindow*>(object))
+        QObject::connect(win, &QWindow::visibleChanged, object, [this]() { checkState(); });
+    checkState();
+}
+
+
 }

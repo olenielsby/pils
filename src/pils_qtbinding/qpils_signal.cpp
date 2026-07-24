@@ -63,7 +63,7 @@ namespace PILS{
         return static_cast<const QtSignalCliche *>(signalCliche);
     }
 
-    void QtObjectWrapper::pilsSignalCallback(const QtSignalCliche *cliche, const Constant **args, size_t argc) const
+    void QtNewObjectWrapper::pilsSignalCallback(const QtSignalCliche *cliche, const Constant **args, size_t argc) const
     {
         const Constant *arg = (argc == 1 ? args[0] : ListConstant::get(args, argc));
         const NodeConstantShort *call = cliche->nodeConstant(arg);

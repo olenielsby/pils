@@ -31,11 +31,11 @@ struct QtEventImplementation
         : meta(m), next(n) {}
 
     virtual bool connectIfCompatible(QObject* obj,
-                                     QtObjectWrapper* wrapper,
+                                     QtNewObjectWrapper* wrapper,
                                      const QtEventCliche* cliche) const = 0;
 };
 
-using QtEventImplement = void(*)(QEvent*, const QtObjectWrapper*, const QtEventCliche*);
+using QtEventImplement = void(*)(QEvent*, const QtNewObjectWrapper*, const QtEventCliche*);
 
 class QtEventCliche
     : public ClicheTiny

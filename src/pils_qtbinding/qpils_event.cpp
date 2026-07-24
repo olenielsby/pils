@@ -18,7 +18,7 @@ namespace PILS{
         return true;
     }
 
-    bool QtObjectWrapper::pilsEventCallback(const QtEventCliche *cliche, const Constant *arg) const
+    bool QtNewObjectWrapper::pilsEventCallback(const QtEventCliche *cliche, const Constant *arg) const
     {
         PilsThread *thread = MainThread::singleton;
         assert(thread);

@@ -583,7 +583,7 @@ void QtObjectClassName::initialize()
 
 template<typename EventT>
 void qtEventDispatch(QEvent *event,
-                     const QtObjectWrapper *wrapper,
+                     const QtNewObjectWrapper *wrapper,
                      const QtEventCliche *c)
 {
     auto *e = static_cast<EventT*>(event);
