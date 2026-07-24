@@ -269,7 +269,7 @@ namespace PILS
         mutable const Constant *hashLink;
         const Constant *as_Constant() const override;
         virtual const Integer *hashLookup(long v) const;
-        virtual const PilsString *hashLookup(const PILS_CHAR *text, size_t count) const;
+        virtual const PilsString *hashLookup(const PILS_CHAR *text, const Integer *count) const;
         virtual const Float *hashLookup(double v) const;
         virtual const PilsColor *hashLookupPilsColor(unsigned int v) const;
         virtual const PilsDate *hashLookupPilsDate(long long v) const;
@@ -279,7 +279,7 @@ namespace PILS
         virtual const ClicheLong *hashLookup(const Constant *h, const Constant *const *a, size_t c) const;
         virtual const NodeConstantShort *hashLookup(const ClicheShort &cliche, const Constant *value) const;
         virtual const NodeConstantLong *hashLookup(const ClicheLong &cliche, const Constant *const *value) const;
-        virtual const ListConstant *hashLookup(const Constant *const *a, size_t c, bool copying) const;
+        virtual const ListConstant *hashLookup(const Constant *const *a, const Integer *count, bool copying) const;
         virtual const ReallySpecial *hashLookup(SpecialLookup &lookup) const;
         static const Constant *&hashChain(size_t hash);
         const ClicheTiny *clichefy() const;
@@ -334,7 +334,7 @@ namespace PILS
         using Number::ordering;
         const Integer *hashLookup(long v) const override;
         static const Integer *get(long v);
-        static const Integer *getInsideLock(long v);
+        // static const Integer *getInsideLock(long v);
         const NodeConstantShort *newSpecializeNode(const Constant *&link, const ClicheShort &cliche) const override;
         bool write (Writing &writing, WriteState state, long level, const Constant *dot) const override;
         const Step *step_(Runner &run) const override;
@@ -365,7 +365,7 @@ namespace PILS
 			: Integer(initial++)
 		{}
         const Integer *hashLookup(long v) const override;
-        const PilsString *hashLookup(const PILS_CHAR *text, size_t c) const override;
+        const PilsString *hashLookup(const PILS_CHAR *text, const Integer *count) const override;
         const Float *hashLookup(double v) const override;
         const PilsColor *hashLookupPilsColor(unsigned int v) const override;
         const PilsDate *hashLookupPilsDate(long long v) const override;
@@ -375,7 +375,7 @@ namespace PILS
         const ClicheShort *hashLookup(const Constant *h, const Constant *a) const override;
         const NodeConstantShort *hashLookup(const ClicheShort &cliche, const Constant *value) const override;
         const NodeConstantLong *hashLookup(const ClicheLong &cliche, const Constant *const *value) const override;
-        const ListConstant *hashLookup(const Constant *const *a, size_t c, bool copying) const override;
+        const ListConstant *hashLookup(const Constant *const *a, const Integer *count, bool copying) const override;
         const ReallySpecial *hashLookup(SpecialLookup &lookup) const override;
 	private:
 		static long initial;
@@ -555,7 +555,7 @@ namespace PILS
         : public Constant
 	{
 	protected:
-        CountedConstant(const Constant *&link, size_t c);
+        CountedConstant(const Constant *&link, const Integer *count);
 	public:
         ~CountedConstant();
         const Integer *const count;
@@ -601,12 +601,12 @@ namespace PILS
             bool put(unsigned short c) override;
 		};
 
-        PilsString(const Constant *&link, const PILS_CHAR *text, size_t c);
+        PilsString(const Constant *&link, const PILS_CHAR *text, const Integer *value);
 #ifndef NDEBUG
         const std::string bug;
 #endif
         const PILS_CHAR value[];
-        const PilsString *hashLookup(const PILS_CHAR *text, size_t c) const override;
+        const PilsString *hashLookup(const PILS_CHAR *text, const Integer *count) const override;
         static const PilsString *get(const PILS_CHAR *text, size_t count);
 		static const PilsString *get(const PILS_CHAR *text);
         // static const PilsString *getInsideLock(const PILS_CHAR *text, size_t count);
@@ -637,9 +637,7 @@ namespace PILS
         int ordering() const override;
         bool recognize(Recognizer &recognizer) const override;
         void writingToDebugOutput(int level) const override;
-	protected:
-		PilsString(const PILS_CHAR *text, size_t count);
-	private:
+    private:
         static const Constant *&hashChain(const PILS_CHAR *text, size_t count);
 	};
 
@@ -695,8 +693,8 @@ namespace PILS
         const Constant *element[1];
         const ListConstant *as_ListConstant() const override;
         const NodeConstantShort *newSpecializeNode(const Constant *&link, const ClicheShort &cliche) const override;
-        const ListConstant *hashLookup(const Constant *const *a, size_t c, bool copying) const override;
-        ListConstant(const Constant *&link, const Constant *const *a, size_t c, bool copying);
+        const ListConstant *hashLookup(const Constant *const *a, const Integer *count, bool copying) const override;
+        ListConstant(const Constant *&link, const Constant *const *a, const Integer *count, bool copying);
         ~ListConstant();
         bool write (Writing &writing, WriteState state, long level, const Constant *dot) const override;
         const Any *labeling(Writing &writing) const override;

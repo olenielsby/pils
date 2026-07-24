@@ -292,7 +292,7 @@ namespace PILS
 	{ return hashLink->hashLookup(v);}
 	const Float *Constant::hashLookup(double v) const
 	{ return hashLink->hashLookup(v);}
-	const PilsString *Constant::hashLookup(const PILS_CHAR *text, size_t count) const
+    const PilsString *Constant::hashLookup(const PILS_CHAR *text, const Integer *count) const
 	{ return hashLink->hashLookup(text, count); }
 	const ClicheShort *Constant::hashLookup(const Constant *h, const Constant *a) const
 	{ return hashLink->hashLookup(h, a); }
@@ -302,8 +302,8 @@ namespace PILS
 	{ return hashLink->hashLookup(cliche, value); }
 	const NodeConstantLong *Constant::hashLookup(const ClicheLong &cliche, const Constant *const *value) const
 	{ return hashLink->hashLookup(cliche, value); }
-	const ListConstant *Constant::hashLookup(const Constant *const *a, size_t c, bool copying) const
-	{ return hashLink->hashLookup(a, c, copying); }
+    const ListConstant *Constant::hashLookup(const Constant *const *a, const Integer *count, bool copying) const
+    { return hashLink->hashLookup(a, count, copying); }
 	const ReallySpecial *Constant::hashLookup(SpecialLookup &lookup) const
 	{ return hashLink->hashLookup(lookup);}
 	const PilsColor *Constant::hashLookupPilsColor(unsigned int v) const
@@ -321,21 +321,6 @@ namespace PILS
 		{
 			const Constant *&link = Constant::hashChain(v);
             Mutex::Lock lock(Mutex::singleMutex);
-			return link->hashLookup(v);
-		}
-	}
-
-	const Integer *Integer::getInsideLock(long v)
-	{
-		if ((unsigned long)v < 0x10000)
-		{
-			const Integer *got = &ShortInteger::hashTable[v];
-			got->retain();
-			return got;
-		}
-		else
-		{
-			const Constant *&link = Constant::hashChain(v);
 			return link->hashLookup(v);
 		}
 	}
@@ -448,8 +433,8 @@ namespace PILS
 		}
 	}
 
-	CountedConstant::CountedConstant(const Constant *&link, size_t c)
-		: Constant(link), count(Integer::getInsideLock((long)c))
+    CountedConstant::CountedConstant(const Constant *&link, const Integer *count)
+        : Constant(link), count(count)
 	{
 	}
 
@@ -498,9 +483,10 @@ namespace PILS
 		return Constant::hashChain(hash);
 	}
 
-	const PilsString *PilsString::get(const PILS_CHAR *text, size_t count)
+    const PilsString *PilsString::get(const PILS_CHAR *text, size_t c)
 	{
-		const Constant *&chain = hashChain(text, count);
+        auto count = Integer::get(c);
+        const Constant *&chain = hashChain(text, c);
         Mutex::Lock lock (Mutex::singleMutex);
 		return chain->hashLookup(text, count);
 	}
@@ -511,35 +497,31 @@ namespace PILS
     //     return chain->hashLookup(text, count);
     // }
 
-    PilsString::PilsString(const PILS_CHAR *text, size_t count)
-        : PilsString(hashChain(text, count), text, count)
-    {}
-
-    const PilsString* PilsString::hashLookup(const PILS_CHAR* text, size_t c) const
+    const PilsString* PilsString::hashLookup(const PILS_CHAR* text, const Integer * count) const
     {
-        if ((size_t)count->value == c &&
-            std::memcmp(text, value, c * sizeof(PILS_CHAR)) == 0 &&
+        if (count == this->count &&
+            std::memcmp(text, value, count->value * sizeof(PILS_CHAR)) == 0 &&
             duplicateReference())
         {
             return this;
         }
-        return hashLink->hashLookup(text, c);
+        return hashLink->hashLookup(text, count);
     }
 
-	const PilsString *ShortInteger::hashLookup(const PILS_CHAR *text, size_t c) const
+    const PilsString *ShortInteger::hashLookup(const PILS_CHAR *text, const Integer *count) const
 	{
-        return new ((c + 1) * sizeof(PILS_CHAR)) PilsString(hashLink, text, c);
+        return new ((count->value + 1) * sizeof(PILS_CHAR)) PilsString(hashLink, text, count);
 	}
 
-	PilsString::PilsString(const Constant *&link, const PILS_CHAR *text, size_t c)
-        : CountedConstant(link, c)
+    PilsString::PilsString(const Constant *&link, const PILS_CHAR *text, const Integer *count)
+        : CountedConstant(link, count)
 #ifndef NDEBUG
-        , bug(text, c)
+        , bug(text, count->value)
 #endif
     {
         auto* buf = const_cast<PILS_CHAR*>(value);
-        memcpy(buf, text, c * sizeof(PILS_CHAR));
-        buf[c] = 0;
+        memcpy(buf, text, count->value * sizeof(PILS_CHAR));
+        buf[count->value] = 0;
 	}
 
 	const PilsString *PilsString::as_String() const
@@ -1443,21 +1425,22 @@ namespace PILS
             releaseChild(element[i]);
 	}
 
-    const ListConstant *ListConstant::hashLookup(const Constant *const *a, size_t c, bool copying) const
+    const ListConstant *ListConstant::hashLookup(const Constant *const *a, const Integer *count, bool copying) const
 	{
-        if (c == (size_t)count->value && memcmp(a, &element, c * sizeof(Constant*)) == 0 && duplicateReference(copying))
+        if (count == this->count && memcmp(a, &element, count->value * sizeof(Constant*)) == 0 && duplicateReference(copying))
 			return this;
-		else return hashLink->hashLookup(a, c, copying);
+        else return hashLink->hashLookup(a, count, copying);
 	}
 
-	const ListConstant *ShortInteger::hashLookup(const Constant *const *a, size_t c, bool copying) const
+    const ListConstant *ShortInteger::hashLookup(const Constant *const *a, const Integer *count, bool copying) const
 	{
-        return new ((c - 1) * sizeof(Constant*)) const ListConstant(hashLink, a, c, copying);
+        return new ((count->value - 1) * sizeof(Constant*)) const ListConstant(hashLink, a, count, copying);
 	}
 
-	ListConstant::ListConstant(const Constant *&link, const Constant *const *a, size_t c, bool copying)
-		: CountedConstant(link, c)
+    ListConstant::ListConstant(const Constant *&link, const Constant *const *a, const Integer *count, bool copying)
+        : CountedConstant(link, count)
 	{
+        size_t c = count->value;
 		if (copying)
 			for (size_t i = 0; i < c; i++)
 				(element[i] = a[i])->retain();
@@ -1475,9 +1458,10 @@ namespace PILS
 				hash += (unsigned long)reinterpret_cast<size_t>(e[i]);
 				hash *= 19;
 			}
+            auto count = Integer::get(c);
 			const Constant *&link = Constant::hashChain(hash);
             Mutex::Lock lock (Mutex::singleMutex);
-			return link->hashLookup(e, c, copying);
+            return link->hashLookup(e, count, copying);
 		}
         else return Empty::get();
 	}
@@ -1490,7 +1474,7 @@ namespace PILS
 	}
 
 	Empty::Empty()
-        : ListConstant(Empty::singleton.hashLink, nullptr, 0, false)
+        : ListConstant(Empty::singleton.hashLink, nullptr, Integer::get(0), false)
 	{}
 
 	const ClicheShort* PokerHead::newCliche(const Constant *&link, const Constant *a) const
