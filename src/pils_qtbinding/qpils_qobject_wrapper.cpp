@@ -72,6 +72,8 @@ const Any *QtObjectWrapper::invokeMethod(const QtMethodName &name, const Any *co
 const ReallySpecial *QtObjectLookup::newSpecial(const Constant *&link)
 {
     className->retain();
+    if (object->parent())
+        return new const QtNewObjectWrapper(run, link, className, object);
     return new const QtObjectWrapper(run, link, className, object);
 }
 
