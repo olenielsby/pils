@@ -1,5 +1,5 @@
 [pils: .use?]
-><:[module:. pils editor .timestamp 2026-07-19T11:04:28.290+02 .language system]><;
+><:[module:. pils editor .timestamp 2026-07-25T22:09:07.303+02 .language system]><;
 { window
 | :ok
   ;lifetime platform lifetime (this module name);
@@ -21,15 +21,9 @@
       @ operations (.window .tabs window channel own [tabs])
     }
   ;
- ! ;module-listener
-  window mind module-listener :=
-   this module channel listen
-  { window
-  | (window: ' .program this program filename) bug {}
-  }
-  { window
-  | :try window activate
-  }
+  ;module-listener
+    this module channel listen
+    { window | :try window activate }
   ;
   ;splitter window splitter column ();
   ;tabs splitter tabs
@@ -44,10 +38,7 @@
     }
     { module: .module-name .tabs
     | :ok
-      tabs tabs find
-      { (tab)
-      | :if tab id = module-name; :ok tab select
-      }
+      tabs tabs find { (tab) | :if tab id = module-name; :ok tab select }
       or:
       ;tab tabs tab
         { id | :ok module-name }
@@ -61,8 +52,13 @@
       ;
       :use { edit | :ok (channel: tabs) own (edit: module-name) };
       ;tab-column tab column {spacing|:ok 2};
-      tab-column label [tr1] text (this program language write (module-name))
+      ;tab-top-row tab-column row  {spacing|:ok 2};
+      tab-top-row label [tr1] text
+      (say [module] ": " (this program language write: module-name))
       and:
+      tab-top-row stretch label [tr2] text (say [language] ":")
+      and:
+      tab-top-row combo () add "Old Norse" add "Latin" add "Sanskrit" and:
       ;edit tab-column edit
         { text: .
         | @ menu: .window .tabs .page tabs current
