@@ -1,8 +1,8 @@
 [pils: .use?]
-><:[module:. pils editor .timestamp 2026-07-26T20:20:06.390+02 .language system]><;
+><:[module:. pils editor .timestamp 2026-07-26T21:40:02.961+02 .language system]><;
 { window
 | :ok
-  ;lifetime platform lifetime (this module name);
+!  ;lifetime platform lifetime (this module name);
   this module channel window or:
   ;window
     platform window
@@ -59,19 +59,23 @@
       and:
       tab-top-row stretch label [tr2] text (say [language] ":")
       and:
-      ;language-combo tab-top-row combo ();
+      ;language-combo tab-top-row combo
+        { changed: n | @ menu: .window .tabs .page tabs current }
+      ;
       languages each
       { (language)
       | language-combo add:
         this program language write (language) -#$* "[" <-#$* "]"
       }
       and:
+      language-combo index 1 and:
       ;edit tab-column edit
         { text: .
         | @ menu: .window .tabs .page tabs current
         }
         { owner | :ok tabs }
         { id | :ok edit: module-name }
+        { language | :try languages . (language-combo index) }
       ;
       edit text (module-node (.module-name) module) and:
       tab select and: edit focus
@@ -144,7 +148,7 @@
 { editor-channel | :ok this module channel }
 { window | :try @@ [pils editor] window }
 
-><:[module:. pils editor languages .timestamp 2026-07-26T17:18:20.820+02 .language system]><;
+><:[module:. pils editor languages .timestamp 2026-07-26T22:00:29.056+02 .language system]><;
 { languages
 | :who :ok who languages: .module-name this module name
 }
@@ -154,7 +158,8 @@
   { library: .filename library .why ? <> [configuration]
   | (channel: pils-library: library) node .:need legs
     { (language) =* [pils language] := module = *;module +$?
-    | ;stub language <-#=* [pils language];
+    | :if language <> module-name;
+      ;stub language <-#=* [pils language];
       :if module-name +#$* stub = stub;
       :try language <+#^* [pils language] call {(ok = ? // ?),|:ok}
     }

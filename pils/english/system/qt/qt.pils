@@ -345,7 +345,7 @@
   { focus | :who :ok who q:setFocus }
   title (title)
 }
-><:[module:. platform qt lane combo .timestamp 2026-07-26T12:23:40.336+02 .language qt]><;
+><:[module:. platform qt lane combo .timestamp 2026-07-26T21:42:17.014+02 .language qt]><;
 ;new plumcake;
 { combo: .boss .layout
 | :ok
@@ -358,10 +358,10 @@
   { add: $ item
   | :who :ok who q:addItem (item, 0)
   }
-  { current: + index
+  { index: + index
   | :who :ok who q:setCurrentIndex (index - 1)
   }
-  { current
+  { index
   | :who :ok who q:currentIndex + 1
   }
   { focus | :who :ok who q:setFocus }
