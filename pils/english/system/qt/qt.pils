@@ -293,11 +293,8 @@
   :ok new Q:PilsGroupBox (title) q:setFlat 1
 }
 
-><:[module:. platform qt lane button .timestamp 2026-07-26T11:39:34.534+02 .language qt]><;
+><:[module:. platform qt lane button .timestamp 2026-07-26T12:23:30.076+02 .language qt]><;
 ;new plumcake;
-{ button: .boss .parent .layout
-| :who :try who button: .boss .layout
-}
 { button: .boss .layout
 | ;title boss title .:need call {$ ok|:ok} .:need;
   :ok
@@ -312,11 +309,8 @@
   { focus | :who :ok who q:setFocus }
   title (title)
 }
-><:[module:. platform qt lane combo .timestamp 2026-07-26T11:42:25.514+02 .language qt]><;
+><:[module:. platform qt lane combo .timestamp 2026-07-26T12:23:40.336+02 .language qt]><;
 ;new plumcake;
-{ combo: .boss .parent .layout
-| :who :try who combo: .boss .layout
-}
 { combo: .boss .layout
 | :ok
   new Q:ComboBox
@@ -336,11 +330,8 @@
   }
   { focus | :who :ok who q:setFocus }
 }
-><:[module:. platform qt lane edit .timestamp 2026-07-17T16:25:18.921+02 .language qt]><;
+><:[module:. platform qt lane edit .timestamp 2026-07-26T12:23:55.074+02 .language qt]><;
 ;new plumcake;
-{ edit: .boss .parent .layout
-| :who :try who: edit: .boss .layout
-}
 { edit: .boss .layout
 | :ok
   new Q:PilsPlainTextEdit
@@ -361,11 +352,8 @@
   { pickup | :who :ok who }
   +++ boss
 }
-><:[module:. platform qt lane label .timestamp 2026-07-26T12:00:00.770+02 .language qt]><;
+><:[module:. platform qt lane label .timestamp 2026-07-26T12:24:06.661+02 .language qt]><;
 ;new plumcake;
-{ label: .boss .parent .layout
-| :who :try who label: .boss .layout
-}
 { label: .boss .layout
 | :ok
   new Q:Label
@@ -375,11 +363,8 @@
   { text | :who :ok who q:text }
   +++ boss
 }
-><:[module:. platform qt lane line-edit .timestamp 2026-07-26T12:01:37.903+02 .language qt]><;
+><:[module:. platform qt lane line-edit .timestamp 2026-07-26T12:24:15.617+02 .language qt]><;
 ;new plumcake;
-{ line-edit: .boss .parent .layout
-| :who :try who line-edit: .boss .layout
-}
 { line-edit: .boss .layout
 | :ok
   ;widget new Q:LineEdit when
@@ -393,11 +378,8 @@
   layout q:addWidget (widget) and:
   widget
 }
-><:[module:. platform qt lane tabs .timestamp 2026-07-26T12:04:54.329+02 .language qt]><;
+><:[module:. platform qt lane tabs .timestamp 2026-07-26T12:24:29.836+02 .language qt]><;
 ;new plumcake;
-{ tabs: .boss .parent .layout
-| :who :try who tabs: .boss .layout
-}
 { tabs: .boss .layout
 | :ok
   ;widget new Q:TabWidget;
@@ -447,11 +429,8 @@
     +++ boss
   )
 }
-><:[module:. platform qt lane tree .timestamp 2026-07-26T12:12:37.829+02 .language qt]><;
+><:[module:. platform qt lane tree .timestamp 2026-07-26T12:24:41.312+02 .language qt]><;
 ;new plumcake;
-{ tree: .boss .parent .layout
-| :who :try who tree: .boss .layout
-}
 { tree: .boss .layout
 | :ok
   new Q:PilsTreeWidget
