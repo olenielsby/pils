@@ -424,6 +424,7 @@ void QtObjectClassName::initialize()
 
     BEGIN_CLASS(QBoxLayout)
     METHOD_OVERLOAD(QBoxLayout, addWidget, void(QBoxLayout::*)(QWidget*, int, Qt::Alignment))
+    METHOD_(QBoxLayout, addLayout)
     METHOD_(QBoxLayout, addStretch)
     END_CLASS()
 

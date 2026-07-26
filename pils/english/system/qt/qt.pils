@@ -246,7 +246,7 @@
   { close | :who :ok who q:close }
   { qs:fileSelected: x | :try boss pick: x }
 }
-><:[module:. platform qt lane .timestamp 2026-07-26T12:51:15.647+02 .language qt]><;
+><:[module:. platform qt lane .timestamp 2026-07-26T13:12:19.072+02 .language qt]><;
 ;new plumcake;
 { lane: .layout .window .boss
 | :self
@@ -264,13 +264,13 @@
   { column: boss
   | :ok
     self lane:
-    .layout new Q:VBoxLayout try {(l)|layout q:addLayout (l)}
+    .layout new Q:VBoxLayout try {(l)|layout q:addLayout (l, 0)}
     .boss
   }
   { row: boss
   | :ok
     self lane:
-    .layout new Q:HBoxLayout try {(l)|layout q:addLayout (l)}
+    .layout new Q:HBoxLayout try {(l)|layout q:addLayout (l, 0)}
     .boss
   }
   { label: boss | :ok @ label: .boss .layout }
@@ -415,7 +415,7 @@
   layout q:addWidget (widget) and:
   widget
 }
-><:[module:. platform qt lane tabs .timestamp 2026-07-26T12:43:33.401+02 .language qt]><;
+><:[module:. platform qt lane tabs .timestamp 2026-07-26T13:00:17.090+02 .language qt]><;
 ;new plumcake;
 { tabs: .boss .layout
 | :ok
@@ -434,23 +434,13 @@
     }	
     { tab: boss
     | :who :ok
-      ;layout new Q:VBoxLayout;
-      ;tab new Q:Widget when
-      ( { bug | :ok shit }
-        +++ boss )
-      ;
-      tab q:setLayout (layout) and:
-      who q:addTab (tab, boss name) and:
-      tab
-    }
-    { tab: boss
-    | :who :ok
       ;tab new Q:Widget when
       ( { bug | :ok shit }
         { boss | :where :what shit and: :ok boss }
         { column: boss
         | :who :ok
-          @ lane: .layout new Q:VBoxLayout .widget who .boss
+          @ lane: .layout new Q:VBoxLayout try {(l)|who q:setLayout (l)}
+          .boss
         }
         { row: boss
         | :who :ok
