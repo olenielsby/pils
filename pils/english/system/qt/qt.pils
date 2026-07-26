@@ -246,7 +246,7 @@
   { close | :who :ok who q:close }
   { qs:fileSelected: x | :try boss pick: x }
 }
-><:[module:. platform qt lane .timestamp 2026-07-25T22:04:31.988+02 .language qt]><;
+><:[module:. platform qt lane .timestamp 2026-07-26T12:17:35.997+02 .language qt]><;
 ;new plumcake;
 { lane: .layout .window .boss
 | :self
@@ -276,14 +276,14 @@
     .layout new Q:HBoxLayout
     .widget w .boss
   }
-  { label: boss | :ok @ label: .boss .parent widget .layout }
-  { button: boss | :ok @ button: .boss .parent widget .layout }
-  { combo: boss | :ok @ combo: .boss .parent widget .layout }
-  { line-edit: boss | :ok @ line-edit: .boss .parent widget .layout }
-  { edit: boss | :ok @ edit: .boss .parent widget .layout }
-  { tree: boss | :ok @ tree: .boss .parent widget .layout }
-  { tabs: boss | :ok @ tabs: .boss .parent widget .layout }
-  { canvas: boss | :ok @ canvas: .boss .parent widget .layout }
+  { label: boss | :ok @ label: .boss .layout }
+  { button: boss | :ok @ button: .boss  .layout }
+  { combo: boss | :ok @ combo: .boss  .layout }
+  { line-edit: boss | :ok @ line-edit: .boss  .layout }
+  { edit: boss | :ok @ edit: .boss .layout }
+  { tree: boss | :ok @ tree: .boss .layout }
+  { tabs: boss | :ok @ tabs: .boss .layout }
+  { canvas: boss | :ok @ canvas: .boss .layout }
   { stretch | :who :ok layout q:addStretch 1 and: who }
 }
 ===
@@ -339,6 +339,9 @@
 ><:[module:. platform qt lane edit .timestamp 2026-07-17T16:25:18.921+02 .language qt]><;
 ;new plumcake;
 { edit: .boss .parent .layout
+| :who :try who: edit: .boss .layout
+}
+{ edit: .boss .layout
 | :ok
   new Q:PilsPlainTextEdit
   try {(widget)|layout q:addWidget: widget}
