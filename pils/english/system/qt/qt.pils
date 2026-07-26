@@ -246,15 +246,14 @@
   { close | :who :ok who q:close }
   { qs:fileSelected: x | :try boss pick: x }
 }
-><:[module:. platform qt lane .timestamp 2026-07-26T13:12:19.072+02 .language qt]><;
+><:[module:. platform qt lane .timestamp 2026-07-26T13:18:07.306+02 .language qt]><;
 ;new plumcake;
 { lane: .layout .window .boss
 | :self
-  ;widget new Q:Widget;
+  ;widget new Q:Widget q:setLayout (layout);
   window q:setCentralWidget (widget) and:
-  :try self lane: .layout .widget .boss
+  :try self lane: .layout .boss
 }
-
 
 { lane: .layout .boss
 | :self :ok

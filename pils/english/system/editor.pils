@@ -137,6 +137,26 @@
 { editor-channel | :ok this module channel }
 { window | :try @@ [pils editor] window }
 
+><:[module:. pils editor languages .timestamp 2026-07-26T17:18:20.820+02 .language system]><;
+{ languages
+| :who :ok who languages: .module-name this module name
+}
+{ languages: .module-name
+| :ok
+  this program libraries each
+  { library: .filename library .why ? <> [configuration]
+  | (channel: pils-library: library) node .:need legs
+    { (language) =* [pils language] := module = *;module +$?
+    | ;stub language <-#=* [pils language];
+      :if module-name +#$* stub = stub;
+      :try language <+#^* [pils language] call {(ok = ? // ?),|:ok}
+    }
+    { (?) <$* [pils language] := ? | ? }
+    .:try
+  }
+  splice distinct
+  order {(ok)|:ok this program language write (ok) <-#$* "]"}
+}
 ><:[module:. pils editor latest .timestamp 2008-05-28T01:30:44.271+02 .language system]><;
 { latest
 | library-channel node
@@ -324,7 +344,7 @@
   dialog listen
   { cancel | }
 }
-><:[module:. pils editor operations .timestamp 2026-07-20T21:09:57.052+02 .language system]><;
+><:[module:. pils editor operations .timestamp 2026-07-26T15:51:46.241+02 .language system]><;
 ;library-channel;
 { operations: .window .tabs
 | :ok
@@ -442,7 +462,7 @@
     :ok
     (library-channel) (module-name)
     := module merge
-      (;module text .timestamp now ! .language page mind language
+      (;module text .timestamp ! .language page mind language
       )
     ;
     paged anyway:
@@ -785,8 +805,7 @@
 ><:[module:. pils editor title .timestamp 2026-07-08T23:06:14.594+02 .language system]><;
 this program filename call
 {(filename)|:ok filename <+#^* "/" . " - " (filename <-#^* "/")}
-><:[module:. pils language graph .timestamp 2009-09-02T16:26:34.424+02 .language system]><;
-language: {}? head "graph"><:[module:. pils language system .timestamp 2008-12-23T02:33:28.886+01 .language system]><;
+><:[module:. pils language system .timestamp 2008-12-23T02:33:28.886+01 .language system]><;
 {}
 ><:[module:. pils language text .timestamp 2008-12-23T02:33:32.543+01 .language system]><;
 { read: ok | :ok }
