@@ -293,9 +293,12 @@
   :ok new Q:PilsGroupBox (title) q:setFlat 1
 }
 
-><:[module:. platform qt lane button .timestamp 2026-07-17T16:23:33.529+02 .language qt]><;
+><:[module:. platform qt lane button .timestamp 2026-07-26T11:39:34.534+02 .language qt]><;
 ;new plumcake;
 { button: .boss .parent .layout
+| :who :try who button: .boss .layout
+}
+{ button: .boss .layout
 | ;title boss title .:need call {$ ok|:ok} .:need;
   :ok
   new Q:PushButton
@@ -309,9 +312,12 @@
   { focus | :who :ok who q:setFocus }
   title (title)
 }
-><:[module:. platform qt lane combo .timestamp 2026-07-25T21:02:39.103+02 .language qt]><;
+><:[module:. platform qt lane combo .timestamp 2026-07-26T11:42:25.514+02 .language qt]><;
 ;new plumcake;
 { combo: .boss .parent .layout
+| :who :try who combo: .boss .layout
+}
+{ combo: .boss .layout
 | :ok
   new Q:ComboBox
   try {(widget)|layout q:addWidget(widget)}
@@ -352,9 +358,12 @@
   { pickup | :who :ok who }
   +++ boss
 }
-><:[module:. platform qt lane label .timestamp 2026-07-17T16:25:47.832+02 .language qt]><;
+><:[module:. platform qt lane label .timestamp 2026-07-26T12:00:00.770+02 .language qt]><;
 ;new plumcake;
 { label: .boss .parent .layout
+| :who :try who label: .boss .layout
+}
+{ label: .boss .layout
 | :ok
   new Q:Label
   try {(widget)|layout q:addWidget: widget}
@@ -363,9 +372,12 @@
   { text | :who :ok who q:text }
   +++ boss
 }
-><:[module:. platform qt lane line-edit .timestamp 2026-07-10T16:45:29.030+02 .language qt]><;
+><:[module:. platform qt lane line-edit .timestamp 2026-07-26T12:01:37.903+02 .language qt]><;
 ;new plumcake;
 { line-edit: .boss .parent .layout
+| :who :try who line-edit: .boss .layout
+}
+{ line-edit: .boss .layout
 | :ok
   ;widget new Q:LineEdit when
   ( { qs:textChanged: text | :who :try who text:. text }
@@ -378,9 +390,12 @@
   layout q:addWidget (widget) and:
   widget
 }
-><:[module:. platform qt lane tabs .timestamp 2026-07-17T16:28:26.402+02 .language qt]><;
+><:[module:. platform qt lane tabs .timestamp 2026-07-26T12:04:54.329+02 .language qt]><;
 ;new plumcake;
 { tabs: .boss .parent .layout
+| :who :try who tabs: .boss .layout
+}
+{ tabs: .boss .layout
 | :ok
   ;widget new Q:TabWidget;
   layout q:addWidget (widget) and:
@@ -429,11 +444,14 @@
     +++ boss
   )
 }
-><:[module:. platform qt lane tree .timestamp 2026-07-10T18:31:31.401+02 .language qt]><;
+><:[module:. platform qt lane tree .timestamp 2026-07-26T12:12:37.829+02 .language qt]><;
 ;new plumcake;
 { tree: .boss .parent .layout
+| :who :try who tree: .boss .layout
+}
+{ tree: .boss .layout
 | :ok
-  new Q:PilsTreeWidget (parent)
+  new Q:PilsTreeWidget
   try {(widget)|layout q:addWidget (widget)}
   when:
   { qs:itemActivated: ? | :who :try who picked: who q:currentNode }
