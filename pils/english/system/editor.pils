@@ -1,5 +1,5 @@
 [pils: .use?]
-><:[module:. pils editor .timestamp 2026-07-26T21:40:02.961+02 .language system]><;
+><:[module:. pils editor .timestamp 2026-07-26T22:27:33.758+02 .language system]><;
 { window
 | :ok
 !  ;lifetime platform lifetime (this module name);
@@ -68,7 +68,12 @@
         this program language write (language) -#$* "[" <-#$* "]"
       }
       and:
-      language-combo index 1 and:
+      ( ;language
+          module-name call (library-channel) module language or [system]
+        ;
+        language-combo index: languages =* (language,)
+      )
+      and:
       ;edit tab-column edit
         { text: .
         | @ menu: .window .tabs .page tabs current
@@ -148,6 +153,13 @@
 { editor-channel | :ok this module channel }
 { window | :try @@ [pils editor] window }
 
+><:[module:. pils editor language .timestamp 2026-07-26T23:32:39.340+02 .language system]><;
+{ language: ..module-name
+| :ok
+  module-name count down 0 every
+  {(n)| :ok module-name +# n & [pils language] & language}
+  find {(module-name)|:try @@ (module-name)}
+}
 ><:[module:. pils editor languages .timestamp 2026-07-26T22:00:29.056+02 .language system]><;
 { languages
 | :who :ok who languages: .module-name this module name
@@ -180,7 +192,7 @@
   @ new
 }
 
-><:[module:. pils editor menu .timestamp 2026-07-19T10:40:09.844+02 .language system]><;
+><:[module:. pils editor menu .timestamp 2026-07-26T22:29:32.557+02 .language system]><;
 ;library-channel;
 { menu: .page .window .tabs
 | :who :ok
@@ -189,16 +201,6 @@
     { action: . | :try action call: @ operations: .window .tabs }
   ;
   ;text page editor text;
-  ;state
-    ( text = module-node (.module-name home) module )
-! TODO: check against change of module language
-!      and
-!      ( page language or [system]
-!        = home call (library-channel) module language or [system]
-!      )
-    and [unchanged]
-    or [changed]
-  ;
   ;items who items (.page .window .tabs);
   items legs
   { (at) := item = *;menu path
@@ -254,10 +256,10 @@
   ( ;text (channel: tabs) own (edit: page id) text;
     :if
       ( text = module-node (.module-name home) module )
-!      and
-!      ( page mind language
-!        = home call (library-channel) module language or [system]
-!      )
+      and
+      ( page editor language
+         = home call (library-channel) module language or [system]
+      )
     .else
       ( menu: . [module save] .shortcut "Ctrl+S" .action save: .page ),
       ( menu: . [module [save and test]]
@@ -356,7 +358,7 @@
   dialog listen
   { cancel | }
 }
-><:[module:. pils editor operations .timestamp 2026-07-26T15:51:46.241+02 .language system]><;
+><:[module:. pils editor operations .timestamp 2026-07-26T23:42:49.772+02 .language system]><;
 ;library-channel;
 { operations: .window .tabs
 | :ok
@@ -456,7 +458,7 @@
     :ok
     (library-channel) (module-name)
     := module-node merge
-      (;module text .timestamp ! .language page mind language
+      (;module text .timestamp .language page editor language
       )
     ;
     paged anyway:
@@ -474,7 +476,7 @@
     :ok
     (library-channel) (module-name)
     := module merge
-      (;module text .timestamp ! .language page mind language
+      (;module text .timestamp .language page editor language
       )
     ;
     paged anyway:
@@ -561,8 +563,8 @@
   ==='
   { valid: .page
   | :tag [valid];
-    ;text page editor text;
-    ( language (.library this program filename .module-name page id) .:need
+    ;text page editor text .language page editor language;
+    ( @ language (..module-name page id) .:need
       read (text)
       ===
       { :error = error:. ' try
