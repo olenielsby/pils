@@ -1,5 +1,37 @@
 [pils: .use?]
-><:[module:. pils editor .timestamp 2026-07-26T22:27:33.758+02 .language system]><;
+><:[module:. pils automenu .timestamp 2026-07-27T14:46:17.167+02 .language system]><;
+{ automenu: .home .window
+| :ok
+  ;menubar window menubar
+    { action:. item:. .actor
+    | :try item call (actor)
+    }
+  ;
+  @@ (home) automenu each
+  { (menu) =  ? // ?
+  | :try
+    @@ (home & menu) .:need
+    call
+    { ::ruleset ' = (::ruleset rules) .where
+    | ;actor (::ruleset .where :;window; where);
+      :possibly
+      ;items rules every [call: match] .:need;
+      ;menu menubar menu (.name say (menu));
+      items each
+      { (item) = ? // ?
+      | menu action: . (item:. .actor) .name say (item)
+      }
+    }
+  }
+}
+><:[module:. pils automenu test .timestamp 2026-07-27T14:44:22.595+02 .language system]><;
+{ test
+| :ok
+  ;window platform window {title|:ok "Menu-test"} {size|:ok [400 200]};
+  window listen {|} and:
+  @ automenu (.window .home [pils editor automenu])
+}
+><:[module:. pils editor .timestamp 2026-07-27T11:49:25.212+02 .language system]><;
 { window
 | :ok
 !  ;lifetime platform lifetime (this module name);
@@ -69,7 +101,9 @@
       }
       and:
       ( ;language
-          module-name call (library-channel) module language or [system]
+          module-name call (library-channel)
+          or (module:. language:. [system])
+          module language or [system]
         ;
         language-combo index: languages =* (language,)
       )
@@ -153,6 +187,29 @@
 { editor-channel | :ok this module channel }
 { window | :try @@ [pils editor] window }
 
+><:[module:. pils editor automenu .timestamp 2026-07-27T13:22:53.114+02 .language system]><;
+{ automenu
+| :ok [file module edit test]
+}
+><:[module:. pils editor automenu edit .timestamp 2026-07-27T13:32:20.804+02 .language system]><;
+{ edit
+| :ok [testing edit]
+}
+><:[module:. pils editor automenu file .timestamp 2026-07-27T13:29:58.338+02 .language system]><;
+{ open
+| :ok 
+}
+{ explore
+| :ok 
+}
+><:[module:. pils editor automenu module .timestamp 2026-07-27T13:51:17.219+02 .language system]><;
+{ create | shit }
+{ navigate | shit }
+
+><:[module:. pils editor automenu test .timestamp 2026-07-27T13:33:32.162+02 .language system]><;
+{ test
+| :ok [testing test]
+}
 ><:[module:. pils editor language .timestamp 2026-07-26T23:32:39.340+02 .language system]><;
 { language: ..module-name
 | :ok
@@ -192,13 +249,15 @@
   @ new
 }
 
-><:[module:. pils editor menu .timestamp 2026-07-26T22:29:32.557+02 .language system]><;
+><:[module:. pils editor menu .timestamp 2026-07-27T15:13:25.855+02 .language system]><;
 ;library-channel;
 { menu: .page .window .tabs
 | :who :ok
   ;home page id;
   ;menubar window menubar
     { action: . | :try action call: @ operations: .window .tabs }
+    { action:. item:. .actor | ? }
+    { action:. item:. .actor | :try item call (actor) }
   ;
   ;text page editor text;
   ;items who items (.page .window .tabs);
@@ -238,6 +297,7 @@
     | :ok menu action (. .name saying (name))
     }
   }
+  and: menubar
 }
 
 { items: .page .window .tabs
@@ -257,8 +317,10 @@
     :if
       ( text = module-node (.module-name home) module )
       and
-      ( page editor language
-         = home call (library-channel) module language or [system]
+      ( page editor language =
+        home call (library-channel)
+        or (module:. language:. [system])
+        module language or [system]
       )
     .else
       ( menu: . [module save] .shortcut "Ctrl+S" .action save: .page ),
@@ -301,7 +363,7 @@
 !  & (@ languages: .page)
 !  & (@ libraries)
 }
-><:[module:. pils editor navigate .timestamp 2026-07-17T21:29:10.124+02 .language system]><;
+><:[module:. pils editor navigate .timestamp 2026-07-27T11:11:48.212+02 .language system]><;
 ;library-channel (channel: pils-library: this program filename)
 .language this program language
 ;
@@ -354,7 +416,7 @@
     }
   }
   populate (.view .tree) and:
-  [hip hop] bug {} and:
+  ;_ platform lifetime (module-navigator: this program filename);
   dialog listen
   { cancel | }
 }

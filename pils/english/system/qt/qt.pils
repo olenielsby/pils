@@ -1,4 +1,4 @@
-><:[module:. platform qt dialog .timestamp 2026-07-17T16:17:16.160+02 .language qt]><;
+><:[module:. platform qt dialog .timestamp 2026-07-27T11:09:43.269+02 .language qt]><;
 ;new plumcake .WA_DeleteOnClose 55 .WindowModal 1;
 { dialog: .window .boss
 | :where :what :ok
@@ -12,14 +12,14 @@
   { channel | :who :ok channel: who }
   { listen: handler
   | :who :ok
-    ;listener who channel listen (handler);
-    who q:show mind listener := listener;
+    ;strap (strap: listen: who);
+    who . strap and: strap? := who channel listen (handler);
     who
   } 
   { bug | shit }
   { close
   | :who :ok
-    window mind dialog-listen := ();
+!    window mind dialog-listen := ();
     who q:close
   }
   { column: boss
@@ -216,7 +216,7 @@
   }
   .(@ strap) .:need
 }
-><:[module:. platform qt entry window strap .timestamp 2009-01-16T22:44:21.050+01 .language qt]><;
+><:[module:. platform qt entry window strap .timestamp 2026-07-27T10:47:22.259+02 .language qt]><;
 ;straps
   (strap: program: this program filename),
   (strap: mind: program: this program filename)
@@ -483,18 +483,11 @@
   }
   +++ boss
 }
-><:[module:. platform qt menubar .timestamp 2026-07-24T22:22:59.022+02 .language qt]><;
+><:[module:. platform qt menubar .timestamp 2026-07-27T14:23:44.284+02 .language qt]><;
 ;new plumcake;
 { menubar: .window .boss
 | :ok window q:menuBar q:clear
   +++
-  { action: ..name
-  | :who :ok
-    who q:addAction (name)
-    when
-    { qs:triggered: args | :try boss action (.) }
-    and: who
-  }
   { action: ..name
   | :who :ok
     ;act new Q:Action (name, who)
