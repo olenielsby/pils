@@ -1,12 +1,16 @@
 [pils: .use?]
-><:[module:. pils automenu .timestamp 2026-07-27T14:46:17.167+02 .language system]><;
+><:[module:. pils automenu .timestamp 2026-07-27T15:24:51.228+02 .language system]><;
 { automenu: .home .window
-| :ok
+| :self :ok
   ;menubar window menubar
     { action:. item:. .actor
     | :try item call (actor)
     }
   ;
+  self automenu: .home .window .menubar
+}
+{ automenu: .home .window .menubar
+| :ok
   @@ (home) automenu each
   { (menu) =  ? // ?
   | :try
@@ -249,7 +253,7 @@
   @ new
 }
 
-><:[module:. pils editor menu .timestamp 2026-07-27T15:13:25.855+02 .language system]><;
+><:[module:. pils editor menu .timestamp 2026-07-27T15:28:46.488+02 .language system]><;
 ;library-channel;
 { menu: .page .window .tabs
 | :who :ok
@@ -259,6 +263,10 @@
     { action:. item:. .actor | ? }
     { action:. item:. .actor | :try item call (actor) }
   ;
+  @@ [pils automenu] automenu
+    (.window .menubar .home [pils editor automenu])
+  and:
+
   ;text page editor text;
   ;items who items (.page .window .tabs);
   items legs
