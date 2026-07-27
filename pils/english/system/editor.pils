@@ -50,7 +50,7 @@
   window listen {|} and:
   @ automenu (.window .home [pils editor automenu])
 }
-><:[module:. pils editor .timestamp 2026-07-27T16:22:15.942+02 .language system]><;
+><:[module:. pils editor .timestamp 2026-07-27T22:24:50.867+02 .language system]><;
 { window
 | :ok
 !  ;lifetime platform lifetime (this module name);
@@ -86,6 +86,9 @@
     { bug
     | :who
       who module-label text (this program language write: who current id)
+    }
+    { module: .module-name
+    | :who :ok who module: .module-name .tabs who
     }
     { module: .module-name .tabs
     | :ok
@@ -186,6 +189,7 @@
   and:
   window listen
   { tab | :try tabs current }
+  { tabs | :ok tabs }
   { window | :ok window }
   { show: .result .page
   | :try result-pane text:
@@ -216,14 +220,23 @@
 { edit
 | :ok [testing edit]
 }
-><:[module:. pils editor automenu file .timestamp 2026-07-27T13:29:58.338+02 .language system]><;
+><:[module:. pils editor automenu file .timestamp 2026-07-27T22:59:30.695+02 .language system]><;
 { open
-| :ok 
+| :- {shortcut|:ok "Ctrl+O"};
+  :ok channel window filedialog
+  { path | :ok  this program filename <-#-* "/" }
+  {  filter | :ok "*." [pils-configuration:pils-filetype] }
+  {  title | :ok say [open file] }
+  {  bug | shit }
+  { pick: file
+  | :if file <$* ("." [pils-configuration:pils-filetype]) > 0;
+    :try file @@@ [pils run start] .:need start
+  }
 }
 { explore
 | :ok 
 }
-><:[module:. pils editor automenu module .timestamp 2026-07-27T16:55:12.791+02 .language system]><;
+><:[module:. pils editor automenu module .timestamp 2026-07-27T22:50:26.399+02 .language system]><;
 { create
 | :- {shortcut|:ok "Ctrl+N"};
   :ok
@@ -302,11 +315,70 @@
   window channel restructure anyway:
   } 
 }
-{ navigate | shit }
+
+{ navigate
+| :- {shortcut|:ok "Ctrl+M"};
+  :ok
+  ;library-channel (channel: pils-library: this program filename)
+  .language this program language
+  ;
+  ;modules 
+    library-channel node legs {+& ok := ?|:ok}
+    order {(ok)|:ok ' .(language write) <-##* ",]"}
+  ;
+  ;tree
+  ( level:. 1; modules) call
+  { level:.; items
+  | :self :ok
+    items groups { (item) | :ok item +# level }
+    legs
+    { (branch) := items
+    | :ok branch:.;
+      self level: . ' + 1;
+      items each {(ok) & n|:if n > level; :ok}
+    }
+    order {branch:.;?|:ok language write (branch)}
+  }   
+  ;
+  ;dialog
+  window dialog
+  { title | :ok say [pick module] }
+  { size | :ok [400 300] }
+  { bug | shit }
+  ;
+  ;column dialog column ();
+  ;view column tree
+    { picked: node
+    | :ok
+      ;module-name node id;
+      dialog close and:
+      ;tabs channel tabs;
+      tabs module: .module-name
+    }
+  ;
+  { populate: .view .tree
+  | :self :ok
+    tree every
+    { branch: .; items
+    | :ok
+      self populate: .tree items .view ' node
+      { text
+      | :ok language write (branch <+# 1 singlewise) -#$* "[" <-#$* "]"
+      }
+      { id | :ok branch }
+    }
+  }
+  populate (.view .tree) and:
+  ;_ platform lifetime (module-navigator: this program filename);
+  dialog listen
+  { cancel | }
+}
 
 
-
-
+{ close
+| :- {shortcut|:ok "Ctrl+F4"};
+  channel tabs remove-current
+}
 ===
 { save | :try @@ [pils system program-file] save }
 ><:[module:. pils editor automenu test .timestamp 2026-07-27T13:33:32.162+02 .language system]><;
@@ -352,7 +424,7 @@
   @ new
 }
 
-><:[module:. pils editor menu .timestamp 2026-07-27T16:33:21.514+02 .language system]><;
+><:[module:. pils editor menu .timestamp 2026-07-27T22:58:40.679+02 .language system]><;
 ;library-channel;
 { menu: .page .window .tabs
 | :who :ok
@@ -410,11 +482,7 @@
 { items: .page .window .tabs
 | :ok
   ;home page id;
-  ( ( menu: . [file open] .shortcut "Ctrl+O" .action [open] ),
-    ( menu: . [file explorer] .shortcut "Ctrl+E" .action [explorer] ),
-    ( menu: . [module navigate] .shortcut "Ctrl+M"
-      .action navigate: .page ),
-    ( menu: . [edit detective] .shortcut "Ctrl+D" .action [detective] ),
+  (  ( menu: . [edit detective] .shortcut "Ctrl+D" .action [detective] ),
   )
 !  &
 !  ( page mind extra menu (.window) or () )
@@ -526,7 +594,7 @@
   dialog listen
   { cancel | }
 }
-><:[module:. pils editor operations .timestamp 2026-07-27T16:30:51.959+02 .language system]><;
+><:[module:. pils editor operations .timestamp 2026-07-27T22:56:07.928+02 .language system]><;
 ;library-channel;
 { operations: .window .tabs
 | :ok
@@ -714,17 +782,6 @@
     paged anyway:
     savez and:
     :try tabs open (.module-name)
-  }
-  { open
-  | :ok window filedialog
-    { path | :ok  this program filename <-#-* "/" }
-    {  filter | :ok "*." [pils-configuration:pils-filetype] }
-    {  title | :ok say [open file] }
-    {  bug | shit }
-    { pick: file
-    | :if file <$* ("." [pils-configuration:pils-filetype]) > 0;
-      :try file @@@ [pils run start] .:need start
-    }
   }
   { explorer | :try platform system explorer }
   ==='

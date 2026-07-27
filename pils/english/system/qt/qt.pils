@@ -414,7 +414,7 @@
   layout q:addWidget (widget) and:
   widget
 }
-><:[module:. platform qt lane tabs .timestamp 2026-07-26T13:00:17.090+02 .language qt]><;
+><:[module:. platform qt lane tabs .timestamp 2026-07-27T22:49:42.364+02 .language qt]><;
 ;new plumcake;
 { tabs: .boss .layout
 | :ok
@@ -430,7 +430,10 @@
     | :who :ok
       who q:count up every
       { (n) | :ok who q:widget: n - 1 }
-    }	
+    }
+    { remove-current
+    | :who :ok who q:removeTab: who q:currentIndex
+    }
     { tab: boss
     | :who :ok
       ;tab new Q:Widget when
