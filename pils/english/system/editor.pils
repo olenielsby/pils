@@ -1,5 +1,5 @@
 [pils: .use?]
-><:[module:. pils automenu .timestamp 2026-07-27T15:24:51.228+02 .language system]><;
+><:[module:. pils automenu .timestamp 2026-07-27T16:52:25.390+02 .language system]><;
 { automenu: .home .window
 | :self :ok
   ;menubar window menubar
@@ -11,20 +11,35 @@
 }
 { automenu: .home .window .menubar
 | :ok
+  ;channel window channel;
   @@ (home) automenu each
   { (menu) =  ? // ?
   | :try
     @@ (home & menu) .:need
     call
     { ::ruleset ' = (::ruleset rules) .where
-    | ;actor (::ruleset .where :;window; where);
+    | ;actor (::ruleset .where :;channel; where);
       :possibly
-      ;items rules every [call: match] .:need;
+      ;items rules each
+        { ;match item = ? // ? .action
+        | :ok item:. .guard action call
+          { ::- ruleset = (::ruleset?); ?
+          | :ok (::ruleset .where :;channel; where)
+          }
+          or ()
+        }
+      ;
       ;menu menubar menu (.name say (menu));
       items each
-      { (item) = ? // ?
-      | menu action: . (item:. .actor) .name say (item)
+      { item:. .guard?
+      | :ok menu action: . (item:. .actor) .name say (item)
       }
+      { item:. .guard
+      | ;shortcut guard shortcut .:need;
+        :ok menu action: . (item:. .actor) .name say (item) .shortcut
+      }
+
+
     }
   }
 }
@@ -35,7 +50,7 @@
   window listen {|} and:
   @ automenu (.window .home [pils editor automenu])
 }
-><:[module:. pils editor .timestamp 2026-07-27T11:49:25.212+02 .language system]><;
+><:[module:. pils editor .timestamp 2026-07-27T16:22:15.942+02 .language system]><;
 { window
 | :ok
 !  ;lifetime platform lifetime (this module name);
@@ -170,6 +185,8 @@
   @ menu (.window .tabs .page tabs current)
   and:
   window listen
+  { tab | :try tabs current }
+  { window | :ok window }
   { show: .result .page
   | :try result-pane text:
      result call
@@ -206,10 +223,92 @@
 { explore
 | :ok 
 }
-><:[module:. pils editor automenu module .timestamp 2026-07-27T13:51:17.219+02 .language system]><;
-{ create | shit }
+><:[module:. pils editor automenu module .timestamp 2026-07-27T16:55:12.791+02 .language system]><;
+{ create
+| :- {shortcut|:ok "Ctrl+N"};
+  :ok
+  ;page channel tab .window channel window;
+  ;module page id
+  .language this program language
+  .start-info say [enter module name]
+  ;
+  ;dialog window dialog
+    { title | :ok say [create new module] }
+  ;
+  ;main-column dialog column ();
+  ;info main-column label () text (say [enter module name]);
+  ;new-name main-column line-edit
+    { text:. | :try dialog channel consider (text) }
+  ;
+  ;button-row main-column row ();
+  ;ok-button button-row button
+    { title | :ok say [ok] }
+    { pressed | :try dialog channel ok }
+  ;
+  ;cancel-button button-row button
+    { title | :ok say [cancel] }
+    { pressed | dialog close  }
+  ;
+  dialog listen
+  { consider: text | info text: validate (text) info }
+  { ok | dialog close }
+  { ok
+  | validate (new-name text) call
+    { valid: .module .info?
+    | :ok create (.module)
+    }
+    or: :ok [don't close]
+  }
+  ===
+  { validate: ? | :ok info:. say [invalid module name] } 
+  { validate: "" | :ok info:. start-info }
+  { validate: text
+  | ;module
+      language read ("[" (text) "]") .:need
+      call {(ok) = ? // ?|:ok} .:need
+      .(module &)
+    ;
+    :ok
+    module call (library-channel node) and
+    ( info:. say
+      ( [module]," " (language write: module) " ", [already exists])
+    )
+    or:
+    valid: .module .info
+    say [create module] ": " (language write: module)
+  }
+  { create: .module new
+  | :possibly
+    this program libraries
+    every
+    { library: .why? .filename
+    | :ok [node] call: channel: pils-library: filename
+    }
+    find ((call: new) -> {(ok)|:ok ' without [timestamp]})
+    or:
+    ;language this program language;
+    ;lastname new <+# 1 1;
+    ;testrule (: { (lastname) | ::ok [testing], lastname  });
+    ;newtext
+      language write (testrule) *=* ["{", "{ ", "|", ""="| ", "}", ""="}"=]
+    ;
+    language read (newtext) .:need and:
+    (library-channel) (new) :=
+    ( module: . newtext .timestamp
+      .language library-channel header language or [system]
+    );
+  save anyway:
+  window channel open (.module new) and:
+  window channel restructure anyway:
+  } 
+}
 { navigate | shit }
 
+
+
+
+===
+{ save | :try @@ [pils system program-file] save }
 ><:[module:. pils editor automenu test .timestamp 2026-07-27T13:33:32.162+02 .language system]><;
 { test
 | :ok [testing test]
@@ -253,7 +352,7 @@
   @ new
 }
 
-><:[module:. pils editor menu .timestamp 2026-07-27T15:28:46.488+02 .language system]><;
+><:[module:. pils editor menu .timestamp 2026-07-27T16:33:21.514+02 .language system]><;
 ;library-channel;
 { menu: .page .window .tabs
 | :who :ok
@@ -313,7 +412,6 @@
   ;home page id;
   ( ( menu: . [file open] .shortcut "Ctrl+O" .action [open] ),
     ( menu: . [file explorer] .shortcut "Ctrl+E" .action [explorer] ),
-    ( menu: . [module create] .shortcut "Ctrl+N" .action new: .page ),
     ( menu: . [module navigate] .shortcut "Ctrl+M"
       .action navigate: .page ),
     ( menu: . [edit detective] .shortcut "Ctrl+D" .action [detective] ),
@@ -428,7 +526,7 @@
   dialog listen
   { cancel | }
 }
-><:[module:. pils editor operations .timestamp 2026-07-26T23:42:49.772+02 .language system]><;
+><:[module:. pils editor operations .timestamp 2026-07-27T16:30:51.959+02 .language system]><;
 ;library-channel;
 { operations: .window .tabs
 | :ok
@@ -451,7 +549,6 @@
 ! end test rule
   { detective | :ok @ detective: .window .tabs }
   { [test open] | :try @@ [pils run command open] open }
-  { new: .page | :ok @ new: .page .window  }
   { rename: .page
   | ;old page mind module-name .:need;
     ;last old call {(ok) 0|:ok} .:need;
@@ -712,85 +809,10 @@
   { paged | :try @ refresh: .window .tabs }
   { [pane: result] | :ok [result escape] find (editor-channel) anyway: }
 }
-><:[module:. pils editor operations new .timestamp 2026-07-18T23:15:06.634+02 .language system]><;
-{ new: .page .window
-| :ok
-  ;module page id
-  .language this program language
-  .start-info say [enter module name]
-  ;
-  ;dialog window dialog
-    { title | :ok say [create new module] }
-  ;
-  ;main-column dialog column ();
-  ;info main-column label () text (say [enter module name]);
-  ;new-name main-column line-edit
-    { text:. | :try dialog channel consider (text) }
-  ;
-  ;button-row main-column row ();
-  ;ok-button button-row button
-    { title | :ok say [ok] }
-    { pressed | :try dialog channel ok }
-  ;
-  ;cancel-button button-row button
-    { title | :ok say [cancel] }
-    { pressed | dialog close  }
-  ;
-  dialog listen
-  { consider: text | info text: validate (text) info }
-  { ok | dialog close }
-  { ok
-  | validate (new-name text) call
-    { valid: .module .info?
-    | :ok create (.module)
-    }
-    or: :ok [don't close]
-  }
-  ===
-  { validate: ? | :ok info:. say [invalid module name] } 
-  { validate: "" | :ok info:. start-info }
-  { validate: text
-  | ;module
-      language read ("[" (text) "]") .:need
-      call {(ok) = ? // ?|:ok} .:need
-      .(module &)
-    ;
-    :ok
-    module call (library-channel node) and
-    ( info:. say
-      ( [module]," " (language write: module) " ", [already exists])
-    )
-    or:
-    valid: .module .info
-    say [create module] ": " (language write: module)
-  }
-  { create: .module new
-  | :possibly
-    this program libraries
-    every
-    { library: .why? .filename
-    | :ok [node] call: channel: pils-library: filename
-    }
-    find ((call: new) -> {(ok)|:ok ' without [timestamp]})
-    or:
-    ;language this program language;
-    ;lastname new <+# 1 1;
-    ;testrule (: { (lastname) | ::ok [testing], lastname  });
-    ;newtext
-      language write (testrule) *=* ["{", "{ ", "|", ""="| ", "}", ""="}"=]
-    ;
-    language read (newtext) .:need and:
-    (library-channel) (new) :=
-    ( module: . newtext .timestamp
-      .language library-channel header language or [system]
-    );
-  save anyway:
-  window channel open (.module new) and:
-  window channel restructure anyway:
-  } 
+><:[module:. pils editor operations newbie .timestamp 2026-07-27T16:29:34.990+02 .language system]><;
+{ newbie
+| :ok [testing newbie]
 }
-===
-{ save | :try @@ [pils system program-file] save }
 ><:[module:. pils editor refresh .timestamp 2026-07-08T19:02:30.576+02 .language system]><;
 ;library-channel (channel: pils-library: this program filename);
 { refresh: .tabs .window
