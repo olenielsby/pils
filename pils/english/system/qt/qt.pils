@@ -399,26 +399,38 @@
   { text | :who :ok who q:text }
   +++ boss
 }
-><:[module:. platform qt lane line-edit .timestamp 2026-07-26T12:24:15.617+02 .language qt]><;
+><:[module:. platform qt lane line-edit .timestamp 2026-07-28T12:53:15.432+02 .language qt]><;
 ;new plumcake;
 { line-edit: .boss .layout
 | :ok
-  ;widget new Q:LineEdit when
-  ( { qs:textChanged: text | :who :try who text:. text }
-    { text: text | :who :ok who q:setText (text) }
-    { text | :who :ok who q:text }
-    { focus | :who :ok who q:setFocus }
-    +++ boss
-  )
-  ;
-  layout q:addWidget (widget) and:
-  widget
+  new Q:LineEdit
+  try {(widget)|layout q:addWidget: widget}
+  call (@ ownership: .boss) when:
+  { qs:textChanged: text | :who :try who text:. text }
+  { qe:keyPress: key, ?, 0, 0
+  | :who :try boss key: :need key call
+    [ key:
+      .16777216 esc
+      .16777220 enter
+      .16777234 left
+      .16777235 up
+      .16777236 right
+      .16777237 down
+    ]
+  }
+  { qe:keyPress: 16777220, ?, 33554432, 0
+  | :who :try boss key [shift enter]
+  }
+  { text: text | :who :ok who q:setText (text) }
+  { text | :who :ok who q:text }
+  { focus | :who :ok who q:setFocus }
+  { select | :who :ok who q:selectAll }
 }
-><:[module:. platform qt lane tabs .timestamp 2026-07-27T22:49:42.364+02 .language qt]><;
+><:[module:. platform qt lane tabs .timestamp 2026-07-28T09:50:20.316+02 .language qt]><;
 ;new plumcake;
 { tabs: .boss .layout
 | :ok
-  ;widget new Q:TabWidget;
+  ;widget new Q:TabWidget q:setMovable 1;
   layout q:addWidget (widget) and:
   widget when
   ( { bug | :ok shit }

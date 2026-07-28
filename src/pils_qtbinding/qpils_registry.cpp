@@ -187,21 +187,108 @@ void QtObjectClassName::initialize()
 
     // ===== QLineEdit =====
     BEGIN_CLASS(QLineEdit)
+
+    // Constructors
     CONSTRUCTOR_NOARGS(QLineEdit)
     CONSTRUCTOR_ARGS(QLineEdit, QWidget*)
-    CONSTRUCTOR_ARGS(QLineEdit, const QString&, QWidget*)
     CONSTRUCTOR_ARGS(QLineEdit, const QString&)
-    METHOD_(QLineEdit, setText)
+    CONSTRUCTOR_ARGS(QLineEdit, const QString&, QWidget*)
+
+    // Text
     METHOD_(QLineEdit, text)
+    METHOD_(QLineEdit, setText)
     METHOD_(QLineEdit, clear)
+    METHOD_(QLineEdit, displayText)
+    METHOD_(QLineEdit, insert)
+
+    // Placeholder
+    METHOD_(QLineEdit, placeholderText)
     METHOD_(QLineEdit, setPlaceholderText)
+
+    // Selection
+    METHOD_(QLineEdit, selectAll)
+    METHOD_(QLineEdit, deselect)
+    METHOD_(QLineEdit, hasSelectedText)
+    METHOD_(QLineEdit, selectedText)
+    METHOD_(QLineEdit, selectionStart)
+    METHOD_OVERLOAD(QLineEdit, setSelection, void(QLineEdit::*)(int, int))
+
+    // Cursor
+    METHOD_(QLineEdit, cursorPosition)
+    METHOD_(QLineEdit, setCursorPosition)
+    METHOD_OVERLOAD(QLineEdit, cursorForward,
+                    void(QLineEdit::*)(bool, int))
+    METHOD_OVERLOAD(QLineEdit, cursorBackward,
+                    void(QLineEdit::*)(bool, int))
+    METHOD_(QLineEdit, cursorWordForward)
+    METHOD_(QLineEdit, cursorWordBackward)
+    METHOD_(QLineEdit, home)
+    METHOD_(QLineEdit, end)
+
+    // Editing
+    METHOD_(QLineEdit, backspace)
+    METHOD_(QLineEdit, del)
+    METHOD_(QLineEdit, cut)
+    METHOD_(QLineEdit, copy)
+    METHOD_(QLineEdit, paste)
+    METHOD_(QLineEdit, undo)
+    METHOD_(QLineEdit, redo)
+    METHOD_(QLineEdit, isUndoAvailable)
+    METHOD_(QLineEdit, isRedoAvailable)
+
+    // Read only / modified
+    METHOD_(QLineEdit, setReadOnly)
+    METHOD_(QLineEdit, isReadOnly)
+    METHOD_(QLineEdit, setModified)
+    METHOD_(QLineEdit, isModified)
+
+    // Length / frame
+    METHOD_(QLineEdit, setMaxLength)
+    METHOD_(QLineEdit, maxLength)
+    METHOD_(QLineEdit, setFrame)
+    METHOD_(QLineEdit, hasFrame)
+
+    // Alignment
+    METHOD_(QLineEdit, setAlignment)
+    METHOD_(QLineEdit, alignment)
+
+    // Echo mode
+    METHOD_(QLineEdit, setEchoMode)
+    METHOD_(QLineEdit, echoMode)
+
+    // Drag & Drop
+    METHOD_(QLineEdit, setDragEnabled)
+    METHOD_(QLineEdit, dragEnabled)
+
+    // Clear button
+    METHOD_(QLineEdit, setClearButtonEnabled)
+    METHOD_(QLineEdit, isClearButtonEnabled)
+
+    // Input mask
+    METHOD_(QLineEdit, setInputMask)
+    METHOD_(QLineEdit, inputMask)
+    METHOD_(QLineEdit, hasAcceptableInput)
+
+    // Margins
+    METHOD_OVERLOAD(QLineEdit, setTextMargins, void(QLineEdit::*)(int, int, int, int))
+    METHOD_(QLineEdit, textMargins)
+
+    // Actions
+    METHOD_OVERLOAD(QLineEdit, addAction, void(QLineEdit::*)(QAction*, QLineEdit::ActionPosition))
+    METHOD_OVERLOAD(QLineEdit, addAction, QAction*(QLineEdit::*)(const QIcon&, QLineEdit::ActionPosition))
+    METHOD_(QLineEdit, removeAction)
+
+    // Signals
     SIGNAL_(QLineEdit, textChanged)
     SIGNAL_(QLineEdit, textEdited)
-    SIGNAL_(QLineEdit, returnPressed)
-    SIGNAL_(QLineEdit, editingFinished)
     SIGNAL_(QLineEdit, cursorPositionChanged)
     SIGNAL_(QLineEdit, selectionChanged)
+    SIGNAL_(QLineEdit, returnPressed)
+    SIGNAL_(QLineEdit, editingFinished)
+    SIGNAL_(QLineEdit, inputRejected)
+
     END_CLASS()
+
 
     // ===== QTextEdit =====
     BEGIN_CLASS(QTextEdit)
@@ -314,6 +401,7 @@ void QtObjectClassName::initialize()
     METHOD_(QTabWidget, setTabsClosable)
     METHOD_(QTabWidget, currentWidget)   // bekvemmelighed
     METHOD_(QTabWidget, setCurrentWidget)   // bekvemmelighed
+    METHOD_(QTabWidget, setMovable)
     SIGNAL_(QTabWidget, currentChanged)
     SIGNAL_(QTabWidget, tabCloseRequested)
     SIGNAL_(QTabWidget, tabBarClicked)

@@ -50,7 +50,7 @@
   window listen {|} and:
   @ automenu (.window .home [pils editor automenu])
 }
-><:[module:. pils editor .timestamp 2026-07-27T22:24:50.867+02 .language system]><;
+><:[module:. pils editor .timestamp 2026-07-28T12:44:13.123+02 .language system]><;
 { window
 | :ok
 !  ;lifetime platform lifetime (this module name);
@@ -153,42 +153,41 @@
   ;
   ;statusbar window statusbar ();
   statusbar label [status] text (say [search] ":") and:
-  ;search statusbar line-edit ();
-  statusbar button
-    { title | :ok say [next] }
-    { pressed
-    | ;edit tabs current editor;
-      ;text edit text .search search text .from edit selection largest;
+  ;search statusbar line-edit
+    { key [up]
+    | :ok
+      ;edit tabs current editor .search window channel search text;
+      ;text edit text .from edit selection smallest;
+      ;at text +# from <=* search;
+      :if at > 0;
+      ;to from - at;
+      edit selection (to, to + search count)
+    }
+    { key [down]
+    | :ok
+      ;edit tabs current editor .search window channel search text;
+      ;text edit text .from edit selection largest;
       ;at text -# from =* search;
       :if at > 0;
       ;to from + at;
       edit selection (to - search count, to)
     }
-  and:
-  statusbar button
-    { title | :ok say [previous] }
-    { pressed
-    | ;edit tabs current editor;
-      ;text edit text .search search text .from edit selection largest;
-      ;at text +# from <=* search;
-      :if at > 0;
-      ;to from - at;
-      edit selection (to, to + search count)
+    { key [esc]
+    | :ok tabs current editor focus
     }
-    { pressed
-    |  ;edit tabs current editor;
-      ;text edit text .search search text .from edit selection smallest;
-      ;at text +# from <=* search;
-      :if at > 0;
-      ;to from - at;
-      edit selection (to, to + search count)
+    { key [enter]
+    | :who :try who key [down]
     }
-  and:
+    { key [shift enter]
+    | :who :try who key [up]
+    }
+  ;
   @ operations (.window .tabs) module (.module-name @ latest) and:
   @ menu (.window .tabs .page tabs current)
   and:
   window listen
   { tab | :try tabs current }
+  { search | :ok search }
   { tabs | :ok tabs }
   { window | :ok window }
   { show: .result .page
@@ -216,11 +215,12 @@
 { automenu
 | :ok [file module edit test]
 }
-><:[module:. pils editor automenu edit .timestamp 2026-07-27T13:32:20.804+02 .language system]><;
-{ edit
-| :ok [testing edit]
+><:[module:. pils editor automenu edit .timestamp 2026-07-28T10:54:37.692+02 .language system]><;
+{ search
+| :-  {shortcut|:ok "Ctrl+F"};
+  :ok channel search focus select
 }
-><:[module:. pils editor automenu file .timestamp 2026-07-27T22:59:30.695+02 .language system]><;
+><:[module:. pils editor automenu file .timestamp 2026-07-28T09:51:20.075+02 .language system]><;
 { open
 | :- {shortcut|:ok "Ctrl+O"};
   :ok channel window filedialog
@@ -234,7 +234,7 @@
   }
 }
 { explore
-| :ok 
+| 
 }
 ><:[module:. pils editor automenu module .timestamp 2026-07-27T22:50:26.399+02 .language system]><;
 { create
