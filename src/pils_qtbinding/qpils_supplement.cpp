@@ -67,7 +67,7 @@ void QPilsTreeWidget::clearTree()
     clear();
 }
 
-QPilsTreeNode *QPilsTreeWidget::wrap(QTreeWidgetItem *item)
+QPilsTreeWidgetItem *QPilsTreeWidget::wrap(QTreeWidgetItem *item)
 {
     if (!item)
         return nullptr;
@@ -76,22 +76,22 @@ QPilsTreeNode *QPilsTreeWidget::wrap(QTreeWidgetItem *item)
     if (it != wrappers_.end())
         return it->second;
 
-    auto *node = new QPilsTreeNode(this, item);
+    auto *node = new QPilsTreeWidgetItem(this, item);
     wrappers_[item] = node;
     return node;
 }
 
-QPilsTreeNode *QPilsTreeWidget::addRootNode(const QString &text)
+QPilsTreeWidgetItem *QPilsTreeWidget::addTopLevelItem(const QString &text)
 {
     auto *item = new QTreeWidgetItem;
     item->setText(0, text);
-    addTopLevelItem(item);
+    QTreeWidget::addTopLevelItem(item);
     return wrap(item);
 }
 
-QPilsTreeNode *QPilsTreeWidget::currentNode() const
+QPilsTreeWidgetItem *QPilsTreeWidget::currentItem() const
 {
-    auto *item = currentItem();
+    auto *item = QTreeWidget::currentItem();
     if (!item)
         return nullptr;
 
@@ -99,9 +99,15 @@ QPilsTreeNode *QPilsTreeWidget::currentNode() const
     return it == wrappers_.end() ? nullptr : it->second;
 }
 
+void QPilsTreeWidget::setCurrentItem(QPilsTreeWidgetItem *item)
+{
+    QTreeWidget::setCurrentItem(item->item_);
+}
+
+
 //==========================================================
 
-QPilsTreeNode::QPilsTreeNode(QPilsTreeWidget *tree,
+QPilsTreeWidgetItem::QPilsTreeWidgetItem(QPilsTreeWidget *tree,
                              QTreeWidgetItem *item)
     : QObject(tree),
     tree_(tree),
@@ -109,17 +115,17 @@ QPilsTreeNode::QPilsTreeNode(QPilsTreeWidget *tree,
 {
 }
 
-QString QPilsTreeNode::text() const
+QString QPilsTreeWidgetItem::text() const
 {
     return item_->text(0);
 }
 
-void QPilsTreeNode::setText(const QString &text)
+void QPilsTreeWidgetItem::setText(const QString &text)
 {
     item_->setText(0, text);
 }
 
-QPilsTreeNode *QPilsTreeNode::addChild(const QString &text)
+QPilsTreeWidgetItem *QPilsTreeWidgetItem::addChild(const QString &text)
 {
     auto *child = new QTreeWidgetItem;
     child->setText(0, text);
@@ -127,36 +133,36 @@ QPilsTreeNode *QPilsTreeNode::addChild(const QString &text)
     return tree_->wrap(child);
 }
 
-QPilsTreeNode *QPilsTreeNode::parentNode() const
+QPilsTreeWidgetItem *QPilsTreeWidgetItem::parentNode() const
 {
     return tree_->wrap(item_->parent());
 }
 
-int QPilsTreeNode::childCount() const
+int QPilsTreeWidgetItem::childCount() const
 {
     return item_->childCount();
 }
 
-QPilsTreeNode *QPilsTreeNode::child(int i) const
+QPilsTreeWidgetItem *QPilsTreeWidgetItem::child(int i) const
 {
     return tree_->wrap(item_->child(i));
 }
 
-void QPilsTreeNode::expand()
+void QPilsTreeWidgetItem::expand()
 {
     tree_->expandItem(item_);
 }
 
-void QPilsTreeNode::collapse()
+void QPilsTreeWidgetItem::collapse()
 {
     tree_->collapseItem(item_);
 }
 
-const PILS::QtObjectClassName *QPilsTreeNode::getClassName()
+const PILS::QtObjectClassName *QPilsTreeWidgetItem::getClassName()
 {
     if (className == nullptr)
     {
-        const PILS::PilsString* pilsName = PILS::PilsString::get("PilsTreeNode");
+        const PILS::PilsString* pilsName = PILS::PilsString::get("PilsTreeWidgetItem");
         PILS::Namespace_QtClass::singleton.uri->retain();
         const PILS::ClicheShort *dumbClassName = PILS::Namespace_QtClass::singleton.uri->clichefy(pilsName);
         className = static_cast<const PILS::QtObjectClassName*>(dumbClassName);
@@ -164,7 +170,7 @@ const PILS::QtObjectClassName *QPilsTreeNode::getClassName()
     return className;
 }
 
-const PILS::QtObjectClassName *QPilsTreeNode::className = nullptr;
+const PILS::QtObjectClassName *QPilsTreeWidgetItem::className = nullptr;
 
 void QPilsGroupBox::paintEvent(QPaintEvent *)
 {

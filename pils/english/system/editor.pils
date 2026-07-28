@@ -244,7 +244,7 @@
 { explore
 | 
 }
-><:[module:. pils editor automenu module .timestamp 2026-07-28T14:19:18.013+02 .language system]><;
+><:[module:. pils editor automenu module .timestamp 2026-07-28T19:30:51.907+02 .language system]><;
 { create
 | :- {shortcut|:ok "Ctrl+N"};
   :ok
@@ -355,7 +355,7 @@
   { bug | shit }
   ;
   ;column dialog column ();
-  ;view column tree
+  ;treeview column tree
     { picked: node
     | :ok
       ;module-name node id;
@@ -374,12 +374,19 @@
       | :ok language write (branch <+# 1 singlewise) -#$* "[" <-#$* "]"
       }
       { id | :ok branch }
+      try
+      { (item)
+      | :if branch = window channel tabs current id;
+        treeview current: item
+      }
     }
   }
-  populate (.view .tree) and:
+  populate (.view treeview .tree) and:
+  treeview focus and:
   ;_ platform lifetime (module-navigator: this program filename);
   dialog listen
   { | }
+  and: treeview focus
 }
 
 

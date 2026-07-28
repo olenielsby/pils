@@ -31,7 +31,7 @@ private:
     };
 };
 
-class QPilsTreeNode;
+class QPilsTreeWidgetItem;
 class QPilsTreeWidget : public QTreeWidget
 {
 public:
@@ -39,30 +39,31 @@ public:
     QPilsTreeWidget() : QPilsTreeWidget(nullptr) {}
     ~QPilsTreeWidget();
     void clearTree();
-    QPilsTreeNode *addRootNode(const QString &text);
-    QPilsTreeNode *currentNode() const;
+    QPilsTreeWidgetItem *addTopLevelItem(const QString &text);
+    QPilsTreeWidgetItem *currentItem() const;
+    void setCurrentItem(QPilsTreeWidgetItem *item);
 private:
-    friend class QPilsTreeNode;
-    QPilsTreeNode *wrap(QTreeWidgetItem *);
+    friend class QPilsTreeWidgetItem;
+    QPilsTreeWidgetItem *wrap(QTreeWidgetItem *);
     // void forget(QTreeWidgetItem *);
-    std::unordered_map<QTreeWidgetItem *, QPilsTreeNode *> wrappers_;
+    std::unordered_map<QTreeWidgetItem *, QPilsTreeWidgetItem *> wrappers_;
 };
 
-class QPilsTreeNode : public QObject
+class QPilsTreeWidgetItem : public QObject
 {
 public:
     QString text() const;
     void setText(const QString &);
-    QPilsTreeNode *addChild(const QString &text);
-    QPilsTreeNode *parentNode() const;
+    QPilsTreeWidgetItem *addChild(const QString &text);
+    QPilsTreeWidgetItem *parentNode() const;
     int childCount() const;
-    QPilsTreeNode *child(int i) const;
+    QPilsTreeWidgetItem *child(int i) const;
     void expand();
     void collapse();
     static const PILS::QtObjectClassName *getClassName();
 private:
     friend class QPilsTreeWidget;
-    QPilsTreeNode(QPilsTreeWidget *,
+    QPilsTreeWidgetItem(QPilsTreeWidget *,
                   QTreeWidgetItem *);
     QPilsTreeWidget *tree_;
     QTreeWidgetItem *item_;

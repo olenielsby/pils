@@ -275,13 +275,13 @@ const Constant *QtWrap::wrap(QObject *obj)
     return lookup.lookup();
 }
 
-const Constant *QtWrap::wrap(QPilsTreeNode *obj)
+const Constant *QtWrap::wrap(QPilsTreeWidgetItem *obj)
 {
     if (obj == nullptr)
     {
         return Empty::get();
     }
-    auto className = QPilsTreeNode::getClassName();
+    auto className = QPilsTreeWidgetItem::getClassName();
     className->retain();
     QtNewObjectLookup lookup(Runner::current(), obj, className);
     return lookup.lookup();

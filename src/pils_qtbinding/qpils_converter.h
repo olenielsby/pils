@@ -138,7 +138,7 @@ class QtWrap
 public:
     static const Constant *wrap(const QString &s);
     static const Constant *wrap(QObject *obj);
-    static const Constant *wrap(QPilsTreeNode *obj);
+    static const Constant *wrap(QPilsTreeWidgetItem *obj);
     static const Constant *wrap(const CXCursor &c);
     static const Constant *wrap(CXString s);
     static const Constant *wrap(int v);

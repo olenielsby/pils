@@ -1,4 +1,4 @@
-><:[module:. platform qt dialog .timestamp 2026-07-27T11:09:43.269+02 .language qt]><;
+><:[module:. platform qt dialog .timestamp 2026-07-28T19:59:09.206+02 .language qt]><;
 ;new plumcake .WA_DeleteOnClose 55 .WindowModal 1;
 { dialog: .window .boss
 | :where :what :ok
@@ -14,12 +14,13 @@
   | :who :ok
     ;strap (strap: listen: who);
     who . strap and: strap? := who channel listen (handler);
-    who
   } 
   { bug | shit }
+  { tree: boss
+  |
+  }
   { close
   | :who :ok
-!    window mind dialog-listen := ();
     who q:close
   }
   { column: boss
@@ -27,38 +28,13 @@
     @ lane: .layout  new Q:VBoxLayout .widget who .boss
   }
   { row: boss
-  |:who  :ok
+  | :who  :ok
     @ lane: .layout  new Q:HBoxLayout .widget who .boss
   }
-  { tree: boss [tree]
+  { tree: boss
   | :who :ok
-    :use
-    { when: .boss
-    | :self :ok
-      { bug | shit }
-      { node: boss
-      | :who
-        ;text boss text .:need; :ok
-        who q:addChild (text) when (self when: .boss)
-      }
-      { boss | :where :what shit and: :ok boss }
-    }
-    ;
-    ;layout new Q:VBoxLayout(who);
-    ;tree new Q:PilsTreeWidget(who) when
-    { qs:itemActivated: ?
-    | :who :try boss [tree] picked: who q:currentNode
-    }
-    { node: boss
-    | :who
-      ;text boss text .:need; :ok
-      who q:addRootNode (text)
-      when (when (.boss))
-    }
-    ;
-    layout q:addWidget(tree) and:
-    who q:setLayout(layout) and:
-    tree
+    @ [lane] tree: .boss .layout
+    { q:addWidget: widget|:ok who q:setCentralWidget: widget }
   }
   try
   { (who)
@@ -473,20 +449,21 @@
     +++ boss
   )
 }
-><:[module:. platform qt lane tree .timestamp 2026-07-26T12:24:41.312+02 .language qt]><;
+><:[module:. platform qt lane tree .timestamp 2026-07-28T19:07:15.594+02 .language qt]><;
 ;new plumcake;
 { tree: .boss .layout
 | :ok
   new Q:PilsTreeWidget
   try {(widget)|layout q:addWidget (widget)}
   when:
-  { qs:itemActivated: ? | :who :try who picked: who q:currentNode }
+  { qs:itemActivated: ? | :who :try who picked: who q:currentItem }
   { node: boss
   | :who
     ;text boss text .:need; :ok
-    who q:addRootNode (text)
+    who q:addTopLevelItem (text)
     when (when (.boss))
   }
+  { current: item | :who :ok who q:setCurrentItem (item) }
   { focus | :who :ok who q:setFocus }
   +++ boss
 }
