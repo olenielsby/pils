@@ -329,21 +329,22 @@
   :ok new Q:PilsGroupBox (title) q:setFlat 1
 }
 
-><:[module:. platform qt lane button .timestamp 2026-07-26T12:23:30.076+02 .language qt]><;
+><:[module:. platform qt lane button .timestamp 2026-07-28T13:35:09.536+02 .language qt]><;
 ;new plumcake;
 { button: .boss .layout
 | ;title boss title .:need call {$ ok|:ok} .:need;
   :ok
-  new Q:PushButton
+  new Q:PushButton q:setText (title)
   try {(widget)|layout q:addWidget (widget)}
-  call (@ ownership: .boss) when
+  call (@ ownership: .boss) when:
   { qs:clicked: args | :try boss pressed }
   { title: $ title | :who :ok who q:setText (title) }
   { title | :who :ok who q:text }
   { enabled: enabled | :who :ok who q:setEnabled (enabled) }
   { enabled | :who :ok who q:isEnabled }
   { focus | :who :ok who q:setFocus }
-  title (title)
+  { tooltip: $ tip | :who :ok who q:setToolTip (tip) }
+  +++ boss
 }
 ><:[module:. platform qt lane combo .timestamp 2026-07-26T21:42:17.014+02 .language qt]><;
 ;new plumcake;
@@ -399,7 +400,7 @@
   { text | :who :ok who q:text }
   +++ boss
 }
-><:[module:. platform qt lane line-edit .timestamp 2026-07-28T12:53:15.432+02 .language qt]><;
+><:[module:. platform qt lane line-edit .timestamp 2026-07-28T13:41:57.482+02 .language qt]><;
 ;new plumcake;
 { line-edit: .boss .layout
 | :ok
@@ -408,7 +409,7 @@
   call (@ ownership: .boss) when:
   { qs:textChanged: text | :who :try who text:. text }
   { qe:keyPress: key, ?, 0, 0
-  | :who :try boss key: :need key call
+  | :who :try who key: :need key call
     [ key:
       .16777216 esc
       .16777220 enter
@@ -419,12 +420,14 @@
     ]
   }
   { qe:keyPress: 16777220, ?, 33554432, 0
-  | :who :try boss key [shift enter]
+  | :who :try who key [shift enter]
   }
   { text: text | :who :ok who q:setText (text) }
   { text | :who :ok who q:text }
   { focus | :who :ok who q:setFocus }
   { select | :who :ok who q:selectAll }
+  { tooltip: $ text | :who :ok who q:setToolTip (text) }
+  +++ boss
 }
 ><:[module:. platform qt lane tabs .timestamp 2026-07-28T09:50:20.316+02 .language qt]><;
 ;new plumcake;
