@@ -707,5 +707,16 @@ void qtEventDispatch(QEvent *event,
         REGISTER_QT_EVENT(Enter, QEvent)
         REGISTER_QT_EVENT(Leave, QEvent)
         REGISTER_QT_EVENT(Close, QCloseEvent)
+        REGISTER_QT_EVENT(Show, QShowEvent)
+        REGISTER_QT_EVENT(Hide, QHideEvent)
+        REGISTER_QT_EVENT(WindowActivate, QEvent)
+        REGISTER_QT_EVENT(WindowDeactivate, QEvent)
+        REGISTER_QT_EVENT(Move, QMoveEvent)
+        REGISTER_QT_EVENT(Paint, QPaintEvent)
+        REGISTER_QT_EVENT(ContextMenu, QContextMenuEvent)
+        REGISTER_QT_EVENT(DragEnter, QDragEnterEvent)
+        REGISTER_QT_EVENT(DragMove, QDragMoveEvent)
+        REGISTER_QT_EVENT(DragLeave, QDragLeaveEvent)
+        REGISTER_QT_EVENT(Drop, QDropEvent)
     }
 }
